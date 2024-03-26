@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router-dom';
-
+import style from './Root.module.css';
 import Navbar from '../components/MainNavbar/MainNavBar';
 
 function RootLayout() {
@@ -8,7 +8,7 @@ function RootLayout() {
   return (
     <>
       <Navbar />
-      <main>
+      <main className={style.main}>
         {/* {navigation.state === 'loading' && <p>Loading...</p>} */}
         <Outlet />
       </main>

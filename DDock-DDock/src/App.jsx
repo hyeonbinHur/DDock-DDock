@@ -26,7 +26,9 @@ function App() {
 
     return (
         <Fragment>
-            <RouterProvider router={router} />
+          <main>
+          <RouterProvider router={router} />
+          </main>
         </Fragment>
     );
 }
