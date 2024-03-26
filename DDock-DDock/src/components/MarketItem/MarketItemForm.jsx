@@ -21,7 +21,7 @@ export default function MarketItemForm() {
         if (response.success === true && isPending === false) {
             setTitle('');
             setDescription('');
-            navigate('..');
+            // navigate('..');
         }
     }, [response, navigate, isPending]);
 
