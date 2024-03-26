@@ -4,7 +4,7 @@ import { useFirestore } from '../../hooks/useFirestore';
 import { useNavigate } from 'react-router-dom'; 
 
 export default function MarketItemForm() {
-    const { addDocument, response } = useFirestore('MarketItem');
+    const { addDocument, response, isPending } = useFirestore('MarketItem');
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const navigate = useNavigate(); 
@@ -18,12 +18,12 @@ export default function MarketItemForm() {
     };
 
     useEffect(() => {
-        if (response.success === true) {
+        if (response.success === true && isPending === false) {
             setTitle('');
             setDescription('');
-            navigate(-1);
+            navigate('..');
         }
-    }, [response, navigate]);
+    }, [response, navigate, isPending]);
 
     return (
         <>

@@ -53,6 +53,7 @@ export const useFirestore = (collection) => {
     };
 
     const addDocument = async (doc) => {
+
         dispatch({ type: 'IS_PENDING' });
         try {
             const addedDocument = ref.add({ ...doc });
@@ -63,11 +64,12 @@ export const useFirestore = (collection) => {
         } catch (error) {
             dispatchIsNotCancelled({ type: 'ERROR', payload: error.message });
         }
+        
     };
 
     useEffect(() => {
         return () => setIsCancelled(!isCancelled);
     }, [isCancelled]);
 
-    return { addDocument, response };
+    return { addDocument, response, isPending: response.isPending };
 };

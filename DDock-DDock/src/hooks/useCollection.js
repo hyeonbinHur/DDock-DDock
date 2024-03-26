@@ -4,24 +4,24 @@ import { projectFirestore } from '../firebase/config';
 export const useCollection = (collection) => {
     const [document, setDocuments] = useState(null);
     const [error, setError] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(true); // 초기 로딩 상태를 true로 설정
 
     useEffect(() => {
+        setLoading(true); // 이 부분을 추가하여 컴포넌트가 마운트될 때마다 로딩 상태를 재설정
         let ref = projectFirestore.collection(collection);
 
         const unsubscribe = ref.onSnapshot(
             (snapshot) => {
                 let results = [];
                 snapshot.docs.forEach((doc) => {
-                    console.log(doc);
                     results.push({ ...doc.data(), id: doc.id });
-                }); // update state
+                });
                 setDocuments(results);
                 setError(null);
-                setLoading(false);
+                setLoading(false); // 데이터 로드 완료
             },
             (error) => {
-                console.log(error);
+                console.error(error);
                 setError('could not fetch the data');
                 setLoading(false);
             }
@@ -31,3 +31,4 @@ export const useCollection = (collection) => {
 
     return { document, error, loading };
 };
+
