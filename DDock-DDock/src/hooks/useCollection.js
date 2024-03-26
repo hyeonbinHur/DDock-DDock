@@ -4,6 +4,7 @@ import { projectFirestore } from '../firebase/config';
 export const useCollection = (collection) => {
     const [document, setDocuments] = useState(null);
     const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         let ref = projectFirestore.collection(collection);
@@ -17,14 +18,16 @@ export const useCollection = (collection) => {
                 }); // update state
                 setDocuments(results);
                 setError(null);
+                setLoading(false);
             },
             (error) => {
                 console.log(error);
                 setError('could not fetch the data');
+                setLoading(false);
             }
         );
         return () => unsubscribe();
     }, [collection]);
 
-    return { document, error };
+    return { document, error, loading };
 };

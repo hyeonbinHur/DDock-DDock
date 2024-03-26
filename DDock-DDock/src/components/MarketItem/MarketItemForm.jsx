@@ -1,11 +1,13 @@
 import style from './MarketItem.module.css';
 import { useEffect, useState } from 'react';
 import { useFirestore } from '../../hooks/useFirestore';
+import { useNavigate } from 'react-router-dom'; 
 
 export default function MarketItemForm() {
     const { addDocument, response } = useFirestore('MarketItem');
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
+    const navigate = useNavigate(); 
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -19,12 +21,13 @@ export default function MarketItemForm() {
         if (response.success === true) {
             setTitle('');
             setDescription('');
+            navigate(-1);
         }
-    }, [response]);
+    }, [response, navigate]);
 
     return (
         <>
-            <form className={style.form}>
+            <form className={style.form} onSubmit={handleSubmit}> 
                 <p>
                     <label>
                         <span htmlFor="title">Title</span>
@@ -33,13 +36,12 @@ export default function MarketItemForm() {
                 </p>
                 <p>
                     <label>
-                        <span>Descrption:</span>
+                        <span>Description:</span>
                         <input type="text" value={description} required onChange={(event)=>{setDescription(event.target.value)}}/>
-
                     </label>
                 </p>
 
-                <button onClick={handleSubmit}>Add Item</button>
+                <button type="submit">Add Item</button>
             </form>
         </>
     );
