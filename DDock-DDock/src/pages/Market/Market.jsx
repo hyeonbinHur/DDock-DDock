@@ -1,5 +1,4 @@
-import MarketList from '../../components/MarketItem/MarketItemList';
-
+import MarketList from "../../components/MarketItem/MarketItemList";
 export default function MarketPage() {
     return (
         <div>
