@@ -1,11 +1,14 @@
 import { useState } from 'react';
 import { useSignUp } from '../../hooks/useSignup';
+import GoogleButton from 'react-google-button';
+import { useGoogleSignin } from '../../hooks/useGoogleSignIn';
 
 export default function SignUpPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [nickName, setNickName] = useState('');
     const { signUp, error, isPending } = useSignUp();
+    const { googleLogin } = useGoogleSignin();
 
     function consoleInfo(event) {
         event.preventDefault();
@@ -58,6 +61,7 @@ export default function SignUpPage() {
                 </button>
             )}
             {error && <p>{error}</p>}
+            <GoogleButton onClick={googleLogin}>Sign Up </GoogleButton>
         </form>
     );
 }
