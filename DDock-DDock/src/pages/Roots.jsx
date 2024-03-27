@@ -11,6 +11,7 @@ function RootLayout() {
       <main className={style.main}>
         {/* {navigation.state === 'loading' && <p>Loading...</p>} */}
         <Outlet />
+      
       </main>
     </>
   );
