@@ -4,7 +4,7 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import RootLayout from './pages/Roots';
 import HomePage from './pages/Home/Home';
 import MarketPage from './pages/Market/Market';
-import JobPage from './pages/Job/Job';
+// import JobPage from './pages/Job/Job';
 import HousePage from './pages/House/House';
 import CommunityPage from './pages/Community/Community';
 import MarketItemForm from './components/MarketItem/MarketItemForm';

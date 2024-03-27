@@ -4,7 +4,7 @@ import { projectAuth } from '../firebase/config';
 import { useAuthContext } from './useAuth';
 
 export const useSignUp = () => {
-    
+
     const [isPending, setIsPending] = useState(false);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
