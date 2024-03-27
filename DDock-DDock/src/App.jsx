@@ -9,6 +9,7 @@ import HousePage from './pages/House/House';
 import CommunityPage from './pages/Community/Community';
 import MarketItemForm from './components/MarketItem/MarketItemForm';
 import MarketRoot from './pages/Market/MarketRoot';
+import SignUpPage from './pages/Auth/Sigunup';
 // import MarketList from './components/MarketItem/MarketItemList';
 
 function App() {
@@ -26,7 +27,7 @@ function App() {
                         { path: 'market-form', element: <MarketItemForm /> },
                     ],
                 },
-                { path: '/job', element: <JobPage /> },
+                { path: '/job', element: <SignUpPage /> },
                 { path: '/house', element: <HousePage /> },
                 { path: '/community', element: <CommunityPage /> },
             ],

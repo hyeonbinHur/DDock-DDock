@@ -2,6 +2,7 @@ import MarketList from '../../components/MarketItem/MarketItemList';
 import { useCollection } from '../../hooks/useCollection';
 
 export default function MarketPage() {
+    
     const { document, error, loading } = useCollection('MarketItem');
 
     return (
