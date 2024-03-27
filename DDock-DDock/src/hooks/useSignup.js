@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { projectAuth } from '../firebase/config';
 import { useAuthContext } from './useAuth';
 
@@ -7,7 +6,6 @@ export const useSignUp = () => {
 
     const [isPending, setIsPending] = useState(false);
     const [error, setError] = useState(null);
-    const navigate = useNavigate();
     const { dispatch } = useAuthContext();
     const [isCancelled, setIsCancelled] = useState(true);
 
@@ -20,7 +18,6 @@ export const useSignUp = () => {
                 email,
                 password
             );
-
             if (!res) {
                 throw new Error('Could not complete signup');
             }
@@ -29,10 +26,8 @@ export const useSignUp = () => {
             if (!isCancelled) {
                 setIsPending(false);
                 setError(null);
+                
             }
-
-            const from = document.referrer || '/';
-            navigate(from, { replace: true });
         } catch (error) {
             setIsPending(false);
             setError(error.message);

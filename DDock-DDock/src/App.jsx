@@ -4,12 +4,13 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import RootLayout from './pages/Roots';
 import HomePage from './pages/Home/Home';
 import MarketPage from './pages/Market/Market';
-// import JobPage from './pages/Job/Job';
+import JobPage from './pages/Job/Job';
 import HousePage from './pages/House/House';
 import CommunityPage from './pages/Community/Community';
 import MarketItemForm from './components/MarketItem/MarketItemForm';
 import MarketRoot from './pages/Market/MarketRoot';
 import SignUpPage from './pages/Auth/Sigunup';
+import LoginPage from './pages/Auth/Login';
 // import MarketList from './components/MarketItem/MarketItemList';
 
 function App() {
@@ -27,9 +28,12 @@ function App() {
                         { path: 'market-form', element: <MarketItemForm /> },
                     ],
                 },
-                { path: '/job', element: <SignUpPage /> },
+                { path: '/job', element: <JobPage /> },
                 { path: '/house', element: <HousePage /> },
                 { path: '/community', element: <CommunityPage /> },
+                { path: '/signup', element: <SignUpPage /> },
+                { path: '/login', element: <LoginPage /> },
+
             ],
         },
     ]);
