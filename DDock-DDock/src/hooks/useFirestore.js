@@ -43,8 +43,8 @@ const firestoreReducer = (state, action) => {
 export const useFirestore = (collection) => {
     const [response, dispatch] = useReducer(firestoreReducer, initalState);
     const [isCancelled, setIsCancelled] = useState(true);
-
     const ref = projectFirestore.collection(collection);
+    const [loading, setLoading] = useState(true);
 
     const dispatchIsNotCancelled = (action) => {
         if (!isCancelled) {
@@ -53,10 +53,12 @@ export const useFirestore = (collection) => {
     };
 
     const addDocument = async (doc) => {
+        setLoading(true);
 
         dispatch({ type: 'IS_PENDING' });
+
         try {
-            const addedDocument = ref.add({ ...doc });
+            const addedDocument = await ref.add({ ...doc });
             dispatchIsNotCancelled({
                 type: 'ADD_DOCUMENT',
                 payload: addedDocument,
@@ -64,12 +66,13 @@ export const useFirestore = (collection) => {
         } catch (error) {
             dispatchIsNotCancelled({ type: 'ERROR', payload: error.message });
         }
-        
+
+        setLoading(false);
     };
 
     useEffect(() => {
         return () => setIsCancelled(!isCancelled);
     }, [isCancelled]);
 
-    return { addDocument, response, isPending: response.isPending };
+    return { addDocument, response, loading };
 };
