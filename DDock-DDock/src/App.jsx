@@ -10,7 +10,11 @@ import CommunityPage from './pages/Community/Community';
 import MarketRoot from './pages/Market/MarketRoot';
 import SignUpPage from './pages/Auth/Sigunup';
 import LoginPage from './pages/Auth/Login';
-import AddMarketItem from './pages/Market/AddMarketItem';
+
+import MarketItemEdit from './pages/Market/MarketItemEdit';
+import MarketItemAdd from './pages/Market/MarketItemAdd';
+import MarketItemDetail from './pages/Market/MarketItemDetail';
+
 // import MarketList from './components/MarketItem/MarketItemList';
 
 function App() {
@@ -24,8 +28,18 @@ function App() {
                     path: 'market',
                     element: <MarketRoot />,
                     children: [
-                        { index: true, element: <MarketPage /> },
-                        { path: 'mupload', element: <AddMarketItem /> },
+                        { path: '', element: <MarketPage /> },
+                        {
+                            path: ':mitemId',
+                            children: [
+                                { index: true, element: <MarketItemDetail /> },
+                                {
+                                    path: 'mupdate',
+                                    element: <MarketItemEdit />,
+                                },
+                            ],
+                        },
+                        { path: 'mupload', element: <MarketItemAdd /> },
                     ],
                 },
                 { path: '/job', element: <JobPage /> },
@@ -33,7 +47,6 @@ function App() {
                 { path: '/community', element: <CommunityPage /> },
                 { path: '/signup', element: <SignUpPage /> },
                 { path: '/login', element: <LoginPage /> },
-
             ],
         },
     ]);

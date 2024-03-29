@@ -10,7 +10,6 @@ export default function MarketItem({ document }) {
             <p>{document.description}</p>
             {loading === true && <img src={spinner} />}
             <menu>
-                
             </menu>
         </article>
     );

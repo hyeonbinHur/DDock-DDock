@@ -36,6 +36,15 @@ const firestoreReducer = (state, action) => {
                 error: null,
             };
 
+        case 'GET_DOCUMENT':
+            return {
+                ...state,
+                isPending: false,
+                document: action.payload,
+                success: true,
+                error: null,
+            };
+
         case 'ERRROR':
             return {
                 ...state,
@@ -82,7 +91,7 @@ export const useFirestore = (collection) => {
 
     const deleteDocument = async (id) => {
         setLoading(true);
-        console.log("DElete start")
+        console.log('DElete start');
         dispatch({ type: 'IS_PENDING' });
 
         try {
@@ -93,16 +102,40 @@ export const useFirestore = (collection) => {
             });
         } catch (error) {
             dispatchIsNotCancelled({ type: 'ERROR', payload: error.message });
-            console.log(error.message)
+            console.log(error.message);
         }
 
         setLoading(false);
-        console.log("DElete done")
+    };
+
+    const getOneItem = async (id) => {
+        setLoading(true);
+        dispatch({ type: 'IS_PENDING' });
+        const docRef = await projectFirestore.collection(collection).doc(id);
+        docRef
+            .get()
+            .then((doc) => {
+                if (doc.exists) {
+                    dispatchIsNotCancelled({
+                        type: 'GET_DOCUMENT',
+                        payload: doc.data(),
+                    });
+                    console.log(doc.data());
+                } else {
+                    dispatchIsNotCancelled({ type: 'ERROR', payload: "Can not find item" });
+                }
+            })
+            .catch((error) => {
+                dispatchIsNotCancelled({ type: 'ERROR', payload: error.message });
+
+            });
+            setLoading(false);
+
     };
 
     useEffect(() => {
         return () => setIsCancelled(!isCancelled);
     }, [isCancelled]);
 
-    return { addDocument, deleteDocument, response, loading };
+    return { addDocument, getOneItem, deleteDocument, response, loading };
 };
