@@ -7,10 +7,10 @@ import MarketPage from './pages/Market/Market';
 import JobPage from './pages/Job/Job';
 import HousePage from './pages/House/House';
 import CommunityPage from './pages/Community/Community';
-import MarketItemForm from './components/MarketItem/MarketItemForm';
 import MarketRoot from './pages/Market/MarketRoot';
 import SignUpPage from './pages/Auth/Sigunup';
 import LoginPage from './pages/Auth/Login';
+import AddMarketItem from './pages/Market/AddMarketItem';
 // import MarketList from './components/MarketItem/MarketItemList';
 
 function App() {
@@ -25,7 +25,7 @@ function App() {
                     element: <MarketRoot />,
                     children: [
                         { index: true, element: <MarketPage /> },
-                        { path: 'market-form', element: <MarketItemForm /> },
+                        { path: 'mupload', element: <AddMarketItem /> },
                     ],
                 },
                 { path: '/job', element: <JobPage /> },

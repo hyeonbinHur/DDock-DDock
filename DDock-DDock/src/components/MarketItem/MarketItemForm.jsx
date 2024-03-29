@@ -1,39 +1,17 @@
 import style from './MarketItem.module.css';
-import { useEffect, useState, useRef } from 'react';
-import { useFirestore } from '../../hooks/useFirestore';
-import { useNavigate } from 'react-router-dom';
-import ItemModal from '../Modal/ItemStatusModal';
+import { useState } from 'react';
 
-
-export default function MarketItemForm() {
-    const { addDocument, response, loading } = useFirestore('MarketItem');
+export default function MarketItemForm({ doAction }) {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const navigate = useNavigate();
-    const modal = useRef();
 
     const handleSubmit = (event) => {
-        event.preventDefault();
-        addDocument({
-            title,
-            description,
-        });
+        event.preventDefault(); // 페이지 새로고침 방지
+        doAction(title, description);
+        // 여기서 필드를 초기화하고 싶지 않다면 초기화 코드를 제거합니다.
     };
-    function OPEN() {
-         modal.current.open();
-    }
-
-    useEffect(() => {
-        console.log("lodaing status from form "+loading);
-        if (response.success === true && response.isPending === false) {
-            setTitle('');
-            setDescription('');
-        }
-    }, [response, response.isPending, loading]);
-
     return (
         <>
-            <ItemModal ref={modal} response={response} loading={loading} navigate={navigate}  from={"market"}/>
             <form className={style.form} onSubmit={handleSubmit}>
                 <p>
                     <label>
@@ -61,10 +39,7 @@ export default function MarketItemForm() {
                         />
                     </label>
                 </p>
-
-                <button type="submit" onClick={OPEN}>
-                    Add Item
-                </button>
+                <button type="submit">Add Item</button>
             </form>
         </>
     );
