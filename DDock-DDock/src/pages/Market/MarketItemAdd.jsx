@@ -16,6 +16,7 @@ export default function AddMarketItem(){
         addDocument({
             title,
             description,
+            comments: [],
         });
     };
 
