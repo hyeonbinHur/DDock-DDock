@@ -1,5 +1,6 @@
 import { useEffect, useReducer, useState } from 'react';
 import { projectFirestore, timestamp } from '../firebase/config';
+import { useAuthContext } from './useAuth';
 
 let initalState = {
     document: null,
@@ -62,6 +63,7 @@ export const useFirestore = (collection) => {
     const [isCancelled, setIsCancelled] = useState(true);
     const [loading, setLoading] = useState(false);
     const ref = projectFirestore.collection(collection);
+    const { user } = useAuthContext();
 
     const dispatchIsNotCancelled = (action) => {
         if (!isCancelled) {
@@ -76,8 +78,13 @@ export const useFirestore = (collection) => {
 
         try {
             const createdAt = timestamp.fromDate(new Date());
-            const addedDocument = await ref.add({ ...doc, createdAt: createdAt  });
-            
+            const userId = user.uid;
+            const addedDocument = await ref.add({
+                ...doc,
+                createdAt: createdAt,
+                userId: userId,
+            });
+
             dispatchIsNotCancelled({
                 type: 'ADD_DOCUMENT',
                 payload: addedDocument,

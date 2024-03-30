@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { timestamp } from '../../firebase/config';
 
 export default function Comment({ Item, collection }) {
+    
     const { updateDocument, response } = useFirestore(collection);
     const { user } = useAuthContext();
     const [comment, setComment] = useState('');
@@ -98,7 +99,6 @@ export default function Comment({ Item, collection }) {
                             <button onClick={() => openCommentArea(comment.id)}>
                             {commentOnComment[comment.id] ? '닫기' : '대댓 달기 + ' + `${comment.childComment.length}`}
                             </button>
-
                             {commentOnComment[comment.id] && (
                                 <div>
                                     {comment.childComment.length > 0 &&

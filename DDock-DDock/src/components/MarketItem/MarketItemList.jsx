@@ -3,8 +3,10 @@ import ItemDeleteModal from '../Modal/ItemDeleteModal';
 import { useRef, useState } from 'react';
 // import style from './MarketItemList.module.css';
 import { Link } from 'react-router-dom';
+import { useAuthContext } from '../../hooks/useAuth';
 export default function MarketList({ documents }) {
     const [deleteItemId, setDeleteItemId] = useState(null);
+    const { user } = useAuthContext();
     const modal = useRef();
 
     function openConfirmModal(itemId) {
@@ -21,9 +23,14 @@ export default function MarketList({ documents }) {
                         <Link to={doc.id}>
                             <MarketItem document={doc} />
                         </Link>
-                        <button onClick={() => openConfirmModal(doc.id)}>
-                            X
-                        </button>
+                        {user && (doc.userId === user.uid && (
+                            <button onClick={() => openConfirmModal(doc.id)}>
+                                X
+                            </button>
+                        ))}
+
+
+                        
                     </li>
                 ))}
             </ul>
