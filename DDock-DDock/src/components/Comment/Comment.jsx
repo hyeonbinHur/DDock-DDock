@@ -96,36 +96,46 @@ export default function Comment({ Item, collection }) {
                             <div>{formatDate(comment.createdAt)}</div>
                             <div>{comment.content}</div>
                             <button onClick={() => openCommentArea(comment.id)}>
-                                {' '}
-                                Add Comment to this comment
+                            {commentOnComment[comment.id] ? 'Close' : 'Open'}
                             </button>
-                            {comment.childComment.length > 0 &&
-                                comment.childComment.map((child) => (
-                                    <ul key={child.id}>
-                                        <label>{child.displayName} </label>
-                                        <div>{formatDate(child.createdAt)}</div>
-                                        <div>{child.content}</div>
-                                    </ul>
-                                ))}
 
                             {commentOnComment[comment.id] && (
-                                <form
-                                    onSubmit={(event) =>
-                                        addReply2Comment(comment.id, event)
-                                    }
-                                >
-                                    <p>one more comment here</p>
-                                    <textarea
-                                        onChange={(e) =>
-                                            setReply2Comment((prev) => ({
-                                                ...prev,
-                                                [comment.id]: e.target.value,
-                                            }))
+                                <div>
+                                    {comment.childComment.length > 0 &&
+                                        comment.childComment.map((child) => (
+                                            <ul key={child.id}>
+                                                <label>
+                                                    {child.displayName}{' '}
+                                                </label>
+                                                <div>
+                                                    {formatDate(
+                                                        child.createdAt
+                                                    )}
+                                                </div>
+                                                <div>{child.content}</div>
+                                            </ul>
+                                        ))}
+                                    <form
+                                        onSubmit={(event) =>
+                                            addReply2Comment(comment.id, event)
                                         }
-                                        value={reply2Comment[comment.id] || ''}
-                                    ></textarea>
-                                    <button>submit</button>
-                                </form>
+                                    >
+                                        <p>one more comment here</p>
+                                        <textarea
+                                            onChange={(e) =>
+                                                setReply2Comment((prev) => ({
+                                                    ...prev,
+                                                    [comment.id]:
+                                                        e.target.value,
+                                                }))
+                                            }
+                                            value={
+                                                reply2Comment[comment.id] || ''
+                                            }
+                                        ></textarea>
+                                        <button>submit</button>
+                                    </form>
+                                </div>
                             )}
                         </li>
                     ))}
