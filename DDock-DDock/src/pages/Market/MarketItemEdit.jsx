@@ -1,9 +1,16 @@
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useDocument } from '../../hooks/useDocument';
+import { useFirestore } from '../../hooks/useFirestore';
+import MarketItemForm from '../../components/MarketItem/MarketItemForm';
+import ItemModal from '../../components/Modal/ItemStatusModal';
+import { useRef } from 'react';
 export default function MarketItemEdit() {
     const { mitemId } = useParams();
     const { document, error } = useDocument('MarketItem', mitemId);
-
+    const { updateDocument,response, loading } = useFirestore('MarketItem');
+    const modal = useRef();
+    const navigate = useNavigate();
+    
     if (error) {
         return <div className="error">{error}</div>;
     }
@@ -11,10 +18,26 @@ export default function MarketItemEdit() {
         return <div className="loading">Loading...</div>;
     }
 
+    const doAudateDocument = (title, description) => {
+        modal.current.open();
+
+        updateDocument(mitemId, {
+            title,
+            description,
+        });
+    };
+
     return (
         <>
-            <p>{document.title}</p>
-            <p>Hello edit</p>
+            <ItemModal
+                ref={modal}
+                response={response}
+                loading={loading}
+                navigate={navigate}
+                from={'market'}
+            />
+
+            <MarketItemForm doAction={doAudateDocument} data={document} />
         </>
     );
 }

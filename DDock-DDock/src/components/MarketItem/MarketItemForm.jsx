@@ -1,15 +1,16 @@
 import style from './MarketItem.module.css';
 import { useState } from 'react';
 
-export default function MarketItemForm({ doAction }) {
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
+export default function MarketItemForm({ doAction, data}) {
+    const [title, setTitle] = useState(data ? data.title: '');
+    const [description, setDescription] = useState(data ? data.description :'');
 
     const handleSubmit = (event) => {
         event.preventDefault(); // 페이지 새로고침 방지
         doAction(title, description);
-        // 여기서 필드를 초기화하고 싶지 않다면 초기화 코드를 제거합니다.
+      
     };
+    console.log(data)
     return (
         <>
             <form className={style.form} onSubmit={handleSubmit}>
@@ -39,7 +40,7 @@ export default function MarketItemForm({ doAction }) {
                         />
                     </label>
                 </p>
-                <button type="submit">Add Item</button>
+                <button type="submit">Save</button>
             </form>
         </>
     );
