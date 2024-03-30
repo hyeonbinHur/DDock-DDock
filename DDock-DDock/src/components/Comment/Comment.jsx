@@ -7,22 +7,67 @@ export default function Comment({ Item, collection }) {
     const { updateDocument, response } = useFirestore(collection);
     const { user } = useAuthContext();
     const [comment, setComment] = useState('');
+    const [commentOnComment, setCommentOnComment] = useState({});
+    const [reply2Comment, setReply2Comment] = useState({});
+
+    const openCommentArea = (id) => {
+        setCommentOnComment((prev) => ({
+            ...prev,
+            [id]: !prev[id],
+        }));
+    };
 
     const addComment = async (event) => {
         event.preventDefault();
-        console.log(user.displayName);
+
         const addedComment = {
             displayName: user.displayName,
             content: comment,
             createdAt: timestamp.fromDate(new Date()),
             id: Math.random(),
+            childComment: [],
         };
 
         await updateDocument(Item.id, {
             comments: [...Item.comments, addedComment],
         });
+
         if (!response.error) {
             setComment('');
+        }
+    };
+
+    const addReply2Comment = async (commentId, event) => {
+        event.preventDefault();
+
+        // 댓글 배열에서 ID가 일치하는 댓글을 찾습니다.
+        const commentIndex = Item.comments.findIndex((c) => c.id === commentId);
+        if (commentIndex !== -1) {
+            // 해당 댓글이 존재하면, childComment 배열에 대댓글을 추가합니다.
+            const commentToUpdate = Item.comments[commentIndex];
+            if (!commentToUpdate.childComment) {
+                commentToUpdate.childComment = []; // childComment 배열이 없으면 초기화합니다.
+            }
+            const added2Comment = {
+                displayName: user.displayName,
+                content: reply2Comment[commentId],
+                createdAt: timestamp.fromDate(new Date()),
+                id: Math.random(),
+            };
+
+            commentToUpdate.childComment.push(added2Comment);
+
+            // 여기서 Item 객체를 업데이트하는 로직을 추가합니다.
+            // 예: 데이터베이스에 Item을 업데이트하는 함수를 호출
+            console.log(commentToUpdate.childComment);
+
+            await updateDocument(Item.id, {
+                comments: [
+                    ...Item.comments.slice(0, commentIndex),
+                    commentToUpdate,
+                    ...Item.comments.slice(commentIndex + 1),
+                ],
+            });
         }
     };
 
@@ -50,6 +95,38 @@ export default function Comment({ Item, collection }) {
                             <label>{comment.displayName} </label>
                             <div>{formatDate(comment.createdAt)}</div>
                             <div>{comment.content}</div>
+                            <button onClick={() => openCommentArea(comment.id)}>
+                                {' '}
+                                Add Comment to this comment
+                            </button>
+                            {comment.childComment.length > 0 &&
+                                comment.childComment.map((child) => (
+                                    <ul key={child.id}>
+                                        <label>{child.displayName} </label>
+                                        <div>{formatDate(child.createdAt)}</div>
+                                        <div>{child.content}</div>
+                                    </ul>
+                                ))}
+
+                            {commentOnComment[comment.id] && (
+                                <form
+                                    onSubmit={(event) =>
+                                        addReply2Comment(comment.id, event)
+                                    }
+                                >
+                                    <p>one more comment here</p>
+                                    <textarea
+                                        onChange={(e) =>
+                                            setReply2Comment((prev) => ({
+                                                ...prev,
+                                                [comment.id]: e.target.value,
+                                            }))
+                                        }
+                                        value={reply2Comment[comment.id] || ''}
+                                    ></textarea>
+                                    <button>submit</button>
+                                </form>
+                            )}
                         </li>
                     ))}
             </ul>
@@ -58,7 +135,7 @@ export default function Comment({ Item, collection }) {
                 <label>
                     <span>add new comment</span>
                     <textarea
-                        onChange={(event) => setComment(event.target.value)}
+                        onChange={() => setComment(event.target.value)}
                         value={comment}
                     ></textarea>
                 </label>
