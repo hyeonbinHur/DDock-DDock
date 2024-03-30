@@ -3,7 +3,7 @@ import { useCollection } from '../../hooks/useCollection';
 
 export default function MarketPage() {
     
-    const { document, error, loading } = useCollection('MarketItem');
+    const { document, error, loading } = useCollection('MarketItem', ['createdAt', 'desc']);
 
     return (
         <div>
