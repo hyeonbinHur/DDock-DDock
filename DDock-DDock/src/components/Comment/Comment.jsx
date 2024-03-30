@@ -9,6 +9,8 @@ export default function Comment({ Item, collection }) {
     const [comment, setComment] = useState('');
     const [commentOnComment, setCommentOnComment] = useState({});
     const [reply2Comment, setReply2Comment] = useState({});
+    const [currentEditComment, setCurrentEditComment] = useState(false);
+    const [editReply, setEditReply] = useState(false);
 
     const openCommentArea = (id) => {
         setCommentOnComment((prev) => ({
@@ -89,16 +91,12 @@ export default function Comment({ Item, collection }) {
         if (commentIndex !== -1) {
             const commentToUpdate = Item.comments[commentIndex];
 
-            // 대댓글이 있는지 확인하고, 있으면 해당 대댓글을 배열에서 찾아서 제거합니다.
             if (commentToUpdate.childComment) {
                 const replyIndex = commentToUpdate.childComment.findIndex(
                     (r) => r.id === replyId
                 );
                 if (replyIndex !== -1) {
-                    // 대댓글을 찾았으면 해당 대댓글을 배열에서 제거합니다.
                     commentToUpdate.childComment.splice(replyIndex, 1);
-
-                    // 수정된 댓글 배열로 데이터베이스를 업데이트합니다.
                     await updateDocument(Item.id, {
                         comments: [
                             ...Item.comments.slice(0, commentIndex),
@@ -124,6 +122,14 @@ export default function Comment({ Item, collection }) {
         });
     }
 
+    const editComment = () => {
+        setCurrentEditComment(!currentEditComment);
+    };
+
+    const editReply2Comment = () => {
+        setEditReply(!editReply);
+    };
+
     return (
         <div>
             <h4>ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ</h4>
@@ -142,11 +148,21 @@ export default function Comment({ Item, collection }) {
                                       `${comment.childComment.length}`}
                             </button>
                             {user && user.uid === comment.userId && (
-                                <button
-                                    onClick={() => deleteComment(comment.id)}
-                                >
-                                    X
-                                </button>
+                                <div>
+                                    <button
+                                        onClick={() =>
+                                            deleteComment(comment.id)
+                                        }
+                                    >
+                                        댓글 삭제
+                                    </button>
+                                    <button onClick={() => editComment()}>
+                                        {' '}
+                                        {currentEditComment
+                                            ? '수정 완료'
+                                            : '댓글 수정'}{' '}
+                                    </button>
+                                </div>
                             )}
                             {commentOnComment[comment.id] && (
                                 <div>
@@ -165,16 +181,27 @@ export default function Comment({ Item, collection }) {
                                                 {user &&
                                                     user.uid ===
                                                         child.userId && (
-                                                        <button
-                                                            onClick={() =>
-                                                                deleteReply2Comment(
-                                                                    comment.id,
-                                                                    child.id
-                                                                )
-                                                            }
-                                                        >
-                                                            대댓 삭제
-                                                        </button>
+                                                        <div>
+                                                            <button
+                                                                onClick={() =>
+                                                                    deleteReply2Comment(
+                                                                        comment.id,
+                                                                        child.id
+                                                                    )
+                                                                }
+                                                            >
+                                                                대댓 삭제
+                                                            </button>
+                                                            <button
+                                                                onClick={() =>
+                                                                    editReply2Comment()
+                                                                }
+                                                            >
+                                                                {editReply
+                                                                    ? '수정 완료'
+                                                                    : '대댓 수정'}
+                                                            </button>
+                                                        </div>
                                                     )}
                                             </ul>
                                         ))}
