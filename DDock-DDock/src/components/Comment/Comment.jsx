@@ -96,7 +96,7 @@ export default function Comment({ Item, collection }) {
                             <div>{formatDate(comment.createdAt)}</div>
                             <div>{comment.content}</div>
                             <button onClick={() => openCommentArea(comment.id)}>
-                            {commentOnComment[comment.id] ? 'Close' : 'Open'}
+                            {commentOnComment[comment.id] ? '닫기' : '대댓 달기 + ' + `${comment.childComment.length}`}
                             </button>
 
                             {commentOnComment[comment.id] && (
