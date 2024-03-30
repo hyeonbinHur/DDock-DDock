@@ -15,7 +15,7 @@ export default function MarketItemDetail() {
     return (
         <>
             <p>{document.title}</p>
-            <Link to={`../${mitemId}/mupdate`}>Go to edit</Link>
+            <Link to={`/market/${mitemId}/mupdate`}>Go to edit</Link>
         </>
     );
 }
