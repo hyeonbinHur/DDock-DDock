@@ -31,8 +31,8 @@ function App() {
                         { path: '', element: <MarketPage /> },
                         {
                             path: ':mitemId',
+                            element: <MarketItemDetail />,
                             children: [
-                                { index: true, element: <MarketItemDetail /> },
                                 {
                                     path: 'mupdate',
                                     element: <MarketItemEdit />,

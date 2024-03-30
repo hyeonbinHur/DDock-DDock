@@ -7,8 +7,6 @@ export default function MarketList({ documents }) {
     const [deleteItemId, setDeleteItemId] = useState(null);
     const modal = useRef();
 
-  
-
     function openConfirmModal(itemId) {
         setDeleteItemId(itemId);
         modal.current.open();
@@ -22,11 +20,10 @@ export default function MarketList({ documents }) {
                     <li key={doc.id}>
                         <Link to={doc.id}>
                             <MarketItem document={doc} />
-                            <button onClick={() => openConfirmModal(doc.id)}>
-                                X
-                            </button>
-                            
                         </Link>
+                        <button onClick={() => openConfirmModal(doc.id)}>
+                            X
+                        </button>
                     </li>
                 ))}
             </ul>
