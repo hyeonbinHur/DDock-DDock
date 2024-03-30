@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { timestamp } from '../../firebase/config';
 
 export default function Comment({ Item, collection }) {
-    
     const { updateDocument, response } = useFirestore(collection);
     const { user } = useAuthContext();
     const [comment, setComment] = useState('');
@@ -23,6 +22,7 @@ export default function Comment({ Item, collection }) {
 
         const addedComment = {
             displayName: user.displayName,
+            userId: user.uid,
             content: comment,
             createdAt: timestamp.fromDate(new Date()),
             id: Math.random(),
@@ -41,16 +41,16 @@ export default function Comment({ Item, collection }) {
     const addReply2Comment = async (commentId, event) => {
         event.preventDefault();
 
-        // 댓글 배열에서 ID가 일치하는 댓글을 찾습니다.
         const commentIndex = Item.comments.findIndex((c) => c.id === commentId);
         if (commentIndex !== -1) {
-            // 해당 댓글이 존재하면, childComment 배열에 대댓글을 추가합니다.
             const commentToUpdate = Item.comments[commentIndex];
             if (!commentToUpdate.childComment) {
-                commentToUpdate.childComment = []; // childComment 배열이 없으면 초기화합니다.
+                commentToUpdate.childComment = []; 
             }
             const added2Comment = {
                 displayName: user.displayName,
+                userId: user.uid,
+
                 content: reply2Comment[commentId],
                 createdAt: timestamp.fromDate(new Date()),
                 id: Math.random(),
@@ -68,6 +68,21 @@ export default function Comment({ Item, collection }) {
                     commentToUpdate,
                     ...Item.comments.slice(commentIndex + 1),
                 ],
+            });
+        }
+    };
+
+    const deleteComment = async (id) => {
+        const commentIndex = Item.comments.findIndex((c) => c.id === id);
+    
+        if (commentIndex !== -1) {
+            const updatedComments = [
+                ...Item.comments.slice(0, commentIndex),
+                ...Item.comments.slice(commentIndex + 1),
+            ];
+    
+            await updateDocument(Item.id, {
+                comments: updatedComments,
             });
         }
     };
@@ -97,8 +112,12 @@ export default function Comment({ Item, collection }) {
                             <div>{formatDate(comment.createdAt)}</div>
                             <div>{comment.content}</div>
                             <button onClick={() => openCommentArea(comment.id)}>
-                            {commentOnComment[comment.id] ? '닫기' : '대댓 달기 + ' + `${comment.childComment.length}`}
+                                {commentOnComment[comment.id]
+                                    ? '닫기'
+                                    : '대댓 달기 + ' +
+                                      `${comment.childComment.length}`}
                             </button>
+                            {user && (user.uid === comment.userId && <button onClick={()=>deleteComment(comment.id)}>X</button>  )}
                             {commentOnComment[comment.id] && (
                                 <div>
                                     {comment.childComment.length > 0 &&
