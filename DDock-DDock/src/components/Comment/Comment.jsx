@@ -45,21 +45,17 @@ export default function Comment({ Item, collection }) {
         if (commentIndex !== -1) {
             const commentToUpdate = Item.comments[commentIndex];
             if (!commentToUpdate.childComment) {
-                commentToUpdate.childComment = []; 
+                commentToUpdate.childComment = [];
             }
             const added2Comment = {
                 displayName: user.displayName,
                 userId: user.uid,
-
                 content: reply2Comment[commentId],
                 createdAt: timestamp.fromDate(new Date()),
                 id: Math.random(),
             };
 
             commentToUpdate.childComment.push(added2Comment);
-
-            // 여기서 Item 객체를 업데이트하는 로직을 추가합니다.
-            // 예: 데이터베이스에 Item을 업데이트하는 함수를 호출
             console.log(commentToUpdate.childComment);
 
             await updateDocument(Item.id, {
@@ -74,16 +70,44 @@ export default function Comment({ Item, collection }) {
 
     const deleteComment = async (id) => {
         const commentIndex = Item.comments.findIndex((c) => c.id === id);
-    
+
         if (commentIndex !== -1) {
             const updatedComments = [
                 ...Item.comments.slice(0, commentIndex),
                 ...Item.comments.slice(commentIndex + 1),
             ];
-    
+
             await updateDocument(Item.id, {
                 comments: updatedComments,
             });
+        }
+    };
+
+    const deleteReply2Comment = async (commentId, replyId) => {
+        const commentIndex = Item.comments.findIndex((c) => c.id === commentId);
+
+        if (commentIndex !== -1) {
+            const commentToUpdate = Item.comments[commentIndex];
+
+            // 대댓글이 있는지 확인하고, 있으면 해당 대댓글을 배열에서 찾아서 제거합니다.
+            if (commentToUpdate.childComment) {
+                const replyIndex = commentToUpdate.childComment.findIndex(
+                    (r) => r.id === replyId
+                );
+                if (replyIndex !== -1) {
+                    // 대댓글을 찾았으면 해당 대댓글을 배열에서 제거합니다.
+                    commentToUpdate.childComment.splice(replyIndex, 1);
+
+                    // 수정된 댓글 배열로 데이터베이스를 업데이트합니다.
+                    await updateDocument(Item.id, {
+                        comments: [
+                            ...Item.comments.slice(0, commentIndex),
+                            commentToUpdate,
+                            ...Item.comments.slice(commentIndex + 1),
+                        ],
+                    });
+                }
+            }
         }
     };
 
@@ -117,7 +141,13 @@ export default function Comment({ Item, collection }) {
                                     : '대댓 달기 + ' +
                                       `${comment.childComment.length}`}
                             </button>
-                            {user && (user.uid === comment.userId && <button onClick={()=>deleteComment(comment.id)}>X</button>  )}
+                            {user && user.uid === comment.userId && (
+                                <button
+                                    onClick={() => deleteComment(comment.id)}
+                                >
+                                    X
+                                </button>
+                            )}
                             {commentOnComment[comment.id] && (
                                 <div>
                                     {comment.childComment.length > 0 &&
@@ -132,6 +162,20 @@ export default function Comment({ Item, collection }) {
                                                     )}
                                                 </div>
                                                 <div>{child.content}</div>
+                                                {user &&
+                                                    user.uid ===
+                                                        child.userId && (
+                                                        <button
+                                                            onClick={() =>
+                                                                deleteReply2Comment(
+                                                                    comment.id,
+                                                                    child.id
+                                                                )
+                                                            }
+                                                        >
+                                                            대댓 삭제
+                                                        </button>
+                                                    )}
                                             </ul>
                                         ))}
                                     <form
