@@ -22,6 +22,7 @@ export const useSignUp = () => {
                 throw new Error('Could not complete signup');
             }
             await res.user.updateProfile({ nickName });
+            
             dispatch({ type: 'LOGIN', payload: res.user });
             if (!isCancelled) {
                 setIsPending(false);

@@ -21,6 +21,7 @@ export default function ReplyForm({ collection, Item, comment }) {
             hour12: false,
         });
     }
+    
     const addReply2Comment = async (comment_id, event) => {
         event.preventDefault();
 

@@ -12,9 +12,7 @@ export default function SignUpPage() {
 
     function consoleInfo(event) {
         event.preventDefault();
-        console.log('Email : ' + email);
-        console.log('Password : ' + password);
-        console.log('Nick name : ' + nickName);
+    
         signUp(email, password, nickName);
     }
     return (
@@ -61,6 +59,7 @@ export default function SignUpPage() {
                 </button>
             )}
             {error && <p>{error}</p>}
+            
             <GoogleButton onClick={googleLogin}>Sign Up </GoogleButton>
         </form>
     );

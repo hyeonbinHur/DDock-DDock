@@ -10,7 +10,6 @@ export default function CommentForm({ collection, Item, comment }) {
     const [commentOnComment, setCommentOnComment] = useState({});
     const { user } = useAuthContext();
     const { updateDocument } = useFirestore(collection);
-    const [loadingEditComment, setLoadingEditComment] = useState({});
 
     function formatDate(timestamp) {
         return new Date(timestamp.seconds * 1000).toLocaleString('en-AU', {
@@ -44,15 +43,13 @@ export default function CommentForm({ collection, Item, comment }) {
             });
         }
     };
+
     const editCommentCheck = async (id) => {
         setCurrentEditComment((prev) => ({
             ...prev,
             [id]: !prev[id],
         }));
-        setLoadingEditComment((prev) => ({
-            ...prev,
-            [id]: !prev[id],
-        }));
+       
        
         const commentIndex = Item.comments.findIndex((c) => c.id === id);
         if (commentIndex !== -1) {
@@ -74,10 +71,6 @@ export default function CommentForm({ collection, Item, comment }) {
                 comments: updatedComments,
             });
 
-            setLoadingEditComment((prev) => ({
-                ...prev,
-                [id]: !prev[id],
-            }));
         }
     };
 
