@@ -56,7 +56,7 @@ function App() {
     ]);
 
     useEffect(() => {
-        if (user && !user.setDisplayName) {
+        if (user && !user.displayName) {
             console.log(user)
             modal.current.open();
         }
