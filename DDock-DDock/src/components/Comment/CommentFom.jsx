@@ -99,7 +99,7 @@ export default function CommentForm({ collection, Item, comment }) {
             )}
             <button onClick={() => openCommentArea(comment.id)}>
                 {commentOnComment[comment.id]
-                    ? '닫기'
+                    ? '대댓 닫기'
                     : '대댓 달기 + ' + `${comment.childComment.length}`}
             </button>
 

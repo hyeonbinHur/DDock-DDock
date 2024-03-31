@@ -21,19 +21,22 @@ export default function ReplyForm({ collection, Item, comment }) {
             hour12: false,
         });
     }
-    const addReply2Comment = async (commentId, event) => {
+    const addReply2Comment = async (comment_id, event) => {
         event.preventDefault();
 
-        const commentIndex = Item.comments.findIndex((c) => c.id === commentId);
+        const commentIndex = Item.comments.findIndex(
+            (c) => c.id === comment_id
+        );
         if (commentIndex !== -1) {
             const commentToUpdate = Item.comments[commentIndex];
+
             if (!commentToUpdate.childComment) {
                 commentToUpdate.childComment = [];
             }
             const added2Comment = {
                 displayName: user.displayName,
                 userId: user.uid,
-                content: reply2Comment[commentId],
+                content: reply2Comment[comment_id],
                 createdAt: timestamp.fromDate(new Date()),
                 id: Math.random(),
             };
@@ -50,8 +53,10 @@ export default function ReplyForm({ collection, Item, comment }) {
         }
     };
 
-    const deleteReply2Comment = async (commentId, replyId) => {
-        const commentIndex = Item.comments.findIndex((c) => c.id === commentId);
+    const deleteReply2Comment = async (comment_id, replyId) => {
+        const commentIndex = Item.comments.findIndex(
+            (c) => c.id === comment_id
+        );
 
         if (commentIndex !== -1) {
             const commentToUpdate = Item.comments[commentIndex];
@@ -62,6 +67,7 @@ export default function ReplyForm({ collection, Item, comment }) {
                 );
                 if (replyIndex !== -1) {
                     commentToUpdate.childComment.splice(replyIndex, 1);
+
                     await updateDocument(Item.id, {
                         comments: [
                             ...Item.comments.slice(0, commentIndex),
@@ -74,10 +80,47 @@ export default function ReplyForm({ collection, Item, comment }) {
         }
     };
 
-    const editReply2Comment = (id) => {
+    const editReply2Comment = async (comment, reply_id) => {
+        const replyIndex = comment.findIndex((c) => c.id === reply_id);
+        if (replyIndex !== -1) {
+            const originalReply = comment[replyIndex];
+            const editedReply = {
+                ...originalReply,
+                content: editReply[reply_id],
+                createdAt: timestamp.fromDate(new Date()),
+            };
+
+            const updatedReply = {
+                ...comment.slice(0, replyIndex),
+                editedReply,
+                ...comment.slice(replyIndex + 1),
+            };
+
+            const comment_index = Item.comments.findIndex(
+                (c) => c.id === comment.id
+            );
+            if (comment_index !== -1) {
+                const originalComment = Item.comments[comment_index];
+                const edittedComment = {
+                    ...originalComment,
+                    childComment: updatedReply,
+                };
+
+                const updatedComments = [
+                    ...Item.comments.slice(0, comment_index),
+                    edittedComment,
+                    ...Item.comments.slice(comment_index + 1),
+                ];
+
+                await updateDocument(Item.id, {
+                    comments: updatedComments,
+                });
+            }
+        }
+
         setStartEditReply((prev) => ({
             ...prev,
-            [id]: !prev[id],
+            [reply_id]: false,
         }));
     };
 
@@ -90,8 +133,20 @@ export default function ReplyForm({ collection, Item, comment }) {
                         <div>{formatDate(child.createdAt)}</div>
 
                         {/*  */}
-                        {!startEditReply[child.id] && <div>{child.content}</div>}
-                        {startEditReply[child.id] && <textarea>Hello</textarea>}
+                        {!startEditReply[child.id] && (
+                            <div>{child.content}</div>
+                        )}
+                        {startEditReply[child.id] && (
+                            <textarea
+                                value={editReply[child.id] || child.content}
+                                onChange={(e) => {
+                                    setEditReply((prev) => ({
+                                        ...prev,
+                                        [child.id]: e.target.value,
+                                    }));
+                                }}
+                            ></textarea>
+                        )}
 
                         {/*  */}
                         {user && user.uid === child.userId && (
@@ -108,7 +163,19 @@ export default function ReplyForm({ collection, Item, comment }) {
                                 </button>
 
                                 <button
-                                    onClick={() => editReply2Comment(child.id)}
+                                    onClick={() => {
+                                        if (!editReply) {
+                                            setStartEditReply((prev) => ({
+                                                ...prev,
+                                                [child.id]: true,
+                                            }));
+                                        } else {
+                                            editReply2Comment(
+                                                comment.id,
+                                                child.id
+                                            );
+                                        }
+                                    }}
                                 >
                                     {startEditReply[child.id]
                                         ? '수정 완료'
@@ -130,6 +197,7 @@ export default function ReplyForm({ collection, Item, comment }) {
                     }
                     value={reply2Comment[comment.id] || ''}
                 ></textarea>
+
                 <button>submit</button>
             </form>
         </div>
