@@ -1,11 +1,12 @@
 import { projectFirestore } from '../firebase/config';
 import { useEffect, useState } from 'react';
 
-export function useDocument( collection, id ) {
+export function useDocument(collection, id) {
     const [document, setDocument] = useState(null);
     const [error, setError] = useState(null);
 
     useEffect(() => {
+
         const ref = projectFirestore.collection(collection).doc(id);
 
         const unsubscribe = ref.onSnapshot(
@@ -23,9 +24,8 @@ export function useDocument( collection, id ) {
             }
         );
 
-        // unsubscribe on unmount
         return () => unsubscribe();
     }, [collection, id]);
 
-    return {document, error};
+    return { document, error };
 }

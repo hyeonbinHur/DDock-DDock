@@ -140,8 +140,6 @@ export default function ReplyForm({ collection, Item, comment }) {
                     <ul key={child.id}>
                         <label>{child.displayName} </label>
                         <div>{formatDate(child.createdAt)}</div>
-
-                        {/*  */}
                         {!startEditReply[child.id] && (
                             <div>{child.content}</div>
                         )}
@@ -156,8 +154,6 @@ export default function ReplyForm({ collection, Item, comment }) {
                                 }}
                             ></textarea>
                         )}
-
-                        {/*  */}
                         {user && user.uid === child.userId && (
                             <div>
                                 <button
