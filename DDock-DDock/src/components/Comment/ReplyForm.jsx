@@ -81,24 +81,36 @@ export default function ReplyForm({ collection, Item, comment }) {
     };
 
     const editReply2Comment = async (comment, reply_id) => {
-        const replyIndex = comment.findIndex((c) => c.id === reply_id);
+
+        console.log(editReply[reply_id])
+    
+        setStartEditReply((prev) => ({
+            ...prev,
+            [reply_id]: !prev[reply_id],
+        }));
+
+        const replyIndex = comment.childComment.findIndex((c) => c.id === reply_id);
         if (replyIndex !== -1) {
-            const originalReply = comment[replyIndex];
+
+            const originalReply = comment.childComment[replyIndex];
+            
             const editedReply = {
                 ...originalReply,
                 content: editReply[reply_id],
                 createdAt: timestamp.fromDate(new Date()),
             };
 
-            const updatedReply = {
-                ...comment.slice(0, replyIndex),
+            const updatedReply = [
+                ...comment.childComment.slice(0, replyIndex),
                 editedReply,
-                ...comment.slice(replyIndex + 1),
-            };
+                ...comment.childComment.slice(replyIndex + 1),
+            ];
 
             const comment_index = Item.comments.findIndex(
                 (c) => c.id === comment.id
             );
+
+
             if (comment_index !== -1) {
                 const originalComment = Item.comments[comment_index];
                 const edittedComment = {
@@ -117,11 +129,7 @@ export default function ReplyForm({ collection, Item, comment }) {
                 });
             }
         }
-
-        setStartEditReply((prev) => ({
-            ...prev,
-            [reply_id]: false,
-        }));
+   
     };
 
     return (
@@ -161,7 +169,6 @@ export default function ReplyForm({ collection, Item, comment }) {
                                 >
                                     대댓 삭제
                                 </button>
-
                                 <button
                                     onClick={() => {
                                         if (!editReply) {
@@ -171,7 +178,7 @@ export default function ReplyForm({ collection, Item, comment }) {
                                             }));
                                         } else {
                                             editReply2Comment(
-                                                comment.id,
+                                                comment,
                                                 child.id
                                             );
                                         }

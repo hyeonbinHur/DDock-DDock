@@ -57,6 +57,7 @@ export default function CommentForm({ collection, Item, comment }) {
         const commentIndex = Item.comments.findIndex((c) => c.id === id);
         if (commentIndex !== -1) {
             const originalComment = Item.comments[commentIndex];
+
             const editedComment = {
                 ...originalComment,
                 content: editingComment[id],
@@ -72,11 +73,11 @@ export default function CommentForm({ collection, Item, comment }) {
             await updateDocument(Item.id, {
                 comments: updatedComments,
             });
+
             setLoadingEditComment((prev) => ({
                 ...prev,
                 [id]: !prev[id],
             }));
-            console.log(loadingEditComment[id]);
         }
     };
 
@@ -120,7 +121,7 @@ export default function CommentForm({ collection, Item, comment }) {
                             }
                         }}
                     >
-                        {' '}
+                        
                         {currentEditComment[comment.id]
                             ? '수정 완료'
                             : '댓글 수정'}{' '}
