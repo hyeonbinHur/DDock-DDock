@@ -15,12 +15,12 @@ import MarketItemAdd from './pages/Market/MarketItemAdd';
 import MarketItemDetail from './pages/Market/MarketItemDetail';
 import { useAuthContext } from './hooks/useAuth';
 import DisplayNameModal from './components/Modal/DisplayNameModal';
-
+import ProfilePage from './pages/User/Profile';
 
 // import MarketList from './components/MarketItem/MarketItemList';
 
 function App() {
-    const {user} = useAuthContext();
+    const { user } = useAuthContext();
     const modal = useRef();
     const router = createBrowserRouter([
         {
@@ -51,13 +51,14 @@ function App() {
                 { path: '/community', element: <CommunityPage /> },
                 { path: '/signup', element: <SignUpPage /> },
                 { path: '/login', element: <LoginPage /> },
+                { path: '/profile/:userId', element: <ProfilePage /> },
             ],
         },
     ]);
 
     useEffect(() => {
         if (user && !user.displayName) {
-            console.log(user)
+            console.log(user);
             modal.current.open();
         }
     }, [user]);
@@ -67,7 +68,7 @@ function App() {
             <main>
                 <RouterProvider router={router} />
             </main>
-            <DisplayNameModal user={user} ref={modal}/>
+            <DisplayNameModal user={user} ref={modal} />
         </Fragment>
     );
 }

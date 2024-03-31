@@ -5,7 +5,7 @@ export default function MarketPage() {
     const {user} = useAuthContext()
     const { document, error, loading } = useCollection('MarketItem', ['createdAt', 'desc']);
     function asd(){
-        console.log(user.displayName);
+        console.log(user.email);
     }
     return (
         <div>

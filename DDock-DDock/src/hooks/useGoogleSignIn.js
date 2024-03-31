@@ -3,12 +3,14 @@ import { projectAuth } from '../firebase/config';
 import { useEffect, useState } from 'react';
 import { provider } from '../firebase/config';
 import { useAuthContext } from './useAuth';
+import { useFirestore } from './useFirestore';
 
 export const useGoogleSignin = () => {
     const [googleError, setError] = useState(null);
     const [googleIsPending, setIsPending] = useState(false);
     const [isCancelled, setIsCancelled] = useState(true);
     const { dispatch } = useAuthContext();
+    const {saveUser} = useFirestore('User');
 
     const googleLogin = async () => {
         setError(null);
@@ -19,10 +21,11 @@ export const useGoogleSignin = () => {
             if (!res) {
                 console.log('구글 로그인 에러 씨발');
             }
+            console.log(res.user);
+            await saveUser(res.user)
 
             dispatch({ type: 'LOGIN', payload: res.user });
 
-            await res.user.updateProfile({setDisplayName: false});
             if (!isCancelled) {
                 setError(null);
                 setIsPending(false);

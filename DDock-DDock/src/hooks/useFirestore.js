@@ -27,6 +27,14 @@ const firestoreReducer = (state, action) => {
                 success: true,
                 error: null,
             };
+        case 'ADD_NEWUSER':
+            return {
+                ...state,
+                isPending: false,
+                document: action.payload,
+                success: true,
+                error: null,
+            };
 
         case 'DELETED_DOCUMENT':
             return {
@@ -73,9 +81,7 @@ export const useFirestore = (collection) => {
 
     const addDocument = async (doc) => {
         setLoading(true);
-
         dispatch({ type: 'IS_PENDING' });
-
         try {
             const createdAt = timestamp.fromDate(new Date());
             const userId = user.uid;
@@ -135,9 +141,52 @@ export const useFirestore = (collection) => {
         }
     };
 
+    const saveUser = async (user) => {
+        console.log("유저 테이블로 저장")
+        setLoading(true);
+        dispatch({ type: 'IS_PENDING' });
+        const userRef = ref.doc(user.uid);
+        try {
+            const currentUser = await userRef.get();
+
+            if (!currentUser.exists) {
+                const newUser = await userRef.set({
+                    uid: user.uid,
+                    displayName: user.displayName,
+                    userItem: [],
+                    userComment: [],
+                    Avatar: null,
+                    setDisplayName: false,
+                    email: user.email
+                });
+
+                dispatchIsNotCancelled({
+                    type: 'ADD_NEWUSER',
+                    payload: newUser,
+                });
+            }
+        console.log("유저 테이블로 저장 성공")
+
+        } catch (error) {
+            dispatchIsNotCancelled({
+                type: 'ERROR',
+                payload: error.message,
+            });
+            console.log(error.message)
+        }
+        setLoading(false);
+    };
+
     useEffect(() => {
         return () => setIsCancelled(!isCancelled);
     }, [isCancelled]);
 
-    return { addDocument, updateDocument, deleteDocument, response, loading };
+    return {
+        addDocument,
+        updateDocument,
+        deleteDocument,
+        saveUser,
+        response,
+        loading,
+    };
 };

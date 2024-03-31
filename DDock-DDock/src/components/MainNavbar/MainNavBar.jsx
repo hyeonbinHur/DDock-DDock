@@ -1,15 +1,14 @@
 import { NavLink } from 'react-router-dom';
-import style from './MainNavBar.module.css'
+import style from './MainNavBar.module.css';
 import { useLogout } from '../../hooks/useLogout';
 import { useAuthContext } from '../../hooks/useAuth';
 export default function Navbar() {
     const { logout } = useLogout();
     const { user } = useAuthContext();
 
-
     return (
         <nav className={style.navbar}>
-            <ul >
+            <ul>
                 <li>
                     <NavLink to="/">Home /</NavLink>
                 </li>
@@ -44,15 +43,17 @@ export default function Navbar() {
                 )}
 
                 {user && (
-                    <li>
-                        <button className="btn" onClick={logout}>
-                            Logout
-                        </button>
-                    </li>
+                    <>
+                        <li>
+                            <button className="btn" onClick={logout}>
+                                Logout
+                            </button>
+                        </li>
+                        <li>
+                            <NavLink to={`/profile/${user.uid}`}>Profile</NavLink>
+                        </li>
+                    </>
                 )}
-
-              
-
             </ul>
         </nav>
     );
