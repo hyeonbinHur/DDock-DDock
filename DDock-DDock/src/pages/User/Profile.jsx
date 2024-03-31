@@ -8,7 +8,7 @@ export default function ProfilePage() {
     const { document, error } = useDocument('User', userId);
     const [startEditDisplayName, setStartEditDisplayName] = useState(false);
     const [newDisplayName, setNewDisplayName] = useState('');
-    const { updateDocument, response } = useFirestore('User');
+    const { updateDocument, loading } = useFirestore('User');
 
     const changeDisplayName = async () => {
         setStartEditDisplayName(false);
@@ -19,18 +19,18 @@ export default function ProfilePage() {
         };
         await updateDocument(userId, updatedUser);
     };
-  
+
     return (
         <>
             {!document && <p>Loading...</p>}
-            {document && !response.isPanding && (
-                <div>
+            {document ? (
+                !loading ? (
                     <div>
-                        <label>Hlloe Profile</label>
-                    </div>
-                    <div>
-                        {document &&
-                            (startEditDisplayName ? (
+                        <div>
+                            <label>Hello Profile</label>
+                        </div>
+                        <div>
+                            {startEditDisplayName ? (
                                 <input
                                     defaultValue={document.displayName}
                                     onChange={(e) =>
@@ -39,28 +39,32 @@ export default function ProfilePage() {
                                 ></input>
                             ) : (
                                 <span>{document.displayName}</span>
-                            ))}
-                    </div>
-                    <div>
-                        <button
-                            onClick={() => {
-                                if (startEditDisplayName) {
-                                    changeDisplayName();
-                                } else {
-                                    setStartEditDisplayName(true);
-                                }
-                            }}
-                        >
-                            {startEditDisplayName ? '완료' : '닉네임 변경'}
-                        </button>
-                    </div>
+                            )}
+                        </div>
+                        <div>
+                            <button
+                                onClick={() => {
+                                    if (startEditDisplayName) {
+                                        changeDisplayName();
+                                    } else {
+                                        setStartEditDisplayName(true);
+                                    }
+                                }}
+                            >
+                                {startEditDisplayName ? '완료' : '닉네임 변경'}
+                            </button>
+                        </div>
 
-                    <div>----M ITEM----</div>
-                    <div>----H ITEM----</div>
-                    <div>----J ITEM----</div>
-                    <div>----C ITEM----</div>
-                </div>
-            )}
+                        <div>----M ITEM----</div>
+                        <div>----H ITEM----</div>
+                        <div>----J ITEM----</div>
+                        <div>----C ITEM----</div>
+                    </div>
+                ) : (
+                    <p>Loading..</p>
+                )
+            ) : null}
+
             {error && <p>{error.message}</p>}
         </>
     );
