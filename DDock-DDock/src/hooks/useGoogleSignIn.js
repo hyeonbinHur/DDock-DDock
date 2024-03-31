@@ -22,7 +22,7 @@ export const useGoogleSignin = () => {
 
             dispatch({ type: 'LOGIN', payload: res.user });
 
-
+            await res.user.updateProfile({setDisplayName: false});
             if (!isCancelled) {
                 setError(null);
                 setIsPending(false);

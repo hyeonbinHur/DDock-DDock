@@ -21,7 +21,7 @@ export const useSignUp = () => {
             if (!res) {
                 throw new Error('Could not complete signup');
             }
-            await res.user.updateProfile({ nickName });
+            await res.user.updateProfile({ displayName: nickName, setDisplayName: true });
             
             dispatch({ type: 'LOGIN', payload: res.user });
             if (!isCancelled) {

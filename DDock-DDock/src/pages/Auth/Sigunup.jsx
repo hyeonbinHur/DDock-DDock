@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useSignUp } from '../../hooks/useSignup';
 import GoogleButton from 'react-google-button';
 import { useGoogleSignin } from '../../hooks/useGoogleSignIn';
+import DisplayNameModal from '../../components/Modal/DisplayNameModal';
 
 export default function SignUpPage() {
     const [email, setEmail] = useState('');
@@ -9,13 +10,23 @@ export default function SignUpPage() {
     const [nickName, setNickName] = useState('');
     const { signUp, error, isPending } = useSignUp();
     const { googleLogin } = useGoogleSignin();
+    const modal = useRef();
+    
+    
 
     function consoleInfo(event) {
         event.preventDefault();
     
         signUp(email, password, nickName);
     }
+
+
+    function handleGoogleSignUp(){
+        googleLogin();
+
+    }
     return (
+        <div>
         <form onSubmit={consoleInfo}>
             <div>
                 <label>
@@ -60,7 +71,9 @@ export default function SignUpPage() {
             )}
             {error && <p>{error}</p>}
             
-            <GoogleButton onClick={googleLogin}>Sign Up </GoogleButton>
+            <GoogleButton onClick={handleGoogleSignUp}>Sign Up </GoogleButton>
         </form>
+        <DisplayNameModal ref={modal}/>
+        </div>
     );
 }

@@ -28,9 +28,6 @@ export default function MarketList({ documents }) {
                                 X
                             </button>
                         ))}
-
-
-                        
                     </li>
                 ))}
             </ul>

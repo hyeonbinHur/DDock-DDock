@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment, useRef, useEffect } from 'react';
 import './App.css';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import RootLayout from './pages/Roots';
@@ -10,14 +10,18 @@ import CommunityPage from './pages/Community/Community';
 import MarketRoot from './pages/Market/MarketRoot';
 import SignUpPage from './pages/Auth/Sigunup';
 import LoginPage from './pages/Auth/Login';
-
 import MarketItemEdit from './pages/Market/MarketItemEdit';
 import MarketItemAdd from './pages/Market/MarketItemAdd';
 import MarketItemDetail from './pages/Market/MarketItemDetail';
+import { useAuthContext } from './hooks/useAuth';
+import DisplayNameModal from './components/Modal/DisplayNameModal';
+
 
 // import MarketList from './components/MarketItem/MarketItemList';
 
 function App() {
+    const {user} = useAuthContext();
+    const modal = useRef();
     const router = createBrowserRouter([
         {
             path: '/',
@@ -51,11 +55,19 @@ function App() {
         },
     ]);
 
+    useEffect(() => {
+        if (user && !user.setDisplayName) {
+            console.log(user)
+            modal.current.open();
+        }
+    }, [user]);
+
     return (
         <Fragment>
             <main>
                 <RouterProvider router={router} />
             </main>
+            <DisplayNameModal user={user} ref={modal}/>
         </Fragment>
     );
 }
