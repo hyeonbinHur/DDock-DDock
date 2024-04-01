@@ -101,8 +101,6 @@ export const useFirestore = (collection) => {
             const originalUserItem = originalUser.userItem;
             const updatedUserItem = [...originalUserItem, addedDocument];
             originalUser.userItem = updatedUserItem;
-            console.log(user.uid);
-
             await updateDocument(user.uid, originalUser,'User');
 
             dispatchIsNotCancelled({
@@ -134,6 +132,7 @@ export const useFirestore = (collection) => {
     };
 
     const updateDocument = async (id, updates, collection) => {
+        
         const ref = projectFirestore.collection(collection);
 
         setLoading(true);
@@ -146,10 +145,8 @@ export const useFirestore = (collection) => {
                 payload: updatedDocument,
             });
             setLoading(false);
-            console.log("성공")
             return updatedDocument;
         } catch (error) {
-            console.log(error);
             setLoading(false);
             dispatchIsNotCancelled({ type: 'ERROR', payload: error.message });
             return null;

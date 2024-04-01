@@ -2,6 +2,7 @@ import { useParams } from 'react-router-dom';
 import { useDocument } from '../../hooks/useDocument';
 import { useState } from 'react';
 import { useFirestore } from '../../hooks/useFirestore';
+import MarketList from '../../components/MarketItem/MarketItemList';
 
 export default function ProfilePage() {
     const { userId } = useParams();
@@ -12,7 +13,6 @@ export default function ProfilePage() {
 
     const changeDisplayName = async () => {
         setStartEditDisplayName(false);
-        
         const originalUser = document;
         const updatedUser = {
             ...originalUser,
@@ -57,6 +57,7 @@ export default function ProfilePage() {
                         </div>
 
                         <div>----M ITEM----</div>
+                        {document.userItem.length > 0 ? <MarketList documents={document.userItem} /> : null}
                         <div>----H ITEM----</div>
                         <div>----J ITEM----</div>
                         <div>----C ITEM----</div>
