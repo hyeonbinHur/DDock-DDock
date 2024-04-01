@@ -16,12 +16,11 @@ export default function MarketList({ documents }) {
 
     return (
         <div>
-            <Link to="/market/mupload">Add New Item</Link>
+            
             <ul>
                 {documents.map((doc) => (
                     <li key={doc.id}>
                         <Link to={ `/market/${doc.id}`}>
-                            <p>{doc.id}</p>
                             <MarketItem document={doc} />
                         </Link>
                         {user && (doc.userId === user.uid && (

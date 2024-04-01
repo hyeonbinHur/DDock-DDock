@@ -1,30 +1,48 @@
 import { useParams } from 'react-router-dom';
 import { useDocument } from '../../hooks/useDocument';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useFirestore } from '../../hooks/useFirestore';
 import MarketList from '../../components/MarketItem/MarketItemList';
+import { useCollection } from '../../hooks/useCollection';
 
 export default function ProfilePage() {
     const { userId } = useParams();
-    const { document, error } = useDocument('User', userId);
+    const { document: user, error: user_error } = useDocument('User', userId);
+    const { document: marketItems,  } = useCollection('MarketItem', ['createdAt', 'desc']);
+
+
     const [startEditDisplayName, setStartEditDisplayName] = useState(false);
     const [newDisplayName, setNewDisplayName] = useState('');
     const { updateDocument, loading } = useFirestore('User');
 
+    const [userMarketItem, setUserMarktItem] = useState([]);
+
     const changeDisplayName = async () => {
         setStartEditDisplayName(false);
-        const originalUser = document;
+        const originalUser = user;
         const updatedUser = {
             ...originalUser,
             displayName: newDisplayName,
         };
         await updateDocument(userId, updatedUser);
     };
+    useEffect(() => {
+    
+        if (user?.userItem && marketItems) {
+            const userIds = user.userItem.map(item => item.id);
+            const userItemDetails = marketItems.filter((doc) => {
+                return userIds.includes(doc.id);
+            });
+            setUserMarktItem(userItemDetails);
+        }
+    }, [marketItems, user?.userItem, user]);
+
+
 
     return (
         <>
-            {!document && <p>Loading...</p>}
-            {document ? (
+            {!user && <p>Loading...</p>}
+            {user ? (
                 !loading ? (
                     <div>
                         <div>
@@ -33,13 +51,13 @@ export default function ProfilePage() {
                         <div>
                             {startEditDisplayName ? (
                                 <input
-                                    defaultValue={document.displayName}
+                                    defaultValue={user.displayName}
                                     onChange={(e) =>
                                         setNewDisplayName(e.target.value)
                                     }
                                 ></input>
                             ) : (
-                                <span>{document.displayName}</span>
+                                <span>{user.displayName}</span>
                             )}
                         </div>
                         <div>
@@ -57,7 +75,9 @@ export default function ProfilePage() {
                         </div>
 
                         <div>----M ITEM----</div>
-                        {document.userItem.length > 0 ? <MarketList documents={document.userItem} /> : null}
+                        {userMarketItem.length > 0 ? (
+                            <MarketList documents={userMarketItem} />
+                        ) : null}
                         <div>----H ITEM----</div>
                         <div>----J ITEM----</div>
                         <div>----C ITEM----</div>
@@ -67,7 +87,7 @@ export default function ProfilePage() {
                 )
             ) : null}
 
-            {error && <p>{error.message}</p>}
+            {user_error && <p>{user_error.message}</p>}
         </>
     );
 }
