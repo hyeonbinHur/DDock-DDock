@@ -25,6 +25,7 @@ export default function CommentForm({ collection, Item, comment }) {
             hour12: false,
         });
     }
+    
     const openCommentArea = (id) => {
         setCommentOnComment((prev) => ({
             ...prev,

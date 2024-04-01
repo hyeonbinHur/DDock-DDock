@@ -12,8 +12,6 @@ const ItemDeleteModal = forwardRef(function ItemStatusModal({ id }, ref) {
     const {user} = useAuthContext();
     const { document: userInfo } = useDocument('User', user.uid);
 
-
-
     useImperativeHandle(ref, () => {
         return {
             open: () => {
@@ -28,21 +26,17 @@ const ItemDeleteModal = forwardRef(function ItemStatusModal({ id }, ref) {
     const deleteItem = async()=> {
         setConfirm(true);
         await deleteDocument(id);
-
-
         const originalUserInfo = userInfo;
         const updatedUserItem = originalUserInfo.userItem.filter(
             (item) => item.id !== id
         );
         originalUserInfo.userItem = updatedUserItem;
         await updateDocument(user.uid, originalUserInfo, 'User');
-
     }
     function handleClose() {
         modal.current.close();
         setConfirm(false); // 모달을 닫을 때 confirm 상태도 초기화
     }
-
     return createPortal(
         <div>
             <dialog ref={modal}>

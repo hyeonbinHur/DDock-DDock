@@ -4,12 +4,15 @@ import { useEffect, useState } from 'react';
 import { useFirestore } from '../../hooks/useFirestore';
 import MarketList from '../../components/MarketItem/MarketItemList';
 import { useCollection } from '../../hooks/useCollection';
+import UserCommentForm from '../../components/User/UserCommentForm';
 
 export default function ProfilePage() {
     const { userId } = useParams();
     const { document: user, error: user_error } = useDocument('User', userId);
-    const { document: marketItems,  } = useCollection('MarketItem', ['createdAt', 'desc']);
-
+    const { document: marketItems } = useCollection('MarketItem', [
+        'createdAt',
+        'desc',
+    ]);
 
     const [startEditDisplayName, setStartEditDisplayName] = useState(false);
     const [newDisplayName, setNewDisplayName] = useState('');
@@ -27,9 +30,8 @@ export default function ProfilePage() {
         await updateDocument(userId, updatedUser);
     };
     useEffect(() => {
-    
         if (user?.userItem && marketItems) {
-            const userIds = user.userItem.map(item => item.id);
+            const userIds = user.userItem.map((item) => item.id);
             const userItemDetails = marketItems.filter((doc) => {
                 return userIds.includes(doc.id);
             });
@@ -37,11 +39,13 @@ export default function ProfilePage() {
         }
     }, [marketItems, user?.userItem, user]);
 
-
-
+    function HelloWorld(){
+        console.log(user.userComment);
+    }
     return (
         <>
             {!user && <p>Loading...</p>}
+            <button onClick={HelloWorld}>Check user comment</button>
             {user ? (
                 !loading ? (
                     <div>
@@ -75,15 +79,17 @@ export default function ProfilePage() {
                         </div>
 
                         <div>----M ITEM----</div>
-                        {userMarketItem.length > 0 ? (
-                            <MarketList documents={userMarketItem} />
-                        ) : null}
+
+                        <MarketList documents={userMarketItem} />
+
                         <div>----H ITEM----</div>
                         <div>----J ITEM----</div>
                         <div>----C ITEM----</div>
                         <div>---Comments---</div>
-                        
-
+                        {user.userComment.length > 0 &&
+                            user.userComment.map((comment) => {
+                                return <UserCommentForm comment={comment} key={comment.id}/>;
+                            })}
                     </div>
                 ) : (
                     <p>Loading..</p>
