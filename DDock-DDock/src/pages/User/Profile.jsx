@@ -81,6 +81,9 @@ export default function ProfilePage() {
                         <div>----H ITEM----</div>
                         <div>----J ITEM----</div>
                         <div>----C ITEM----</div>
+                        <div>---Comments---</div>
+                        
+
                     </div>
                 ) : (
                     <p>Loading..</p>
