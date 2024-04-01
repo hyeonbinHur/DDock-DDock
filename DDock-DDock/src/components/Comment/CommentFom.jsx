@@ -53,7 +53,6 @@ export default function CommentForm({ collection, Item, comment }) {
                 (comment) => comment.id !== id
             );
             originalUserInfo.userComment = updatedUserComments;
-            console.log(originalUserInfo.userComment);
             await updateDocument(user.uid, originalUserInfo, 'User');
         }
     };
@@ -87,6 +86,17 @@ export default function CommentForm({ collection, Item, comment }) {
                 },
                 collection
             );
+
+            const originalUserInfo = userInfo;
+            const updatedUserComments = originalUserInfo.userComment.map((comment) => {
+                if(comment.id === id){
+                    return editedComment
+                }
+                return comment;
+            });
+            originalUserInfo.userComment = updatedUserComments;
+            await updateDocument(user.uid, originalUserInfo, 'User');
+
         }
     };
 
