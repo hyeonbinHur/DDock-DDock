@@ -2,12 +2,17 @@ import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import spinner from '../../assets/spinner.svg';
 import { useFirestore } from '../../hooks/useFirestore';
+import { useDocument } from '../../hooks/useDocument';
+import { useAuthContext } from '../../hooks/useAuth';
 
 const ItemDeleteModal = forwardRef(function ItemStatusModal({ id }, ref) {
-    const { deleteDocument, loading, response } = useFirestore('MarketItem');
-
+    const { deleteDocument, updateDocument ,loading, response } = useFirestore('MarketItem');
     const [confirm, setConfirm] = useState(false);
     const modal = useRef(null);
+    const {user} = useAuthContext();
+    const { document: userInfo } = useDocument('User', user.uid);
+
+
 
     useImperativeHandle(ref, () => {
         return {
@@ -20,9 +25,18 @@ const ItemDeleteModal = forwardRef(function ItemStatusModal({ id }, ref) {
         };
     });
 
-    function deleteItem() {
+    const deleteItem = async()=> {
         setConfirm(true);
-        deleteDocument(id);
+        await deleteDocument(id);
+
+
+        const originalUserInfo = userInfo;
+        const updatedUserItem = originalUserInfo.userItem.filter(
+            (item) => item.id !== id
+        );
+        originalUserInfo.userItem = updatedUserItem;
+        await updateDocument(user.uid, originalUserInfo, 'User');
+
     }
     function handleClose() {
         modal.current.close();

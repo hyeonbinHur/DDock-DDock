@@ -24,7 +24,7 @@ export default function MarketItemEdit() {
         updateDocument(mitemId, {
             title,
             description,
-        });
+        },'MarketItem');
     };
 
     return (

@@ -11,6 +11,9 @@ export default function MarketList({ documents }) {
 
     function openConfirmModal(itemId) {
         setDeleteItemId(itemId);
+
+
+        
         modal.current.open();
     }
 
