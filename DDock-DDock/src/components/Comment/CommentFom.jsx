@@ -3,6 +3,7 @@ import { useAuthContext } from '../../hooks/useAuth';
 import { useFirestore } from '../../hooks/useFirestore';
 import { timestamp } from '../../firebase/config';
 import ReplyForm from './ReplyForm';
+import { useDocument } from '../../hooks/useDocument';
 
 export default function CommentForm({ collection, Item, comment }) {
     const [currentEditComment, setCurrentEditComment] = useState({});
@@ -10,6 +11,7 @@ export default function CommentForm({ collection, Item, comment }) {
     const [commentOnComment, setCommentOnComment] = useState({});
     const { user } = useAuthContext();
     const { updateDocument } = useFirestore(collection);
+    const { document: userInfo } = useDocument('User', user.uid);
 
     function formatDate(timestamp) {
         return new Date(timestamp.seconds * 1000).toLocaleString('en-AU', {
@@ -38,9 +40,21 @@ export default function CommentForm({ collection, Item, comment }) {
                 ...Item.comments.slice(commentIndex + 1),
             ];
 
-            await updateDocument(Item.id, {
-                comments: updatedComments,
-            },collection);
+            await updateDocument(
+                Item.id,
+                {
+                    comments: updatedComments,
+                },
+                collection
+            );
+
+            const originalUserInfo = userInfo;
+            const updatedUserComments = originalUserInfo.userComment.filter(
+                (comment) => comment.id !== id
+            );
+            originalUserInfo.userComment = updatedUserComments;
+            console.log(originalUserInfo.userComment);
+            await updateDocument(user.uid, originalUserInfo, 'User');
         }
     };
 
@@ -49,8 +63,7 @@ export default function CommentForm({ collection, Item, comment }) {
             ...prev,
             [id]: !prev[id],
         }));
-       
-       
+
         const commentIndex = Item.comments.findIndex((c) => c.id === id);
         if (commentIndex !== -1) {
             const originalComment = Item.comments[commentIndex];
@@ -67,10 +80,13 @@ export default function CommentForm({ collection, Item, comment }) {
                 ...Item.comments.slice(commentIndex + 1),
             ];
 
-            await updateDocument(Item.id, {
-                comments: updatedComments,
-            },collection);
-
+            await updateDocument(
+                Item.id,
+                {
+                    comments: updatedComments,
+                },
+                collection
+            );
         }
     };
 
@@ -114,7 +130,6 @@ export default function CommentForm({ collection, Item, comment }) {
                             }
                         }}
                     >
-                        
                         {currentEditComment[comment.id]
                             ? '수정 완료'
                             : '댓글 수정'}{' '}

@@ -15,7 +15,6 @@ export default function Comment({ Item, collection }) {
 
     const addComment = async (event) => {
         event.preventDefault();
-
         const addedComment = {
             displayName: user.displayName,
             userId: user.uid,
@@ -23,8 +22,8 @@ export default function Comment({ Item, collection }) {
             createdAt: timestamp.fromDate(new Date()),
             id: Math.random(),
             childComment: [],
+            itemId: Item.id,
         };
-
         await updateDocument(
             Item.id,
             {
@@ -32,22 +31,18 @@ export default function Comment({ Item, collection }) {
             },
             collection
         );
-
-        if (user) {
-            const originalUser = userInfo;
-            const originalUserComment = originalUser.userComment;
-            const updatedUserComment = [...originalUserComment, addedComment];
-            originalUser.userComment = updatedUserComment;
-            await updateUser(user.uid, originalUser, 'User');
-        }
-
+        const originalUser = userInfo;
+        const originalUserComment = originalUser.userComment;
+        const updatedUserComment = [...originalUserComment, addedComment];
+        originalUser.userComment = updatedUserComment;
+        await updateUser(user.uid, originalUser, 'User');
         if (!response.error) {
             setComment('');
         }
     };
 
-    function HelloWorld(){
-        console.log(userInfo.userComment);
+    function HelloWorld() {
+        console.log(userInfo.userComment[0].id);
     }
 
     return (
