@@ -16,7 +16,7 @@ import MarketItemDetail from './pages/Market/MarketItemDetail';
 import { useAuthContext } from './hooks/useAuth';
 import DisplayNameModal from './components/Modal/DisplayNameModal';
 import ProfilePage from './pages/User/Profile';
-
+import Memo from '../src/pages/Memo'
 // import MarketList from './components/MarketItem/MarketItemList';
 
 function App() {
@@ -52,6 +52,7 @@ function App() {
                 { path: '/signup', element: <SignUpPage /> },
                 { path: '/login', element: <LoginPage /> },
                 { path: '/profile/:userId', element: <ProfilePage /> },
+                { path: '/csstest', element: <Memo /> },
             ],
         },
     ]);

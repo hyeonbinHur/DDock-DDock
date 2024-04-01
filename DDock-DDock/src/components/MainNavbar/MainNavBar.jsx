@@ -25,6 +25,9 @@ export default function Navbar() {
                 <li>
                     <NavLink to="/community">Community /</NavLink>
                 </li>
+                <li>
+                    <NavLink to="/csstest">memo /</NavLink>
+                </li>
                 {/* <li>
                     <NavLink to="/signup">Login</NavLink>
                 </li>
