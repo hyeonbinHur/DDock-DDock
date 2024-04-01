@@ -73,7 +73,7 @@ export const useFirestore = (collection) => {
     const [loading, setLoading] = useState(false);
     const ref = projectFirestore.collection(collection);
     const { user } = useAuthContext();
-    const { document } = useDocument('User', user.uid);
+    const { document } = useDocument('User', user?.uid);
 
     const dispatchIsNotCancelled = (action) => {
         if (!isCancelled) {
