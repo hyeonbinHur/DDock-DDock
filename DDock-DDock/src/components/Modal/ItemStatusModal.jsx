@@ -16,7 +16,6 @@ const ItemModal = forwardRef(function ItemStatusModal(
     });
 
     useEffect(() => {
-        console.log("from modal "+ response.success)
         if (response.success === true) {
             const timer = setTimeout(() => {
                 modal.current.close();

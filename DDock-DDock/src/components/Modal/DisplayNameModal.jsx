@@ -22,7 +22,6 @@ const DisplayNameModal = forwardRef(function DisplayNameModal({user},ref) {
                 console.error("디스플레이 네임 업데이트 실패", error);
             }
         } else {
-            console.log(user)
             console.error("user 객체가 유효하지 않습니다.");
         }
     }

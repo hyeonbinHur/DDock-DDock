@@ -12,6 +12,7 @@ export default function ProfilePage() {
 
     const changeDisplayName = async () => {
         setStartEditDisplayName(false);
+        
         const originalUser = document;
         const updatedUser = {
             ...originalUser,

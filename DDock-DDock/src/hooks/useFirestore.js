@@ -135,14 +135,12 @@ export const useFirestore = (collection) => {
             return updatedDocument;
         } catch (error) {
             setLoading(false);
-
             dispatchIsNotCancelled({ type: 'ERROR', payload: error.message });
             return null;
         }
     };
 
     const saveUser = async (user) => {
-        console.log("유저 테이블로 저장")
         setLoading(true);
         dispatch({ type: 'IS_PENDING' });
         const userRef = ref.doc(user.uid);
@@ -165,14 +163,12 @@ export const useFirestore = (collection) => {
                     payload: newUser,
                 });
             }
-        console.log("유저 테이블로 저장 성공")
 
         } catch (error) {
             dispatchIsNotCancelled({
                 type: 'ERROR',
                 payload: error.message,
             });
-            console.log(error.message)
         }
         setLoading(false);
     };

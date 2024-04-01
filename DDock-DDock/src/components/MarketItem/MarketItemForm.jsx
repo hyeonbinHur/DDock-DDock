@@ -10,7 +10,6 @@ export default function MarketItemForm({ doAction, data}) {
         doAction(title, description);
       
     };
-    console.log(data)
     return (
         <>
             <form className={style.form} onSubmit={handleSubmit}>
