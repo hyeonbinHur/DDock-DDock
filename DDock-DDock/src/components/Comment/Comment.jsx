@@ -24,7 +24,7 @@ export default function Comment({ Item, collection }) {
 
         await updateDocument(Item.id, {
             comments: [...Item.comments, addedComment],
-        });
+        },collection);
 
         if (!response.error) {
             setComment('');

@@ -40,7 +40,7 @@ export default function CommentForm({ collection, Item, comment }) {
 
             await updateDocument(Item.id, {
                 comments: updatedComments,
-            });
+            },collection);
         }
     };
 
@@ -69,7 +69,7 @@ export default function CommentForm({ collection, Item, comment }) {
 
             await updateDocument(Item.id, {
                 comments: updatedComments,
-            });
+            },collection);
 
         }
     };

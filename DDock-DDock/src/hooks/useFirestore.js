@@ -1,6 +1,7 @@
 import { useEffect, useReducer, useState } from 'react';
 import { projectFirestore, timestamp } from '../firebase/config';
 import { useAuthContext } from './useAuth';
+import { useDocument } from './useDocument';
 
 let initalState = {
     document: null,
@@ -72,6 +73,7 @@ export const useFirestore = (collection) => {
     const [loading, setLoading] = useState(false);
     const ref = projectFirestore.collection(collection);
     const { user } = useAuthContext();
+    const { document } = useDocument('User', user.uid);
 
     const dispatchIsNotCancelled = (action) => {
         if (!isCancelled) {
@@ -79,21 +81,33 @@ export const useFirestore = (collection) => {
         }
     };
 
-    const addDocument = async (doc) => {
+    const addDocument = async (doc, type, subtype) => {
         setLoading(true);
         dispatch({ type: 'IS_PENDING' });
         try {
             const createdAt = timestamp.fromDate(new Date());
             const userId = user.uid;
-            const addedDocument = await ref.add({
+
+            const newDocument = await ref.add({
                 ...doc,
                 createdAt: createdAt,
                 userId: userId,
+                type: type,
+                subtype: subtype,
             });
+
+            const addedDocument = newDocument;
+            const originalUser = document;
+            const originalUserItem = originalUser.userItem;
+            const updatedUserItem = [...originalUserItem, addedDocument];
+            originalUser.userItem = updatedUserItem;
+            console.log(user.uid);
+
+            await updateDocument(user.uid, originalUser,'User');
 
             dispatchIsNotCancelled({
                 type: 'ADD_DOCUMENT',
-                payload: addedDocument,
+                payload: newDocument,
             });
         } catch (error) {
             dispatchIsNotCancelled({ type: 'ERROR', payload: error.message });
@@ -119,9 +133,10 @@ export const useFirestore = (collection) => {
         setLoading(false);
     };
 
-    const updateDocument = async (id, updates) => {
-        setLoading(true);
+    const updateDocument = async (id, updates, collection) => {
+        const ref = projectFirestore.collection(collection);
 
+        setLoading(true);
         dispatch({ type: 'IS_PENDING' });
 
         try {
@@ -131,9 +146,10 @@ export const useFirestore = (collection) => {
                 payload: updatedDocument,
             });
             setLoading(false);
-
+            console.log("성공")
             return updatedDocument;
         } catch (error) {
+            console.log(error);
             setLoading(false);
             dispatchIsNotCancelled({ type: 'ERROR', payload: error.message });
             return null;
@@ -155,7 +171,7 @@ export const useFirestore = (collection) => {
                     userComment: [],
                     Avatar: null,
                     setDisplayName: false,
-                    email: user.email
+                    email: user.email,
                 });
 
                 dispatchIsNotCancelled({
@@ -163,7 +179,6 @@ export const useFirestore = (collection) => {
                     payload: newUser,
                 });
             }
-
         } catch (error) {
             dispatchIsNotCancelled({
                 type: 'ERROR',

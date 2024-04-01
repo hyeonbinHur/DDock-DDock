@@ -50,7 +50,7 @@ export default function ReplyForm({ collection, Item, comment }) {
                     commentToUpdate,
                     ...Item.comments.slice(commentIndex + 1),
                 ],
-            });
+            },collection);
         }
     };
 
@@ -75,7 +75,7 @@ export default function ReplyForm({ collection, Item, comment }) {
                             commentToUpdate,
                             ...Item.comments.slice(commentIndex + 1),
                         ],
-                    });
+                    }, collection);
                 }
             }
         }
@@ -127,7 +127,7 @@ export default function ReplyForm({ collection, Item, comment }) {
 
                 await updateDocument(Item.id, {
                     comments: updatedComments,
-                });
+                },collection);
             }
         }
    
