@@ -1,10 +1,16 @@
 import { useParams } from 'react-router-dom';
 import { useDocument } from '../../hooks/useDocument';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useFirestore } from '../../hooks/useFirestore';
 import MarketList from '../../components/MarketItem/MarketItemList';
 import { useCollection } from '../../hooks/useCollection';
 import UserCommentForm from '../../components/User/UserCommentForm';
+import defaultUserImg from '../../assets/user.png';
+import style from './profile.module.css';
+import cameraPlus from '../../assets/cameraPlus.png';
+
+import { projectStorage } from '../../firebase/config';
+import { v4 as uuidv4 } from 'uuid';
 
 export default function ProfilePage() {
     const { userId } = useParams();
@@ -13,12 +19,15 @@ export default function ProfilePage() {
         'createdAt',
         'desc',
     ]);
-
     const [startEditDisplayName, setStartEditDisplayName] = useState(false);
     const [newDisplayName, setNewDisplayName] = useState('');
     const { updateDocument, loading } = useFirestore('User');
-
     const [userMarketItem, setUserMarktItem] = useState([]);
+
+    const [imageUrl, setImageUrl] = useState();
+    const [imageUpload, setImageUpload] = useState(null);
+    const [imagePreview, setImagePreview] = useState(defaultUserImg);
+    const fileInputRef = useRef();
 
     const changeDisplayName = async () => {
         setStartEditDisplayName(false);
@@ -27,8 +36,9 @@ export default function ProfilePage() {
             ...originalUser,
             displayName: newDisplayName,
         };
-        await updateDocument(userId, updatedUser);
+        await updateDocument(userId, updatedUser, 'User');
     };
+
     useEffect(() => {
         if (user?.userItem && marketItems) {
             const userIds = user.userItem.map((item) => item.id);
@@ -39,20 +49,156 @@ export default function ProfilePage() {
         }
     }, [marketItems, user?.userItem, user]);
 
-    function HelloWorld(){
-        console.log(user.userComment);
+    const handleImageClick = () => {
+        fileInputRef.current.click();
+    };
+
+    function resizeImageToMaxSize(
+        file,
+        maxWidth,
+        maxHeight,
+        maxFileSize,
+        callback
+    ) {
+        const img = new Image();
+        img.src = URL.createObjectURL(file);
+        img.onload = () => {
+            let canvas = document.createElement('canvas');
+            let width = img.width;
+            let height = img.height;
+
+            if (width > height) {
+                if (width > maxWidth) {
+                    height *= maxWidth / width;
+                    width = maxWidth;
+                }
+            } else {
+                if (height > maxHeight) {
+                    width *= maxHeight / height;
+                    height = maxHeight;
+                }
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+
+            let quality = 1; // 시작 품질
+            const attemptResize = () => {
+                canvas.toBlob(
+                    (blob) => {
+                        if (blob.size > maxFileSize && quality > 0.1) {
+                            quality -= 0.1; // 품질 감소
+                            canvas.toDataURL('image/jpeg', quality);
+                            attemptResize(); // 재귀적으로 품질 조절
+                        } else {
+                            const resizedFile = new File([blob], file.name, {
+                                type: 'image/jpeg',
+                                lastModified: Date.now(),
+                            });
+                            callback(resizedFile); // 최종 파일 콜백 함수로 반환
+                        }
+                    },
+                    'image/jpeg',
+                    quality
+                );
+            };
+
+            attemptResize();
+        };
+        img.onerror = (error) => {
+            console.error('Error in resizing image: ', error);
+        };
     }
+
+    const uploadImage = () => {
+        if (!imageUpload) return;
+
+        const maxWidth = 1920;
+        const maxHeight = 1080;
+        const maxFileSize = 500 * 1024;
+
+        resizeImageToMaxSize(
+            imageUpload,
+            maxWidth,
+            maxHeight,
+            maxFileSize,
+            (resizedFile) => {
+                const imageRef = projectStorage.ref(
+                    `${userId}/${imageUpload.name}_${uuidv4()}`
+                );
+                imageRef
+                    .put(resizedFile)
+                    .then(() => {
+                        imageRef.getDownloadURL().then((url) => {
+                            setImageUrl(url);
+                            console.log(url);
+                        });
+                    })
+                    .catch((error) => {
+                        console.error('Error uploading image:', error);
+                    });
+            }
+        );
+    };
+
+    const handleImageChange = (event) => {
+        const file = event.target.files[0];
+        setImageUpload(file);
+        console.log(file);
+        if (file && file.type.match('image.*')) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                setImagePreview(e.target.result); // 이 결과를 `src`로 사용하여 이미지 미리보기를 보여줍니다.
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
     return (
         <>
             {!user && <p>Loading...</p>}
-            <button onClick={HelloWorld}>Check user comment</button>
             {user ? (
                 !loading ? (
                     <div>
+                        <input
+                            type="file"
+                            className={style.fileInput}
+                            ref={fileInputRef}
+                            onChange={handleImageChange}
+                        />
+
                         <div>
-                            <label>Hello Profile</label>
+                            <div className={style.imageContainer}>
+                                <img
+                                    className={style.userImage}
+                                    src={
+                                        imagePreview
+                                            ? imagePreview
+                                            : imageUrl
+                                            ? imageUrl
+                                            : defaultUserImg
+                                    }
+                                    alt="Default"
+                                />
+
+                                <div className={style.cameraContainer}>
+                                    <img
+                                        src={cameraPlus}
+                                        className={style.cameraPlus}
+                                        onClick={handleImageClick}
+                                    />
+                                </div>
+                            </div>
+                            <button onClick={uploadImage}>
+                                사진 변경 확인
+                            </button>
                         </div>
                         <div>
+                            <div>
+                                <label>Display name</label>
+                            </div>
                             {startEditDisplayName ? (
                                 <input
                                     defaultValue={user.displayName}
@@ -88,7 +234,12 @@ export default function ProfilePage() {
                         <div>---Comments---</div>
                         {user.userComment.length > 0 &&
                             user.userComment.map((comment) => {
-                                return <UserCommentForm comment={comment} key={comment.id}/>;
+                                return (
+                                    <UserCommentForm
+                                        comment={comment}
+                                        key={comment.id}
+                                    />
+                                );
                             })}
                     </div>
                 ) : (

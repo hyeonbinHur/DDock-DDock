@@ -1,0 +1,42 @@
+.userImage{
+    width: 8rem;
+    height: 8rem;
+    border-radius: 50%;
+    display: block;
+}
+.fileInput{
+    display: none;
+}
+.cameraPlus{
+    width: 2rem;
+    height: 2rem;
+    position: absolute;
+ top: 50%;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+    transition: opacity 0.3s;
+   
+}
+.cameraContainer{
+    width: 3rem;
+    height: 3rem;
+    position: absolute;
+    top: 65%;
+    left: 65%;
+    background-color: white;
+    border-radius: 50%;
+
+}
+
+.imageContainer{
+    position: relative;
+    display: inline-block;
+}
+.cameraContainer:hover .cameraPlus {
+    filter: grayscale(50%) opacity(50%);
+}
+  
+
+
+
+

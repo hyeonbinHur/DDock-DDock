@@ -1,5 +1,7 @@
-import defaultImg from '../assets/default.png';
+import defaultImg from '../assets/user.png';
 import style from './memo.module.css';
+
+
 import { projectStorage } from '../firebase/config';
 import { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid'; // uuid 라이브러리에서 v4 함수를 uuidv4라는 이름으로 가져옵니다.
