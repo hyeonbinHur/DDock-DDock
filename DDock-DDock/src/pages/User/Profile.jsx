@@ -29,6 +29,9 @@ export default function ProfilePage() {
     const [imagePreview, setImagePreview] = useState(undefined);
     const fileInputRef = useRef();
 
+
+    const [userLoading, setUserLoading] = useState(true); // 맨처음이나, 유저가 정보를 바꾸면 로딩
+
     const changeDisplayName = async () => {
         setStartEditDisplayName(false);
         const originalUser = user;
@@ -39,7 +42,7 @@ export default function ProfilePage() {
         await updateDocument(userId, updatedUser, 'User');
     };
 
-    useEffect(() => {
+    useEffect(() => { //유저 마켓 아이템 로드
         if (user?.userItem && marketItems) {
             const userIds = user.userItem.map((item) => item.id);
             const userItemDetails = marketItems.filter((doc) => {
@@ -48,9 +51,12 @@ export default function ProfilePage() {
             setUserMarktItem(userItemDetails);
         }
 
-        if (user?.Avatar) {
-            
+        if (user?.Avatar) { // 유저 아바타 로드
             setImageUrl(user.Avatar);
+
+        }
+        if(!user?.Avatar){
+            setUserLoading(false)
         }
     }, [marketItems, user?.userItem, user]);
 
@@ -120,6 +126,8 @@ export default function ProfilePage() {
     const uploadImage = async () => {
         if (!imageUpload) return;
 
+
+        setUserLoading(true)
         const maxWidth = 1920;
         const maxHeight = 1080;
         const maxFileSize = 500 * 1024;
@@ -161,6 +169,8 @@ export default function ProfilePage() {
                     });
             }
         );
+        setUserLoading(false)
+
     };
 
     const handleImageChange = (event) => {
@@ -175,16 +185,11 @@ export default function ProfilePage() {
             reader.readAsDataURL(file);
         }
     };
-    function hello(){
-        console.log(imageUrl)
-        console.log(imagePreview)
-    }
-
+  
     return (
         <>
-        <button onClick={hello}> check url</button>
-            {!user && <p>Loading...</p>}
-            {user ? (
+            {(!user || userLoading ) && <p>Loading...</p>}
+            {(user && !userLoading )? (
                 !loading ? (
                     <div>
                         <input
@@ -193,13 +198,12 @@ export default function ProfilePage() {
                             ref={fileInputRef}
                             onChange={handleImageChange}
                         />
-
                         <div>
                             <div className={style.imageContainer}>
                                 <img
                                     className={style.userImage}
                                     src={imagePreview || imageUrl || defaultUserImg}
-
+                                    onLoad={() => setUserLoading(false)}
                                     alt="Default"
                                 />
 

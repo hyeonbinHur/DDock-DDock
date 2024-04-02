@@ -1,4 +1,4 @@
-.form {
+/* .form {
     max-width: 40rem;
     margin: 2rem auto;
   }
@@ -43,5 +43,39 @@
   
   .actions button[type='button']:hover {
     background-color: var(--color-gray-800);
-  }
+  } */
   
+.userImageContainer {
+  border: 0.3rem solid gray;
+  width: 45rem;
+  height: 30rem;
+  margin: auto;
+}
+.imageContainer{
+  display: flex;
+}
+.right{
+  width: 1.5rem;
+  height: 4rem;
+  position: absolute;
+  top: 40%;
+  right: 28%;
+}
+.left{
+  width: 1.5rem;
+  height: 4rem;
+  position: absolute;
+  top: 40%;
+  left: 28%;
+}
+
+.left:hover {
+  filter: grayscale(50%) opacity(50%);
+}
+.right:hover {
+  filter: grayscale(50%) opacity(50%);
+}
+.defaultImg{
+  margin-top: 5rem;
+  width: 10rem;
+}

@@ -1,33 +1,65 @@
 .event {
-    max-width: 50rem;
-    margin: 2rem auto;
-    text-align: center;
-  }
-  
-  .event img {
-    width: 30rem;
-    border-radius: 4px;
-  }
-  
-  .actions {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    align-items: center;
-    padding: 0;
-  }
-  
-  .actions a,
-  .actions button {
-    padding: 0.25rem 1rem;
-    text-decoration: none;
-    font: inherit;
-    cursor: pointer;
-  }
-  
-  .actions button {
-    background-color: transparent;
-    border: none;
-    color: var(--color-primary-800);
-  }
-  
+  max-width: 50rem;
+  margin: 2rem auto;
+  text-align: center;
+}
+
+.event img {
+  width: 30rem;
+  border-radius: 4px;
+}
+
+.actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+}
+
+.actions a,
+.actions button {
+  padding: 0.25rem 1rem;
+  text-decoration: none;
+  font: inherit;
+  cursor: pointer;
+}
+
+.actions button {
+  background-color: transparent;
+  border: none;
+  color: var(--color-primary-800);
+}
+
+.userImageContainer {
+  border: 0.3rem solid black;
+  width: 45rem;
+  height: 30rem;
+  margin: auto;
+}
+.imageContainer{
+  display: flex;
+}
+.right{
+  width: 2rem;
+  height: 4rem;
+  position: absolute;
+  top: 40%;
+  right: 28%;
+}
+.left{
+  width: 2rem;
+  height: 4rem;
+  position: absolute;
+  top: 40%;
+  left: 28%;
+}
+
+.left:hover {
+  filter: grayscale(50%) opacity(50%);
+}
+.right:hover {
+  filter: grayscale(50%) opacity(50%);
+}
+
+
