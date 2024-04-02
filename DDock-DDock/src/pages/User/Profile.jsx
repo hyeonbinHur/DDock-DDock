@@ -26,7 +26,7 @@ export default function ProfilePage() {
 
     const [imageUrl, setImageUrl] = useState();
     const [imageUpload, setImageUpload] = useState(null);
-    const [imagePreview, setImagePreview] = useState(defaultUserImg);
+    const [imagePreview, setImagePreview] = useState(undefined);
     const fileInputRef = useRef();
 
     const changeDisplayName = async () => {
@@ -46,6 +46,11 @@ export default function ProfilePage() {
                 return userIds.includes(doc.id);
             });
             setUserMarktItem(userItemDetails);
+        }
+
+        if (user?.Avatar) {
+            
+            setImageUrl(user.Avatar);
         }
     }, [marketItems, user?.userItem, user]);
 
@@ -131,9 +136,15 @@ export default function ProfilePage() {
                 imageRef
                     .put(resizedFile)
                     .then(() => {
-                        imageRef.getDownloadURL().then((url) => {
+                        imageRef.getDownloadURL().then(async (url) => {
                             setImageUrl(url);
-                            console.log(url);
+
+                            const originalUser = user;
+                            const updatedUser = {
+                                ...originalUser,
+                                Avatar: url,
+                            };
+                            await updateDocument(userId, updatedUser, 'User');
                         });
                     })
                     .catch((error) => {
@@ -155,9 +166,14 @@ export default function ProfilePage() {
             reader.readAsDataURL(file);
         }
     };
+    function hello(){
+        console.log(imageUrl)
+        console.log(imagePreview)
+    }
 
     return (
         <>
+        <button onClick={hello}> check url</button>
             {!user && <p>Loading...</p>}
             {user ? (
                 !loading ? (
@@ -173,13 +189,8 @@ export default function ProfilePage() {
                             <div className={style.imageContainer}>
                                 <img
                                     className={style.userImage}
-                                    src={
-                                        imagePreview
-                                            ? imagePreview
-                                            : imageUrl
-                                            ? imageUrl
-                                            : defaultUserImg
-                                    }
+                                    src={imagePreview || imageUrl || defaultUserImg}
+
                                     alt="Default"
                                 />
 
