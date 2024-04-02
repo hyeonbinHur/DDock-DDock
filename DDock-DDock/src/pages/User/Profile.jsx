@@ -117,12 +117,22 @@ export default function ProfilePage() {
         };
     }
 
-    const uploadImage = () => {
+    const uploadImage = async () => {
         if (!imageUpload) return;
 
         const maxWidth = 1920;
         const maxHeight = 1080;
         const maxFileSize = 500 * 1024;
+
+        if (user.Avatar) {
+            const oldImageRef = projectStorage.refFromURL(user.Avatar);
+            try {
+              await oldImageRef.delete();
+              console.log('Previous image deleted successfully');
+            } catch (error) {
+              console.error('Error deleting old image:', error);
+            }
+          }
 
         resizeImageToMaxSize(
             imageUpload,
@@ -138,7 +148,6 @@ export default function ProfilePage() {
                     .then(() => {
                         imageRef.getDownloadURL().then(async (url) => {
                             setImageUrl(url);
-
                             const originalUser = user;
                             const updatedUser = {
                                 ...originalUser,
