@@ -18,7 +18,7 @@ export default function MarketItemEdit() {
         return <div className="loading">Loading...</div>;
     }
 
-    const doAudateDocument = (title, description) => {
+    const doEditDocument = (title, description) => {
         modal.current.open();
 
         updateDocument(mitemId, {
@@ -37,7 +37,7 @@ export default function MarketItemEdit() {
                 from={'market'}
             />
 
-            <MarketItemForm doAction={doAudateDocument} data={document} />
+            <MarketItemForm doAction={doEditDocument} data={document} />
         </>
     );
 }

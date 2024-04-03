@@ -102,6 +102,8 @@ export const useFirestore = (collection) => {
             originalUser.userItem = updatedUserItem;
             await updateDocument(user.uid, originalUser,'User');
 
+
+
             dispatchIsNotCancelled({
                 type: 'ADD_DOCUMENT',
                 payload: newDocument,

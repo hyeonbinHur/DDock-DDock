@@ -126,7 +126,6 @@ export default function ProfilePage() {
     const uploadImage = async () => {
         if (!imageUpload) return;
 
-
         setUserLoading(true)
         const maxWidth = 1920;
         const maxHeight = 1080;

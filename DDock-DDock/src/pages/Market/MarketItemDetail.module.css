@@ -1,0 +1,38 @@
+.imageContainer {
+    display: flex;
+}
+
+.right {
+    width: 1.5rem;
+    height: 4rem;
+    position: absolute;
+    top: 40%;
+    right: 28%;
+}
+
+.left {
+    width: 1.5rem;
+    height: 4rem;
+    position: absolute;
+    top: 40%;
+    left: 28%;
+}
+
+.left:hover {
+    filter: grayscale(20%) opacity(50%);
+}
+
+.right:hover {
+    filter: grayscale(20%) opacity(50%);
+}
+
+.userImageContainer {
+    border: 0.3rem solid gray;
+    width: 45rem;
+    height: 30rem;
+    margin: auto;
+}
+.mItemImage{
+    width: 45rem;
+    height: 30rem;
+}

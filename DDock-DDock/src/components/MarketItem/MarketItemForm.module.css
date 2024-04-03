@@ -70,12 +70,25 @@
 }
 
 .left:hover {
-  filter: grayscale(50%) opacity(50%);
+  filter: grayscale(20%) opacity(50%);
 }
 .right:hover {
-  filter: grayscale(50%) opacity(50%);
+  filter: grayscale(20%) opacity(50%);
 }
 .defaultImg{
   margin-top: 5rem;
   width: 10rem;
+}
+.fileInput{
+  display: none;
+}
+.deleteImg{
+  position: absolute;
+  width: 2rem;
+  height: 2rem;
+  top: 20%;
+  right: 40%;
+}
+.deleteImg:hover {
+  filter: grayscale(20%) opacity(50%);
 }

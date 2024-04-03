@@ -11,12 +11,15 @@ export default function AddMarketItem(){
     const navigate = useNavigate();
     const modal = useRef();
 
-    const doAddDocument = async (title,description) => {
+    const doAddDocument = async (title,description,images,bucket) => {
         modal.current.open();
+
         const newMItem = {
             title,
             description,
             comments: [],
+            images,
+            bucket
         }
         await addDocument(newMItem,"M_Item","M_Item");
     };
