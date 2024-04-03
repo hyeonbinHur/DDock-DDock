@@ -18,6 +18,7 @@ export default function MarketItemForm({ doAction, data }) {
     const [imageUploads, setImageUploads] = useState([]); //업로드된 이미지들
     const [imagePreviews, setImagePreviews] = useState([]); //선택한 이미지 미리보기
     const fileInputRef = useRef(); //이미지 누르면 안보이게 했던 input필드 눌리게
+    const [deletedImagesLinks, setDeletedImagesLinks] = useState([]);
 
     function resizeImageToMaxSize(
         file,
