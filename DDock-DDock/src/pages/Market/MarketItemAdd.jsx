@@ -13,7 +13,6 @@ export default function AddMarketItem(){
 
     const doAddDocument = async (title,description,images,bucket) => {
         modal.current.open();
-
         const newMItem = {
             title,
             description,

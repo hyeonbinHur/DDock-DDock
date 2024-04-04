@@ -1,8 +1,8 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDocument } from '../../hooks/useDocument';
 import { useFirestore } from '../../hooks/useFirestore';
-import MarketItemForm from '../../components/MarketItem/MarketItemForm';
 import ItemModal from '../../components/Modal/ItemStatusModal';
+import MarketItemEditForm from '../../components/MarketItem/MarketItemEditForm'
 import { useRef } from 'react';
 export default function MarketItemEdit() {
     const { mitemId } = useParams();
@@ -23,9 +23,13 @@ export default function MarketItemEdit() {
 
         updateDocument(mitemId, {
             title,
-            description,
+            description,        
         },'MarketItem');
     };
+
+    const Hello = () =>{
+        console.log(Hello);
+    }
 
     return (
         <>
@@ -37,7 +41,7 @@ export default function MarketItemEdit() {
                 from={'market'}
             />
 
-            <MarketItemForm doAction={doEditDocument} data={document} />
+            <MarketItemEditForm doAction={Hello} data={document} />
         </>
     );
 }

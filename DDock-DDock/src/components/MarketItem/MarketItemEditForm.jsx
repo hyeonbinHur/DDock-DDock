@@ -1,27 +1,43 @@
 import style from './MarketItemForm.module.css';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import defaultImg from '../../assets/defaultImg.png';
 import leftArrow from '../../assets/left.png';
 import rightArrow from '../../assets/right.png';
 import deleteImg from '../../assets/close.png';
 import { projectStorage } from '../../firebase/config';
-import {v4 as uuidv4} from 'uuid'
 
 export default function MarketItemForm({ doAction, data }) {
-    const [title, setTitle] = useState(data ? data.title : '');
-    const [description, setDescription] = useState(
-        data ? data.description : ''
-    );
 
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
     const [currentIndex, setCurrentIndex] = useState(0); //에로우 카운트임 일단
     const [uploadImageCount, setUploadImageCount] = useState(0); //현재까지 업로드된 이미지들 수
     const fileInputRef = useRef(); //이미지 누르면 안보이게 했던 input필드 눌리게
-    
     const [imageUploads, setImageUploads] = useState([]); //업로드된 이미지들
     const [imagePreviews, setImagePreviews] = useState([]); //선택한 이미지 미리보기
+    const [imageToFirestore, setImageTofirestore] = useState([]);//firebase에 업로드할 이미지 링크를 저장
+
     // const [uploadedUrls, setUploadedUrls] = useState([]);
     // const [deleteUrls, setDeleteUrls] = useState([]);
     // const [deleteIndex, setDeleteIndex] = useState([]);
+
+    const [storageBucket, setStorageBucket] = useState('');
+
+    useEffect(() => {
+        if(data?.title){
+            setTitle(data.title)
+        }
+        if(data?.description){
+            setDescription(data.description)
+        }
+        if(data?.bucket){
+            setStorageBucket(data.bucket)
+        }
+        if(data?.images){
+            setImagePreviews(data.images)
+        }
+        
+    }, [data?.title, data?.description, data?.bucket, data?.images])
     
 
     function resizeImageToMaxSize(
@@ -82,56 +98,61 @@ export default function MarketItemForm({ doAction, data }) {
             console.error('Error in resizing image: ', error);
         };
     }
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         if (!imageUploads) return;
 
         console.log("버튼 눌림")
-        const uuid = uuidv4();
         const maxWidth = 850;
         const maxHeight = 650;
         const maxFileSize = 1000 * 1024;
     
-        try {
-            const uploadPromises = imageUploads.map((imageUpload) => {
-                return new Promise((resolve, reject) => {
-                    resizeImageToMaxSize(
-                        imageUpload,
-                        maxWidth,
-                        maxHeight,
-                        maxFileSize,
-                        async (resizedFile) => {
-                            try {
-                                const imageRef = projectStorage.ref(`/${title}_${uuid}/${imageUpload.name}`);
-                                await imageRef.put(resizedFile);
-                                const url = await imageRef.getDownloadURL();
-                                resolve(url);
-                            } catch (error) {
-                                reject(error);
-                            }
-                        }
-                    );
-                });
-            });
+        // try {
+        //     const uploadPromises = imageUploads.map((imageUpload) => {
+        //         return new Promise((resolve, reject) => {
+        //             resizeImageToMaxSize(
+        //                 imageUpload,
+        //                 maxWidth,
+        //                 maxHeight,
+        //                 maxFileSize,
+        //                 async (resizedFile) => {
+        //                     try {
+        //                         const imageRef = projectStorage.ref(`/${title}_${uuid}/${imageUpload.name}`);
+        //                         await imageRef.put(resizedFile);
+        //                         const url = await imageRef.getDownloadURL();
+        //                         resolve(url);
+        //                     } catch (error) {
+        //                         reject(error);
+        //                     }
+        //                 }
+        //             );
+        //         });
+        //     });
     
-            const urls = await Promise.all(uploadPromises);
+        //     const urls = await Promise.all(uploadPromises);
 
+        //     setImageTofirestore(urls)
            
-            doAction(title, description, urls, `/${title}_${uuid}`); // 모든 이미지 업로드 후 doAction 호출
+        //     doAction(); // 모든 이미지 업로드 후 doAction 호출
         
-        } catch (error) {
-            console.error("Error uploading images: ", error);
-        }
+        // } catch (error) {
+        //     console.error("Error uploading images: ", error);
+        // }
     };
+
     const currentIndexMinus = () => {
         setCurrentIndex((prev) => prev - 1);
     };
+
     const currentIndexPlus = () => {
         setCurrentIndex((prev) => prev + 1);
     };
+
     const handleImageClick = () => {
         fileInputRef.current.click();
     };
+
     const handleImageChange = (event) => {
         const file = event.target.files[0];
         console.log(file);
@@ -146,22 +167,28 @@ export default function MarketItemForm({ doAction, data }) {
             reader.readAsDataURL(file);
         }
     };
+
     const deleteFromPreviewArray = () => {
+
         const newArray = [
             ...imagePreviews.slice(0, currentIndex),
             ...imagePreviews.slice(currentIndex + 1),
         ];
         setImagePreviews(newArray); // 프리뷰 배열에서 삭제
 
-        const newUploadImages =[
-            ...imageUploads.slice(0,currentIndex),
-            ...imageUploads.slice(currentIndex+1)
-        ]
-        setImageUploads(newUploadImages) // 삭제되면 업로드 이미지 배열에서도 삭제
-        setUploadImageCount((prev) => prev - 1);
+        // const newUploadImages =[
+        //     ...imageUploads.slice(0,currentIndex),
+        //     ...imageUploads.slice(currentIndex+1)
+        // ]
+        // setImageUploads(newUploadImages) // 삭제되면 업로드 이미지 배열에서도 삭제
+        // setUploadImageCount((prev) => prev - 1);
+
     };
 
-    
+    const hello = () =>{ 
+        console.log("preview : " +imagePreviews);
+    }
+
     return (
         <>
             <form className={style.form} onSubmit={handleSubmit}>
@@ -195,7 +222,8 @@ export default function MarketItemForm({ doAction, data }) {
                             />
                         )}
                     </div>
-                    {currentIndex < uploadImageCount && currentIndex < 9 && (
+
+                    {currentIndex < imagePreviews.length && currentIndex < 9 && (
                         <img
                             src={rightArrow}
                             onClick={currentIndexPlus}
@@ -204,7 +232,9 @@ export default function MarketItemForm({ doAction, data }) {
                     )}
                 </div>
 
-                <p>{uploadImageCount}/10</p>
+                <button onClick={hello}> asdadasd</button>
+                <button onClick={console.log("current Index : " + currentIndex + " preview length : " + imagePreviews.length)}>ddd</button>
+                <p>{imagePreviews.length}/10</p>
 
                 <p>
                     <label>
