@@ -93,6 +93,7 @@ export const useFirestore = (collection) => {
                 userId: userId,
                 type: type,
                 subtype: subtype,
+                interests: 0,
             });
 
             const addedDocument = newDocument;
@@ -170,6 +171,7 @@ export const useFirestore = (collection) => {
                     Avatar: null,
                     setDisplayName: false,
                     email: user.email,
+                    interests:[],
                 });
 
                 dispatchIsNotCancelled({

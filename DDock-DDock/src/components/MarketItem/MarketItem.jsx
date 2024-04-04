@@ -1,6 +1,8 @@
 import style from './MarketItem.module.css';
 import spinner from '../../assets/spinner.svg';
 import { useFirestore } from '../../hooks/useFirestore';
+
+
 // import rightArrow from '../../assets/right.png';
 // import leftArrow from '../../assets/left.png';
 // import { useState } from 'react';
@@ -48,6 +50,8 @@ export default function MarketItem({ document }) {
 
                     <h1>{document.title}</h1>
                     <p>{document.description}</p>
+
+                    
                 </div>
             )}
 

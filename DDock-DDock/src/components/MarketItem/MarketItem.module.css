@@ -5,7 +5,6 @@
 }
 
 .event img {
-  width: 30rem;
   border-radius: 4px;
 }
 
@@ -61,3 +60,14 @@
   filter: grayscale(20%) opacity(50%);
 }
 
+.pngContainer{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.basicPng{
+  width: 1rem;
+  height: 1rem;
+
+}
