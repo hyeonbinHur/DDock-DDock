@@ -3,7 +3,7 @@ import ItemDeleteModal from '../Modal/ItemDeleteModal';
 import { useRef, useState } from 'react';
 import commentPng from '../../assets/comment.png';
 import heartPng from '../../assets/heart.png';
-import EmptyHeartPng from '../../assets/emptyHeart.png';
+import emptyHeart from '../../assets/emptyHeart.png';
 import style from './MarketItemList.module.css';
 
 // import style from './MarketItemList.module.css';
@@ -116,7 +116,7 @@ export default function MarketList({ documents }) {
                                         />
                                     ) : (
                                         <img
-                                            src={EmptyHeartPng}
+                                            src={emptyHeart}
                                             className={style.basicPng}
                                             onClick={() => toggleHeart(doc)}
                                         />

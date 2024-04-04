@@ -35,8 +35,24 @@
 .cameraContainer:hover .cameraPlus {
     filter: grayscale(50%) opacity(50%);
 }
-  
+.tmpContainer{
+    display: flex;
+    align-items: center;
+  justify-content: center;
 
+}
+
+.emptyHeart{
+    width: 2rem;
+    height: 2rem;
+}
+
+.heartContainer{
+    display: flex;
+    align-items: center;
+  justify-content: center;
+  border: 0.1rem solid black;
+}
 
 
 

@@ -8,9 +8,13 @@ import UserCommentForm from '../../components/User/UserCommentForm';
 import defaultUserImg from '../../assets/user.png';
 import style from './profile.module.css';
 import cameraPlus from '../../assets/cameraPlus.png';
-
+import emptyHeart from '../../assets/emptyHeart.png';
 import { projectStorage } from '../../firebase/config';
 import { v4 as uuidv4 } from 'uuid';
+import InterestsItemModal from './interestsModal';
+
+
+
 
 export default function ProfilePage() {
     const { userId } = useParams();
@@ -28,10 +32,16 @@ export default function ProfilePage() {
     const [imageUpload, setImageUpload] = useState(null);
     const [imagePreview, setImagePreview] = useState(undefined);
     const fileInputRef = useRef();
-
+    const modal = useRef();
 
     const [userLoading, setUserLoading] = useState(true); // 맨처음이나, 유저가 정보를 바꾸면 로딩
 
+
+    function openConfirmModal() {
+        if (modal.current) {
+            modal.current.open();
+        }
+    }
     const changeDisplayName = async () => {
         setStartEditDisplayName(false);
         const originalUser = user;
@@ -42,7 +52,8 @@ export default function ProfilePage() {
         await updateDocument(userId, updatedUser, 'User');
     };
 
-    useEffect(() => { //유저 마켓 아이템 로드
+    useEffect(() => {
+        //유저 마켓 아이템 로드
         if (user?.userItem && marketItems) {
             const userIds = user.userItem.map((item) => item.id);
             const userItemDetails = marketItems.filter((doc) => {
@@ -51,12 +62,12 @@ export default function ProfilePage() {
             setUserMarktItem(userItemDetails);
         }
 
-        if (user?.Avatar) { // 유저 아바타 로드
+        if (user?.Avatar) {
+            // 유저 아바타 로드
             setImageUrl(user.Avatar);
-
         }
-        if(!user?.Avatar){
-            setUserLoading(false)
+        if (!user?.Avatar) {
+            setUserLoading(false);
         }
     }, [marketItems, user?.userItem, user]);
 
@@ -126,7 +137,7 @@ export default function ProfilePage() {
     const uploadImage = async () => {
         if (!imageUpload) return;
 
-        setUserLoading(true)
+        setUserLoading(true);
         const maxWidth = 1920;
         const maxHeight = 1080;
         const maxFileSize = 500 * 1024;
@@ -134,12 +145,12 @@ export default function ProfilePage() {
         if (user.Avatar) {
             const oldImageRef = projectStorage.refFromURL(user.Avatar);
             try {
-              await oldImageRef.delete();
-              console.log('Previous image deleted successfully');
+                await oldImageRef.delete();
+                console.log('Previous image deleted successfully');
             } catch (error) {
-              console.error('Error deleting old image:', error);
+                console.error('Error deleting old image:', error);
             }
-          }
+        }
 
         resizeImageToMaxSize(
             imageUpload,
@@ -168,8 +179,7 @@ export default function ProfilePage() {
                     });
             }
         );
-        setUserLoading(false)
-
+        setUserLoading(false);
     };
 
     const handleImageChange = (event) => {
@@ -184,11 +194,11 @@ export default function ProfilePage() {
             reader.readAsDataURL(file);
         }
     };
-  
+
     return (
         <>
-            {(!user || userLoading ) && <p>Loading...</p>}
-            {(user && !userLoading )? (
+            {(!user || userLoading) && <p>Loading...</p>}
+            {user && !userLoading ? (
                 !loading ? (
                     <div>
                         <input
@@ -197,27 +207,41 @@ export default function ProfilePage() {
                             ref={fileInputRef}
                             onChange={handleImageChange}
                         />
-                        <div>
-                            <div className={style.imageContainer}>
-                                <img
-                                    className={style.userImage}
-                                    src={imagePreview || imageUrl || defaultUserImg}
-                                    onLoad={() => setUserLoading(false)}
-                                    alt="Default"
-                                />
 
-                                <div className={style.cameraContainer}>
+                        <div className={style.tmpContainer}>
+                            <div>
+                                <div className={style.imageContainer}>
                                     <img
-                                        src={cameraPlus}
-                                        className={style.cameraPlus}
-                                        onClick={handleImageClick}
+                                        className={style.userImage}
+                                        src={
+                                            imagePreview ||
+                                            imageUrl ||
+                                            defaultUserImg
+                                        }
+                                        onLoad={() => setUserLoading(false)}
+                                        alt="Default"
                                     />
+
+                                    <div className={style.cameraContainer}>
+                                        <img
+                                            src={cameraPlus}
+                                            className={style.cameraPlus}
+                                            onClick={handleImageClick}
+                                        />
+                                    </div>
                                 </div>
+                                <button onClick={uploadImage}>
+                                    사진 변경 확인
+                                </button>
                             </div>
-                            <button onClick={uploadImage}>
-                                사진 변경 확인
-                            </button>
+
+                            <div className={style.heartContainer} >
+                                <img src={emptyHeart} className={style.emptyHeart}/>
+                                <p>관심 상품</p>
+                                <button onClick={openConfirmModal}>open modal</button>
+                            </div>
                         </div>
+
                         <div>
                             <div>
                                 <label>Display name</label>
@@ -264,6 +288,7 @@ export default function ProfilePage() {
                                     />
                                 );
                             })}
+                            <InterestsItemModal ref={modal} itemIds={user.interests} displayName ={user.displayName}/>
                     </div>
                 ) : (
                     <p>Loading..</p>
