@@ -66,6 +66,26 @@ export default function Memo() {
         console.log('latitude: ' + latitude);
         console.log('longitude: ' + longitude);
         console.log('accuracy : ' + position.coords.accuracy);
+
+        const geocoder = new window.google.maps.Geocoder();
+        geocoder.geocode(
+            { location: { lat: latitude, lng: longitude } },
+            (results, status) => {
+                if (status === 'OK') {
+                    if (results[0]) {
+                        console.log(
+                            '정확한 주소:',
+                            results[0].formatted_address
+                        );
+                        // 여기서 결과를 상태에 저장하거나 다른 작업을 수행할 수 있습니다.
+                    } else {
+                        console.log('결과를 찾을 수 없습니다.');
+                    }
+                } else {
+                    console.log('Geocoder 실패: ' + status);
+                }
+            }
+        );
     }
 
     function error() {
