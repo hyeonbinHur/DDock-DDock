@@ -17,13 +17,15 @@ export default function Memo() {
     const [map, setMap] = React.useState(null);
     const [zoomSeting, setZoomSeting] = useState(16);
     const [bound, setBound] = useState(1000);
-
     const [currentLat, setCurrentLat] = useState(0);
     const [currentLng, setCurrentLng] = useState(0);
     const [center, setCenter] = useState({ lat: 0, lng: 0 });
 
+    const testLat = -37.815303; // chagne all testLat, testLng to currentLat,currentLng
+    const testLng = 144.952798;
+
     useEffect(() => {
-        setCenter({ lat: currentLat, lng: currentLng });
+        setCenter({ lat: testLat, lng:  144.952798 });
     }, [currentLat, currentLng]);
 
     const containerStyle = {
@@ -68,24 +70,31 @@ export default function Memo() {
         console.log('accuracy : ' + position.coords.accuracy);
 
         const geocoder = new window.google.maps.Geocoder();
-        geocoder.geocode(
-            { location: { lat: latitude, lng: longitude } },
-            (results, status) => {
-                if (status === 'OK') {
-                    if (results[0]) {
-                        console.log(
-                            '정확한 주소:',
-                            results[0].formatted_address
-                        );
-                        // 여기서 결과를 상태에 저장하거나 다른 작업을 수행할 수 있습니다.
-                    } else {
-                        console.log('결과를 찾을 수 없습니다.');
+        geocoder.geocode({ location: { lat:testLat,  lng:testLng}}, (results, status) => {
+            if (status === 'OK' && results[0]) {
+                let dong = null;
+                let gu = null;
+
+        
+                // address_components 배열을 순회하며 나라와 동네 정보 추출
+                results[0].address_components.forEach((component) => {
+                    
+                    if (component.types.includes('locality')) {
+                        dong = component.long_name;
                     }
-                } else {
-                    console.log('Geocoder 실패: ' + status);
-                }
+                    if (component.types.includes('administrative_area_level_2')) {
+                        gu = component.long_name;
+                    }
+                    // 동네 정보가 locality에 없는 경우 다른 타입을 확인할 수 있음
+                   
+                });
+                
+                console.log(`동: ${dong} , 구: ${gu}`);
+                // 결과를 상태에 저장하거나 UI에 표시
+            } else {
+                console.log('Geocoder 결과를 찾을 수 없거나 실패했습니다:', status);
             }
-        );
+        });
     }
 
     function error() {
@@ -133,15 +142,15 @@ export default function Memo() {
                         {' '}
                         <Marker
                             position={{
-                                lat: currentLat,
-                                lng: currentLng,
+                                lat: testLat,
+                                lng:  testLng,
                             }}
                         />
                         <Circle
                             // 원의 중심 위치를 현재 위치로 설정
                             center={{
-                                lat: currentLat,
-                                lng: currentLng,
+                                lat: testLat,
+                                lng:  testLng,
                             }}
                             // 원의 반경을 미터 단위로 설정 (여기서는 1000미터로 설정)
                             radius={bound}
