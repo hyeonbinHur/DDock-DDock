@@ -15,7 +15,7 @@ export default function Memo() {
 
     const [location, setLocation] = useState(null);
     const [map, setMap] = React.useState(null);
-
+    const [zoomSeting, setZoomSeting] = useState(16);
     const [bound, setBound] = useState(1000);
 
     const [currentLat, setCurrentLat] = useState(0);
@@ -93,18 +93,25 @@ export default function Memo() {
     }
 
     const borederBound = () => {
+        console.log(bound)
         if (bound === 1000) {
             setBound(3000);
-        } else if (bound === 3000) {
+            setZoomSeting(14);
+        }
+        if (bound === 3000) {
             setBound(5000);
+            setZoomSeting(13);
         }
     };
 
     const narrowBound = () => {
         if (bound === 5000) {
             setBound(3000);
-        } else if (bound === 3000) {
+            setZoomSeting(14);
+        }
+        if (bound === 3000) {
             setBound(1000);
+            setZoomSeting(16);
         }
     };
     return isLoaded ? (
@@ -112,7 +119,7 @@ export default function Memo() {
             <GoogleMap
                 mapContainerStyle={containerStyle}
                 center={center}
-                zoom={20}
+                zoom={zoomSeting}
                 onLoad={onLoad}
                 onUnmount={onUnmount}
                 options={{
