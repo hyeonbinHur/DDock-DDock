@@ -1,6 +1,6 @@
 import MarketItem from './MarketItem';
 import ItemDeleteModal from '../Modal/ItemDeleteModal';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import commentPng from '../../assets/comment.png';
 import heartPng from '../../assets/heart.png';
 import emptyHeart from '../../assets/emptyHeart.png';
@@ -16,10 +16,12 @@ export default function MarketList({ documents }) {
     const [deleteItemId, setDeleteItemId] = useState(null);
     const { user } = useAuthContext();
     const modal = useRef();
-
     const { document: userInfo } = useDocument('User', user.uid);
-
     const { updateDocument } = useFirestore('User');
+
+    const [searchTitle, setSearchTitle] = useState('');
+    const [searchedItem, setSearchedItem] = useState(documents);
+
 
     function openConfirmModal(itemId) {
         setDeleteItemId(itemId);
@@ -67,16 +69,30 @@ export default function MarketList({ documents }) {
         await updateDocument(item.id, updatedItem, 'MarketItem');
     };
 
-    const hello = () => {
-        console.log(userInfo);
-    };
+
+    useEffect(()=>{
+        console.log("이펙트 들어옴")
+        const emptyArray = [];
+        setSearchedItem(emptyArray)
+
+        documents.map((document) => {
+            if(document.title.includes(searchTitle)){
+                setSearchedItem((prev) => [...prev, document])
+            }
+        })
+
+    },[searchTitle, documents])
 
     return (
         <div>
-            <button onClick={hello}>user info</button>
-
+            <input
+                type="search"
+                placeholder="찾는 물건을 검색해 보세요"
+                value={searchTitle}
+                onChange={(event) => setSearchTitle(event.target.value)}
+            />
             <ul>
-                {documents.map((doc) => (
+                { searchedItem.map((doc) => (
                     <li key={doc.id}>
                         <Link to={`/market/${doc.id}`}>
                             <MarketItem document={doc} />
