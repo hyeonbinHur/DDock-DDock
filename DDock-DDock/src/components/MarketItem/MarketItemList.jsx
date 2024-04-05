@@ -76,7 +76,7 @@ export default function MarketList({ documents }) {
         setSearchedItem(emptyArray)
 
         documents.map((document) => {
-            if(document.title.includes(searchTitle)){
+            if(document.title.includes(searchTitle) || document.description.includes(searchTitle)){
                 setSearchedItem((prev) => [...prev, document])
             }
         })
