@@ -1,30 +1,34 @@
-import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
-import React from 'react';
+import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
-
-const containerStyle = {
-    width: '1200px',
-    height: '550px',
-};
-
-const center = {
-    lat: 10.7304752,
-    lng: 106.7063022,
-};
 
 export default function Memo() {
     const { isLoaded } = useJsApiLoader({
         id: 'google-map-script',
         googleMapsApiKey: 'AIzaSyAlPYVkjdM1yEkocPAkchtBqYYdw_y-QuY',
     });
+
     const [location, setLocation] = useState(null);
     const [map, setMap] = React.useState(null);
 
-    const onLoad = React.useCallback(function callback(map) {
-        // This is just an example of getting and using the map instance!!! don't just blindly copy!
-        const bounds = new window.google.maps.LatLngBounds(center);
-        map.fitBounds(bounds);
+    const [currentLat, setCurrentLat] = useState(0);
+    const [currentLng, setCurrentLng] = useState(0);
+    const [center, setCenter] = useState({ lat: 0, lng: 0 });
 
+    useEffect(() => {
+        setCenter({ lat: currentLat, lng: currentLng });
+    }, [currentLat, currentLng]);
+
+    const containerStyle = {
+        width: '1200px',
+        height: '550px',
+    };
+
+    // const center = {
+    //     lat: currentLat,
+    //     lng: currentLng,
+    // };
+    const onLoad = React.useCallback(function callback(map) {
         setMap(map);
     }, []);
 
@@ -47,6 +51,10 @@ export default function Memo() {
     function success(position) {
         const latitude = position.coords.latitude;
         const longitude = position.coords.longitude;
+
+        setCurrentLat(latitude);
+        setCurrentLng(longitude);
+
         setLocation({ latitude, longitude });
         console.log('latitude: ' + latitude);
         console.log('longitude: ' + longitude);
@@ -62,7 +70,7 @@ export default function Memo() {
             <GoogleMap
                 mapContainerStyle={containerStyle}
                 center={center}
-                zoom={10}
+                zoom={20}
                 onLoad={onLoad}
                 onUnmount={onUnmount}
                 options={{
@@ -71,8 +79,14 @@ export default function Memo() {
                     fullscreenControl: false,
                 }}
             >
-                {/* Child components, such as markers, info windows, etc. */}
-                <></>
+                {location && (
+                    <Marker
+                        position={{
+                            lat: currentLat,
+                            lng: currentLng,
+                        }}
+                    />
+                )}
             </GoogleMap>
             <button onClick={handleLocationClick}> Get current lat,lng</button>
         </div>
