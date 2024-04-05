@@ -1,4 +1,9 @@
-import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
+import {
+    GoogleMap,
+    useJsApiLoader,
+    Marker,
+    Circle,
+} from '@react-google-maps/api';
 import React, { useEffect } from 'react';
 import { useState } from 'react';
 
@@ -10,6 +15,8 @@ export default function Memo() {
 
     const [location, setLocation] = useState(null);
     const [map, setMap] = React.useState(null);
+
+    const [bound, setBound] = useState(1000);
 
     const [currentLat, setCurrentLat] = useState(0);
     const [currentLng, setCurrentLng] = useState(0);
@@ -65,6 +72,21 @@ export default function Memo() {
         console.log('Error occured');
     }
 
+    const borederBound = () => {
+        if (bound === 1000) {
+            setBound(3000);
+        } else if (bound === 3000) {
+            setBound(5000);
+        }
+    };
+
+    const narrowBound = () => {
+        if (bound === 5000) {
+            setBound(3000);
+        } else if (bound === 3000) {
+            setBound(1000);
+        }
+    };
     return isLoaded ? (
         <div>
             <GoogleMap
@@ -80,14 +102,38 @@ export default function Memo() {
                 }}
             >
                 {location && (
-                    <Marker
-                        position={{
-                            lat: currentLat,
-                            lng: currentLng,
-                        }}
-                    />
+                    <>
+                        {' '}
+                        <Marker
+                            position={{
+                                lat: currentLat,
+                                lng: currentLng,
+                            }}
+                        />
+                        <Circle
+                            // 원의 중심 위치를 현재 위치로 설정
+                            center={{
+                                lat: currentLat,
+                                lng: currentLng,
+                            }}
+                            // 원의 반경을 미터 단위로 설정 (여기서는 1000미터로 설정)
+                            radius={bound}
+                            // 원의 스타일 설정
+                            options={{
+                                strokeColor: '#00BFFF', // 원의 선 색상
+                                strokeOpacity: 0.1, // 원의 선 투명도
+                                strokeWeight: 0.1, // 원의 선 두께
+                                fillColor: '#98DFFF', // 원의 채움 색상
+                                fillOpacity: 0.35, // 원의 채움 투명도
+                            }}
+                        />
+                    </>
                 )}
             </GoogleMap>
+            {bound < 4999 && <button onClick={borederBound}>+</button>}
+            {bound > 1000 && <button onClick={narrowBound}>-</button>}
+
+            <p>현재 범위 : {bound}</p>
             <button onClick={handleLocationClick}> Get current lat,lng</button>
         </div>
     ) : (
