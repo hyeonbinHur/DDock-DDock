@@ -1,8 +1,7 @@
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { useDocument } from '../../hooks/useDocument';
 import { useEffect, useState, useRef } from 'react';
 import { useFirestore } from '../../hooks/useFirestore';
-import MarketList from '../../components/MarketItem/MarketItemList';
 import { useCollection } from '../../hooks/useCollection';
 import UserCommentForm from '../../components/User/UserCommentForm';
 import defaultUserImg from '../../assets/user.png';
@@ -12,9 +11,7 @@ import emptyHeart from '../../assets/emptyHeart.png';
 import { projectStorage } from '../../firebase/config';
 import { v4 as uuidv4 } from 'uuid';
 import InterestsItemModal from './interestsModal';
-
-
-
+import MarketItem from '../../components/MarketItem/MarketItem';
 
 export default function ProfilePage() {
     const { userId } = useParams();
@@ -35,7 +32,6 @@ export default function ProfilePage() {
     const modal = useRef();
 
     const [userLoading, setUserLoading] = useState(true); // 맨처음이나, 유저가 정보를 바꾸면 로딩
-
 
     function openConfirmModal() {
         if (modal.current) {
@@ -235,10 +231,15 @@ export default function ProfilePage() {
                                 </button>
                             </div>
 
-                            <div className={style.heartContainer} >
-                                <img src={emptyHeart} className={style.emptyHeart}/>
+                            <div className={style.heartContainer}>
+                                <img
+                                    src={emptyHeart}
+                                    className={style.emptyHeart}
+                                />
                                 <p>관심 상품</p>
-                                <button onClick={openConfirmModal}>open modal</button>
+                                <button onClick={openConfirmModal}>
+                                    open modal
+                                </button>
                             </div>
                         </div>
 
@@ -273,8 +274,13 @@ export default function ProfilePage() {
 
                         <div>----M ITEM----</div>
 
-                        <MarketList documents={userMarketItem} />
-
+                        {userMarketItem.map((item) => (
+                            <li key={item.id}>
+                                <Link to={`/market/${item.id}`}>
+                                    <MarketItem document={item} />
+                                </Link>
+                            </li>
+                        ))}
                         <div>----H ITEM----</div>
                         <div>----J ITEM----</div>
                         <div>----C ITEM----</div>
@@ -288,7 +294,11 @@ export default function ProfilePage() {
                                     />
                                 );
                             })}
-                            <InterestsItemModal ref={modal} itemIds={user.interests} displayName ={user.displayName}/>
+                        <InterestsItemModal
+                            ref={modal}
+                            itemIds={user.interests}
+                            displayName={user.displayName}
+                        />
                     </div>
                 ) : (
                     <p>Loading..</p>
