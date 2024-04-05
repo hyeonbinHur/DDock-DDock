@@ -40,7 +40,7 @@ export default function Memo() {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(success, error, {
                 enableHighAccuracy: true,
-                maximumAge: 30000,
+                maximumAge: 300000,
                 timeout: 27000,
             });
         } else {
