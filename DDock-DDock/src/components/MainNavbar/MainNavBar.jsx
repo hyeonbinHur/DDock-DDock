@@ -53,10 +53,14 @@ export default function Navbar() {
                             </button>
                         </li>
                         <li>
-                            <NavLink to={`/profile/${user.uid}`}>Profile</NavLink>
+                            <NavLink to={`/profile/${user.uid}`}>Profile /</NavLink>
                         </li>
                     </>
                 )}
+
+                <li>
+                    <p> 내 위치 설정 </p>
+                </li>
             </ul>
         </nav>
     );

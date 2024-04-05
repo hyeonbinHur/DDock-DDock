@@ -1,52 +1,56 @@
-import defaultImg from '../assets/user.png';
-import style from './memo.module.css';
-
-import { projectStorage } from '../firebase/config';
-import { useEffect, useState } from 'react';
-import { v4 as uuidv4 } from 'uuid'; // uuid 라이브러리에서 v4 함수를 uuidv4라는 이름으로 가져옵니다.
-
-
+import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
+import React from 'react'
+const containerStyle = {
+    width: '1200px',
+    height: '550px'
+  };
+  
+  const center = {
+    lat: -3.745,
+    lng: -38.523
+  };
+  
+  
 export default function Memo() {
-    const [imageUpload, setImageUpload] = useState(null);
-    const [imageUrls, setImageUrls] = useState([]);
 
+    const { isLoaded } = useJsApiLoader({
+        id: 'google-map-script',
+        googleMapsApiKey: "AIzaSyAlPYVkjdM1yEkocPAkchtBqYYdw_y-QuY"
+      })
     
-    const uploadImage = () => {
-        if (!imageUpload) return; // 파일이 선택되지 않았다면 아무 작업도 하지 않음
-        const imageRef = projectStorage.ref(`images/${imageUpload.name}_${uuidv4()}`);
-        imageRef.put(imageUpload).then(() => {
-            imageRef.getDownloadURL().then((url) => {
-                setImageUrls((prev) => [...prev, url]);
-            });
-        });
-    };
-
-
-    useEffect(() => {
-        const imageListRef = projectStorage.ref('images/');
-        imageListRef.listAll().then((response) => {
-            response.items.forEach((item) => {
-                item.getDownloadURL().then((url) => {
-                    setImageUrls((prev) => [...prev, url]);
-                });
-            });
-        });
-    }, []);
-
-
+      const [map, setMap] = React.useState(null)
+    
+      const onLoad = React.useCallback(function callback(map) {
+        // This is just an example of getting and using the map instance!!! don't just blindly copy!
+        const bounds = new window.google.maps.LatLngBounds(center);
+        map.fitBounds(bounds);
+    
+        setMap(map)
+      }, [])
+    
+      const onUnmount = React.useCallback(function callback(map) {
+        setMap(null)
+      }, [])
+    
+    
     return (
-        <div>
-            <input
-                type="file"
-                onChange={(event) => {
-                    setImageUpload(event.target.files[0]); // 이벤트 대상의 files 배열에서 첫 번째 파일을 선택
-                }}
-            />
-            <button onClick={uploadImage}>submit image</button>
-            <img className={style.image} src={defaultImg} alt="Default" />
-            {imageUrls.map((url) => (
-                <img src={url} alt="" key={url} />
-            ))}
-        </div>
+        isLoaded ? (
+            <GoogleMap
+              mapContainerStyle={containerStyle}
+              center={center}
+              zoom={10}
+              onLoad={onLoad}
+              onUnmount={onUnmount}
+              options={{
+                streetViewControl:false,
+                mapTypeControl: false,
+                fullscreenControl: false,
+
+              }}
+            >
+              { /* Child components, such as markers, info windows, etc. */ }
+              <></>
+            </GoogleMap>
+        ) : <></>
     );
 }
