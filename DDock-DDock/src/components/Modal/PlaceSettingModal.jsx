@@ -15,6 +15,8 @@ import {
     Circle,
 } from '@react-google-maps/api';
 
+import { useFirestore } from '../../hooks/useFirestore';
+
 const PlaceSettingModal = forwardRef(function PlaceSettingModal(
     { placeSettingFn, user },
     ref
@@ -25,16 +27,25 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
         id: 'google-map-script',
         googleMapsApiKey: 'AIzaSyAlPYVkjdM1yEkocPAkchtBqYYdw_y-QuY',
     });
+    const [hashtagSi, setHashtagSi] = useState('');
+    const [hashtagGu, setHashtagGu] = useState('');
+    const [hashtagDong, setHashtagDong] = useState('');
+
+    const testLat = -37.815303; // chagne all testLat, testLng to currentLat,currentLng
+    const testLng = 144.952798;
 
     const [location, setLocation] = useState(null);
     const [map, setMap] = useState(null);
     const [zoomSeting, setZoomSeting] = useState(16);
     const [bound, setBound] = useState(1000);
+
     const [currentLat, setCurrentLat] = useState(0);
     const [currentLng, setCurrentLng] = useState(0);
-    const [center, setCenter] = useState({ lat: 0, lng: 0 });
+
+    const [center, setCenter] = useState({ lat: testLat, lng: testLng });
 
     const [selectedBound, setSelectedBound] = useState('dong');
+
     const [currentSi, setCurrentSi] = useState('');
     const [currentGu, setCurrentGu] = useState('');
     const [currentDong, setCurrentDong] = useState('');
@@ -59,35 +70,32 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
     //         : ''
     // );
 
-    // useEffect(() => {
-    //     let si = '';
-    //     let gu = '';
-    //     let dong = '';
-    //     if (user?.location.si !== '') {
-    //         si = user.location.si;
-    //         setCurrentSi(user.location.si)
-    //         setBoundString(`${si} 시 `);
-    //         if (user?.location.gu !== '') {
-    //             gu = user.location.gu;
-    //             setBoundString(`${si} 시 ${gu} 구`);
-    //         setCurrentGu(user.location.gu)
+    const { updateDocument } = useFirestore('User');
 
-    //         }
-    //         if (user?.location.dong !== '') {
-    //             si = user.location.dong;
-    //             setBoundString(`${si} 시 ${gu} 구 ${dong} 동`);
-    //         setCurrentGu(user.location.dong)
+    useEffect(() => {
+        let si = '';
+        let gu = '';
+        let dong = '';
 
-    //         }
-    //     }
-    // }, [user?.location]);
-
-    const [hashtagSi, setHashtagSi] = useState('');
-    const [hashtagGu, setHashtagGu] = useState('');
-    const [hashtagDong, setHashtagDong] = useState('');
-
-    const testLat = -37.815303; // chagne all testLat, testLng to currentLat,currentLng
-    const testLng = 144.952798;
+        if (user && user.location) {
+            if (user.location.si !== '') {
+                si = user.location.si;
+                setCurrentSi(user.location.si);
+                setBoundString(`${si} 시 `);
+                if (user.location.gu !== '') {
+                    gu = user.location.gu;
+                    setBoundString(`${si} 시 ${gu} 구`);
+                    setCurrentGu(user.location.gu);
+                }
+                if (user.location.dong !== '') {
+                    dong = user.location.dong; // 여기서 si 대신 dong을 사용해야 합니다.
+                    setBoundString(`${si} 시 ${gu} 구 ${dong} 동`);
+                    setCurrentDong(user.location.dong); // setCurrentGu 대신 setCurrentDong을 사용해야 합니다.
+                }
+                setLocation({ testLat, testLng });
+            }
+        }
+    }, [user?.location, user]);
 
     const containerStyle = {
         width: '1200px',
@@ -116,6 +124,29 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
     }));
 
     const handleClose = async () => {
+        const originalUser = user;
+        let cnt = 0;
+        const updatedUser = {
+            ...originalUser,
+            location: {
+                lat: '',
+                lng: '',
+                si: currentSi,
+                gu: currentGu,
+                dong: currentDong,
+            },
+        };
+        if (originalUser.location.si !== currentSi) {
+            cnt = 1;
+        } else if (originalUser.location.gu !== currentSi) {
+            cnt = 1;
+        } else if (originalUser.location.dong !== currentSi) {
+            cnt = 1;
+        }
+        if (cnt === 1) {
+            await updateDocument(user.id, updatedUser, 'User');
+        }
+
         placeSettingFn(hashtagSi, hashtagGu, hashtagDong);
         modal.current.close();
     };
@@ -137,6 +168,7 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
         const longitude = position.coords.longitude;
 
         setCurrentLat(latitude);
+
         setCurrentLng(longitude);
 
         setLocation({ latitude, longitude });
@@ -219,7 +251,6 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
             setBound(1000);
             setZoomSeting(16);
             setCenter({ lat: testLat, lng: testLng });
-
             setHashtagSi(currentSi);
             setHashtagGu(currentGu);
             setHashtagDong(currentDong);
@@ -233,7 +264,6 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
         } else if (event.target.value === 'si') {
             setBound(5000);
             setZoomSeting(13);
-
             setCenter({ lat: testLat, lng: testLng });
             setHashtagSi(currentSi);
             setHashtagGu('');
@@ -241,8 +271,8 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
         }
     };
     const hello = () => {
-        console.log(user.location.dong);
-        console.log(user.location);
+        console.log('test lat' + testLat);
+        console.log('test lng' + testLng);
     };
 
     return createPortal(
@@ -263,7 +293,6 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
                     >
                         {location && (
                             <>
-                                {' '}
                                 <Marker
                                     position={{
                                         lat: testLat,
@@ -329,27 +358,30 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
 
                     {boundString !== '' && (
                         <div>
-                            <label>동 까지 </label>
                             <input
                                 type="radio"
                                 value="dong"
                                 checked={selectedBound === 'dong'}
                                 onChange={checkBound}
                             />
-                            <label>구 까지 </label>
+                            <label>동 까지 / </label>
+
                             <input
                                 type="radio"
                                 value="gu"
                                 checked={selectedBound === 'gu'}
                                 onChange={checkBound}
                             />
-                            <label>시 까지 </label>
+                            <label>구 까지 / </label>
+
                             <input
                                 type="radio"
                                 value="si"
                                 checked={selectedBound === 'si'}
                                 onChange={checkBound}
                             />
+                            <label>시 까지 / </label>
+
                             <div>
                                 <button onClick={handleClose}>
                                     위치 설정 완료

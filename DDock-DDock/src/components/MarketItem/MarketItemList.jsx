@@ -17,7 +17,7 @@ export default function MarketList({ documents }) {
     const { user } = useAuthContext();
     const modal = useRef();
     const placeModal = useRef();
-    const { document: userInfo } = useDocument('User', user.uid);
+    const { document: userInfo } = useDocument('User', user?.uid);
     const { updateDocument } = useFirestore('User');
 
     const [searchTitle, setSearchTitle] = useState('');
