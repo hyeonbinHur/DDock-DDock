@@ -124,8 +124,9 @@ export default function MarketList({ documents }) {
             <ul>
                 { searchedItem.map((doc) => (
                     <li key={doc.id}>
+                        <MarketItem document={doc} />
                         <Link to={`/market/${doc.id}`}>
-                            <MarketItem document={doc} />
+                            {doc.title}
                         </Link>
                         {userInfo && doc.userId === user.uid && (
                             <div>

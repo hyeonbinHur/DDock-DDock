@@ -33,7 +33,8 @@ export default function AddMarketItem(){
                     dong: userInfo.location.dong,
                     lat: userInfo.location.lat,
                     lng: userInfo.location.lng
-                }
+                },
+                
             }
             await addDocument(newMItem,"M_Item","M_Item");
         }

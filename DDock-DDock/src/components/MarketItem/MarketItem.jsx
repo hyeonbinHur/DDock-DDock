@@ -51,6 +51,11 @@ export default function MarketItem({ document }) {
                     <h1>{document.title}</h1>
                     <p>{document.description}</p>
 
+                    <span>{document.location.si} 시 </span>
+                    <span>{document.location.gu} 구 </span>
+                    <span>{document.location.dong} 동 </span>
+
+
                     
                 </div>
             )}
