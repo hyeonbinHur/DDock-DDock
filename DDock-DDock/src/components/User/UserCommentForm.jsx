@@ -32,7 +32,7 @@ export default function UserCommentForm({ comment }) {
                     </Link>{' '}
                 </div>
             ) : (
-                <p>Loading..</p>
+                <p> 물건이 삭제 됐네요...ㅠ</p>
             )}
         </div>
     );

@@ -19,10 +19,7 @@ export default function MarketItemForm({ doAction, data }) {
     
     const [imageUploads, setImageUploads] = useState([]); //업로드된 이미지들
     const [imagePreviews, setImagePreviews] = useState([]); //선택한 이미지 미리보기
-    // const [uploadedUrls, setUploadedUrls] = useState([]);
-    // const [deleteUrls, setDeleteUrls] = useState([]);
-    // const [deleteIndex, setDeleteIndex] = useState([]);
-    
+
 
     function resizeImageToMaxSize(
         file,
@@ -116,7 +113,6 @@ export default function MarketItemForm({ doAction, data }) {
     
             const urls = await Promise.all(uploadPromises);
 
-           
             doAction(title, description, urls, `/${title}_${uuid}`); // 모든 이미지 업로드 후 doAction 호출
         
         } catch (error) {

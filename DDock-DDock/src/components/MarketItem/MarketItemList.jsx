@@ -23,6 +23,11 @@ export default function MarketList({ documents }) {
     const [searchTitle, setSearchTitle] = useState('');
     const [searchedItem, setSearchedItem] = useState(documents);
 
+    const [hashtagSi, setHashtagSi] = useState('')
+    const [hashtagGu, setHashtagGu] = useState('')
+    const [hashtagDong, setHashtagDong] = useState('')
+
+
     function openPlaceModal(){
         placeModal.current.open();
     }
@@ -73,8 +78,10 @@ export default function MarketList({ documents }) {
         await updateDocument(item.id, updatedItem, 'MarketItem');
     };
 
-    const placeSetting = () =>{
-        console.log("Hello place modal")
+    const placeSetting = (si,gu,dong) =>{
+        setHashtagSi(si);
+        setHashtagGu(gu);
+        setHashtagDong(dong);
     }
 
     useEffect(()=>{
@@ -90,6 +97,16 @@ export default function MarketList({ documents }) {
 
     },[searchTitle, documents])
 
+    const deleteHasTag = (bound) => {
+        if(bound === "Si"){
+            setHashtagSi('')
+        }else if(bound === "Gu"){
+            setHashtagGu('')
+        }else if (bound === "Dong"){
+            setHashtagDong('')
+        }
+    }
+
     return (
         <div>
             <input
@@ -99,6 +116,11 @@ export default function MarketList({ documents }) {
                 onChange={(event) => setSearchTitle(event.target.value)}
             />
             <button onClick={openPlaceModal}>Open Place modal</button>
+            <div>
+                {hashtagSi !== '' && <span> {hashtagSi} 시 <button onClick={() =>{deleteHasTag("Si")}}> X </button> </span>}
+                {hashtagGu !== '' && <span> {hashtagGu} 시 <button onClick={() =>{deleteHasTag("Gu")}} > X </button> </span>}
+                {hashtagDong !== '' && <span> {hashtagDong} 시 <button onClick={() =>{deleteHasTag("Dong")}} > X </button> </span>}
+            </div>
             <ul>
                 { searchedItem.map((doc) => (
                     <li key={doc.id}>
@@ -154,7 +176,7 @@ export default function MarketList({ documents }) {
                 ))}
             </ul>
             <ItemDeleteModal ref={modal} id={deleteItemId} />
-            <PlaceSettingModal ref={placeModal} placeSettingFn={placeSetting}/>
+            <PlaceSettingModal ref={placeModal} placeSettingFn={placeSetting} user={userInfo}/>
         </div>
     );
 }

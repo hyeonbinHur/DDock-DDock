@@ -16,7 +16,7 @@ import {
 } from '@react-google-maps/api';
 
 const PlaceSettingModal = forwardRef(function PlaceSettingModal(
-    { placeSettingFn, userLat, userLng },
+    { placeSettingFn, user },
     ref
 ) {
     //paceSettingFn은 원하는 위치 태그를 마켓에다가 포함시켜야하기때문임 해시태그를 마켓페이지에 보여줘야함, 범위를 보여주려고
@@ -34,11 +34,57 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
     const [currentLng, setCurrentLng] = useState(0);
     const [center, setCenter] = useState({ lat: 0, lng: 0 });
 
-    const [selectedBound, setSelectedBound] = useState('');
-    const [currentSi, setCurrentSi] = useState(userLat? userLat : '');
-    const [currentGu, setCurrentGu] = useState(userLat? userLat : '');
-    const [currentDong, setCurrentDong] = useState(userLat? userLat : '');
-    const [boundString, setBoundString] = useState(userLat? userLat : '');
+    const [selectedBound, setSelectedBound] = useState('dong');
+    const [currentSi, setCurrentSi] = useState('');
+    const [currentGu, setCurrentGu] = useState('');
+    const [currentDong, setCurrentDong] = useState('');
+    const [boundString, setBoundString] = useState('');
+
+    // const [currentSi, setCurrentSi] = useState(
+    //     user?.location.si ? user?.location.si : ''
+    // );
+    // const [currentGu, setCurrentGu] = useState(
+    //     user?.location.gu ? user?.location.gu : ''
+    // );
+    // const [currentDong, setCurrentDong] = useState(
+    //     user?.locaion.dong ? user?.location.dong : ''
+    // );
+    // const [boundString, setBoundString] = useState(
+    //     user?.location?.si !== ''
+    //         ? user?.location.si + '시'
+    //         : '' + user?.location.gu !== ''
+    //         ? user?.location.gu + '구'
+    //         : '' + user.location.dong !== ''
+    //         ? user?.locaion.dong + '동'
+    //         : ''
+    // );
+
+    // useEffect(() => {
+    //     let si = '';
+    //     let gu = '';
+    //     let dong = '';
+    //     if (user?.location.si !== '') {
+    //         si = user.location.si;
+    //         setCurrentSi(user.location.si)
+    //         setBoundString(`${si} 시 `);
+    //         if (user?.location.gu !== '') {
+    //             gu = user.location.gu;
+    //             setBoundString(`${si} 시 ${gu} 구`);
+    //         setCurrentGu(user.location.gu)
+
+    //         }
+    //         if (user?.location.dong !== '') {
+    //             si = user.location.dong;
+    //             setBoundString(`${si} 시 ${gu} 구 ${dong} 동`);
+    //         setCurrentGu(user.location.dong)
+
+    //         }
+    //     }
+    // }, [user?.location]);
+
+    const [hashtagSi, setHashtagSi] = useState('');
+    const [hashtagGu, setHashtagGu] = useState('');
+    const [hashtagDong, setHashtagDong] = useState('');
 
     const testLat = -37.815303; // chagne all testLat, testLng to currentLat,currentLng
     const testLng = 144.952798;
@@ -70,6 +116,7 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
     }));
 
     const handleClose = async () => {
+        placeSettingFn(hashtagSi, hashtagGu, hashtagDong);
         modal.current.close();
     };
 
@@ -145,7 +192,6 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
                 const si = address.municipality;
                 const gu = address.city;
                 const dong = address.suburb;
-               
 
                 setCurrentSi(si);
                 setCurrentGu(gu);
@@ -166,24 +212,37 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
         console.log('Error occured');
     }
 
-
     const checkBound = (event) => {
         setSelectedBound(event.target.value);
 
-        if(event.target.value === "dong"){
+        if (event.target.value === 'dong') {
             setBound(1000);
             setZoomSeting(16);
             setCenter({ lat: testLat, lng: testLng });
-        }else if(event.target.value === "gu"){
+
+            setHashtagSi(currentSi);
+            setHashtagGu(currentGu);
+            setHashtagDong(currentDong);
+        } else if (event.target.value === 'gu') {
             setBound(3000);
             setZoomSeting(14);
             setCenter({ lat: testLat, lng: testLng });
-        }else if(event.target.value === "si"){
+            setHashtagSi(currentSi);
+            setHashtagGu(currentGu);
+            setHashtagDong('');
+        } else if (event.target.value === 'si') {
             setBound(5000);
             setZoomSeting(13);
-            setCenter({ lat: testLat, lng: testLng });
-        }
 
+            setCenter({ lat: testLat, lng: testLng });
+            setHashtagSi(currentSi);
+            setHashtagGu('');
+            setHashtagDong('');
+        }
+    };
+    const hello = () => {
+        console.log(user.location.dong);
+        console.log(user.location);
     };
 
     return createPortal(
@@ -231,7 +290,6 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
                             </>
                         )}
                     </GoogleMap>
-                  
 
                     <p>현재 범위 : {bound}</p>
                     <div>
@@ -240,9 +298,34 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
                         </button>
                     </div>
 
-                    <span>{currentSi} 시 </span>
-                    <span>{currentGu} 구 </span>
-                    <span>{currentDong} 동 </span>
+                    {selectedBound === 'si' && (
+                        <div>
+                            <span>{currentSi} 시 </span>{' '}
+                        </div>
+                    )}
+
+                    {selectedBound === 'gu' && (
+                        <div>
+                            <span>{currentSi} 시 </span>{' '}
+                            <span>{currentGu} 구 </span>{' '}
+                        </div>
+                    )}
+
+                    {selectedBound === 'dong' && (
+                        <div>
+                            <span>{currentSi} 시 </span>{' '}
+                            <span>{currentGu} 구 </span>{' '}
+                            <span>{currentDong} 동 </span>{' '}
+                        </div>
+                    )}
+                    {selectedBound === '' && (
+                        <div>
+                            {' '}
+                            <span>{currentSi} 시 </span>{' '}
+                            <span>{currentGu} 구 </span>{' '}
+                            <span>{currentDong} 동 </span>{' '}
+                        </div>
+                    )}
 
                     {boundString !== '' && (
                         <div>
@@ -274,6 +357,7 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
                             </div>
                         </div>
                     )}
+                    <button onClick={hello}>Console user info</button>
                 </dialog>
             ) : (
                 <p>Map is Loading...</p>

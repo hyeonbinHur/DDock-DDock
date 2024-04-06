@@ -126,6 +126,8 @@ export const useFirestore = (collection) => {
                 type: 'DELETED_DOCUMENT',
                 payload: deletedDocument,
             });
+
+
         } catch (error) {
             dispatchIsNotCancelled({ type: 'ERROR', payload: error.message });
         }
@@ -172,6 +174,13 @@ export const useFirestore = (collection) => {
                     setDisplayName: false,
                     email: user.email,
                     interests:[],
+                    location:{
+                        si:'',
+                        gu:'',
+                        dong:'',
+                        lat:'',
+                        lng:'',
+                    }
                 });
 
                 dispatchIsNotCancelled({

@@ -18,7 +18,8 @@ export default function AddMarketItem(){
             description,
             comments: [],
             images,
-            bucket
+            bucket,
+            
         }
         await addDocument(newMItem,"M_Item","M_Item");
     };
