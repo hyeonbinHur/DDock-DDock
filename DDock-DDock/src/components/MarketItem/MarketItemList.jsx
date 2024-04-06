@@ -5,7 +5,7 @@ import commentPng from '../../assets/comment.png';
 import heartPng from '../../assets/heart.png';
 import emptyHeart from '../../assets/emptyHeart.png';
 import style from './MarketItemList.module.css';
-
+import PlaceSettingModal from '../Modal/PlaceSettingModal';
 // import style from './MarketItemList.module.css';
 import { Link } from 'react-router-dom';
 import { useAuthContext } from '../../hooks/useAuth';
@@ -16,12 +16,16 @@ export default function MarketList({ documents }) {
     const [deleteItemId, setDeleteItemId] = useState(null);
     const { user } = useAuthContext();
     const modal = useRef();
+    const placeModal = useRef();
     const { document: userInfo } = useDocument('User', user.uid);
     const { updateDocument } = useFirestore('User');
 
     const [searchTitle, setSearchTitle] = useState('');
     const [searchedItem, setSearchedItem] = useState(documents);
 
+    function openPlaceModal(){
+        placeModal.current.open();
+    }
 
     function openConfirmModal(itemId) {
         setDeleteItemId(itemId);
@@ -69,6 +73,9 @@ export default function MarketList({ documents }) {
         await updateDocument(item.id, updatedItem, 'MarketItem');
     };
 
+    const placeSetting = () =>{
+        console.log("Hello place modal")
+    }
 
     useEffect(()=>{
         console.log("이펙트 들어옴")
@@ -91,6 +98,7 @@ export default function MarketList({ documents }) {
                 value={searchTitle}
                 onChange={(event) => setSearchTitle(event.target.value)}
             />
+            <button onClick={openPlaceModal}>Open Place modal</button>
             <ul>
                 { searchedItem.map((doc) => (
                     <li key={doc.id}>
@@ -146,6 +154,7 @@ export default function MarketList({ documents }) {
                 ))}
             </ul>
             <ItemDeleteModal ref={modal} id={deleteItemId} />
+            <PlaceSettingModal ref={placeModal} placeSettingFn={placeSetting}/>
         </div>
     );
 }

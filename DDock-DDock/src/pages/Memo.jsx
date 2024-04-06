@@ -21,11 +21,12 @@ export default function Memo() {
     const [currentLng, setCurrentLng] = useState(0);
     const [center, setCenter] = useState({ lat: 0, lng: 0 });
 
-    const testLat = -37.815303; // chagne all testLat, testLng to currentLat,currentLng
-    const testLng = 144.952798;
+    const testLat = -37.811609; // chagne all testLat, testLng to currentLat,currentLng
+    const testLng = 144.977227;
+    
 
     useEffect(() => {
-        setCenter({ lat: testLat, lng:  144.952798 });
+        setCenter({ lat: testLat, lng: 144.952798 });
     }, [currentLat, currentLng]);
 
     const containerStyle = {
@@ -69,32 +70,54 @@ export default function Memo() {
         console.log('longitude: ' + longitude);
         console.log('accuracy : ' + position.coords.accuracy);
 
-        const geocoder = new window.google.maps.Geocoder();
-        geocoder.geocode({ location: { lat:testLat,  lng:testLng}}, (results, status) => {
-            if (status === 'OK' && results[0]) {
-                let dong = null;
-                let gu = null;
+        // const geocoder = new window.google.maps.Geocoder();
+        // geocoder.geocode({ location: { lat:testLat,  lng:testLng}}, (results, status) => {
+        //     if (status === 'OK' && results[0]) {
+        //         let dong = null;
+        //         let gu = null;
 
-        
-                // address_components 배열을 순회하며 나라와 동네 정보 추출
-                results[0].address_components.forEach((component) => {
-                    
-                    if (component.types.includes('locality')) {
-                        dong = component.long_name;
-                    }
-                    if (component.types.includes('administrative_area_level_2')) {
-                        gu = component.long_name;
-                    }
-                    // 동네 정보가 locality에 없는 경우 다른 타입을 확인할 수 있음
-                   
-                });
-                
-                console.log(`동: ${dong} , 구: ${gu}`);
-                // 결과를 상태에 저장하거나 UI에 표시
-            } else {
-                console.log('Geocoder 결과를 찾을 수 없거나 실패했습니다:', status);
-            }
-        });
+        //         // address_components 배열을 순회하며 나라와 동네 정보 추출
+        //         results[0].address_components.forEach((component) => {
+
+        //             if (component.types.includes('locality')) {
+        //                 dong = component.long_name;
+        //             }
+        //             if (component.types.includes('administrative_area_level_2')) {
+        //                 gu = component.long_name;
+        //             }
+        //             // 동네 정보가 locality에 없는 경우 다른 타입을 확인할 수 있음
+
+        //         });
+
+        //         console.log(`동: ${dong} , 구: ${gu}`);
+        //         console.log(results[0].address_components)
+        //     } else {
+        //         console.log('Geocoder 결과를 찾을 수 없거나 실패했습니다:', status);
+        //     }
+        // });
+
+        const lat = testLat; // 시드니의 위도
+        const lon = testLng // 시드니의 경도
+
+        fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&accept-language=en`)
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(data);
+                // data에서 필요한 정보 추출
+                const address = data.address;
+                const country = address.country;
+                const state = address.state;
+                // 'administrative_area_level_2'는 OpenStreetMap 데이터에 따라 다르게 표현될 수 있으며, 주로 'county' 등으로 나타납니다.
+                const administrative_area_level_2 =
+                    address.county || address['state_district'];
+                const region = address.region;
+                const suburb = address.suburb;
+
+                console.log(
+                    `Country: ${country}, State: ${state}, Administrative Area Level 2: ${administrative_area_level_2}, Region: ${region}, Suburb: ${suburb}`
+                );
+            })
+            .catch((error) => console.error('Error:', error));
     }
 
     function error() {
@@ -102,7 +125,7 @@ export default function Memo() {
     }
 
     const borederBound = () => {
-        console.log(bound)
+        console.log(bound);
         if (bound === 1000) {
             setBound(3000);
             setZoomSeting(14);
@@ -143,14 +166,14 @@ export default function Memo() {
                         <Marker
                             position={{
                                 lat: testLat,
-                                lng:  testLng,
+                                lng: testLng,
                             }}
                         />
                         <Circle
                             // 원의 중심 위치를 현재 위치로 설정
                             center={{
                                 lat: testLat,
-                                lng:  testLng,
+                                lng: testLng,
                             }}
                             // 원의 반경을 미터 단위로 설정 (여기서는 1000미터로 설정)
                             radius={bound}
