@@ -35,6 +35,7 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
     const testLng = 144.952798;
 
     const [location, setLocation] = useState(null);
+    // eslint-disable-next-line no-unused-vars
     const [map, setMap] = useState(null);
     const [zoomSeting, setZoomSeting] = useState(16);
     const [bound, setBound] = useState(1000);
@@ -110,6 +111,7 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
         setMap(map);
     }, []);
 
+    // eslint-disable-next-line no-unused-vars
     const onUnmount = useCallback(function callback(map) {
         setMap(null);
     }, []);

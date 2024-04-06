@@ -118,8 +118,8 @@ export default function MarketList({ documents }) {
             <button onClick={openPlaceModal}>Open Place modal</button>
             <div>
                 {hashtagSi !== '' && <span> {hashtagSi} 시 <button onClick={() =>{deleteHasTag("Si")}}> X </button> </span>}
-                {hashtagGu !== '' && <span> {hashtagGu} 시 <button onClick={() =>{deleteHasTag("Gu")}} > X </button> </span>}
-                {hashtagDong !== '' && <span> {hashtagDong} 시 <button onClick={() =>{deleteHasTag("Dong")}} > X </button> </span>}
+                {hashtagGu !== '' && <span> {hashtagGu} 구 <button onClick={() =>{deleteHasTag("Gu")}} > X </button> </span>}
+                {hashtagDong !== '' && <span> {hashtagDong} 동 <button onClick={() =>{deleteHasTag("Dong")}} > X </button> </span>}
             </div>
             <ul>
                 { searchedItem.map((doc) => (
