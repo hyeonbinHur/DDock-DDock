@@ -83,15 +83,19 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
                 si = user.location.si;
                 setCurrentSi(user.location.si);
                 setBoundString(`${si} 시 `);
+                setHashtagSi(user.location.si);
+
                 if (user.location.gu !== '') {
                     gu = user.location.gu;
                     setBoundString(`${si} 시 ${gu} 구`);
                     setCurrentGu(user.location.gu);
+                    setHashtagGu(user.location.gu);
                 }
                 if (user.location.dong !== '') {
                     dong = user.location.dong; // 여기서 si 대신 dong을 사용해야 합니다.
                     setBoundString(`${si} 시 ${gu} 구 ${dong} 동`);
                     setCurrentDong(user.location.dong); // setCurrentGu 대신 setCurrentDong을 사용해야 합니다.
+                    setHashtagDong(user.location.dong);
                 }
                 setLocation({ testLat, testLng });
             }
@@ -106,15 +110,18 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
     useEffect(() => {
         setCenter({ lat: testLat, lng: testLng });
     }, [currentLat, currentLng]);
+    
 
     const onLoad = useCallback(function callback(map) {
         setMap(map);
     }, []);
 
+
     // eslint-disable-next-line no-unused-vars
     const onUnmount = useCallback(function callback(map) {
         setMap(null);
     }, []);
+
 
     useImperativeHandle(ref, () => ({
         open: () => {
@@ -124,6 +131,7 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
             modal.current.close();
         },
     }));
+
 
     const handleClose = async () => {
         const originalUser = user;
@@ -153,6 +161,7 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
         modal.current.close();
     };
 
+
     function handleLocationClick() {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(success, error, {
@@ -170,7 +179,6 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
         const longitude = position.coords.longitude;
 
         setCurrentLat(latitude);
-
         setCurrentLng(longitude);
 
         setLocation({ latitude, longitude });
