@@ -37,6 +37,15 @@ const firestoreReducer = (state, action) => {
                 error: null,
             };
 
+        case 'ADD_NEWCHATROOM':
+            return {
+                ...state,
+                isPending: false,
+                document: action.payload,
+                success: true,
+                error: null,
+            };
+
         case 'DELETED_DOCUMENT':
             return {
                 ...state,
@@ -101,9 +110,7 @@ export const useFirestore = (collection) => {
             const originalUserItem = originalUser.userItem;
             const updatedUserItem = [...originalUserItem, addedDocument];
             originalUser.userItem = updatedUserItem;
-            await updateDocument(user.uid, originalUser,'User');
-
-
+            await updateDocument(user.uid, originalUser, 'User');
 
             dispatchIsNotCancelled({
                 type: 'ADD_DOCUMENT',
@@ -126,8 +133,6 @@ export const useFirestore = (collection) => {
                 type: 'DELETED_DOCUMENT',
                 payload: deletedDocument,
             });
-
-
         } catch (error) {
             dispatchIsNotCancelled({ type: 'ERROR', payload: error.message });
         }
@@ -136,7 +141,6 @@ export const useFirestore = (collection) => {
     };
 
     const updateDocument = async (id, updates, collection) => {
-        
         const ref = projectFirestore.collection(collection);
 
         setLoading(true);
@@ -160,7 +164,9 @@ export const useFirestore = (collection) => {
     const saveUser = async (user) => {
         setLoading(true);
         dispatch({ type: 'IS_PENDING' });
+
         const userRef = ref.doc(user.uid);
+
         try {
             const currentUser = await userRef.get();
 
@@ -173,11 +179,11 @@ export const useFirestore = (collection) => {
                     Avatar: null,
                     setDisplayName: false,
                     email: user.email,
-                    interests:[],
-                    location:{
-                        si:'',
-                        gu:'',
-                        dong:'',
+                    interests: [],
+                    location: {
+                        si: '',
+                        gu: '',
+                        dong: '',
                     },
                     chatRoomID: [],
                 });
@@ -196,6 +202,32 @@ export const useFirestore = (collection) => {
         setLoading(false);
     };
 
+    const createChattingRoom = async (user1, user2, collection) => {
+        setLoading(true);
+        dispatch({ type: 'IS_PENDING' });
+
+        const chatRef = projectFirestore.collection(collection);
+        try {
+            const createdAt = timestamp.fromDate(new Date());
+            const newChattingRoom = await chatRef.add({
+                user1,
+                user2,
+                createdAt,
+                chat: [],
+            });
+            dispatchIsNotCancelled({
+                type: 'ADD_NEWUSER',
+                payload: newChattingRoom,
+            });
+        } catch (error) {
+            dispatchIsNotCancelled({
+                type: 'ERROR',
+                payload: error.message,
+            });
+        }
+        setLoading(false);
+    };
+
     useEffect(() => {
         return () => setIsCancelled(!isCancelled);
     }, [isCancelled]);
@@ -205,6 +237,7 @@ export const useFirestore = (collection) => {
         updateDocument,
         deleteDocument,
         saveUser,
+        createChattingRoom,
         response,
         loading,
     };
