@@ -22,13 +22,80 @@ export default function MarketList({ documents }) {
 
     const [searchTitle, setSearchTitle] = useState('');
     const [searchedItem, setSearchedItem] = useState(documents);
+    const [filteredItem, setFilteredItem] = useState(documents);
 
-    const [hashtagSi, setHashtagSi] = useState('')
-    const [hashtagGu, setHashtagGu] = useState('')
-    const [hashtagDong, setHashtagDong] = useState('')
+    const [hashtagSi, setHashtagSi] = useState('');
+    const [hashtagGu, setHashtagGu] = useState('');
+    const [hashtagDong, setHashtagDong] = useState('');
+
+    
+    useEffect(() => {
+        console.log('이펙트 들어옴');
+        const emptyArray = [];
+        setSearchedItem(emptyArray);
+
+        documents.map((document) => {
+            if (
+                document.title.includes(searchTitle) ||
+                document.description.includes(searchTitle)
+            ) {
+                setSearchedItem((prev) => [...prev, document]);
+            }
+        });
+    }, [searchTitle, documents]);
+
+    
+    useEffect(() => {
+        const newItemArray = [];
+        const oldItemArray = documents;
+        console.log("해시필터")
+        //동
+        //해쉬 동이 엠티가 아니라면 해쉬동과 아이템동이 일치하는걸 뉴아이템 어레이에 집어넣어
+        if (hashtagDong !== '') {
+            oldItemArray.map((item) => {
+                if (item.location.dong === hashtagDong) {
+                    newItemArray.push(item);
+                }
+            });
+        }
+        //구
+        //해쉬 구가 존재한다면 올드 어레이에서 해시구와 아이템 구가 같은걸 뉴아이템 어레리에 집어넣는데, 이미 존재한다면 패스
+        if (hashtagGu !== '') {
+            oldItemArray.map((item) => {
+                if (item.location.gu === hashtagGu) {
+                    const isExist = newItemArray.some(
+                        (newItem) => newItem.id === item.id
+                    );
+
+                    if (!isExist) {
+                        newItemArray.push(item);
+                    }
+                }
+            });
+        }
+
+        //시
+        //해쉬 시가 존재한다면 올드 어레이에서 해시시와 같은 시를 가지고 있는 아이템을 뉴아이템 어레이에 집어 넣어, 이미 존재한다면 패스
+        if (hashtagSi !== '') {
+            oldItemArray.map((item) => {
+                if (item.location.si === hashtagSi) {
+                    const isExist = newItemArray.some(
+                        (newItem) => newItem.id === item.id
+                    );
+
+                    if (!isExist) {
+                        newItemArray.push(item);
+                    }
+                }
+            });
+        }
+        if (newItemArray.length > 0) {
+            setFilteredItem(newItemArray);
+        }
+    }, [hashtagDong, hashtagGu, hashtagSi, searchedItem]);
 
 
-    function openPlaceModal(){
+    function openPlaceModal() {
         placeModal.current.open();
     }
 
@@ -78,34 +145,21 @@ export default function MarketList({ documents }) {
         await updateDocument(item.id, updatedItem, 'MarketItem');
     };
 
-    const placeSetting = (si,gu,dong) =>{
+    const placeSetting = (si, gu, dong) => {
         setHashtagSi(si);
         setHashtagGu(gu);
         setHashtagDong(dong);
-    }
-
-    useEffect(()=>{
-        console.log("이펙트 들어옴")
-        const emptyArray = [];
-        setSearchedItem(emptyArray)
-
-        documents.map((document) => {
-            if(document.title.includes(searchTitle) || document.description.includes(searchTitle)){
-                setSearchedItem((prev) => [...prev, document])
-            }
-        })
-
-    },[searchTitle, documents])
+    };
 
     const deleteHasTag = (bound) => {
-        if(bound === "Si"){
-            setHashtagSi('')
-        }else if(bound === "Gu"){
-            setHashtagGu('')
-        }else if (bound === "Dong"){
-            setHashtagDong('')
+        if (bound === 'Si') {
+            setHashtagSi('');
+        } else if (bound === 'Gu') {
+            setHashtagGu('');
+        } else if (bound === 'Dong') {
+            setHashtagDong('');
         }
-    }
+    };
 
     return (
         <div>
@@ -117,17 +171,54 @@ export default function MarketList({ documents }) {
             />
             <button onClick={openPlaceModal}>Open Place modal</button>
             <div>
-                {hashtagSi !== '' && <span> {hashtagSi} 시 <button onClick={() =>{deleteHasTag("Si")}}> X </button> </span>}
-                {hashtagGu !== '' && <span> {hashtagGu} 구 <button onClick={() =>{deleteHasTag("Gu")}} > X </button> </span>}
-                {hashtagDong !== '' && <span> {hashtagDong} 동 <button onClick={() =>{deleteHasTag("Dong")}} > X </button> </span>}
+                {hashtagSi !== '' && (
+                    <span>
+                        {' '}
+                        {hashtagSi} 시{' '}
+                        <button
+                            onClick={() => {
+                                deleteHasTag('Si');
+                            }}
+                        >
+                            {' '}
+                            X{' '}
+                        </button>{' '}
+                    </span>
+                )}
+                {hashtagGu !== '' && (
+                    <span>
+                        {' '}
+                        {hashtagGu} 구{' '}
+                        <button
+                            onClick={() => {
+                                deleteHasTag('Gu');
+                            }}
+                        >
+                            {' '}
+                            X{' '}
+                        </button>{' '}
+                    </span>
+                )}
+                {hashtagDong !== '' && (
+                    <span>
+                        {' '}
+                        {hashtagDong} 동{' '}
+                        <button
+                            onClick={() => {
+                                deleteHasTag('Dong');
+                            }}
+                        >
+                            {' '}
+                            X{' '}
+                        </button>{' '}
+                    </span>
+                )}
             </div>
             <ul>
-                { searchedItem.map((doc) => (
+                {filteredItem.map((doc) => (
                     <li key={doc.id}>
                         <MarketItem document={doc} />
-                        <Link to={`/market/${doc.id}`}>
-                            {doc.title}
-                        </Link>
+                        <Link to={`/market/${doc.id}`}>{doc.title}</Link>
                         {userInfo && doc.userId === user.uid && (
                             <div>
                                 <button
@@ -177,7 +268,11 @@ export default function MarketList({ documents }) {
                 ))}
             </ul>
             <ItemDeleteModal ref={modal} id={deleteItemId} />
-            <PlaceSettingModal ref={placeModal} placeSettingFn={placeSetting} user={userInfo}/>
+            <PlaceSettingModal
+                ref={placeModal}
+                placeSettingFn={placeSetting}
+                user={userInfo}
+            />
         </div>
     );
 }

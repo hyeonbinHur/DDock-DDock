@@ -31,8 +31,8 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
     const [hashtagGu, setHashtagGu] = useState('');
     const [hashtagDong, setHashtagDong] = useState('');
 
-    const testLat = -37.815303; // chagne all testLat, testLng to currentLat,currentLng
-    const testLng = 144.952798;
+    const testLat = -33.867192; // chagne all testLat, testLng to currentLat,currentLng
+    const testLng = 151.137923;
 
     const [location, setLocation] = useState(null);
     // eslint-disable-next-line no-unused-vars
@@ -110,18 +110,15 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
     useEffect(() => {
         setCenter({ lat: testLat, lng: testLng });
     }, [currentLat, currentLng]);
-    
 
     const onLoad = useCallback(function callback(map) {
         setMap(map);
     }, []);
 
-
     // eslint-disable-next-line no-unused-vars
     const onUnmount = useCallback(function callback(map) {
         setMap(null);
     }, []);
-
 
     useImperativeHandle(ref, () => ({
         open: () => {
@@ -131,7 +128,6 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
             modal.current.close();
         },
     }));
-
 
     const handleClose = async () => {
         const originalUser = user;
@@ -161,7 +157,6 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
         modal.current.close();
     };
 
-
     function handleLocationClick() {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(success, error, {
@@ -182,9 +177,9 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
         setCurrentLng(longitude);
 
         setLocation({ latitude, longitude });
-        console.log('latitude: ' + latitude);
-        console.log('longitude: ' + longitude);
-        console.log('accuracy : ' + position.coords.accuracy);
+        // console.log('latitude: ' + latitude);
+        // console.log('longitude: ' + longitude);
+        // console.log('accuracy : ' + position.coords.accuracy);
 
         // const geocoder = new window.google.maps.Geocoder();
         // geocoder.geocode({ location: { lat:testLat,  lng:testLng}}, (results, status) => {
@@ -234,9 +229,13 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
                 const si = address.municipality;
                 const gu = address.city;
                 const dong = address.suburb;
-
                 setCurrentSi(si);
                 setCurrentGu(gu);
+                setCurrentDong(dong);
+
+                setHashtagSi(si);
+                setHashtagGu(gu);
+                setHashtagDong(dong);
                 if (dong === 'Melbourne') {
                     setCurrentDong('Melbourne CBD');
                 }
