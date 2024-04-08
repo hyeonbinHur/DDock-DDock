@@ -21,14 +21,16 @@ export default function MarketList({ documents }) {
     const { updateDocument } = useFirestore('User');
 
     const [searchTitle, setSearchTitle] = useState('');
-    const [searchedItem, setSearchedItem] = useState(documents);
-    const [filteredItem, setFilteredItem] = useState(documents);
+    const [searchedItem, setSearchedItem] = useState([]);
+    const [results, setResults] = useState([]);
 
-    const [hashtagSi, setHashtagSi] = useState('');
-    const [hashtagGu, setHashtagGu] = useState('');
-    const [hashtagDong, setHashtagDong] = useState('');
+    const [userSi, setUserSi] = useState('');
+    const [userGu, setUserGu] = useState('');
+    const [userDong, setUserDong] = useState('');
 
-    
+    const [hasedPlace, setHasedPlace] = useState('');
+    const [selectedPlace, setSelectedPlace] = useState('dong');
+
     useEffect(() => {
         console.log('이펙트 들어옴');
         const emptyArray = [];
@@ -42,57 +44,50 @@ export default function MarketList({ documents }) {
                 setSearchedItem((prev) => [...prev, document]);
             }
         });
+
     }, [searchTitle, documents]);
 
-    
     useEffect(() => {
-        const newItemArray = [];
-        const oldItemArray = documents;
-        console.log("해시필터")
-        //동
-        //해쉬 동이 엠티가 아니라면 해쉬동과 아이템동이 일치하는걸 뉴아이템 어레이에 집어넣어
-        if (hashtagDong !== '') {
-            oldItemArray.map((item) => {
-                if (item.location.dong === hashtagDong) {
-                    newItemArray.push(item);
-                }
-            });
+        if (userInfo?.location) {
+            setUserSi(userInfo.location.si);
+            setUserGu(userInfo.location.gu);
+            setUserDong(userInfo.location.dong);
+            setHasedPlace(userInfo.location.dong);
         }
-        //구
-        //해쉬 구가 존재한다면 올드 어레이에서 해시구와 아이템 구가 같은걸 뉴아이템 어레리에 집어넣는데, 이미 존재한다면 패스
-        if (hashtagGu !== '') {
-            oldItemArray.map((item) => {
-                if (item.location.gu === hashtagGu) {
-                    const isExist = newItemArray.some(
-                        (newItem) => newItem.id === item.id
-                    );
+    }, [userInfo?.location]);
 
-                    if (!isExist) {
-                        newItemArray.push(item);
+
+    useEffect(() => {
+        console.log("들어옴")
+        const emptyArray = [];
+        if (selectedPlace === 'dong') {
+            searchedItem.map((item) => {
+                if (item.location.si === userSi) {
+                    if (item.location.gu === userGu) {
+                        if (item.location.dong === userDong) {
+                            emptyArray.push(item);
+                        }
                     }
                 }
             });
-        }
-
-        //시
-        //해쉬 시가 존재한다면 올드 어레이에서 해시시와 같은 시를 가지고 있는 아이템을 뉴아이템 어레이에 집어 넣어, 이미 존재한다면 패스
-        if (hashtagSi !== '') {
-            oldItemArray.map((item) => {
-                if (item.location.si === hashtagSi) {
-                    const isExist = newItemArray.some(
-                        (newItem) => newItem.id === item.id
-                    );
-
-                    if (!isExist) {
-                        newItemArray.push(item);
+        } else if (selectedPlace === 'gu') {
+            searchedItem.map((item) => {
+                if (item.location.si === userSi) {
+                    if (item.location.gu === userGu) {
+                        emptyArray.push(item);
                     }
                 }
             });
+        } else if (selectedPlace === 'si') {
+            searchedItem.map((item) => {
+                if (item.location.si === userSi) {
+                    emptyArray.push(item);
+                }
+            });
         }
-        if (newItemArray.length > 0) {
-            setFilteredItem(newItemArray);
-        }
-    }, [hashtagDong, hashtagGu, hashtagSi, searchedItem]);
+
+        setResults(emptyArray)
+    }, [hasedPlace, searchedItem, selectedPlace, userDong, userGu, userSi])
 
 
     function openPlaceModal() {
@@ -146,19 +141,47 @@ export default function MarketList({ documents }) {
     };
 
     const placeSetting = (si, gu, dong) => {
-        setHashtagSi(si);
-        setHashtagGu(gu);
-        setHashtagDong(dong);
+        setUserSi(si);
+        setUserGu(gu);
+        setUserDong(dong);
+        setHasedPlace(dong);
     };
 
-    const deleteHasTag = (bound) => {
-        if (bound === 'Si') {
-            setHashtagSi('');
-        } else if (bound === 'Gu') {
-            setHashtagGu('');
-        } else if (bound === 'Dong') {
-            setHashtagDong('');
+
+    const changeSelectedPlace = (event) => {
+        setSelectedPlace(event.target.value);
+        const emptyArray = [];
+        if (event.target.value === 'dong') {
+            setHasedPlace(userDong);
+            console.log("Hello")
+            searchedItem.map((item) => {
+                console.log(item.location)
+                if (item.location.si === userSi) {
+                    if (item.location.gu === userGu) {
+                        if (item.location.dong === userGu) {
+                            emptyArray.push(item);
+                        }
+                    }
+                }
+            });
+        } else if (event.target.value === 'gu') {
+            setHasedPlace(userGu);
+            searchedItem.map((item) => {
+                if (item.location.si === userSi) {
+                    if (item.location.gu === userGu) {
+                        emptyArray.push(item);
+                    }
+                }
+            });
+        } else if (event.target.value === 'si') {
+            setHasedPlace(userSi);
+            searchedItem.map((item) => {
+                if (item.location.si === userSi) {
+                    emptyArray.push(item);
+                }
+            });
         }
+        setResults(emptyArray);
     };
 
     return (
@@ -169,53 +192,42 @@ export default function MarketList({ documents }) {
                 value={searchTitle}
                 onChange={(event) => setSearchTitle(event.target.value)}
             />
+
             <button onClick={openPlaceModal}>Open Place modal</button>
+
+           
+
             <div>
-                {hashtagSi !== '' && (
-                    <span>
-                        {' '}
-                        {hashtagSi} 시{' '}
-                        <button
-                            onClick={() => {
-                                deleteHasTag('Si');
-                            }}
-                        >
-                            {' '}
-                            X{' '}
-                        </button>{' '}
-                    </span>
-                )}
-                {hashtagGu !== '' && (
-                    <span>
-                        {' '}
-                        {hashtagGu} 구{' '}
-                        <button
-                            onClick={() => {
-                                deleteHasTag('Gu');
-                            }}
-                        >
-                            {' '}
-                            X{' '}
-                        </button>{' '}
-                    </span>
-                )}
-                {hashtagDong !== '' && (
-                    <span>
-                        {' '}
-                        {hashtagDong} 동{' '}
-                        <button
-                            onClick={() => {
-                                deleteHasTag('Dong');
-                            }}
-                        >
-                            {' '}
-                            X{' '}
-                        </button>{' '}
-                    </span>
-                )}
+                <label>{hasedPlace}</label>
             </div>
+
+            <div>
+                <input
+                    type="radio"
+                    value="si"
+                    checked={selectedPlace === 'si'}
+                    onChange={changeSelectedPlace}
+                />
+                <label>{userSi} / </label>
+                <input
+                    type="radio"
+                    value="gu"
+                    checked={selectedPlace === 'gu'}
+                    onChange={changeSelectedPlace}
+                />
+                <label>{userGu} / </label>
+
+                <input
+                    type="radio"
+                    value="dong"
+                    checked={selectedPlace === 'dong'}
+                    onChange={changeSelectedPlace}
+                />
+                <label>{userDong} / </label>
+            </div>
+
             <ul>
-                {filteredItem.map((doc) => (
+                {results.map((doc) => (
                     <li key={doc.id}>
                         <MarketItem document={doc} />
                         <Link to={`/market/${doc.id}`}>{doc.title}</Link>
@@ -242,7 +254,7 @@ export default function MarketList({ documents }) {
                                                           .length
                                                     : 0),
                                             0
-                                        )}{' '}
+                                        )}
                                         개
                                     </p>
 

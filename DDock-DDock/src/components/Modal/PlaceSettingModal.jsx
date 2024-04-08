@@ -30,9 +30,8 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
     const [hashtagSi, setHashtagSi] = useState('');
     const [hashtagGu, setHashtagGu] = useState('');
     const [hashtagDong, setHashtagDong] = useState('');
-
-    const testLat = -33.867192; // chagne all testLat, testLng to currentLat,currentLng
-    const testLng = 151.137923;
+    const testLat = -37.818959; // chagne all testLat, testLng to currentLat,currentLng
+    const testLng = 144.943697;
 
     const [location, setLocation] = useState(null);
     // eslint-disable-next-line no-unused-vars
@@ -144,9 +143,9 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
         };
         if (originalUser.location.si !== currentSi) {
             cnt = 1;
-        } else if (originalUser.location.gu !== currentSi) {
+        } else if (originalUser.location.gu !== currentGu) {
             cnt = 1;
-        } else if (originalUser.location.dong !== currentSi) {
+        } else if (originalUser.location.dong !== currentDong) {
             cnt = 1;
         }
         if (cnt === 1) {
@@ -282,6 +281,8 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
     const hello = () => {
         console.log('test lat' + testLat);
         console.log('test lng' + testLng);
+        console.log("current si :" + currentSi )
+        console.log("user si :" + user.interests);
     };
 
     return createPortal(
