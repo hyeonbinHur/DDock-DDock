@@ -53,6 +53,8 @@ function App() {
                 { path: '/login', element: <LoginPage /> },
                 { path: '/profile/:userId', element: <ProfilePage /> },
                 { path: '/csstest', element: <Memo /> },
+                { path: '/chatting', element: <Memo /> },
+
             ],
         },
     ]);

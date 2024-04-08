@@ -178,9 +178,8 @@ export const useFirestore = (collection) => {
                         si:'',
                         gu:'',
                         dong:'',
-                        lat:'',
-                        lng:'',
-                    }
+                    },
+                    chatRoomID: [],
                 });
 
                 dispatchIsNotCancelled({

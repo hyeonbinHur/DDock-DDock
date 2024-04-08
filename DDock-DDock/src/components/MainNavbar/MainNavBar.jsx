@@ -59,7 +59,7 @@ export default function Navbar() {
                 )}
 
                 <li>
-                    <p> 내 위치 설정 </p>
+                    <p> 채팅 </p>
                 </li>
             </ul>
         </nav>
