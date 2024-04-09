@@ -4,15 +4,16 @@ import { useLogout } from '../../hooks/useLogout';
 import { useAuthContext } from '../../hooks/useAuth';
 import { useState } from 'react';
 import ChattingRoomList from '../Chatting/ChattingRoomList';
+import { useDocument } from '../../hooks/useDocument';
 
 export default function Navbar() {
     const { logout } = useLogout();
     const { user } = useAuthContext();
     const [showChatList, setShowChatList] = useState(false);
+    const {document: currentUser} = useDocument('User',user?.uid)
 
     const activeChatList = () => {
         setShowChatList(!showChatList);
-        console.log(showChatList);
     };
 
     return (
@@ -22,7 +23,6 @@ export default function Navbar() {
                     <li>
                         <NavLink to="/">Home /</NavLink>
                     </li>
-
                     <li>
                         <NavLink to="/market">Market /</NavLink>
                     </li>
@@ -76,7 +76,7 @@ export default function Navbar() {
             </nav>
             {showChatList && (
                 <div className={style.popupContainer}>
-                    <ChattingRoomList user={user} />
+                    <ChattingRoomList user={currentUser} />
                 </div>
             )}
         </div>
