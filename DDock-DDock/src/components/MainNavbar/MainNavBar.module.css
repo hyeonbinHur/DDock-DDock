@@ -27,3 +27,13 @@
     color: #333;
     text-decoration: none;
 }
+.popupContainer {
+    position: fixed; /* 또는 absolute, 필요에 따라 */
+    top: 15%;
+    left: 70%;
+    transform: translate(-50%, -50%);
+    z-index: 1000; /* 충분히 높은 값으로 다른 요소들 위에 오도록 설정 */
+    padding: 20px; /* 내용에 여백을 줍니다 */
+    border: 1px solid #ccc; /* 테두리를 설정합니다 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 팝업에 그림자를 추가합니다 */
+}

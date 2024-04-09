@@ -31,8 +31,6 @@ export default function AddMarketItem(){
                     si: userInfo.location.si,
                     gu: userInfo.location.gu,
                     dong: userInfo.location.dong,
-                    lat: userInfo.location.lat,
-                    lng: userInfo.location.lng
                 },
                 
             }

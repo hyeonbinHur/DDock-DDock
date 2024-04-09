@@ -1,11 +1,12 @@
-import style from './ChattingRoomListItem.module.css'
+import { useDocument } from '../../hooks/useDocument';
 
-export default function ChattingRoomListItem(){
+
+export default function ChattingRoomListItem({room}){
+    const {document: partner} = useDocument('User', room.partner)
+
     return (
-        <div className={style.itemContainer}>
-            <p htmlFor=""> user 1</p>
-            <p htmlFor=""> user 2</p>
-            <p> time </p>
+        <div>
+            {partner && <p>{partner.displayName}</p>}
         </div>
     );
 }

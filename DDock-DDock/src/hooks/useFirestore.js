@@ -118,6 +118,7 @@ export const useFirestore = (collection) => {
                 payload: newDocument,
             });
         } catch (error) {
+            console.log(error)
             dispatchIsNotCancelled({ type: 'ERROR', payload: error.message });
         }
 
