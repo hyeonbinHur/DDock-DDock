@@ -22,7 +22,6 @@ export default function Memo() {
     useEffect(() => {
         if (document) {
             document.map((user) => {
-                console.log(user.email);
                 if (user.email.includes(search)) {
                     setChatUser(user);
                 }
@@ -31,10 +30,10 @@ export default function Memo() {
     }, [search, document]);
 
     const createChatRoom = async () => {
-        console.log('current user : ' + currentUser.displayName);
-        console.log('대화 상대 : ' + chatUser.displayName);
+     
         console.log("create chatting room start")
-        await createChattingRoom(currentUser,chatUser,'ChattingRoom')
+        const roomID =  await createChattingRoom(currentUser,chatUser,'ChattingRoom')
+        console.log(roomID);
     };
 
     return (

@@ -81,6 +81,7 @@ export const useFirestore = (collection) => {
     const [isCancelled, setIsCancelled] = useState(true);
     const [loading, setLoading] = useState(false);
     const ref = projectFirestore.collection(collection);
+
     const { user } = useAuthContext();
     const { document } = useDocument('User', user?.uid);
 
@@ -142,7 +143,6 @@ export const useFirestore = (collection) => {
 
     const updateDocument = async (id, updates, collection) => {
         const ref = projectFirestore.collection(collection);
-
         setLoading(true);
         dispatch({ type: 'IS_PENDING' });
 
@@ -156,6 +156,7 @@ export const useFirestore = (collection) => {
             return updatedDocument;
         } catch (error) {
             setLoading(false);
+            console.log(error);
             dispatchIsNotCancelled({ type: 'ERROR', payload: error.message });
             return null;
         }
@@ -185,13 +186,16 @@ export const useFirestore = (collection) => {
                         gu: '',
                         dong: '',
                     },
-                    chatRoomID: [],
+                    chatRoom: [],
                 });
-
                 dispatchIsNotCancelled({
-                    type: 'ADD_NEWUSER',
+                    type: 'ADD_NEWCHATROOM',
                     payload: newUser,
                 });
+                
+
+
+
             }
         } catch (error) {
             dispatchIsNotCancelled({
@@ -207,23 +211,66 @@ export const useFirestore = (collection) => {
         dispatch({ type: 'IS_PENDING' });
 
         const chatRef = projectFirestore.collection(collection);
+
         try {
             const createdAt = timestamp.fromDate(new Date());
-            const newChattingRoom = await chatRef.add({
-                user1,
-                user2,
-                createdAt,
-                chat: [],
-            });
-            dispatchIsNotCancelled({
-                type: 'ADD_NEWUSER',
-                payload: newChattingRoom,
-            });
+            let chatPartnerExist = false;
+            let chatRoomID;
+            user1.chatRoom.map((room) => {
+                if(room.partner === user2.id){
+                    chatPartnerExist = true;
+                    chatRoomID = room.roomId;
+                }
+            })
+            if(!chatPartnerExist){
+                const newChattingRoom = await chatRef.add({
+                    user1 : user1.id,
+                    user2 : user2.id,
+                    createdAt,
+                    chat: [],
+                });
+                dispatchIsNotCancelled({
+                    type: 'ADD_NEWUSER',
+                    payload: newChattingRoom,
+                });
+
+                const originalUser2 = user2
+                const olduser2ChatRoom = originalUser2.chatRoom;
+                const newUser2ChatRoom = {
+                    roomId: newChattingRoom.id,
+                    partner:user1.id
+                }
+                const updatedUser2ChatRoom = [...olduser2ChatRoom,newUser2ChatRoom]
+                originalUser2.chatRoom = updatedUser2ChatRoom;
+
+                await updateDocument(user2.id,originalUser2,'User')
+
+                const originalUser1 = user1
+                const olduser1ChatRoom = originalUser1.chatRoom;
+                const newUser1ChatRoom = {
+                    roomId: newChattingRoom.id,
+                    partner:user2.id
+                }
+                const updatedUser1ChatRoom = [...olduser1ChatRoom,newUser1ChatRoom]
+                originalUser1.chatRoom = updatedUser1ChatRoom;
+
+                await updateDocument(user1.id,originalUser1,'User')
+
+
+                console.log("채팅방 만들기 성공")
+                return newChattingRoom.id;
+            }
+            else if(chatPartnerExist){
+                console.log("이미 존재해서 안만듬")
+                return chatRoomID;
+            }
+
         } catch (error) {
             dispatchIsNotCancelled({
                 type: 'ERROR',
                 payload: error.message,
             });
+            console.log(error);
         }
         setLoading(false);
     };
