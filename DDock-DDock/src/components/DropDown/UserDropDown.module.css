@@ -1,0 +1,28 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+.dropdown{
+    width: 400px;
+    margin: 0.1rem auto;
+    position: relative;
+}
+.dropdown .dropdown_btn {
+    padding: 0.5rem 0.5rem;
+    background-color: #fff;
+    box-shadow: 3px 3px 10px 6px rgba(0,0,0,0.03);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+
+}
+.dropdown .dropdown_content {
+    box-shadow: 3px 3px 10px 6px rgba(0,0,0,0.03);
+    background-color: #fff;
+    cursor: pointer;
+    padding: 0.5rem;
+}
+.dropdown_item{
+    padding-top: 0.2rem;
+}
