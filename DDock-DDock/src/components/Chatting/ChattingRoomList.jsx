@@ -1,11 +1,9 @@
 import style from './ChattingRoomList.module.css';
 import { useEffect, useState } from 'react';
 import ChattingRoomListItem from './ChattingRoomListItem';
-import PrivateChattingRoom from './PrivateChattingRoom';
 
 export default function ChattingRoomList({user}) {
     const [chattingRoomList, setChattingRoomList] = useState([]);
-    const [isActiveChatRoom, setIsActiveChatRoom] = useState(false);
 
 
     useEffect(() => {
@@ -25,7 +23,6 @@ export default function ChattingRoomList({user}) {
                     />
                 );
             })}
-            {isActiveChatRoom && <PrivateChattingRoom partner={"Hello"} />}
         </div>
     );
 }

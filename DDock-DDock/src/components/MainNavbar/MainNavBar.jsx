@@ -5,6 +5,8 @@ import { useAuthContext } from '../../hooks/useAuth';
 import { useState } from 'react';
 import ChattingRoomList from '../Chatting/ChattingRoomList';
 import { useDocument } from '../../hooks/useDocument';
+import { useSelector } from 'react-redux'
+import PrivateChattingRoom from '../Chatting/PrivateChattingRoom';
 
 export default function Navbar() {
     const { logout } = useLogout();
@@ -12,6 +14,7 @@ export default function Navbar() {
     const [showChatList, setShowChatList] = useState(false);
     const {document: currentUser} = useDocument('User',user?.uid)
 
+    const openChatRoom = useSelector(state => state.openChatRoom.openChatRoom);
 
     const activeChatList = () => {
         setShowChatList(!showChatList);
@@ -87,10 +90,9 @@ export default function Navbar() {
                     <ChattingRoomList user={currentUser} />
                 </div>
             )}
+            {openChatRoom && (<div>  <PrivateChattingRoom /> </div>)}
 
-            {
-
-            }
+           
         </div>
     );
 }
