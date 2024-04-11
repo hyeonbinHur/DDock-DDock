@@ -125,6 +125,10 @@ export const useFirestore = (collection) => {
         setLoading(false);
     };
 
+    const addChat = () => {
+        console.log("add chat started");
+    }
+
     const deleteDocument = async (id) => {
         setLoading(true);
         dispatch({ type: 'IS_PENDING' });
@@ -286,6 +290,7 @@ export const useFirestore = (collection) => {
         deleteDocument,
         saveUser,
         createChattingRoom,
+        addChat,
         response,
         loading,
     };
