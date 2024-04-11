@@ -4,8 +4,9 @@ import { Link } from 'react-router-dom';
 
 export default function MarketPage() {
     const { document, error, loading } = useCollection('MarketItem', ['createdAt', 'desc']);
-    
+
     return (
+
         <div>
             {loading ? (
                 <p>Loading...</p> // 로딩 중이면 로딩 메시지 표시

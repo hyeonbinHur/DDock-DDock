@@ -31,8 +31,9 @@ export default function MarketList({ documents }) {
     const [hasedPlace, setHasedPlace] = useState('');
     const [selectedPlace, setSelectedPlace] = useState('dong');
 
+
+    
     useEffect(() => {
-        console.log('이펙트 들어옴');
         const emptyArray = [];
         setSearchedItem(emptyArray);
 
@@ -58,7 +59,6 @@ export default function MarketList({ documents }) {
 
 
     useEffect(() => {
-        console.log("들어옴")
         const emptyArray = [];
         if (selectedPlace === 'dong') {
             searchedItem.map((item) => {
@@ -153,9 +153,7 @@ export default function MarketList({ documents }) {
         const emptyArray = [];
         if (event.target.value === 'dong') {
             setHasedPlace(userDong);
-            console.log("Hello")
             searchedItem.map((item) => {
-                console.log(item.location)
                 if (item.location.si === userSi) {
                     if (item.location.gu === userGu) {
                         if (item.location.dong === userGu) {

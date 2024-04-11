@@ -12,9 +12,17 @@ export default function Navbar() {
     const [showChatList, setShowChatList] = useState(false);
     const {document: currentUser} = useDocument('User',user?.uid)
 
+
     const activeChatList = () => {
         setShowChatList(!showChatList);
     };
+
+
+    // const openChatRoom = (partner) => {
+    //     setIsActiveChatRoom(true);
+    //     conso
+    // }
+    
 
     return (
         <div>
@@ -79,6 +87,10 @@ export default function Navbar() {
                     <ChattingRoomList user={currentUser} />
                 </div>
             )}
+
+            {
+
+            }
         </div>
     );
 }
