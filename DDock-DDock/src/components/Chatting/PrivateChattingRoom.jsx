@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { close } from '../../store/chatRoomSlice';
 import { useDocument } from '../../hooks/useDocument';
 import { useFirestore } from '../../hooks/useFirestore';
+import { useAuthContext } from '../../hooks/useAuth';
 
 export default function PrivateChattingRoom() {
     const dispatch = useDispatch();
@@ -11,7 +12,8 @@ export default function PrivateChattingRoom() {
     );
     const roomId = useSelector((state) => state.openChatRoom.roomId);
     const partnerId = useSelector((state) => state.openChatRoom.partnerId);
-    const { addChat } = useFirestore('ChaattingRoom');
+    const { updateChat } = useFirestore('ChaattingRoom');
+    const { user } = useAuthContext();
 
     const { document: partner } = useDocument('User', partnerId);
     const { document: chatRoom } = useDocument(
@@ -22,9 +24,13 @@ export default function PrivateChattingRoom() {
     return (
         <>
             <div className={style.container}>
-                {partner && <div> {partner.displayName}</div>}
+                {user && (
+                    <>
+                        {partner && <div> {partner.displayName}</div>}
 
-                <button onClick={addChat}> send </button>
+                        <button onClick={() => updateChat('Hello', user.id, roomId)}> send </button>
+                    </>
+                )}
             </div>
         </>
     );

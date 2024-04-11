@@ -125,8 +125,20 @@ export const useFirestore = (collection) => {
         setLoading(false);
     };
 
-    const addChat = () => {
-        console.log("add chat started");
+    const updateChat = (content, sender, collection) => {
+
+        const ref = projectFirestore.collection(collection);
+        setLoading(true);
+        dispatch({ type: 'IS_PENDING' });
+        // try{
+
+        // }catch(error) {
+        //     setLoading(false);
+        //     dispatchIsNotCancelled({ type: 'ERROR', payload: error.message });
+        // }
+        console.log("content : " + content);
+        console.log("Sender : " + sender);
+
     }
 
     const deleteDocument = async (id) => {
@@ -161,7 +173,6 @@ export const useFirestore = (collection) => {
             return updatedDocument;
         } catch (error) {
             setLoading(false);
-            console.log(error);
             dispatchIsNotCancelled({ type: 'ERROR', payload: error.message });
             return null;
         }
@@ -290,7 +301,7 @@ export const useFirestore = (collection) => {
         deleteDocument,
         saveUser,
         createChattingRoom,
-        addChat,
+        updateChat,
         response,
         loading,
     };
