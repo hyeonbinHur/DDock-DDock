@@ -33,3 +33,11 @@
     padding-right: 0.3rem;
     margin-right: 1rem;
 }
+.partner_timeContainer{
+    font-size: 0.7rem;
+    margin-left: 0.3rem;
+}
+.current_timeContainer{
+    font-size: 0.7rem;
+    margin-right: 0.3rem;
+}

@@ -125,19 +125,12 @@ export const useFirestore = (collection) => {
         setLoading(false);
     };
 
-    const updateChat = async (content, sender, collection, roomId, uuid) => {
+    const updateChat = async ( collection, roomId, newMessage ) => {
         const ref = projectFirestore.collection(collection);
         setLoading(true);
         dispatch({ type: 'IS_PENDING' });
-        const createdAt = timestamp.fromDate(new Date());
         const originalDocuments = await ref.doc(roomId).get()
         try{
-            const newMessage = {
-                content: content,
-                sender: sender,
-                createdAt:createdAt,
-                id: uuid
-            };
             const updateChat = {
                 chat: FieldValue.arrayUnion(newMessage)
             }

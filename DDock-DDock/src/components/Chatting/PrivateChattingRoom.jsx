@@ -40,7 +40,8 @@ export default function PrivateChattingRoom() {
     const handleSubmit = async () => {
         setContent('');
         const uuid = uuidv4();
-        const createdAt = timestamp.fromDate(new Date());
+        const createdAt = formatDate(timestamp.fromDate(new Date()));
+        console.log(createdAt)
         const newMessage = {
             content: content,
             sender: user?.uid,
@@ -49,9 +50,20 @@ export default function PrivateChattingRoom() {
         };
         
         setCurrentChat((state) => [...state, newMessage]);
-        await updateChat(content, user.uid, 'ChattingRoom', roomId, uuid);
+        await updateChat('ChattingRoom', roomId, newMessage);
     };
-
+    function formatDate(timestamp) {
+        return new Date(timestamp.seconds * 1000).toLocaleString('en-AU', {
+            timeZone: 'Australia/Sydney',
+            year: 'numeric',
+            month: 'numeric',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false,
+        });
+    }
     return (
         <>
             <div className={style.container}>
@@ -74,7 +86,6 @@ export default function PrivateChattingRoom() {
                                                 key={chat.id}
                                                 content={chat.content}
                                                 date ={chat.createdAt}
-                                                
                                             />
                                         )}
 

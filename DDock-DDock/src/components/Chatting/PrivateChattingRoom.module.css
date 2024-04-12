@@ -21,7 +21,7 @@
 
 .chat_textfield {
     position: sticky;
-    bottom: 0%;
+    top: 28rem;
     width: 100%;
     background-color: skyblue; /* 원하는 배경색으로 변경 */
     z-index: 2;
