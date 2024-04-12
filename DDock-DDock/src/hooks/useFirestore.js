@@ -125,9 +125,7 @@ export const useFirestore = (collection) => {
         setLoading(false);
     };
 
-    const updateChat = async (content, sender, collection, roomId) => {
-        console.log("start")
-        console.log("room ID :" + roomId);
+    const updateChat = async (content, sender, collection, roomId, uuid) => {
         const ref = projectFirestore.collection(collection);
         setLoading(true);
         dispatch({ type: 'IS_PENDING' });
@@ -138,8 +136,8 @@ export const useFirestore = (collection) => {
                 content: content,
                 sender: sender,
                 createdAt:createdAt,
+                id: uuid
             };
-            console.log(newMessage)
             const updateChat = {
                 chat: FieldValue.arrayUnion(newMessage)
             }
@@ -149,7 +147,6 @@ export const useFirestore = (collection) => {
                 payload: updatedChat,
             });
             setLoading(false);
-            console.log("success")
             return updatedChat;
 
         }catch(error) {
