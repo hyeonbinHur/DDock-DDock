@@ -4,7 +4,7 @@ import { close } from '../../store/chatRoomSlice';
 import { useDocument } from '../../hooks/useDocument';
 import { useFirestore } from '../../hooks/useFirestore';
 import { useAuthContext } from '../../hooks/useAuth';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import CurrentUserChat from './CurrentUserChat';
 import PartnerUserChat from './PartnerUserChat';
 import { v4 as uuidv4 } from 'uuid';
@@ -12,7 +12,6 @@ import { timestamp } from '../../firebase/config';
 
 export default function PrivateChattingRoom() {
     const dispatch = useDispatch();
-
     const roomId = useSelector((state) => state.openChatRoom.roomId);
     const partnerId = useSelector((state) => state.openChatRoom.partnerId);
     const { updateChat } = useFirestore('ChaattingRoom');
@@ -21,8 +20,16 @@ export default function PrivateChattingRoom() {
     const { document: currentUser } = useDocument('User', user?.uid);
     const { document: partner } = useDocument('User', partnerId);
     const { document: chatRoom } = useDocument('ChattingRoom', roomId);
-
     const [currentChat, setCurrentChat] = useState([]);
+    const scrollDown = useRef(null);
+
+    const scrollDownFn = () => {
+        scrollDown.current?.scrollIntoView({ behavior: 'smooth' });
+    };
+
+    useEffect(() => {
+        scrollDownFn();
+    }, [currentChat]);
 
     useEffect(() => {
         if (chatRoom) {
@@ -40,6 +47,7 @@ export default function PrivateChattingRoom() {
             createdAt: createdAt,
             id: uuid,
         };
+        
         setCurrentChat((state) => [...state, newMessage]);
         await updateChat(content, user.uid, 'ChattingRoom', roomId, uuid);
     };
@@ -53,35 +61,40 @@ export default function PrivateChattingRoom() {
                             {partner && <div> {partner.displayName}</div>}
                             <button onClick={() => dispatch(close())}>X</button>
                         </div>
-                        {chatRoom?.chat.length > 0 &&
-                            currentChat.length > 0 &&
-                            currentChat.map((chat) => (
-                                <li key={chat.id}>
-                                    
-                                    {chat.sender === currentUser.id && (
-                                        <CurrentUserChat
-                                            key={chat.id}
-                                            content={chat.content}
-                                            avatar={currentUser.avatar}
-                                            displayName={
-                                                currentUser.displayName
-                                            }
-                                        />
-                                    )}
+                        <div >
+                            {chatRoom?.chat.length > 0 &&
+                                currentChat.length > 0 &&
+                                currentChat.map((chat) => (
+                                    <ul
+                                        key={chat.id}
+                                        className={style.chatItem}
+                                    >
+                                        {chat.sender === currentUser.id && (
+                                            <CurrentUserChat
+                                                key={chat.id}
+                                                content={chat.content}
+                                                date ={chat.createdAt}
+                                                
+                                            />
+                                        )}
 
-                                    {chat.sender !== currentUser.id && (
-                                        <PartnerUserChat
-                                            key={chat.id}
-                                            content={chat.content}
-                                            avatar={partner.avatar}
-                                            displayName={partner.displayName}
-                                        />
-                                        
-                                    )}
-                                </li>
-                            ))}
+                                        {chat.sender !== currentUser.id && (
+                                            <PartnerUserChat
+                                                key={chat.id}
+                                                content={chat.content}
+                                                avatar={partner.avatar}
+                                                date ={chat.createdAt}
+                                                displayName={
+                                                    partner.displayName
+                                                }
+                                            />
+                                        )}
+                                    </ul>
+                                ))}
+                        </div>
+                        <div ref={scrollDown}></div>
 
-                        <div>
+                        <div className={style.chat_textfield}>
                             <textarea
                                 type="text"
                                 value={content}
@@ -103,10 +116,10 @@ export default function PrivateChattingRoom() {
                                     }
                                 }}
                             ></textarea>
+                            {content.length > 0 && (
+                                <button onClick={handleSubmit}>send</button>
+                            )}
                         </div>
-                        {content.length > 0 && (
-                            <button onClick={handleSubmit}>send</button>
-                        )}
                     </>
                 )}
             </div>

@@ -1,0 +1,35 @@
+.partner_chat_container {
+    margin-bottom: 0.5rem;
+    text-align: left;
+}
+.partner_chat_avatar{
+    width: 3rem;
+}
+.partner_chat_info{
+    display: flex;
+}
+.partner_chat_displayName{
+    font-size: 0.8rem;
+}
+.partner_chat_content{
+    width: auto;
+    max-width: 70%;
+    background-color: white;
+    border: 0.1rem solid black;
+    padding-left: 0.3rem;
+    padding-right: 0.3rem;
+    margin-left: 3rem;
+}
+.current_chat_container{
+    margin-bottom: 1rem;
+    text-align: right;
+}
+.current_chat_content{
+    width: auto;
+    max-width: 70%;
+    background-color: skyblue;
+    border: 0.1rem solid black;
+    padding-left: 0.3rem;
+    padding-right: 0.3rem;
+    margin-right: 1rem;
+}
