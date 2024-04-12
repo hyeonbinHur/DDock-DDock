@@ -1,5 +1,5 @@
 import { useEffect, useReducer, useState } from 'react';
-import { projectFirestore, timestamp,FieldValue } from '../firebase/config';
+import { projectFirestore, timestamp, FieldValue } from '../firebase/config';
 import { useAuthContext } from './useAuth';
 import { useDocument } from './useDocument';
 
@@ -118,22 +118,22 @@ export const useFirestore = (collection) => {
                 payload: newDocument,
             });
         } catch (error) {
-            console.log(error)
+            console.log(error);
             dispatchIsNotCancelled({ type: 'ERROR', payload: error.message });
         }
 
         setLoading(false);
     };
 
-    const updateChat = async ( collection, roomId, newMessage ) => {
+    const updateChat = async (collection, roomId, newMessage) => {
         const ref = projectFirestore.collection(collection);
         setLoading(true);
         dispatch({ type: 'IS_PENDING' });
-        const originalDocuments = await ref.doc(roomId).get()
-        try{
+        const originalDocuments = await ref.doc(roomId).get();
+        try {
             const updateChat = {
-                chat: FieldValue.arrayUnion(newMessage)
-            }
+                chat: FieldValue.arrayUnion(newMessage),
+            };
             const updatedChat = await ref.doc(roomId).update(updateChat);
             dispatchIsNotCancelled({
                 type: 'UPDATE_DOCUMENT',
@@ -141,16 +141,13 @@ export const useFirestore = (collection) => {
             });
             setLoading(false);
             return updatedChat;
-
-        }catch(error) {
-            console.log(error.message)
+        } catch (error) {
+            console.log(error.message);
             setLoading(false);
             dispatchIsNotCancelled({ type: 'ERROR', payload: error.message });
             return originalDocuments;
         }
-        
-
-    }
+    };
 
     const deleteDocument = async (id) => {
         setLoading(true);
@@ -219,10 +216,6 @@ export const useFirestore = (collection) => {
                     type: 'ADD_NEWCHATROOM',
                     payload: newUser,
                 });
-                
-
-
-
             }
         } catch (error) {
             dispatchIsNotCancelled({
@@ -240,19 +233,20 @@ export const useFirestore = (collection) => {
         const chatRef = projectFirestore.collection(collection);
 
         try {
-            const createdAt = timestamp.fromDate(new Date());
+            const createdAt = formatDate(timestamp.fromDate(new Date()));
             let chatPartnerExist = false;
             let chatRoomID;
+
             user1.chatRoom.map((room) => {
-                if(room.partner === user2.id){
+                if (room.partner === user2.id) {
                     chatPartnerExist = true;
                     chatRoomID = room.roomId;
                 }
-            })
-            if(!chatPartnerExist){
+            });
+            if (!chatPartnerExist) {
                 const newChattingRoom = await chatRef.add({
-                    user1 : user1.id,
-                    user2 : user2.id,
+                    user1: user1.id,
+                    user2: user2.id,
                     createdAt,
                     chat: [],
                 });
@@ -261,37 +255,42 @@ export const useFirestore = (collection) => {
                     payload: newChattingRoom,
                 });
 
-                const originalUser2 = user2
+                
+
+                const originalUser2 = user2;
                 const olduser2ChatRoom = originalUser2.chatRoom;
                 const newUser2ChatRoom = {
                     roomId: newChattingRoom.id,
-                    partner:user1.id
-                }
-                const updatedUser2ChatRoom = [...olduser2ChatRoom,newUser2ChatRoom]
+                    partner: user1.id,
+                };
+                const updatedUser2ChatRoom = [
+                    ...olduser2ChatRoom,
+                    newUser2ChatRoom,
+                ];
                 originalUser2.chatRoom = updatedUser2ChatRoom;
 
-                await updateDocument(user2.id,originalUser2,'User')
+                await updateDocument(user2.id, originalUser2, 'User');
 
-                const originalUser1 = user1
+                const originalUser1 = user1;
                 const olduser1ChatRoom = originalUser1.chatRoom;
                 const newUser1ChatRoom = {
                     roomId: newChattingRoom.id,
-                    partner:user2.id
-                }
-                const updatedUser1ChatRoom = [...olduser1ChatRoom,newUser1ChatRoom]
+                    partner: user2.id,
+                };
+                const updatedUser1ChatRoom = [
+                    ...olduser1ChatRoom,
+                    newUser1ChatRoom,
+                ];
                 originalUser1.chatRoom = updatedUser1ChatRoom;
 
-                await updateDocument(user1.id,originalUser1,'User')
+                await updateDocument(user1.id, originalUser1, 'User');
 
-
-                console.log("채팅방 만들기 성공")
+                console.log('채팅방 만들기 성공');
                 return newChattingRoom.id;
-            }
-            else if(chatPartnerExist){
-                console.log("이미 존재해서 안만듬")
+            } else if (chatPartnerExist) {
+                console.log('이미 존재해서 안만듬');
                 return chatRoomID;
             }
-
         } catch (error) {
             dispatchIsNotCancelled({
                 type: 'ERROR',
@@ -301,6 +300,18 @@ export const useFirestore = (collection) => {
         }
         setLoading(false);
     };
+    function formatDate(timestamp) {
+        return new Date(timestamp.seconds * 1000).toLocaleString('en-AU', {
+            timeZone: 'Australia/Sydney',
+            year: 'numeric',
+            month: 'numeric',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false,
+        });
+    }
 
     useEffect(() => {
         return () => setIsCancelled(!isCancelled);

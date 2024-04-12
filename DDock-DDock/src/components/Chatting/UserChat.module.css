@@ -21,9 +21,14 @@
     margin-left: 3rem;
 }
 .current_chat_container{
-    margin-bottom: 1rem;
+    margin-top: 1rem;
     text-align: right;
 }
+.current_chat_container_without_info{
+    margin-top: 0.1rem;
+    text-align: right;
+}
+
 .current_chat_content{
     width: auto;
     max-width: 70%;
@@ -33,6 +38,7 @@
     padding-right: 0.3rem;
     margin-right: 1rem;
 }
+
 .partner_timeContainer{
     font-size: 0.7rem;
     margin-left: 0.3rem;

@@ -7,8 +7,8 @@ import { useAuthContext } from '../../hooks/useAuth';
 import { useEffect, useState, useRef } from 'react';
 import CurrentUserChat from './CurrentUserChat';
 import PartnerUserChat from './PartnerUserChat';
-import { v4 as uuidv4 } from 'uuid';
 import { timestamp } from '../../firebase/config';
+import ChatDate from './Chatdate';
 
 export default function PrivateChattingRoom() {
     const dispatch = useDispatch();
@@ -20,8 +20,13 @@ export default function PrivateChattingRoom() {
     const { document: currentUser } = useDocument('User', user?.uid);
     const { document: partner } = useDocument('User', partnerId);
     const { document: chatRoom } = useDocument('ChattingRoom', roomId);
-    const [currentChat, setCurrentChat] = useState([]);
     const scrollDown = useRef(null);
+    const [currentChat, setCurrentChat] = useState([]);
+    const [lastYear, setLastYear] = useState(null);
+    const [lastMonth, setLastMonth] = useState(null);
+    const [lastDay, setLastDay] = useState(null);
+    const [lastHour, setLastHour] = useState(null);
+    const [lastMinute, setLastMinute] = useState(null);
 
     const scrollDownFn = () => {
         scrollDown.current?.scrollIntoView({ behavior: 'smooth' });
@@ -29,6 +34,21 @@ export default function PrivateChattingRoom() {
 
     useEffect(() => {
         scrollDownFn();
+        if (currentChat.length > 1) {
+            const lastMessageTimeInfo =
+                currentChat[currentChat.length - 1].createdAt;
+
+            const [datePart, timePart] = lastMessageTimeInfo.split(', ');
+            // eslint-disable-next-line no-unused-vars
+            const [day, month, year] = datePart.split('/').map(Number);
+            // eslint-disable-next-line no-unused-vars
+            const [hour, minute, second] = timePart.split(':').map(Number);
+            setLastYear(year);
+            setLastMonth(month);
+            setLastDay(day);
+            setLastHour(hour);
+            setLastMinute(minute);
+        }
     }, [currentChat]);
 
     useEffect(() => {
@@ -39,19 +59,56 @@ export default function PrivateChattingRoom() {
 
     const handleSubmit = async () => {
         setContent('');
-        const uuid = uuidv4();
         const createdAt = formatDate(timestamp.fromDate(new Date()));
-        console.log(createdAt)
-        const newMessage = {
-            content: content,
-            sender: user?.uid,
-            createdAt: createdAt,
-            id: uuid,
-        };
-        
-        setCurrentChat((state) => [...state, newMessage]);
-        await updateChat('ChattingRoom', roomId, newMessage);
+
+        const [datePart, timePart] = createdAt.split(', ');
+        // eslint-disable-next-line no-unused-vars
+        const [day, month, year] = datePart.split('/').map(Number);
+        // eslint-disable-next-line no-unused-vars
+        const [hour, minute, second] = timePart.split(':').map(Number);
+
+        if (year != lastYear || month != lastMonth || day != lastDay){
+
+            const GMmessage = {
+                content: null,
+                sender: 'GM',
+                createdAt: createdAt,
+            };
+            setCurrentChat((state) => [...state, GMmessage]);
+            await updateChat('ChattingRoom', roomId, GMmessage);
+        }
+
+        if (
+            month != lastMonth ||
+            day != lastDay ||
+            hour != lastHour ||
+            minute != lastMinute
+        ) {
+            const newMessage = {
+                content: content,
+                sender: user?.uid,
+                createdAt: createdAt,
+                showBasicInfo: true,
+            };
+            setCurrentChat((state) => [...state, newMessage]);
+            await updateChat('ChattingRoom', roomId, newMessage);
+        } else if (
+            month == lastMonth &&
+            day == lastDay &&
+            hour == lastHour &&
+            minute == lastMinute
+        ) {
+            const newMessage = {
+                content: content,
+                sender: user?.uid,
+                createdAt: createdAt,
+                showBasicInfo: false,
+            };
+            setCurrentChat((state) => [...state, newMessage]);
+            await updateChat('ChattingRoom', roomId, newMessage);
+        }
     };
+
     function formatDate(timestamp) {
         return new Date(timestamp.seconds * 1000).toLocaleString('en-AU', {
             timeZone: 'Australia/Sydney',
@@ -64,6 +121,7 @@ export default function PrivateChattingRoom() {
             hour12: false,
         });
     }
+
     return (
         <>
             <div className={style.container}>
@@ -73,32 +131,39 @@ export default function PrivateChattingRoom() {
                             {partner && <div> {partner.displayName}</div>}
                             <button onClick={() => dispatch(close())}>X</button>
                         </div>
-                        <div >
+                        <div>
                             {chatRoom?.chat.length > 0 &&
                                 currentChat.length > 0 &&
-                                currentChat.map((chat) => (
-                                    <ul
-                                        key={chat.id}
-                                        className={style.chatItem}
-                                    >
+                                currentChat.map((chat, index) => (
+                                    <ul key={index} className={style.chatItem}>
                                         {chat.sender === currentUser.id && (
                                             <CurrentUserChat
                                                 key={chat.id}
                                                 content={chat.content}
-                                                date ={chat.createdAt}
+                                                date={chat.createdAt}
+                                                showBasicInfo={
+                                                    chat.showBasicInfo
+                                                }
                                             />
                                         )}
 
-                                        {chat.sender !== currentUser.id && (
-                                            <PartnerUserChat
-                                                key={chat.id}
-                                                content={chat.content}
-                                                avatar={partner.avatar}
-                                                date ={chat.createdAt}
-                                                displayName={
-                                                    partner.displayName
-                                                }
-                                            />
+                                        {chat.sender !== currentUser.id &&
+                                            chat.sender !== 'GM' && (
+                                                <PartnerUserChat
+                                                    key={index}
+                                                    content={chat.content}
+                                                    avatar={partner.avatar}
+                                                    date={chat.createdAt}
+                                                    showBasicInfo={
+                                                        chat.showBasicInfo
+                                                    }
+                                                    displayName={
+                                                        partner.displayName
+                                                    }
+                                                />
+                                            )}
+                                        {chat.sender == 'GM' && (
+                                            <ChatDate date={chat.createdAt} />
                                         )}
                                     </ul>
                                 ))}
