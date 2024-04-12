@@ -21,12 +21,15 @@
     margin-left: 3rem;
 }
 .current_chat_container{
-    margin-top: 1rem;
+    margin-top: 1.5rem;
     text-align: right;
+    margin-bottom: 0.3rem;
 }
 .current_chat_container_without_info{
     margin-top: 0.1rem;
     text-align: right;
+    margin-bottom: 0.3rem;
+
 }
 
 .current_chat_content{

@@ -29,7 +29,7 @@ export default function PrivateChattingRoom() {
     const [lastMinute, setLastMinute] = useState(null);
 
     const scrollDownFn = () => {
-        scrollDown.current?.scrollIntoView({ behavior: 'smooth' });
+        scrollDown.current?.scrollIntoView({ behavior: 'auto' });
     };
 
     useEffect(() => {
@@ -67,8 +67,7 @@ export default function PrivateChattingRoom() {
         // eslint-disable-next-line no-unused-vars
         const [hour, minute, second] = timePart.split(':').map(Number);
 
-        if (year != lastYear || month != lastMonth || day != lastDay){
-
+        if (year != lastYear || month != lastMonth || day != lastDay) {
             const GMmessage = {
                 content: null,
                 sender: 'GM',
@@ -82,7 +81,8 @@ export default function PrivateChattingRoom() {
             month != lastMonth ||
             day != lastDay ||
             hour != lastHour ||
-            minute != lastMinute
+            minute != lastMinute ||
+            currentChat[currentChat.length - 1].sender != user.uid
         ) {
             const newMessage = {
                 content: content,

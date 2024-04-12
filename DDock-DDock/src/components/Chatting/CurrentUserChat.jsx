@@ -7,6 +7,7 @@ export default function CurrentUserChat({ content, date, showBasicInfo }) {
     const [day, month, year] = datePart.split('/').map(Number);
     // eslint-disable-next-line no-unused-vars
     const [hour, minute, second] = timePart.split(':').map(Number);
+    
     const [cssStyle, setCssSytle] = useState(style.current_chat_container);
 
     useEffect(() => {
