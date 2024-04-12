@@ -32,12 +32,19 @@ export default function PrivateChattingRoom() {
         scrollDown.current?.scrollIntoView({ behavior: 'auto' });
     };
 
+   
     useEffect(() => {
         scrollDownFn();
+        if(currentChat.length > 1){
+            if(currentChat[currentChat.length - 1].sender != user.uid){
+                console.log("보낸사람 : " + currentChat[currentChat.length - 1].sender);
+                console.log("나 : " + user.uid)
+            }
+        }
+
         if (currentChat.length > 1) {
             const lastMessageTimeInfo =
                 currentChat[currentChat.length - 1].createdAt;
-
             const [datePart, timePart] = lastMessageTimeInfo.split(', ');
             // eslint-disable-next-line no-unused-vars
             const [day, month, year] = datePart.split('/').map(Number);
