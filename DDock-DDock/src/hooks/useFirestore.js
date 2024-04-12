@@ -1,5 +1,5 @@
 import { useEffect, useReducer, useState } from 'react';
-import { projectFirestore, timestamp } from '../firebase/config';
+import { projectFirestore, timestamp,FieldValue } from '../firebase/config';
 import { useAuthContext } from './useAuth';
 import { useDocument } from './useDocument';
 
@@ -125,19 +125,40 @@ export const useFirestore = (collection) => {
         setLoading(false);
     };
 
-    const updateChat = (content, sender, collection) => {
-
+    const updateChat = async (content, sender, collection, roomId) => {
+        console.log("start")
+        console.log("room ID :" + roomId);
         const ref = projectFirestore.collection(collection);
         setLoading(true);
         dispatch({ type: 'IS_PENDING' });
-        // try{
+        const createdAt = timestamp.fromDate(new Date());
+        const originalDocuments = await ref.doc(roomId).get()
+        try{
+            const newMessage = {
+                content: content,
+                sender: sender,
+                createdAt:createdAt,
+            };
+            console.log(newMessage)
+            const updateChat = {
+                chat: FieldValue.arrayUnion(newMessage)
+            }
+            const updatedChat = await ref.doc(roomId).update(updateChat);
+            dispatchIsNotCancelled({
+                type: 'UPDATE_DOCUMENT',
+                payload: updatedChat,
+            });
+            setLoading(false);
+            console.log("success")
+            return updatedChat;
 
-        // }catch(error) {
-        //     setLoading(false);
-        //     dispatchIsNotCancelled({ type: 'ERROR', payload: error.message });
-        // }
-        console.log("content : " + content);
-        console.log("Sender : " + sender);
+        }catch(error) {
+            console.log(error.message)
+            setLoading(false);
+            dispatchIsNotCancelled({ type: 'ERROR', payload: error.message });
+            return originalDocuments;
+        }
+        
 
     }
 

@@ -20,7 +20,7 @@ export default function PrivateChattingRoom() {
         'ChattingRoom',
         openChatRoom.roomId
     );
-
+    // use Arrayunion??
     return (
         <>
             <div className={style.container}>
@@ -28,7 +28,19 @@ export default function PrivateChattingRoom() {
                     <>
                         {partner && <div> {partner.displayName}</div>}
 
-                        <button onClick={() => updateChat('Hello', user.id, roomId)}> send </button>
+                        <button
+                            onClick={() =>
+                                updateChat(
+                                    'Hello',
+                                    user.uid,
+                                    'ChattingRoom',
+                                    roomId
+                                )
+                            }
+                        >
+                            {' '}
+                            send{' '}
+                        </button>
                     </>
                 )}
             </div>
