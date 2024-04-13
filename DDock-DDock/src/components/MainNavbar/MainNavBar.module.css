@@ -42,5 +42,6 @@
     top: 80%;
     left: 70%;
     z-index: 1;
+    width: 30rem;
     border: 1px solid black;
 }

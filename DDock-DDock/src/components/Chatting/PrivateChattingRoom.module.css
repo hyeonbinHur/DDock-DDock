@@ -2,7 +2,7 @@
     border: 1px solid black;
     position: absolute;
     bottom: 10%;
-    width: 17rem;
+   
     height: 30rem;
     overflow: auto; /* 또는 overflow: scroll; */
     background: white;

@@ -78,7 +78,7 @@ export default function PartnerUserChat({
                 {!read && <span>1</span>}
                 {showBasicInfo && (
                     <span className={style.partner_timeContainer}>
-                        {hour} : {minute === 0 ? "00" : minute}
+                        {hour} : {String(minute).padStart(2, '0')}
                     </span>
                 )}
             </div>
