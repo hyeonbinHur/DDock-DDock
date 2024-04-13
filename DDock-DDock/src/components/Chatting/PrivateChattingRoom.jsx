@@ -16,7 +16,7 @@ export default function PrivateChattingRoom() {
     const roomId = useSelector((state) => state.openChatRoom.roomId);
     const partnerId = useSelector((state) => state.openChatRoom.partnerId);
 
-    const { updateChat, readChat } = useFirestore('ChaattingRoom');
+    const { updateChat, readChat } = useFirestore('ChattingRoom');
 
     const { user } = useAuthContext();
     const [content, setContent] = useState('');
@@ -81,30 +81,17 @@ export default function PrivateChattingRoom() {
     }, [chatRoom]);
 
     useEffect(() => {
-        if (chatRoom) {
-            if (isPageFocused) {
-                const unreadMessage = [];
-                chatRoom.chat.map((chat) => {
-                    if (chat.sender == partnerId) {
-                        if (chat.status === 'unread') {
-                            unreadMessage.push(chat);
-                        }
-                    }
-                });
-
-                tryToReadMessaged(unreadMessage);
-            } else if (!isPageFocused) {
-                console.log('포커스 해제');
-            }
+        if (isPageFocused) {
+            tryToReadMessaged();
+        } else if (!isPageFocused) {
+            console.log('포커스 해제');
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [chatRoom?.chat, isPageFocused]);
+    }, [isPageFocused]);
 
-    const tryToReadMessaged = async (unreadMessage) => {
-        unreadMessage.map(async (chat) => {
-            readChat(roomId, 'ChattingRoom', chat.id);
-        });
+    const tryToReadMessaged = async () => {
+        await readChat('ChattingRoom', roomId, partnerId);
     };
 
     const handleSubmit = async () => {
@@ -127,7 +114,6 @@ export default function PrivateChattingRoom() {
             setCurrentChat((state) => [...state, GMmessage]);
             await updateChat('ChattingRoom', roomId, GMmessage);
         }
-
         if (
             month != lastMonth ||
             day != lastDay ||
@@ -141,10 +127,9 @@ export default function PrivateChattingRoom() {
                 sender: user?.uid,
                 createdAt: createdAt,
                 showBasicInfo: true,
-                status: 'unread',
             };
             setCurrentChat((state) => [...state, newMessage]);
-            await updateChat('ChattingRoom', roomId, newMessage);
+            await updateChat('ChattingRoom', roomId, newMessage, partnerId);
         } else if (
             month == lastMonth &&
             day == lastDay &&
@@ -157,10 +142,9 @@ export default function PrivateChattingRoom() {
                 sender: user?.uid,
                 createdAt: createdAt,
                 showBasicInfo: false,
-                status: 'unread',
             };
             setCurrentChat((state) => [...state, newMessage]);
-            await updateChat('ChattingRoom', roomId, newMessage);
+            await updateChat('ChattingRoom', roomId, newMessage, partnerId);
         }
     };
 

@@ -125,22 +125,38 @@ export const useFirestore = (collection) => {
         setLoading(false);
     };
 
-    const updateChat = async (collection, roomId, newMessage) => {
+    const updateChat = async (collection, roomId, newMessage, partnerId) => {
         const ref = projectFirestore.collection(collection);
         setLoading(true);
         dispatch({ type: 'IS_PENDING' });
         const originalDocuments = await ref.doc(roomId).get();
+        const chattinRoomData = originalDocuments.data(); 
         try {
-            const updateChat = {
-                chat: FieldValue.arrayUnion(newMessage),
-            };
-            const updatedChat = await ref.doc(roomId).update(updateChat);
-            dispatchIsNotCancelled({
-                type: 'UPDATE_DOCUMENT',
-                payload: updatedChat,
-            });
-            setLoading(false);
-            return updatedChat;
+            if (chattinRoomData.user1 == partnerId) {
+                const updateChat = {
+                    chat: FieldValue.arrayUnion(newMessage),
+                    user1_unread: FieldValue.arrayUnion(newMessage),
+                };
+                const updatedChat = await ref.doc(roomId).update(updateChat);
+                dispatchIsNotCancelled({
+                    type: 'UPDATE_DOCUMENT',
+                    payload: updatedChat,
+                });
+                setLoading(false);
+                return updatedChat;
+            } else if(chattinRoomData.user2 == partnerId){
+                const updateChat = {
+                    chat: FieldValue.arrayUnion(newMessage),
+                    user2_unread: FieldValue.arrayUnion(newMessage),
+                };
+                const updatedChat = await ref.doc(roomId).update(updateChat);
+                dispatchIsNotCancelled({
+                    type: 'UPDATE_DOCUMENT',
+                    payload: updatedChat,
+                });
+                setLoading(false);
+                return updatedChat;
+            }
         } catch (error) {
             console.log(error.message);
             setLoading(false);
@@ -312,13 +328,47 @@ export const useFirestore = (collection) => {
         });
     }
 
-    const readChat = async (roomId, collection, chatId) => {
-      
-        const ref = projectFirestore.collection(collection).doc(roomId).collection('chat')
-        console.log(ref.get().where('id' == 'chatId'))
-        // const itemRef = chatRef.doc(chatId);
-       
-        // await itemRef.update({ 'status': 'read' });
+    const readChat = async (collection, roomId, partnerId) => {
+
+        const ref = projectFirestore.collection(collection);
+        setLoading(true);
+        dispatch({ type: 'IS_PENDING' });
+        const originalDocuments = await ref.doc(roomId).get();
+        const chattinRoomData = originalDocuments.data(); 
+        try {
+            console.log(chattinRoomData.user1)
+            if (chattinRoomData.user1 == partnerId) {
+                console.log("user 1 is partner")
+              
+                const updatedChat = await ref.doc(roomId).update({
+                    user2_unread: []
+                });
+                dispatchIsNotCancelled({
+                    type: 'UPDATE_DOCUMENT',
+                    payload: updatedChat,
+                });
+                setLoading(false);
+                console.log("end read");
+                return updatedChat;
+
+            } else if (chattinRoomData.user2 == partnerId) {
+                console.log("user 2 is partner")
+
+                const updatedChat = await ref.doc(roomId).update({
+                    user1_unread: [],
+                });
+                dispatchIsNotCancelled({
+                    type: 'UPDATE_DOCUMENT',
+                    payload: updatedChat,
+                });
+                setLoading(false);
+                console.log("end read");
+
+                return updatedChat;
+            }
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     useEffect(() => {

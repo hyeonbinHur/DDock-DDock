@@ -12,13 +12,17 @@ export default function ChattingRoomListItem({ room }) {
         if(chatRoom){
             const emptyArray = []
             setUnreadChat(emptyArray)
-            chatRoom.chat.map((chat) => {
-                if(chat.sender == room.partner){
-                    if(chat.status === 'unread'){
-                        setUnreadChat((prevState) => [...prevState, chat])
-                    }
-                }
-            })
+            if(chatRoom.user1 == room.partner){
+                chatRoom.user2_unread.map((unreadChat)=>{
+                    setUnreadChat((prevState) => [...prevState, unreadChat])
+                })
+
+            }else if(chatRoom.user2 == room.partner){
+                chatRoom.user1_unread.map((unreadChat)=>{
+                    setUnreadChat((prevState) => [...prevState, unreadChat])
+                })
+                
+            }
         }
     },[chatRoom, room.partner])
 
