@@ -9,18 +9,22 @@ import CurrentUserChat from './CurrentUserChat';
 import PartnerUserChat from './PartnerUserChat';
 import { timestamp } from '../../firebase/config';
 import ChatDate from './Chatdate';
+import { v4 as uuidv4 } from 'uuid';
 
 export default function PrivateChattingRoom() {
     const dispatch = useDispatch();
     const roomId = useSelector((state) => state.openChatRoom.roomId);
     const partnerId = useSelector((state) => state.openChatRoom.partnerId);
-    const { updateChat } = useFirestore('ChaattingRoom');
+
+    const { updateChat, readChat } = useFirestore('ChaattingRoom');
+
     const { user } = useAuthContext();
     const [content, setContent] = useState('');
     const { document: currentUser } = useDocument('User', user?.uid);
     const { document: partner } = useDocument('User', partnerId);
     const { document: chatRoom } = useDocument('ChattingRoom', roomId);
     const scrollDown = useRef(null);
+
     const [currentChat, setCurrentChat] = useState([]);
     const [lastYear, setLastYear] = useState(null);
     const [lastMonth, setLastMonth] = useState(null);
@@ -31,17 +35,28 @@ export default function PrivateChattingRoom() {
     const scrollDownFn = () => {
         scrollDown.current?.scrollIntoView({ behavior: 'auto' });
     };
+    const [isPageFocused, setIsPageFocused] = useState(true);
 
-   
+    useEffect(() => {
+        const handleFocus = () => {
+            setIsPageFocused(true); // 페이지가 포커스 되었을 때
+        };
+
+        const handleBlur = () => {
+            setIsPageFocused(false); // 페이지가 포커스를 잃었을 때
+        };
+
+        window.addEventListener('focus', handleFocus);
+        window.addEventListener('blur', handleBlur);
+
+        return () => {
+            window.removeEventListener('focus', handleFocus);
+            window.removeEventListener('blur', handleBlur);
+        };
+    }, []);
+
     useEffect(() => {
         scrollDownFn();
-        if(currentChat.length > 1){
-            if(currentChat[currentChat.length - 1].sender != user.uid){
-                console.log("보낸사람 : " + currentChat[currentChat.length - 1].sender);
-                console.log("나 : " + user.uid)
-            }
-        }
-
         if (currentChat.length > 1) {
             const lastMessageTimeInfo =
                 currentChat[currentChat.length - 1].createdAt;
@@ -56,6 +71,7 @@ export default function PrivateChattingRoom() {
             setLastHour(hour);
             setLastMinute(minute);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentChat]);
 
     useEffect(() => {
@@ -64,9 +80,37 @@ export default function PrivateChattingRoom() {
         }
     }, [chatRoom]);
 
+    useEffect(() => {
+        if (chatRoom) {
+            if (isPageFocused) {
+                const unreadMessage = [];
+                chatRoom.chat.map((chat) => {
+                    if (chat.sender == partnerId) {
+                        if (chat.status === 'unread') {
+                            unreadMessage.push(chat);
+                        }
+                    }
+                });
+
+                tryToReadMessaged(unreadMessage);
+            } else if (!isPageFocused) {
+                console.log('포커스 해제');
+            }
+        }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [chatRoom?.chat, isPageFocused]);
+
+    const tryToReadMessaged = async (unreadMessage) => {
+        unreadMessage.map(async (chat) => {
+            readChat(roomId, 'ChattingRoom', chat.id);
+        });
+    };
+
     const handleSubmit = async () => {
         setContent('');
         const createdAt = formatDate(timestamp.fromDate(new Date()));
+        const uuid = uuidv4();
 
         const [datePart, timePart] = createdAt.split(', ');
         // eslint-disable-next-line no-unused-vars
@@ -92,10 +136,12 @@ export default function PrivateChattingRoom() {
             currentChat[currentChat.length - 1].sender != user.uid
         ) {
             const newMessage = {
+                id: uuid,
                 content: content,
                 sender: user?.uid,
                 createdAt: createdAt,
                 showBasicInfo: true,
+                status: 'unread',
             };
             setCurrentChat((state) => [...state, newMessage]);
             await updateChat('ChattingRoom', roomId, newMessage);
@@ -106,10 +152,12 @@ export default function PrivateChattingRoom() {
             minute == lastMinute
         ) {
             const newMessage = {
+                id: uuid,
                 content: content,
                 sender: user?.uid,
                 createdAt: createdAt,
                 showBasicInfo: false,
+                status: 'unread',
             };
             setCurrentChat((state) => [...state, newMessage]);
             await updateChat('ChattingRoom', roomId, newMessage);
@@ -129,6 +177,11 @@ export default function PrivateChattingRoom() {
         });
     }
 
+    const closeChatRoom = () => {
+        setIsPageFocused(false);
+        dispatch(close());
+    };
+
     return (
         <>
             <div className={style.container}>
@@ -136,7 +189,7 @@ export default function PrivateChattingRoom() {
                     <>
                         <div className={style.chat_header}>
                             {partner && <div> {partner.displayName}</div>}
-                            <button onClick={() => dispatch(close())}>X</button>
+                            <button onClick={closeChatRoom}>X</button>
                         </div>
                         <div>
                             {chatRoom?.chat.length > 0 &&

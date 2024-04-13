@@ -249,13 +249,13 @@ export const useFirestore = (collection) => {
                     user2: user2.id,
                     createdAt,
                     chat: [],
+                    user1_unread: [],
+                    user2_unread: [],
                 });
                 dispatchIsNotCancelled({
                     type: 'ADD_NEWUSER',
                     payload: newChattingRoom,
                 });
-
-                
 
                 const originalUser2 = user2;
                 const olduser2ChatRoom = originalUser2.chatRoom;
@@ -285,10 +285,8 @@ export const useFirestore = (collection) => {
 
                 await updateDocument(user1.id, originalUser1, 'User');
 
-                console.log('채팅방 만들기 성공');
                 return newChattingRoom.id;
             } else if (chatPartnerExist) {
-                console.log('이미 존재해서 안만듬');
                 return chatRoomID;
             }
         } catch (error) {
@@ -300,6 +298,7 @@ export const useFirestore = (collection) => {
         }
         setLoading(false);
     };
+
     function formatDate(timestamp) {
         return new Date(timestamp.seconds * 1000).toLocaleString('en-AU', {
             timeZone: 'Australia/Sydney',
@@ -313,6 +312,15 @@ export const useFirestore = (collection) => {
         });
     }
 
+    const readChat = async (roomId, collection, chatId) => {
+      
+        const ref = projectFirestore.collection(collection).doc(roomId).collection('chat')
+        console.log(ref.get().where('id' == 'chatId'))
+        // const itemRef = chatRef.doc(chatId);
+       
+        // await itemRef.update({ 'status': 'read' });
+    };
+
     useEffect(() => {
         return () => setIsCancelled(!isCancelled);
     }, [isCancelled]);
@@ -324,6 +332,7 @@ export const useFirestore = (collection) => {
         saveUser,
         createChattingRoom,
         updateChat,
+        readChat,
         response,
         loading,
     };

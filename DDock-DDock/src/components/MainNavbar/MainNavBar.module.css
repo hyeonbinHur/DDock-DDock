@@ -37,3 +37,10 @@
     border: 1px solid #ccc; /* 테두리를 설정합니다 */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 팝업에 그림자를 추가합니다 */
 }
+.ChatpopupContainer{
+    position: fixed; /* 또는 absolute, 필요에 따라 */
+    top: 80%;
+    left: 70%;
+    z-index: 1;
+    border: 1px solid black;
+}

@@ -90,7 +90,7 @@ export default function Navbar() {
                     <ChattingRoomList user={currentUser} />
                 </div>
             )}
-            {openChatRoom && (<div>  <PrivateChattingRoom /> </div>)}
+            {openChatRoom && (<div className={style.ChatpopupContainer}> <PrivateChattingRoom /> </div>)}
 
            
         </div>
