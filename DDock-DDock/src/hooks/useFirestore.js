@@ -336,9 +336,7 @@ export const useFirestore = (collection) => {
         const originalDocuments = await ref.doc(roomId).get();
         const chattinRoomData = originalDocuments.data(); 
         try {
-            console.log(chattinRoomData.user1)
             if (chattinRoomData.user1 == partnerId) {
-                console.log("user 1 is partner")
               
                 const updatedChat = await ref.doc(roomId).update({
                     user2_unread: []
@@ -348,11 +346,9 @@ export const useFirestore = (collection) => {
                     payload: updatedChat,
                 });
                 setLoading(false);
-                console.log("end read");
                 return updatedChat;
 
             } else if (chattinRoomData.user2 == partnerId) {
-                console.log("user 2 is partner")
 
                 const updatedChat = await ref.doc(roomId).update({
                     user1_unread: [],
@@ -362,7 +358,6 @@ export const useFirestore = (collection) => {
                     payload: updatedChat,
                 });
                 setLoading(false);
-                console.log("end read");
 
                 return updatedChat;
             }

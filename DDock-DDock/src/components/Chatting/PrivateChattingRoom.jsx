@@ -180,17 +180,21 @@ export default function PrivateChattingRoom() {
                                 currentChat.length > 0 &&
                                 currentChat.map((chat, index) => (
                                     <ul key={index} className={style.chatItem}>
-                                        {chat.sender === currentUser.id && (
-                                            <CurrentUserChat
-                                                key={chat.id}
-                                                content={chat.content}
-                                                date={chat.createdAt}
-                                                showBasicInfo={
-                                                    chat.showBasicInfo
-                                                }
-                                            />
-                                        )}
-
+                                        {chat.sender === currentUser.id &&
+                                            (
+                                                <CurrentUserChat
+                                                    key={chat.id}
+                                                    content={chat.content}
+                                                    date={chat.createdAt}
+                                                    showBasicInfo={
+                                                        chat.showBasicInfo
+                                                    }
+                                                    user = {user.uid}
+                                                    roomId={roomId}
+                                                    chatId={chat.id}
+                                                   
+                                                />
+                                            )}
                                         {chat.sender !== currentUser.id &&
                                             chat.sender !== 'GM' && (
                                                 <PartnerUserChat
@@ -204,6 +208,9 @@ export default function PrivateChattingRoom() {
                                                     displayName={
                                                         partner.displayName
                                                     }
+                                                    user = {user.uid}
+                                                    roomId={roomId}
+                                                    chatId={chat.id}
                                                 />
                                             )}
                                         {chat.sender == 'GM' && (
