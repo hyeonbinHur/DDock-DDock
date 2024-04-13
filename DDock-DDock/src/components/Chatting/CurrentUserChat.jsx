@@ -32,7 +32,6 @@ export default function CurrentUserChat({
                     setRead(true);
                 }
             } else if (chatRoom.user2 === user) {
-                ``;
                 if (chatRoom.user1_unread.some((chat) => chat.id === chatId)) {
                     setRead(false);
                 } else if (

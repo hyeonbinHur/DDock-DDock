@@ -1,12 +1,17 @@
 import defaultUserImg from '../../assets/user.png';
 import style from './UserChat.module.css';
 import { useEffect, useState } from 'react';
+import { useDocument } from '../../hooks/useDocument';
+
 export default function PartnerUserChat({
     content,
     avatar,
     displayName,
     date,
     showBasicInfo,
+    user,
+    roomId,
+    chatId,
 }) {
     const [datePart, timePart] = date.split(', ');
     // eslint-disable-next-line no-unused-vars
@@ -15,6 +20,34 @@ export default function PartnerUserChat({
     const [hour, minute, second] = timePart.split(':').map(Number);
 
     const [cssStyle, setCssSytle] = useState(style.partner_chat_container);
+
+    const [read, setRead] = useState(false);
+
+    const { document: chatRoom } = useDocument('ChattingRoom', roomId);
+
+    useEffect(() => {
+        if (chatRoom) {
+            if (chatRoom.user1 === user) {
+                if (chatRoom.user1_unread.some((chat) => chat.id === chatId)) {
+                    setRead(false);
+                } else if (
+                    !chatRoom.user1_unread.some((chat) => chat.id === chatId)
+                ) {
+                    setRead(true);
+                }
+            } else if (chatRoom.user2 === user) {
+                ``;
+                if (chatRoom.user2_unread.some((chat) => chat.id === chatId)) {
+                    setRead(false);
+                } else if (
+                    !chatRoom.user2_unread.some((chat) => chat.id === chatId)
+                ) {
+                    setRead(true);
+                }
+            }
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [chatRoom]);
 
     useEffect(() => {
         if (showBasicInfo === false) {
@@ -42,9 +75,10 @@ export default function PartnerUserChat({
 
             <div>
                 <span className={style.partner_chat_content}>{content}</span>
+                {!read && <span>1</span>}
                 {showBasicInfo && (
                     <span className={style.partner_timeContainer}>
-                        {hour} : {minute}
+                        {hour} : {minute === 0 ? "00" : minute}
                     </span>
                 )}
             </div>
