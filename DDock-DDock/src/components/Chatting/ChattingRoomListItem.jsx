@@ -3,34 +3,27 @@ import { useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { open } from '../../store/chatRoomSlice';
 
-export default function ChattingRoomListItem({ room }) {
+export default function ChattingRoomListItem({ room, userId }) {
     const { document: partner } = useDocument('User', room.partner);
-    const { document: chatRoom } = useDocument('ChattingRoom', room.roomId);
+
     const [unreadChat, setUnreadChat] = useState([]);
+    const { document: currentUser } = useDocument('User', userId);
 
     useEffect(() => {
-        if (chatRoom) {
-            const emptyArray = [];
-            setUnreadChat(emptyArray);
-
-            if (chatRoom.user1 == room.partner) {
-                chatRoom.user2_unread.map((unreadChat) => {
-                    setUnreadChat((prevState) => [...prevState, unreadChat]);
-                });
-            } else if (chatRoom.user2 == room.partner) {
-                chatRoom.user1_unread.map((unreadChat) => {
-                    setUnreadChat((prevState) => [...prevState, unreadChat]);
-                });
-            }
+        if (currentUser) {
+            currentUser.unread.forEach((unreadRoom) =>{
+                if(unreadRoom.roomId === room.roomId){
+                    setUnreadChat(unreadRoom.chat);
+                }
+            })
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [chatRoom, room.partner]);
+    }, [room.roomId, currentUser, currentUser?.unread]);
 
     const dispatch = useDispatch();
 
     return (
         <div>
-            {partner && chatRoom && (
+            {partner && currentUser && (
                 <p
                     onClick={() =>
                         dispatch(

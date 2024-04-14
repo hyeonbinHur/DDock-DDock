@@ -20,6 +20,7 @@ export default function ChattingRoomList({user}) {
                     <ChattingRoomListItem
                         room={roomInfo}
                         key={roomInfo.roomId}
+                        userId = {user.uid}
                     />
                 );
             })}

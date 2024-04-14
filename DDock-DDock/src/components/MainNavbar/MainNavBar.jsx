@@ -26,8 +26,6 @@ export default function Navbar() {
         setShowChatList(!showChatList);
     };
 
-    
-
     return (
         <div>
             <nav className={style.navbar}>
