@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom';
 import style from './MainNavBar.module.css';
 import { useLogout } from '../../hooks/useLogout';
 import { useAuthContext } from '../../hooks/useAuth';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ChattingRoomList from '../Chatting/ChattingRoomList';
 import { useDocument } from '../../hooks/useDocument';
 import { useSelector } from 'react-redux';
@@ -21,10 +21,31 @@ export default function Navbar() {
     const openChatRoom = useSelector(
         (state) => state.openChatRoom.openChatRoom
     );
+    const [oldUser, setOldUser] = useState(currentUser?.unread);
 
     const activeChatList = () => {
         setShowChatList(!showChatList);
     };
+
+    useEffect(() => {
+        console.log(currentUser.unread);
+        console.log(oldUser);
+
+        if (oldUser) {
+            console.log('이펙트 들어옴');
+
+            oldUser.forEach((chat) => {
+                currentUser.unread.forEach((real) => {
+                    if (chat.roomId == real.roomId) {
+                        console.log('들어오긴함');
+                        if (chat.chat.length < real.chat.length) {
+                            notify();
+                        }
+                    }
+                });
+            });
+        }
+    }, [currentUser?.unread]);
 
     return (
         <div>
