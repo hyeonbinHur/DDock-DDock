@@ -125,13 +125,60 @@ export const useFirestore = (collection) => {
         setLoading(false);
     };
 
-    const updateChat = async (collection, roomId, newMessage, partnerId) => {
+    const updateChat = async (
+        collection,
+        roomId,
+        newMessage,
+        partnerId,
+        myId
+    ) => {
+
         const ref = projectFirestore.collection(collection);
+        const partnerRef =  projectFirestore.collection("User");
+        const partnerInfo =  await partnerRef.doc(partnerId).get();
+        const partnerData = partnerInfo.data();
+        console.log(partnerData.displayName)
+        console.log("partner id : " + partnerId)
+
         setLoading(true);
         dispatch({ type: 'IS_PENDING' });
         const originalDocuments = await ref.doc(roomId).get();
-        const chattinRoomData = originalDocuments.data(); 
+        const chattinRoomData = originalDocuments.data();
         try {
+            if (partnerData.unread.some((unreadByRoom) => unreadByRoom.roomId === roomId)) {
+                partnerData.unread.forEach((unreadByRoom) => {
+                    if (unreadByRoom.roomId === roomId) {
+                      unreadByRoom.chat.push({
+                        content: newMessage.content,
+                        createdAt: newMessage.createdAt,
+                      });
+                    }
+                  });
+                await partnerRef.doc(partnerId).update({
+                    unread: partnerData.unread,
+                });
+
+                // 만약 유저가 unread에 우리 방이 있으면, 그방에 새로온 메세지 추가해서
+                // 유저 언리드 업데이트
+            } else if (
+                !partnerData.unread.some((chat) => chat.roomId === roomId)
+            ) {
+                // 만약 유저 unread에 우리 방이 없다면, 유저 unread에 우리방 추가
+                const unreadByRoom = {
+                    roomId,
+                    sender: myId,
+                    chat: [{
+                        content: newMessage.content,
+                        createdAt: newMessage.createdAt
+                    }],
+                };
+
+                const updateUnread = {
+                    unread: FieldValue.arrayUnion(unreadByRoom)
+                }
+
+                await partnerRef.doc(partnerId).update(updateUnread);
+            }
             if (chattinRoomData.user1 == partnerId) {
                 const updateChat = {
                     chat: FieldValue.arrayUnion(newMessage),
@@ -144,10 +191,21 @@ export const useFirestore = (collection) => {
                 });
                 setLoading(false);
                 return updatedChat;
-            } else if(chattinRoomData.user2 == partnerId){
+            } else if (chattinRoomData.user2 == partnerId) {
                 const updateChat = {
                     chat: FieldValue.arrayUnion(newMessage),
                     user2_unread: FieldValue.arrayUnion(newMessage),
+                };
+                const updatedChat = await ref.doc(roomId).update(updateChat);
+                dispatchIsNotCancelled({
+                    type: 'UPDATE_DOCUMENT',
+                    payload: updatedChat,
+                });
+                setLoading(false);
+                return updatedChat;
+            } else if (partnerId == 'GM') {
+                const updateChat = {
+                    chat: FieldValue.arrayUnion(newMessage),
                 };
                 const updatedChat = await ref.doc(roomId).update(updateChat);
                 dispatchIsNotCancelled({
@@ -227,6 +285,7 @@ export const useFirestore = (collection) => {
                         dong: '',
                     },
                     chatRoom: [],
+                    unread: [],
                 });
                 dispatchIsNotCancelled({
                     type: 'ADD_NEWCHATROOM',
@@ -329,17 +388,15 @@ export const useFirestore = (collection) => {
     }
 
     const readChat = async (collection, roomId, partnerId) => {
-
         const ref = projectFirestore.collection(collection);
         setLoading(true);
         dispatch({ type: 'IS_PENDING' });
         const originalDocuments = await ref.doc(roomId).get();
-        const chattinRoomData = originalDocuments.data(); 
+        const chattinRoomData = originalDocuments.data();
         try {
             if (chattinRoomData.user1 == partnerId) {
-              
                 const updatedChat = await ref.doc(roomId).update({
-                    user2_unread: []
+                    user2_unread: [],
                 });
                 dispatchIsNotCancelled({
                     type: 'UPDATE_DOCUMENT',
@@ -347,9 +404,7 @@ export const useFirestore = (collection) => {
                 });
                 setLoading(false);
                 return updatedChat;
-
             } else if (chattinRoomData.user2 == partnerId) {
-
                 const updatedChat = await ref.doc(roomId).update({
                     user1_unread: [],
                 });

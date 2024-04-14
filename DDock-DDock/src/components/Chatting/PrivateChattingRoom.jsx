@@ -112,7 +112,7 @@ export default function PrivateChattingRoom() {
                 createdAt: createdAt,
             };
             setCurrentChat((state) => [...state, GMmessage]);
-            await updateChat('ChattingRoom', roomId, GMmessage);
+            await updateChat('ChattingRoom', roomId, GMmessage, "GM");
         }
         if (
             month != lastMonth ||
@@ -129,7 +129,7 @@ export default function PrivateChattingRoom() {
                 showBasicInfo: true,
             };
             setCurrentChat((state) => [...state, newMessage]);
-            await updateChat('ChattingRoom', roomId, newMessage, partnerId);
+            await updateChat('ChattingRoom', roomId, newMessage, partnerId, currentUser.id );
         } else if (
             month == lastMonth &&
             day == lastDay &&
@@ -144,7 +144,7 @@ export default function PrivateChattingRoom() {
                 showBasicInfo: false,
             };
             setCurrentChat((state) => [...state, newMessage]);
-            await updateChat('ChattingRoom', roomId, newMessage, partnerId);
+            await updateChat('ChattingRoom', roomId, newMessage, partnerId, currentUser.id );
         }
     };
 

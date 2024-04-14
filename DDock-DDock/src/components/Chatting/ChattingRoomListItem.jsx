@@ -9,22 +9,22 @@ export default function ChattingRoomListItem({ room }) {
     const [unreadChat, setUnreadChat] = useState([]);
 
     useEffect(() => {
-        if(chatRoom){
-            const emptyArray = []
-            setUnreadChat(emptyArray)
-            if(chatRoom.user1 == room.partner){
-                chatRoom.user2_unread.map((unreadChat)=>{
-                    setUnreadChat((prevState) => [...prevState, unreadChat])
-                })
+        if (chatRoom) {
+            const emptyArray = [];
+            setUnreadChat(emptyArray);
 
-            }else if(chatRoom.user2 == room.partner){
-                chatRoom.user1_unread.map((unreadChat)=>{
-                    setUnreadChat((prevState) => [...prevState, unreadChat])
-                })
-                
+            if (chatRoom.user1 == room.partner) {
+                chatRoom.user2_unread.map((unreadChat) => {
+                    setUnreadChat((prevState) => [...prevState, unreadChat]);
+                });
+            } else if (chatRoom.user2 == room.partner) {
+                chatRoom.user1_unread.map((unreadChat) => {
+                    setUnreadChat((prevState) => [...prevState, unreadChat]);
+                });
             }
         }
-    },[chatRoom, room.partner])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [chatRoom, room.partner]);
 
     const dispatch = useDispatch();
 
@@ -38,11 +38,9 @@ export default function ChattingRoomListItem({ room }) {
                         )
                     }
                 >
-                    {partner.displayName}  {unreadChat.length}
-                    
+                    {partner.displayName} {unreadChat.length}
                 </p>
             )}
-
         </div>
     );
 }

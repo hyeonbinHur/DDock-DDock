@@ -5,26 +5,27 @@ import { useAuthContext } from '../../hooks/useAuth';
 import { useState } from 'react';
 import ChattingRoomList from '../Chatting/ChattingRoomList';
 import { useDocument } from '../../hooks/useDocument';
-import { useSelector } from 'react-redux'
+import { useSelector } from 'react-redux';
 import PrivateChattingRoom from '../Chatting/PrivateChattingRoom';
+import toast, { Toaster } from 'react-hot-toast';
+
+const notify = () => toast('Here is your toast.');
 
 export default function Navbar() {
     const { logout } = useLogout();
     const { user } = useAuthContext();
     const [showChatList, setShowChatList] = useState(false);
-    const {document: currentUser} = useDocument('User',user?.uid)
 
-    const openChatRoom = useSelector(state => state.openChatRoom.openChatRoom);
+    const { document: currentUser } = useDocument('User', user?.uid);
+
+    const openChatRoom = useSelector(
+        (state) => state.openChatRoom.openChatRoom
+    );
 
     const activeChatList = () => {
         setShowChatList(!showChatList);
     };
 
-
-    // const openChatRoom = (partner) => {
-    //     setIsActiveChatRoom(true);
-    //     conso
-    // }
     
 
     return (
@@ -90,9 +91,16 @@ export default function Navbar() {
                     <ChattingRoomList user={currentUser} />
                 </div>
             )}
-            {openChatRoom && (<div className={style.ChatpopupContainer}> <PrivateChattingRoom /> </div>)}
+            {openChatRoom && (
+                <div className={style.ChatpopupContainer}>
+                    {' '}
+                    <PrivateChattingRoom />{' '}
+                </div>
+            )}
 
-           
+            <div>
+                <Toaster />
+            </div>
         </div>
     );
 }
