@@ -56,7 +56,8 @@ export default function CurrentUserChat({
         <div className={cssStyle}>
             {showBasicInfo && (
                 <span className={style.current_timeContainer}>
-                    {hour} : {String(minute).padStart(2, '0')}
+                     {hour === 24 ? '00' : String(hour).padStart(2, '0')} :
+                    {String(minute).padStart(2, '0')}
                 </span>
             )}
             {!read && <span>1</span>}
