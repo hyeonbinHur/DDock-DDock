@@ -28,13 +28,11 @@ export default function Navbar() {
     useEffect(() => {
         // 올드 유저를 저장하고, 올드유저 unread값이랑 현 업데이트된 unread값이 다르면 토스트
         if (oldUser) {
-            console.log('이펙트 들어옴');
             if(oldUser){
                 if(oldUser.length === currentUser.unread.length){
                     oldUser.forEach((chat) => {
                         currentUser.unread.some((real) => {
                             if (chat.roomId == real.roomId) {
-                                console.log('들어오긴함');
                                 if (chat.chat.length < real.chat.length) {
                                     receiveMessageFromOldRoom(
                                         real.chat[real.chat.length - 1],

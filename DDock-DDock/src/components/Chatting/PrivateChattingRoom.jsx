@@ -189,33 +189,21 @@ export default function PrivateChattingRoom() {
                                             (
                                                 <CurrentUserChat
                                                     key={chat.id}
-                                                    content={chat.content}
-                                                    date={chat.createdAt}
-                                                    showBasicInfo={
-                                                        chat.showBasicInfo
-                                                    }
-                                                    user = {user.uid}
-                                                    roomId={roomId}
-                                                    chatId={chat.id}
-                                                   
+                                                    chat = {chat}
+                                                    partner = {partner}
+                                                    roomId = {roomId}
                                                 />
                                             )}
-                                        {chat.sender !== currentUser.id &&
-                                            chat.sender !== 'GM' && (
+                                        {chat.sender === partnerId&& (
                                                 <PartnerUserChat
                                                     key={index}
-                                                    content={chat.content}
                                                     avatar={partner.avatar}
-                                                    date={chat.createdAt}
-                                                    showBasicInfo={
-                                                        chat.showBasicInfo
-                                                    }
                                                     displayName={
                                                         partner.displayName
                                                     }
-                                                    user = {user.uid}
                                                     roomId={roomId}
-                                                    chatId={chat.id}
+                                                    chat = {chat}
+                                                    user = {currentUser}
                                                 />
                                             )}
                                         {chat.sender == 'GM' && (

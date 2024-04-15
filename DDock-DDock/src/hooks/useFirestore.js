@@ -153,6 +153,7 @@ export const useFirestore = (collection) => {
                         unreadByRoom.chat.push({
                             content: newMessage.content,
                             createdAt: newMessage.createdAt,
+                            id: newMessage.id
                         });
                     }
                 });
@@ -176,6 +177,7 @@ export const useFirestore = (collection) => {
                         {
                             content: newMessage.content,
                             createdAt: newMessage.createdAt,
+                            id: newMessage.id
                         },
                     ],
                 };

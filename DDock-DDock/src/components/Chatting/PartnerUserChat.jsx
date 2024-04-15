@@ -4,16 +4,22 @@ import { useEffect, useState } from 'react';
 import { useDocument } from '../../hooks/useDocument';
 
 export default function PartnerUserChat({
-    content,
+    // content,
+    // avatar,
+    // displayName,
+    // date,
+    // showBasicInfo,
+    // user,
+    // roomId,
+    // chatId,
+
     avatar,
     displayName,
-    date,
-    showBasicInfo,
-    user,
     roomId,
-    chatId,
+    chat,
+    user,
 }) {
-    const [datePart, timePart] = date.split(', ');
+    const [datePart, timePart] = chat.createdAt.split(', ');
     // eslint-disable-next-line no-unused-vars
     const [day, month, year] = datePart.split('/').map(Number);
     // eslint-disable-next-line no-unused-vars
@@ -24,42 +30,60 @@ export default function PartnerUserChat({
     const [read, setRead] = useState(false);
 
     const { document: chatRoom } = useDocument('ChattingRoom', roomId);
+    const { document: currentUser } = useDocument('User', user.id);
 
+
+    // useEffect(() => {
+    //     if (chatRoom) {
+    //         if (chatRoom.user1 === user) {
+    //             if (chatRoom.user1_unread.some((chat) => chat.id === chatId)) {
+    //                 setRead(false);
+    //             } else if (
+    //                 !chatRoom.user1_unread.some((chat) => chat.id === chatId)
+    //             ) {
+    //                 setRead(true);
+    //             }
+    //         } else if (chatRoom.user2 === user) {
+    //             ``;
+    //             if (chatRoom.user2_unread.some((chat) => chat.id === chatId)) {
+    //                 setRead(false);
+    //             } else if (
+    //                 !chatRoom.user2_unread.some((chat) => chat.id === chatId)
+    //             ) {
+    //                 setRead(true);
+    //             }
+    //         }
+    //     }
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [chatRoom]);
+
+    
     useEffect(() => {
-        if (chatRoom) {
-            if (chatRoom.user1 === user) {
-                if (chatRoom.user1_unread.some((chat) => chat.id === chatId)) {
+        if(chatRoom && currentUser?.unread){
+            if(currentUser.unread.some((room) => room.roomId === chatRoom.roomId)){
+                const unreadRoom = currentUser.unread.some((room) => room.roomId === chatRoom.roomId);
+    
+                if(unreadRoom.some((chat) => chat.id === chatRoom.chat.id)){
                     setRead(false);
-                } else if (
-                    !chatRoom.user1_unread.some((chat) => chat.id === chatId)
-                ) {
-                    setRead(true);
-                }
-            } else if (chatRoom.user2 === user) {
-                ``;
-                if (chatRoom.user2_unread.some((chat) => chat.id === chatId)) {
-                    setRead(false);
-                } else if (
-                    !chatRoom.user2_unread.some((chat) => chat.id === chatId)
-                ) {
-                    setRead(true);
+                }else{
+                    setRead(true)
                 }
             }
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [chatRoom]);
+    }, [chatRoom, currentUser?.unread]);
+
 
     useEffect(() => {
-        if (showBasicInfo === false) {
+        if (chat.showBasicInfo === false) {
             setCssSytle(style.partner_chat_container);
         } else {
             setCssSytle(style.partner_chat_container);
         }
-    }, [showBasicInfo]);
+    }, [chat.showBasicInfo]);
 
     return (
         <div className={cssStyle}>
-            {showBasicInfo && (
+            {chat.showBasicInfo && (
                 <div className={style.partner_chat_info}>
                     <img
                         className={style.partner_chat_avatar}
@@ -74,11 +98,11 @@ export default function PartnerUserChat({
             )}
 
             <div>
-                <span className={style.partner_chat_content}>{content}</span>
+                <span className={style.partner_chat_content}>{chat.content}</span>
                 {!read && <span>1</span>}
-                {showBasicInfo && (
+                {chat.showBasicInfo && (
                     <span className={style.partner_timeContainer}>
-                        {hour === 24 ? '00' : String(hour).padStart(2, '0')}: {String(minute).padStart(2, '0')}
+                        {String(hour).padStart(2, '0')} : {String(minute).padStart(2, '0')}
                     </span>
                 )}
             </div>

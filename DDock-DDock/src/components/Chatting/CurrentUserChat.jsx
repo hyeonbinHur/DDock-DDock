@@ -2,14 +2,11 @@ import { useEffect, useState } from 'react';
 import style from './UserChat.module.css';
 import { useDocument } from '../../hooks/useDocument';
 export default function CurrentUserChat({
-    content,
-    date,
-    showBasicInfo,
-    user,
-    roomId,
-    chatId,
+    chat,
+    partner,
+    roomId
 }) {
-    const [datePart, timePart] = date.split(', ');
+    const [datePart, timePart] = chat.createdAt.split(', ');
     // eslint-disable-next-line no-unused-vars
     const [day, month, year] = datePart.split('/').map(Number);
     // eslint-disable-next-line no-unused-vars
@@ -20,48 +17,49 @@ export default function CurrentUserChat({
     const [read, setRead] = useState(false);
 
     const { document: chatRoom } = useDocument('ChattingRoom', roomId);
+    const { document: partnerInfo } = useDocument('User', partner.id);
+
 
     useEffect(() => {
-        if (chatRoom) {
-            if (chatRoom.user1 === user) {
-                if (chatRoom.user2_unread.some((chat) => chat.id === chatId)) {
-                    setRead(false);
-                } else if (
-                    !chatRoom.user2_unread.some((chat) => chat.id === chatId)
-                ) {
-                    setRead(true);
-                }
-            } else if (chatRoom.user2 === user) {
-                if (chatRoom.user1_unread.some((chat) => chat.id === chatId)) {
-                    setRead(false);
-                } else if (
-                    !chatRoom.user1_unread.some((chat) => chat.id === chatId)
-                ) {
-                    setRead(true);
-                }
+        console.log("이펙트 들어옴")
+        if(chatRoom && partnerInfo?.unread){
+            if(partnerInfo.unread.some((room) => room.roomId === chatRoom.id)){
+
+                partnerInfo.unread.map((room) =>{
+                    if(room.roomId === chatRoom.roomId){
+                        console.log("같은 룸 찾음")
+                        room.chat.map((userUnreadChat) => {
+                            if(userUnreadChat.id == chat.id ){
+                                console.log("같은 챗 찾음")
+                                setRead(true);
+                            }
+                        })
+                        
+                    }
+                });
+               
             }
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [chatRoom]);
+    }, [chat.id, chatRoom, partnerInfo?.unread]);
 
     useEffect(() => {
-        if (showBasicInfo === false) {
+        if (chat.showBasicInfo === false) {
             setCssSytle(style.current_chat_container_without_info);
         } else {
             setCssSytle(style.current_chat_container);
         }
-    }, [showBasicInfo]);
+    }, [chat.showBasicInfo]);
 
     return (
         <div className={cssStyle}>
-            {showBasicInfo && (
+            {chat.showBasicInfo && (
                 <span className={style.current_timeContainer}>
                      {hour === 24 ? '00' : String(hour).padStart(2, '0')} :
                     {String(minute).padStart(2, '0')}
                 </span>
             )}
             {!read && <span>1</span>}
-            <span className={style.current_chat_content}>{content}</span>
+            <span className={style.current_chat_content}>{chat.content}</span>
         </div>
     );
 }
