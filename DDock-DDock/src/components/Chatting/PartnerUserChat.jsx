@@ -59,17 +59,26 @@ export default function PartnerUserChat({
 
     
     useEffect(() => {
-        if(chatRoom && currentUser?.unread){
-            if(currentUser.unread.some((room) => room.roomId === chatRoom.roomId)){
-                const unreadRoom = currentUser.unread.some((room) => room.roomId === chatRoom.roomId);
-    
-                if(unreadRoom.some((chat) => chat.id === chatRoom.chat.id)){
-                    setRead(false);
-                }else{
-                    setRead(true)
-                }
+        if (chatRoom && currentUser?.unread) {
+            if (
+                currentUser.unread.some((room) => room.roomId === chatRoom.id)
+            ) {
+                currentUser.unread.map((room) => {
+                    if (room.roomId === chatRoom.id) {
+                        if (
+                            room.chat.map(
+                                (userUnreadChat) => userUnreadChat.id == chat.id
+                            )
+                        ) {
+                            setRead(false);
+                        } else {
+                            setRead(true);
+                        }
+                    }
+                });
             }
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [chatRoom, currentUser?.unread]);
 
 

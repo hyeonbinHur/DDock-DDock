@@ -1,11 +1,7 @@
 import { useEffect, useState } from 'react';
 import style from './UserChat.module.css';
 import { useDocument } from '../../hooks/useDocument';
-export default function CurrentUserChat({
-    chat,
-    partner,
-    roomId
-}) {
+export default function CurrentUserChat({ chat, partner, roomId }) {
     const [datePart, timePart] = chat.createdAt.split(', ');
     // eslint-disable-next-line no-unused-vars
     const [day, month, year] = datePart.split('/').map(Number);
@@ -19,28 +15,28 @@ export default function CurrentUserChat({
     const { document: chatRoom } = useDocument('ChattingRoom', roomId);
     const { document: partnerInfo } = useDocument('User', partner.id);
 
-
     useEffect(() => {
-        console.log("이펙트 들어옴")
-        if(chatRoom && partnerInfo?.unread){
-            if(partnerInfo.unread.some((room) => room.roomId === chatRoom.id)){
-
-                partnerInfo.unread.map((room) =>{
-                    if(room.roomId === chatRoom.roomId){
-                        console.log("같은 룸 찾음")
-                        room.chat.map((userUnreadChat) => {
-                            if(userUnreadChat.id == chat.id ){
-                                console.log("같은 챗 찾음")
-                                setRead(true);
-                            }
-                        })
-                        
+        if (chatRoom && partnerInfo?.unread) {
+            if (
+                partnerInfo.unread.some((room) => room.roomId === chatRoom.id)
+            ) {
+                partnerInfo.unread.map((room) => {
+                    if (room.roomId === chatRoom.id) {
+                        if (
+                            room.chat.map(
+                                (userUnreadChat) => userUnreadChat.id == chat.id
+                            )
+                        ) {
+                            setRead(false);
+                        } else {
+                            setRead(true);
+                        }
                     }
                 });
-               
             }
         }
-    }, [chat.id, chatRoom, partnerInfo?.unread]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [chatRoom, partnerInfo?.unread]);
 
     useEffect(() => {
         if (chat.showBasicInfo === false) {
@@ -54,7 +50,7 @@ export default function CurrentUserChat({
         <div className={cssStyle}>
             {chat.showBasicInfo && (
                 <span className={style.current_timeContainer}>
-                     {hour === 24 ? '00' : String(hour).padStart(2, '0')} :
+                    {hour === 24 ? '00' : String(hour).padStart(2, '0')} :
                     {String(minute).padStart(2, '0')}
                 </span>
             )}

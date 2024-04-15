@@ -153,7 +153,7 @@ export const useFirestore = (collection) => {
                         unreadByRoom.chat.push({
                             content: newMessage.content,
                             createdAt: newMessage.createdAt,
-                            id: newMessage.id
+                            id: newMessage.id,
                         });
                     }
                 });
@@ -177,7 +177,7 @@ export const useFirestore = (collection) => {
                         {
                             content: newMessage.content,
                             createdAt: newMessage.createdAt,
-                            id: newMessage.id
+                            id: newMessage.id,
                         },
                     ],
                 };
@@ -404,33 +404,30 @@ export const useFirestore = (collection) => {
         });
     }
 
-    const readChat = async (collection, roomId, partnerId) => {
-        const ref = projectFirestore.collection(collection);
+    const readChat = async (collection, roomId, myId) => {
+        console.log('read chat start');
+        const userRef = projectFirestore.collection(collection);
         setLoading(true);
         dispatch({ type: 'IS_PENDING' });
-        const originalDocuments = await ref.doc(roomId).get();
-        const chattinRoomData = originalDocuments.data();
+        const originalDocuments = await userRef.doc(myId).get();
+        const userData = originalDocuments.data();
         try {
-            if (chattinRoomData.user1 == partnerId) {
-                const updatedChat = await ref.doc(roomId).update({
-                    user2_unread: [],
-                });
-                dispatchIsNotCancelled({
-                    type: 'UPDATE_DOCUMENT',
-                    payload: updatedChat,
-                });
-                setLoading(false);
-                return updatedChat;
-            } else if (chattinRoomData.user2 == partnerId) {
-                const updatedChat = await ref.doc(roomId).update({
-                    user1_unread: [],
-                });
-                dispatchIsNotCancelled({
-                    type: 'UPDATE_DOCUMENT',
-                    payload: updatedChat,
-                });
-                setLoading(false);
+            const oldUserUnreadArray = userData.unread;
 
+            if (
+                oldUserUnreadArray.some(
+                    (unreadChatRoom) => unreadChatRoom.roomId === roomId
+                )
+            ) {
+                oldUserUnreadArray.forEach((unreadChatRoom) => {
+                    if (unreadChatRoom.roomId === roomId) {
+                        unreadChatRoom.chat = [];
+                    }
+                });
+                const updatedChat = await userRef.doc(myId).update({
+                    unread: oldUserUnreadArray,
+                });
+                console.log('read chat done');
                 return updatedChat;
             }
         } catch (error) {
