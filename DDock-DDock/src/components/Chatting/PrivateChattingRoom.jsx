@@ -10,6 +10,7 @@ import PartnerUserChat from './PartnerUserChat';
 import { timestamp } from '../../firebase/config';
 import ChatDate from './Chatdate';
 import { v4 as uuidv4 } from 'uuid';
+import defaultImg from '../../assets/defaultImg.png';
 
 export default function PrivateChattingRoom() {
     const dispatch = useDispatch();
@@ -30,7 +31,9 @@ export default function PrivateChattingRoom() {
     const [lastHour, setLastHour] = useState(null);
     const [lastMinute, setLastMinute] = useState(null);
 
-    const [messageType, setMessageType] = useState('text');
+    const [imageUpload, setImageUpload] = useState(undefined); //업로드된 이미지들
+    const [imagePreviews, setImagePreview] = useState(undefined); //선택한 이미지 미리보기
+    const fileInputRef = useRef();
 
     const scrollDownFn = () => {
         scrollDown.current?.scrollIntoView({ behavior: 'auto' });
@@ -82,7 +85,7 @@ export default function PrivateChattingRoom() {
 
     useEffect(() => {
         if (isPageFocused) {
-            console.log("들어옴")
+            console.log('들어옴');
             tryToReadMessaged();
         } else if (!isPageFocused) {
             console.log('포커스 해제');
@@ -94,6 +97,7 @@ export default function PrivateChattingRoom() {
     const tryToReadMessaged = async () => {
         await readChat('User', roomId, user?.uid);
     };
+   
 
     const handleSubmit = async () => {
         setContent('');
@@ -106,16 +110,21 @@ export default function PrivateChattingRoom() {
         // eslint-disable-next-line no-unused-vars
         const [hour, minute, second] = timePart.split(':').map(Number);
 
-
         if (year != lastYear || month != lastMonth || day != lastDay) {
-            console.log("GM message");
+            console.log('GM message');
             const GMmessage = {
                 content: null,
                 sender: 'GM',
                 createdAt: createdAt,
             };
             setCurrentChat((state) => [...state, GMmessage]);
-            await updateChat('ChattingRoom', roomId, GMmessage, partnerId ,"GM");
+            await updateChat(
+                'ChattingRoom',
+                roomId,
+                GMmessage,
+                partnerId,
+                'GM'
+            );
         }
         if (
             month != lastMonth ||
@@ -132,7 +141,13 @@ export default function PrivateChattingRoom() {
                 showBasicInfo: true,
             };
             setCurrentChat((state) => [...state, newMessage]);
-            await updateChat('ChattingRoom', roomId, newMessage, partnerId, currentUser.id );
+            await updateChat(
+                'ChattingRoom',
+                roomId,
+                newMessage,
+                partnerId,
+                currentUser.id
+            );
         } else if (
             month == lastMonth &&
             day == lastDay &&
@@ -147,7 +162,13 @@ export default function PrivateChattingRoom() {
                 showBasicInfo: false,
             };
             setCurrentChat((state) => [...state, newMessage]);
-            await updateChat('ChattingRoom', roomId, newMessage, partnerId, currentUser.id );
+            await updateChat(
+                'ChattingRoom',
+                roomId,
+                newMessage,
+                partnerId,
+                currentUser.id
+            );
         }
     };
 
@@ -168,11 +189,27 @@ export default function PrivateChattingRoom() {
         setIsPageFocused(false);
         dispatch(close());
     };
+    const handleImageClick = () => {
+        fileInputRef.current.click();
+    };
+
+    const handleImageChange = (event) => {
+        const file = event.target.files[0];
+        setImageUpload(file);
+        console.log(file);
+        if (file && file.type.match('image.*')) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                setImagePreview(e.target.result); // 이 결과를 `src`로 사용하여 이미지 미리보기를 보여줍니다.
+            };
+            reader.readAsDataURL(file);
+        }
+    };
 
     return (
         <>
             <div className={style.container}>
-                {user &&currentUser&& (
+                {user && currentUser && (
                     <>
                         <div className={style.chat_header}>
                             {partner && <div> {partner.displayName}</div>}
@@ -183,27 +220,26 @@ export default function PrivateChattingRoom() {
                                 currentChat.length > 0 &&
                                 currentChat.map((chat, index) => (
                                     <ul key={index} className={style.chatItem}>
-                                        {chat.sender === currentUser.id &&
-                                            (
-                                                <CurrentUserChat
-                                                    key={chat.id}
-                                                    chat = {chat}
-                                                    partner = {partner}
-                                                    roomId = {roomId}
-                                                />
-                                            )}
-                                        {chat.sender === partnerId&& (
-                                                <PartnerUserChat
-                                                    key={index}
-                                                    avatar={partner.avatar}
-                                                    displayName={
-                                                        partner.displayName
-                                                    }
-                                                    roomId={roomId}
-                                                    chat = {chat}
-                                                    user = {currentUser}
-                                                />
-                                            )}
+                                        {chat.sender === currentUser.id && (
+                                            <CurrentUserChat
+                                                key={chat.id}
+                                                chat={chat}
+                                                partner={partner}
+                                                roomId={roomId}
+                                            />
+                                        )}
+                                        {chat.sender === partnerId && (
+                                            <PartnerUserChat
+                                                key={index}
+                                                avatar={partner.avatar}
+                                                displayName={
+                                                    partner.displayName
+                                                }
+                                                roomId={roomId}
+                                                chat={chat}
+                                                user={currentUser}
+                                            />
+                                        )}
                                         {chat.sender == 'GM' && (
                                             <ChatDate date={chat.createdAt} />
                                         )}
@@ -213,27 +249,41 @@ export default function PrivateChattingRoom() {
                         <div ref={scrollDown}></div>
 
                         <div className={style.chat_textfield}>
-                            <textarea
-                                type="text"
-                                value={content}
-                                onChange={(event) => {
-                                    setContent(event.target.value);
-                                }}
-                                onKeyDown={(event) => {
-                                    if (
-                                        event.key === 'Enter' &&
-                                        !event.shiftKey
-                                    ) {
-                                        if (content.length > 0) {
-                                            event.preventDefault(); // 텍스트 영역에서 엔터키로 인한 줄바꿈 방지
-                                            handleSubmit();
+                            <input
+                                type="file"
+                                className={style.fileInput}
+                                ref={fileInputRef}
+                                onChange={handleImageChange}
+                            />
+                            <div>
+                                <img
+                                    src={defaultImg}
+                                    className={style.defaultImg}
+                                    onClick={handleImageClick}
+                                />
+                                <textarea
+                                    type="text"
+                                    value={content}
+                                    onChange={(event) => {
+                                        setContent(event.target.value);
+                                    }}
+                                    onKeyDown={(event) => {
+                                        if (
+                                            event.key === 'Enter' &&
+                                            !event.shiftKey
+                                        ) {
+                                            if (content.length > 0) {
+                                                event.preventDefault(); // 텍스트 영역에서 엔터키로 인한 줄바꿈 방지
+                                                handleSubmit();
+                                            }
+                                            if (content.length == 0) {
+                                                event.preventDefault();
+                                            }
                                         }
-                                        if (content.length == 0) {
-                                            event.preventDefault();
-                                        }
-                                    }
-                                }}
-                            ></textarea>
+                                    }}
+                                ></textarea>
+                            </div>
+
                             {content.length > 0 && (
                                 <button onClick={handleSubmit}>send</button>
                             )}

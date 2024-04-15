@@ -142,6 +142,7 @@ export default function MarketItemForm({ doAction, data }) {
             reader.readAsDataURL(file);
         }
     };
+    
     const deleteFromPreviewArray = () => {
         const newArray = [
             ...imagePreviews.slice(0, currentIndex),
