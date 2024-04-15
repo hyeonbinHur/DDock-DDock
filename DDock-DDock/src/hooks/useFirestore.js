@@ -341,8 +341,6 @@ export const useFirestore = (collection) => {
                     user2: user2.id,
                     createdAt,
                     chat: [],
-                    user1_unread: [],
-                    user2_unread: [],
                 });
                 dispatchIsNotCancelled({
                     type: 'ADD_NEWUSER',

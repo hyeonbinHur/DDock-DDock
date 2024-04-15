@@ -4,15 +4,6 @@ import { useEffect, useState } from 'react';
 import { useDocument } from '../../hooks/useDocument';
 
 export default function PartnerUserChat({
-    // content,
-    // avatar,
-    // displayName,
-    // date,
-    // showBasicInfo,
-    // user,
-    // roomId,
-    // chatId,
-
     avatar,
     displayName,
     roomId,
@@ -31,33 +22,6 @@ export default function PartnerUserChat({
 
     const { document: chatRoom } = useDocument('ChattingRoom', roomId);
     const { document: currentUser } = useDocument('User', user.id);
-
-
-    // useEffect(() => {
-    //     if (chatRoom) {
-    //         if (chatRoom.user1 === user) {
-    //             if (chatRoom.user1_unread.some((chat) => chat.id === chatId)) {
-    //                 setRead(false);
-    //             } else if (
-    //                 !chatRoom.user1_unread.some((chat) => chat.id === chatId)
-    //             ) {
-    //                 setRead(true);
-    //             }
-    //         } else if (chatRoom.user2 === user) {
-    //             ``;
-    //             if (chatRoom.user2_unread.some((chat) => chat.id === chatId)) {
-    //                 setRead(false);
-    //             } else if (
-    //                 !chatRoom.user2_unread.some((chat) => chat.id === chatId)
-    //             ) {
-    //                 setRead(true);
-    //             }
-    //         }
-    //     }
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [chatRoom]);
-
-    
     useEffect(() => {
         if (chatRoom && currentUser?.unread) {
             if (
