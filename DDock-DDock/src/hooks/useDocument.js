@@ -8,7 +8,6 @@ export function useDocument(collection, id) {
     useEffect(() => {
 
         const ref = projectFirestore.collection(collection).doc(id);
-
         const unsubscribe = ref.onSnapshot(
             (snapshot) => {
                 if (snapshot.data()) {

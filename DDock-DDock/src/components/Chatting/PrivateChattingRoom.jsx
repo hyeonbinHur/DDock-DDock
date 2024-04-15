@@ -92,7 +92,7 @@ export default function PrivateChattingRoom() {
     }, [isPageFocused]);
 
     const tryToReadMessaged = async () => {
-        await readChat('User', roomId, currentUser?.id);
+        await readChat('User', roomId, user?.uid);
     };
 
     const handleSubmit = async () => {
@@ -175,7 +175,7 @@ export default function PrivateChattingRoom() {
     return (
         <>
             <div className={style.container}>
-                {user && (
+                {user &&currentUser&& (
                     <>
                         <div className={style.chat_header}>
                             {partner && <div> {partner.displayName}</div>}
