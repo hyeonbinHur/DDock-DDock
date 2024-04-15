@@ -66,7 +66,7 @@ export default function PartnerUserChat({
                 currentUser.unread.map((room) => {
                     if (room.roomId === chatRoom.id) {
                         if (
-                            room.chat.map(
+                            room.chat.some(
                                 (userUnreadChat) => userUnreadChat.id == chat.id
                             )
                         ) {
@@ -79,7 +79,7 @@ export default function PartnerUserChat({
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [chatRoom, currentUser?.unread]);
+    }, [currentUser?.unread]);
 
 
     useEffect(() => {

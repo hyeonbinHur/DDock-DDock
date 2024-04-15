@@ -91,7 +91,6 @@ export default function PrivateChattingRoom() {
     }, [isPageFocused]);
 
     const tryToReadMessaged = async () => {
-
         await readChat('User', roomId, currentUser?.id);
     };
 

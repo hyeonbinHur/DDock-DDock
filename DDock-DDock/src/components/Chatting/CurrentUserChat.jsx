@@ -16,6 +16,7 @@ export default function CurrentUserChat({ chat, partner, roomId }) {
     const { document: partnerInfo } = useDocument('User', partner.id);
 
     useEffect(() => {
+        console.log('읽긴함');
         if (chatRoom && partnerInfo?.unread) {
             if (
                 partnerInfo.unread.some((room) => room.roomId === chatRoom.id)
@@ -23,7 +24,7 @@ export default function CurrentUserChat({ chat, partner, roomId }) {
                 partnerInfo.unread.map((room) => {
                     if (room.roomId === chatRoom.id) {
                         if (
-                            room.chat.map(
+                            room.chat.some(
                                 (userUnreadChat) => userUnreadChat.id == chat.id
                             )
                         ) {
