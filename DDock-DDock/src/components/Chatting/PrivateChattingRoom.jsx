@@ -124,6 +124,8 @@ export default function PrivateChattingRoom() {
                 content: null,
                 sender: 'GM',
                 createdAt: createdAt,
+                type:'txt'
+
             };
             setCurrentChat((state) => [...state, GMmessage]);
             await updateChat(
@@ -147,6 +149,8 @@ export default function PrivateChattingRoom() {
                 sender: user?.uid,
                 createdAt: createdAt,
                 showBasicInfo: true,
+                type:'txt'
+
             };
             setCurrentChat((state) => [...state, newMessage]);
             await updateChat(
@@ -154,7 +158,8 @@ export default function PrivateChattingRoom() {
                 roomId,
                 newMessage,
                 partnerId,
-                currentUser.id
+                currentUser.id,
+
             );
         } else if (
             month == lastMonth &&
@@ -168,6 +173,7 @@ export default function PrivateChattingRoom() {
                 sender: user?.uid,
                 createdAt: createdAt,
                 showBasicInfo: false,
+                type:'txt'
             };
             setCurrentChat((state) => [...state, newMessage]);
             await updateChat(
@@ -216,6 +222,7 @@ export default function PrivateChattingRoom() {
 
     function openImageSendModal() {
         modal.current.open();
+        setImagePreview(undefined);
     }
 
     return (
@@ -223,7 +230,12 @@ export default function PrivateChattingRoom() {
             <div className={style.container}>
                 {user && currentUser && (
                     <>
-                        <ImgMessageModal ref={modal} preview={undefined} />
+                        <ImgMessageModal
+                            ref={modal}
+                            preview={undefined}
+                            uploadImg={imageUpload}
+                            myId={currentUser.id}
+                        />
 
                         <div className={style.chat_header}>
                             {partner && <div> {partner.displayName}</div>}

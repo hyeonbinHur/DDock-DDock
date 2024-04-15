@@ -1,7 +1,7 @@
 import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
-const ImgMessageModal = forwardRef(function ImgMessageModal({ preview }, ref) {
+const ImgMessageModal = forwardRef(function ImgMessageModal({ preview, uploadImg, myId }, ref) {
     const modal = useRef(null);
 
     useImperativeHandle(ref, () => {

@@ -1,5 +1,6 @@
 import { forwardRef, useRef, useImperativeHandle, useState } from 'react';
 import { createPortal } from 'react-dom';
+
 const DisplayNameModal = forwardRef(function DisplayNameModal({user},ref) {
     const modal = useRef(null);
     const [displayName, setDisplayName] = useState('');
