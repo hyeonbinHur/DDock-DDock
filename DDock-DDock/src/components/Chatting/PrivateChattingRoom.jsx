@@ -11,6 +11,7 @@ import { timestamp } from '../../firebase/config';
 import ChatDate from './Chatdate';
 import { v4 as uuidv4 } from 'uuid';
 import defaultImg from '../../assets/defaultImg.png';
+import ImgMessageModal from '../Modal/ImgMessgeModal';
 
 export default function PrivateChattingRoom() {
     const dispatch = useDispatch();
@@ -30,9 +31,10 @@ export default function PrivateChattingRoom() {
     const [lastDay, setLastDay] = useState(null);
     const [lastHour, setLastHour] = useState(null);
     const [lastMinute, setLastMinute] = useState(null);
+    const modal = useRef();
 
     const [imageUpload, setImageUpload] = useState(undefined); //업로드된 이미지들
-    const [imagePreviews, setImagePreview] = useState(undefined); //선택한 이미지 미리보기
+    const [imagePreview, setImagePreview] = useState(undefined); //선택한 이미지 미리보기
     const fileInputRef = useRef();
 
     const scrollDownFn = () => {
@@ -94,10 +96,16 @@ export default function PrivateChattingRoom() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isPageFocused]);
 
+    useEffect(() => {
+        if (imagePreview !== undefined) {
+            console.log('열려라 참깨');
+            openImageSendModal();
+        }
+    }, [imagePreview]);
+
     const tryToReadMessaged = async () => {
         await readChat('User', roomId, user?.uid);
     };
-   
 
     const handleSubmit = async () => {
         setContent('');
@@ -206,11 +214,17 @@ export default function PrivateChattingRoom() {
         }
     };
 
+    function openImageSendModal() {
+        modal.current.open();
+    }
+
     return (
         <>
             <div className={style.container}>
                 {user && currentUser && (
                     <>
+                        <ImgMessageModal ref={modal} preview={undefined} />
+
                         <div className={style.chat_header}>
                             {partner && <div> {partner.displayName}</div>}
                             <button onClick={closeChatRoom}>X</button>
