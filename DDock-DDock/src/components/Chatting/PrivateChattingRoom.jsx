@@ -30,6 +30,8 @@ export default function PrivateChattingRoom() {
     const [lastHour, setLastHour] = useState(null);
     const [lastMinute, setLastMinute] = useState(null);
 
+    const [messageType, setMessageType] = useState('text');
+
     const scrollDownFn = () => {
         scrollDown.current?.scrollIntoView({ behavior: 'auto' });
     };
