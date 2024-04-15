@@ -14,6 +14,7 @@ export default function CurrentUserChat({ chat, partner, roomId }) {
 
     const { document: chatRoom } = useDocument('ChattingRoom', roomId);
     const { document: partnerInfo } = useDocument('User', partner.id);
+    const [messageLoading, setMessageLoading] = useState(true);
 
     useEffect(() => {
         console.log('읽긴함');
@@ -35,6 +36,11 @@ export default function CurrentUserChat({ chat, partner, roomId }) {
                     }
                 });
             }
+
+
+            if(chatRoom.chat.some((snapShot) => snapShot.id === chat.id)){
+                setMessageLoading(false);
+            }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [chatRoom, partnerInfo?.unread]);
@@ -55,7 +61,8 @@ export default function CurrentUserChat({ chat, partner, roomId }) {
                     {String(minute).padStart(2, '0')}
                 </span>
             )}
-            {!read && <span>1</span>}
+            {messageLoading && <span> 0 </span>}
+            {!read&& !messageLoading&& <span>1</span>}
             <span className={style.current_chat_content}>{chat.content}</span>
         </div>
     );

@@ -15,9 +15,7 @@ export default function PrivateChattingRoom() {
     const dispatch = useDispatch();
     const roomId = useSelector((state) => state.openChatRoom.roomId);
     const partnerId = useSelector((state) => state.openChatRoom.partnerId);
-
     const { updateChat, readChat } = useFirestore('ChattingRoom');
-
     const { user } = useAuthContext();
     const [content, setContent] = useState('');
     const { document: currentUser } = useDocument('User', user?.uid);
@@ -99,16 +97,13 @@ export default function PrivateChattingRoom() {
         setContent('');
         const createdAt = formatDate(timestamp.fromDate(new Date()));
         // const createdAt = "18/04/2024, 24:57:47";
-        
         const uuid = uuidv4();
         const [datePart, timePart] = createdAt.split(', ');
         // eslint-disable-next-line no-unused-vars
         const [day, month, year] = datePart.split('/').map(Number);
         // eslint-disable-next-line no-unused-vars
         const [hour, minute, second] = timePart.split(':').map(Number);
-        
-        console.log("last year" + lastYear);
-        console.log("year " + year);
+
 
         if (year != lastYear || month != lastMonth || day != lastDay) {
             console.log("GM message");
