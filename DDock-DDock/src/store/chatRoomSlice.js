@@ -10,12 +10,12 @@ const chatRoomSlice = createSlice({
     name: 'openChatRoom',
     initialState: initialState,
     reducers: {
-        open(state, action) {
+        open(state, action){
             state.openChatRoom = true;
             state.roomId = action.payload.roomId;
             state.partnerId = action.payload.partner;
         },
-        close(state) {
+        close(state){
             state.openChatRoom = false;
         },
     },

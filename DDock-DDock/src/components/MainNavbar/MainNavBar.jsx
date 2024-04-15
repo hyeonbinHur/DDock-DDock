@@ -7,18 +7,28 @@ import ChattingRoomList from '../Chatting/ChattingRoomList';
 import { useDocument } from '../../hooks/useDocument';
 import { useSelector } from 'react-redux';
 import PrivateChattingRoom from '../Chatting/PrivateChattingRoom';
-import toast, { Toaster } from 'react-hot-toast';
+import toast ,{ Toaster } from 'react-hot-toast';
+import { projectFirestore } from '../../firebase/config';
+
+
+const receiveDynamycUserInfo = async (id) => {
+    const ref = projectFirestore.collection('User').doc(id);
+    const senderRef = await ref.get();
+    const senderData = senderRef.data();
+    return senderData;
+    
+}
+
 
 export default function Navbar() {
     const { logout } = useLogout();
     const { user } = useAuthContext();
     const [showChatList, setShowChatList] = useState(false);
-
     const { document: currentUser } = useDocument('User', user?.uid);
-
     const openChatRoom = useSelector(
         (state) => state.openChatRoom.openChatRoom
     );
+
     const [oldUser, setOldUser] = useState(currentUser?.unread);
 
     const activeChatList = () => {
@@ -30,8 +40,7 @@ export default function Navbar() {
         if (oldUser) {
             if(oldUser){
                 if(oldUser.length === currentUser.unread.length){
-                    oldUser.forEach((chat) => {
-                        currentUser.unread.some((real) => {
+                    oldUser.forEach((chat) => {currentUser.unread.some((real) => {
                             if (chat.roomId == real.roomId) {
                                 if (chat.chat.length < real.chat.length) {
                                     receiveMessageFromOldRoom(
@@ -52,16 +61,20 @@ export default function Navbar() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentUser?.unread]);
 
-    const notify = (sender, content) => {
+    const notify = (sender, content) => {        
         toast(sender + '님이 메세지를 보냈어요 : ' + content);
     };
 
-    const receiveMessageFromOldRoom = (content, sender) => {
-        notify(sender, content.content);
+    const receiveMessageFromOldRoom = async (content, sender) => {
+        const senderInfo = await receiveDynamycUserInfo(sender);
+        notify(senderInfo.displayName, content.content);
+
     };
 
-    const receiveMessageFromNewRoom = (content, sender) => {
-        notify(sender, content.content);
+    const receiveMessageFromNewRoom = async (content, sender) => {
+        const senderInfo = await receiveDynamycUserInfo(sender);
+        notify(senderInfo.displayName, content.content);
+
     };
 
     return (

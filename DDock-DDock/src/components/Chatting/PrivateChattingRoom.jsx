@@ -82,6 +82,7 @@ export default function PrivateChattingRoom() {
 
     useEffect(() => {
         if (isPageFocused) {
+            console.log("들어옴")
             tryToReadMessaged();
         } else if (!isPageFocused) {
             console.log('포커스 해제');

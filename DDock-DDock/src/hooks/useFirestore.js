@@ -321,9 +321,7 @@ export const useFirestore = (collection) => {
     const createChattingRoom = async (user1, user2, collection) => {
         setLoading(true);
         dispatch({ type: 'IS_PENDING' });
-
         const chatRef = projectFirestore.collection(collection);
-
         try {
             const createdAt = formatDate(timestamp.fromDate(new Date()));
             let chatPartnerExist = false;
