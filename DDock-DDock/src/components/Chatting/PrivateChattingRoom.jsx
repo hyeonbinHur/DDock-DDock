@@ -98,21 +98,23 @@ export default function PrivateChattingRoom() {
         setContent('');
         const createdAt = formatDate(timestamp.fromDate(new Date()));
         const uuid = uuidv4();
-
         const [datePart, timePart] = createdAt.split(', ');
         // eslint-disable-next-line no-unused-vars
         const [day, month, year] = datePart.split('/').map(Number);
         // eslint-disable-next-line no-unused-vars
         const [hour, minute, second] = timePart.split(':').map(Number);
+        console.log("last year" + lastYear);
+        console.log("year " + year);
 
         if (year != lastYear || month != lastMonth || day != lastDay) {
+            console.log("GM message");
             const GMmessage = {
                 content: null,
                 sender: 'GM',
                 createdAt: createdAt,
             };
             setCurrentChat((state) => [...state, GMmessage]);
-            await updateChat('ChattingRoom', roomId, GMmessage, "GM");
+            await updateChat('ChattingRoom', roomId, GMmessage, partnerId ,"GM");
         }
         if (
             month != lastMonth ||

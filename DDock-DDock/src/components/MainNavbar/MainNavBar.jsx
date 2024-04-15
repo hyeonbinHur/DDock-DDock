@@ -9,8 +9,6 @@ import { useSelector } from 'react-redux';
 import PrivateChattingRoom from '../Chatting/PrivateChattingRoom';
 import toast, { Toaster } from 'react-hot-toast';
 
-const notify = () => toast('Here is your toast.');
-
 export default function Navbar() {
     const { logout } = useLogout();
     const { user } = useAuthContext();
@@ -28,24 +26,45 @@ export default function Navbar() {
     };
 
     useEffect(() => {
-        console.log(currentUser.unread);
-        console.log(oldUser);
-
+        // 올드 유저를 저장하고, 올드유저 unread값이랑 현 업데이트된 unread값이 다르면 토스트
         if (oldUser) {
             console.log('이펙트 들어옴');
+            if(oldUser){
+                if(oldUser.length === currentUser.unread.length){
+                    oldUser.forEach((chat) => {
+                        currentUser.unread.some((real) => {
+                            if (chat.roomId == real.roomId) {
+                                console.log('들어오긴함');
+                                if (chat.chat.length < real.chat.length) {
+                                    receiveMessageFromOldRoom(
+                                        real.chat[real.chat.length - 1],
+                                        real.sender
+                                    );
+                                }
+                            }
+                        });
+                    });
 
-            oldUser.forEach((chat) => {
-                currentUser.unread.forEach((real) => {
-                    if (chat.roomId == real.roomId) {
-                        console.log('들어오긴함');
-                        if (chat.chat.length < real.chat.length) {
-                            notify();
-                        }
-                    }
-                });
-            });
+                }else if (oldUser.length !== currentUser.unread.length){
+                    receiveMessageFromNewRoom(currentUser.unread[currentUser.unread.length-1].chat[0].content ,currentUser.unread[currentUser.unread.length-1].sender);
+                }
+            }
         }
+        setOldUser(currentUser?.unread);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentUser?.unread]);
+
+    const notify = (sender, content) => {
+        toast(sender + '님이 메세지를 보냈어요 : ' + content);
+    };
+
+    const receiveMessageFromOldRoom = (content, sender) => {
+        notify(sender, content.content);
+    };
+
+    const receiveMessageFromNewRoom = (content, sender) => {
+        notify(sender, content.content);
+    };
 
     return (
         <div>
