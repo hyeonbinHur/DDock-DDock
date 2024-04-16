@@ -56,7 +56,10 @@ export default function Navbar() {
 
                 }else if (oldUser.length !== currentUser.unread.length){
                     const type = currentUser.unread[currentUser.unread.length-1].chat[0].type
-                    receiveMessageFromNewRoom(currentUser.unread[currentUser.unread.length-1].chat[0].content, type ,currentUser.unread[currentUser.unread.length-1].sender);
+                    console.log(currentUser.unread[currentUser.unread.length-1].chat[0])
+                    console.log(currentUser.unread[currentUser.unread.length-1].chat[0].content)
+
+                    receiveMessageFromNewRoom(currentUser.unread[currentUser.unread.length-1].chat[0], type ,currentUser.unread[currentUser.unread.length-1].sender);
                 }
             }
         }
