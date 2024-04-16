@@ -401,7 +401,6 @@ export const useFirestore = (collection) => {
     }
 
     const readChat = async (collection, roomId, myId) => {
-        console.log('read chat start');
         const userRef = projectFirestore.collection(collection);
         setLoading(true);
         dispatch({ type: 'IS_PENDING' });
@@ -423,7 +422,6 @@ export const useFirestore = (collection) => {
                 const updatedChat = await userRef.doc(myId).update({
                     unread: oldUserUnreadArray,
                 });
-                console.log('read chat done');
                 return updatedChat;
             }
         } catch (error) {

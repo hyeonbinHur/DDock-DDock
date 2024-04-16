@@ -35,6 +35,7 @@ export default function PrivateChattingRoom() {
 
     const [imageUpload, setImageUpload] = useState(undefined); //업로드된 이미지들
     const [imagePreview, setImagePreview] = useState(undefined); //선택한 이미지 미리보기
+    const [imageUrl, setImageUrl] = useState(undefined);
     const fileInputRef = useRef();
 
     const scrollDownFn = () => {
@@ -87,7 +88,6 @@ export default function PrivateChattingRoom() {
 
     useEffect(() => {
         if (isPageFocused) {
-            console.log('들어옴');
             tryToReadMessaged();
         } else if (!isPageFocused) {
             console.log('포커스 해제');
@@ -98,26 +98,35 @@ export default function PrivateChattingRoom() {
 
     useEffect(() => {
         if (imagePreview !== undefined) {
-            console.log(imagePreview);
             openImageSendModal();
         }
     }, [imagePreview]);
+    
+    useEffect(() => {
+        if (imageUrl !== undefined) {
+            openImageSendModal();
+        }
+    }, [imageUrl]);
+    
 
     const doAction = (action) => {
         if(action === "close"){
             console.log("프리뷰 지움")
             setImagePreview(undefined);
+            setImageUpload(undefined);
         }
+    }
+
+    const receiveURL = async (URL) => {
+        setImageUrl(undefined);
+        const createdAt = formatDate(timestamp.fromDate(new Date()));
+        await sendMessage (createdAt, URL);
     }
 
     const tryToReadMessaged = async () => {
         await readChat('User', roomId, user?.uid);
     };
-
-    const handleSubmit = async () => {
-        setContent('');
-        const createdAt = formatDate(timestamp.fromDate(new Date()));
-        // const createdAt = "18/04/2024, 24:57:47";
+    const sendMessage = async (createdAt, content) => {
         const uuid = uuidv4();
         const [datePart, timePart] = createdAt.split(', ');
         // eslint-disable-next-line no-unused-vars
@@ -188,6 +197,14 @@ export default function PrivateChattingRoom() {
                 currentUser.id
             );
         }
+
+    }
+    const handleSubmit = async () => {
+        setContent('');
+        const createdAt = formatDate(timestamp.fromDate(new Date()));
+        // const createdAt = "18/04/2024, 24:57:47";
+        await sendMessage (createdAt, content);
+       
     };
 
     function formatDate(timestamp) {
@@ -314,8 +331,10 @@ export default function PrivateChattingRoom() {
                                 ref={modal}
                                 preview={imagePreview}
                                 uploadImg={imageUpload}
+                                roomId={roomId}
                                 myId={currentUser.id}
                                 doAction={doAction}
+                                sendURL= {receiveURL}
                             />
                         </div>
                     </>

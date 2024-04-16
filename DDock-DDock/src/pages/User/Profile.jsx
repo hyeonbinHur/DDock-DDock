@@ -102,14 +102,14 @@ export default function ProfilePage() {
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0, width, height);
 
-            let quality = 1; // 시작 품질
+            let quality = 1;
             const attemptResize = () => {
                 canvas.toBlob(
                     (blob) => {
                         if (blob.size > maxFileSize && quality > 0.1) {
-                            quality -= 0.1; // 품질 감소
+                            quality -= 0.1; 
                             canvas.toDataURL('image/jpeg', quality);
-                            attemptResize(); // 재귀적으로 품질 조절
+                            attemptResize(); 
                         } else {
                             const resizedFile = new File([blob], file.name, {
                                 type: 'image/jpeg',
