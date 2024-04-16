@@ -45,7 +45,6 @@ export default function PartnerUserChat({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentUser?.unread]);
 
-
     useEffect(() => {
         if (chat.showBasicInfo === false) {
             setCssSytle(style.partner_chat_container);
@@ -71,11 +70,20 @@ export default function PartnerUserChat({
             )}
 
             <div>
-                <span className={style.partner_chat_content}>{chat.content}</span>
+                {chat.type === 'txt' && (
+                    <span className={style.current_chat_content}>
+                        {chat.content}
+                    </span>
+                )}
+
+                {chat.type === 'img' && (
+                    <img className={style.partnerimageConatiner} src={chat.content} />
+                )}
                 {!read && <span>1</span>}
                 {chat.showBasicInfo && (
                     <span className={style.partner_timeContainer}>
-                        {String(hour).padStart(2, '0')} : {String(minute).padStart(2, '0')}
+                        {String(hour).padStart(2, '0')} :{' '}
+                        {String(minute).padStart(2, '0')}
                     </span>
                 )}
             </div>

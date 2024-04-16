@@ -37,8 +37,7 @@ export default function CurrentUserChat({ chat, partner, roomId }) {
                 });
             }
 
-
-            if(chatRoom.chat.some((snapShot) => snapShot.id === chat.id)){
+            if (chatRoom.chat.some((snapShot) => snapShot.id === chat.id)) {
                 setMessageLoading(false);
             }
         }
@@ -62,8 +61,16 @@ export default function CurrentUserChat({ chat, partner, roomId }) {
                 </span>
             )}
             {messageLoading && <span> 0 </span>}
-            {!read&& !messageLoading&& <span>1</span>}
-            <span className={style.current_chat_content}>{chat.content}</span>
+            {!read && !messageLoading && <span>1</span>}
+            {chat.type === 'txt' && (
+                <span className={style.current_chat_content}>
+                    {chat.content}
+                </span>
+            )}
+
+            {chat.type === 'img' && (
+                <img className={style.imageConatiner} src ={chat.content}/>
+            )}
         </div>
     );
 }
