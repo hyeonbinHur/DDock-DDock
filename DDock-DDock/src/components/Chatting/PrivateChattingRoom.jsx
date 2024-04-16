@@ -120,13 +120,13 @@ export default function PrivateChattingRoom() {
     const receiveURL = async (URL) => {
         setImageUrl(undefined);
         const createdAt = formatDate(timestamp.fromDate(new Date()));
-        await sendMessage (createdAt, URL);
+        await sendMessage (createdAt, URL ,"img");
     }
 
     const tryToReadMessaged = async () => {
         await readChat('User', roomId, user?.uid);
     };
-    const sendMessage = async (createdAt, content) => {
+    const sendMessage = async (createdAt, content, type) => {
         const uuid = uuidv4();
         const [datePart, timePart] = createdAt.split(', ');
         // eslint-disable-next-line no-unused-vars
@@ -164,7 +164,7 @@ export default function PrivateChattingRoom() {
                 sender: user?.uid,
                 createdAt: createdAt,
                 showBasicInfo: true,
-                type: 'txt',
+                type: type,
             };
             setCurrentChat((state) => [...state, newMessage]);
             await updateChat(
@@ -186,7 +186,7 @@ export default function PrivateChattingRoom() {
                 sender: user?.uid,
                 createdAt: createdAt,
                 showBasicInfo: false,
-                type: 'txt',
+                type: type,
             };
             setCurrentChat((state) => [...state, newMessage]);
             await updateChat(
@@ -203,7 +203,7 @@ export default function PrivateChattingRoom() {
         setContent('');
         const createdAt = formatDate(timestamp.fromDate(new Date()));
         // const createdAt = "18/04/2024, 24:57:47";
-        await sendMessage (createdAt, content);
+        await sendMessage (createdAt, content, "txt");
        
     };
 

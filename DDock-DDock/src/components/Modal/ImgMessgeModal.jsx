@@ -54,6 +54,7 @@ const ImgMessageModal = forwardRef(function ImgMessageModal(
                             // };
                             // await updateDocument(userId, updatedUser, 'User');
                             await sendURL(url);
+                            doAction('close');
                             modal.current.close();
                         });
                     })

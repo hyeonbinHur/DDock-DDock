@@ -43,8 +43,10 @@ export default function Navbar() {
                     oldUser.forEach((chat) => {currentUser.unread.some((real) => {
                             if (chat.roomId == real.roomId) {
                                 if (chat.chat.length < real.chat.length) {
+                                    const type =  real.chat[real.chat.length - 1].type
                                     receiveMessageFromOldRoom(
                                         real.chat[real.chat.length - 1],
+                                        type,
                                         real.sender
                                     );
                                 }
@@ -53,7 +55,8 @@ export default function Navbar() {
                     });
 
                 }else if (oldUser.length !== currentUser.unread.length){
-                    receiveMessageFromNewRoom(currentUser.unread[currentUser.unread.length-1].chat[0].content ,currentUser.unread[currentUser.unread.length-1].sender);
+                    const type = currentUser.unread[currentUser.unread.length-1].chat[0].type
+                    receiveMessageFromNewRoom(currentUser.unread[currentUser.unread.length-1].chat[0].content, type ,currentUser.unread[currentUser.unread.length-1].sender);
                 }
             }
         }
@@ -61,19 +64,24 @@ export default function Navbar() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentUser?.unread]);
 
-    const notify = (sender, content) => {        
-        toast(sender + '님이 메세지를 보냈어요 : ' + content);
+    const notify = (sender, content, type) => {       
+        if(type === "txt"){
+            toast(sender + '님이 메세지를 보냈어요 : ' + content);
+        } else if(type ==='img'){
+            toast(sender + '님이 이미지를 보냈어요');
+
+        }
     };
 
-    const receiveMessageFromOldRoom = async (content, sender) => {
+    const receiveMessageFromOldRoom = async (content, type,sender) => {
         const senderInfo = await receiveDynamycUserInfo(sender);
-        notify(senderInfo.displayName, content.content);
+        notify(senderInfo.displayName, content.content, type);
 
     };
 
-    const receiveMessageFromNewRoom = async (content, sender) => {
+    const receiveMessageFromNewRoom = async (content, type,sender) => {
         const senderInfo = await receiveDynamycUserInfo(sender);
-        notify(senderInfo.displayName, content.content);
+        notify(senderInfo.displayName, content.content, type);
 
     };
 

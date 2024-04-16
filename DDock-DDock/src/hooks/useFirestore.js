@@ -154,6 +154,8 @@ export const useFirestore = (collection) => {
                             content: newMessage.content,
                             createdAt: newMessage.createdAt,
                             id: newMessage.id,
+                            type: newMessage.type,
+
                         });
                     }
                 });
@@ -178,6 +180,7 @@ export const useFirestore = (collection) => {
                             content: newMessage.content,
                             createdAt: newMessage.createdAt,
                             id: newMessage.id,
+                            type: newMessage.type,
                         },
                     ],
                 };
