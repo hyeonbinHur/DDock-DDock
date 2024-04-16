@@ -136,20 +136,8 @@ export default function PrivateChattingRoom() {
         // eslint-disable-next-line no-unused-vars
         const [hour, minute, second] = timePart.split(':').map(Number);
 
-        if(currentChat.length === 0 || currentChat.length === 1 ) {
-            const newMessage = {
-                id: uuid,
-                content: content,
-                sender: user?.uid,
-                createdAt: createdAt,
-                showBasicInfo: true,
-                type: type,
-            };
-            setCurrentChat([newMessage]);
-
-        }
-        if(currentChat.length === 0 ){
-           await startChat(roomId ,currentUser.id, partnerId)
+        if (currentChat.length === 0) {
+            await startChat(roomId, currentUser.id, partnerId);
         }
         if (year != lastYear || month != lastMonth || day != lastDay) {
             console.log('GM message');
@@ -159,7 +147,7 @@ export default function PrivateChattingRoom() {
                 createdAt: createdAt,
                 type: 'txt',
             };
-            setCurrentChat((state) => [...state, GMmessage]);
+           setCurrentChat((state) => [...state, GMmessage]);
             await updateChat(
                 'ChattingRoom',
                 roomID,
@@ -214,13 +202,12 @@ export default function PrivateChattingRoom() {
                 currentUser.id
             );
         }
-
     };
 
     const handleSubmit = async () => {
         setContent('');
         const createdAt = formatDate(timestamp.fromDate(new Date()));
-        // const createdAt = "18/04/2024, 24:57:47";
+        // const createdAt = "18/04/2024, 24:57:47";        
         await sendMessage(createdAt, content, 'txt');
     };
 

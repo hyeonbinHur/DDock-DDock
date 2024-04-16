@@ -5,7 +5,7 @@ import style from './UserDropDown.module.css';
 import { useDocument } from '../../hooks/useDocument';
 import { useDispatch } from 'react-redux';
 
-import { open } from '../../store/chatRoomSlice';
+import { open,set } from '../../store/chatRoomSlice';
 
 
 export default function UserDropDown({ writer }) {
@@ -19,9 +19,12 @@ export default function UserDropDown({ writer }) {
 
     const startChatting = async () => {
         if(currentUser.id !== writer.id){
+            dispatch(
+                open({ roomId: undefined, partner: writer.id })
+            )
             const roomID =  await createChattingRoom(currentUser,writer,'ChattingRoom')
             dispatch(
-                open({ roomId: roomID, partner: writer.id })
+                set({ roomId: roomID})
             )
             console.log(roomID)
         }
