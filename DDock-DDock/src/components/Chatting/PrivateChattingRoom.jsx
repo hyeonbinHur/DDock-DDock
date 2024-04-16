@@ -98,10 +98,17 @@ export default function PrivateChattingRoom() {
 
     useEffect(() => {
         if (imagePreview !== undefined) {
-            console.log('열려라 참깨');
+            console.log(imagePreview);
             openImageSendModal();
         }
     }, [imagePreview]);
+
+    const doAction = (action) => {
+        if(action === "close"){
+            console.log("프리뷰 지움")
+            setImagePreview(undefined);
+        }
+    }
 
     const tryToReadMessaged = async () => {
         await readChat('User', roomId, user?.uid);
@@ -124,8 +131,7 @@ export default function PrivateChattingRoom() {
                 content: null,
                 sender: 'GM',
                 createdAt: createdAt,
-                type:'txt'
-
+                type: 'txt',
             };
             setCurrentChat((state) => [...state, GMmessage]);
             await updateChat(
@@ -149,8 +155,7 @@ export default function PrivateChattingRoom() {
                 sender: user?.uid,
                 createdAt: createdAt,
                 showBasicInfo: true,
-                type:'txt'
-
+                type: 'txt',
             };
             setCurrentChat((state) => [...state, newMessage]);
             await updateChat(
@@ -158,8 +163,7 @@ export default function PrivateChattingRoom() {
                 roomId,
                 newMessage,
                 partnerId,
-                currentUser.id,
-
+                currentUser.id
             );
         } else if (
             month == lastMonth &&
@@ -173,7 +177,7 @@ export default function PrivateChattingRoom() {
                 sender: user?.uid,
                 createdAt: createdAt,
                 showBasicInfo: false,
-                type:'txt'
+                type: 'txt',
             };
             setCurrentChat((state) => [...state, newMessage]);
             await updateChat(
@@ -222,7 +226,6 @@ export default function PrivateChattingRoom() {
 
     function openImageSendModal() {
         modal.current.open();
-        setImagePreview(undefined);
     }
 
     return (
@@ -230,13 +233,6 @@ export default function PrivateChattingRoom() {
             <div className={style.container}>
                 {user && currentUser && (
                     <>
-                        <ImgMessageModal
-                            ref={modal}
-                            preview={undefined}
-                            uploadImg={imageUpload}
-                            myId={currentUser.id}
-                        />
-
                         <div className={style.chat_header}>
                             {partner && <div> {partner.displayName}</div>}
                             <button onClick={closeChatRoom}>X</button>
@@ -313,6 +309,14 @@ export default function PrivateChattingRoom() {
                             {content.length > 0 && (
                                 <button onClick={handleSubmit}>send</button>
                             )}
+
+                            <ImgMessageModal
+                                ref={modal}
+                                preview={imagePreview}
+                                uploadImg={imageUpload}
+                                myId={currentUser.id}
+                                doAction={doAction}
+                            />
                         </div>
                     </>
                 )}
