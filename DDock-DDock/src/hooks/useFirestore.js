@@ -353,6 +353,7 @@ export const useFirestore = (collection) => {
                 const newUser2ChatRoom = {
                     roomId: newChattingRoom.id,
                     partner: user1.id,
+                    started: false,
                 };
                 const updatedUser2ChatRoom = [
                     ...olduser2ChatRoom,
@@ -367,6 +368,8 @@ export const useFirestore = (collection) => {
                 const newUser1ChatRoom = {
                     roomId: newChattingRoom.id,
                     partner: user2.id,
+                    started: false,
+
                 };
                 const updatedUser1ChatRoom = [
                     ...olduser1ChatRoom,
@@ -425,12 +428,64 @@ export const useFirestore = (collection) => {
                 const updatedChat = await userRef.doc(myId).update({
                     unread: oldUserUnreadArray,
                 });
+                dispatchIsNotCancelled({
+                    type: 'UPDATE_DOCUMENT',
+                    payload: updatedChat,
+                });
+                setLoading(false);
                 return updatedChat;
             }
         } catch (error) {
             console.log(error);
         }
     };
+
+    const startChat = async (roomID, myId, partnerId) => {
+        const myRef = projectFirestore.collection('User');
+        const partnerRef = projectFirestore.collection('User');
+
+        setLoading(true);
+        dispatch({ type: 'IS_PENDING' });
+        try{
+
+            const myDoc = await myRef.doc(myId).get()
+            const myData = myDoc.data()
+
+            const partnerDoc = await partnerRef.doc(partnerId).get()
+            const partnerData = partnerDoc.data()
+
+            const myChatRoom = myData.chatRoom
+            myChatRoom.forEach((chatRoom)=>{
+                if(chatRoom.roomId === roomID){
+                    chatRoom.started = true;
+                }
+            })
+
+            await myRef.doc(myId).update({
+                chatRoom: myChatRoom
+            })
+
+            const partnerChatRoom = partnerData.chatRoom
+            partnerChatRoom.map((chatRoom) => {
+                if(chatRoom.roomId === roomID){
+                    console.log("찾긴함")
+                    chatRoom.started = true;
+                }
+            })
+            await partnerRef.doc(partnerId).update({
+                chatRoom: partnerChatRoom
+            })
+            
+            dispatchIsNotCancelled({
+                type: 'UPDATE_DOCUMENT',
+                payload: partnerChatRoom,
+            });
+            setLoading(false);
+        }catch(error){
+            console.log(error)
+        }
+         
+    }
 
     useEffect(() => {
         return () => setIsCancelled(!isCancelled);
@@ -444,6 +499,7 @@ export const useFirestore = (collection) => {
         createChattingRoom,
         updateChat,
         readChat,
+        startChat,
         response,
         loading,
     };

@@ -17,7 +17,7 @@ export default function PrivateChattingRoom() {
     const dispatch = useDispatch();
     const roomId = useSelector((state) => state.openChatRoom.roomId);
     const partnerId = useSelector((state) => state.openChatRoom.partnerId);
-    const { updateChat, readChat } = useFirestore('ChattingRoom');
+    const { updateChat, readChat, startChat } = useFirestore('ChattingRoom');
     const { user } = useAuthContext();
     const [content, setContent] = useState('');
     const { document: currentUser } = useDocument('User', user?.uid);
@@ -101,32 +101,34 @@ export default function PrivateChattingRoom() {
             openImageSendModal();
         }
     }, [imagePreview]);
-    
+
     useEffect(() => {
         if (imageUrl !== undefined) {
             openImageSendModal();
         }
     }, [imageUrl]);
-    
 
     const doAction = (action) => {
-        if(action === "close"){
-            console.log("프리뷰 지움")
+        if (action === 'close') {
+            console.log('프리뷰 지움');
             setImagePreview(undefined);
             setImageUpload(undefined);
         }
-    }
+    };
 
     const receiveURL = async (URL) => {
         setImageUrl(undefined);
         const createdAt = formatDate(timestamp.fromDate(new Date()));
-        await sendMessage (createdAt, URL ,"img");
-    }
+        await sendMessage(createdAt, URL, 'img');
+    };
 
     const tryToReadMessaged = async () => {
         await readChat('User', roomId, user?.uid);
     };
-    const sendMessage = async (createdAt, content, type) => {
+
+    const sendMessage = async (createdAt, content, type, getRoomID) => {
+        const roomID = getRoomID ? getRoomID : roomId;
+
         const uuid = uuidv4();
         const [datePart, timePart] = createdAt.split(', ');
         // eslint-disable-next-line no-unused-vars
@@ -134,6 +136,21 @@ export default function PrivateChattingRoom() {
         // eslint-disable-next-line no-unused-vars
         const [hour, minute, second] = timePart.split(':').map(Number);
 
+        if(currentChat.length === 0 || currentChat.length === 1 ) {
+            const newMessage = {
+                id: uuid,
+                content: content,
+                sender: user?.uid,
+                createdAt: createdAt,
+                showBasicInfo: true,
+                type: type,
+            };
+            setCurrentChat([newMessage]);
+
+        }
+        if(currentChat.length === 0 ){
+           await startChat(roomId ,currentUser.id, partnerId)
+        }
         if (year != lastYear || month != lastMonth || day != lastDay) {
             console.log('GM message');
             const GMmessage = {
@@ -145,7 +162,7 @@ export default function PrivateChattingRoom() {
             setCurrentChat((state) => [...state, GMmessage]);
             await updateChat(
                 'ChattingRoom',
-                roomId,
+                roomID,
                 GMmessage,
                 partnerId,
                 'GM'
@@ -169,7 +186,7 @@ export default function PrivateChattingRoom() {
             setCurrentChat((state) => [...state, newMessage]);
             await updateChat(
                 'ChattingRoom',
-                roomId,
+                roomID,
                 newMessage,
                 partnerId,
                 currentUser.id
@@ -191,20 +208,20 @@ export default function PrivateChattingRoom() {
             setCurrentChat((state) => [...state, newMessage]);
             await updateChat(
                 'ChattingRoom',
-                roomId,
+                roomID,
                 newMessage,
                 partnerId,
                 currentUser.id
             );
         }
 
-    }
+    };
+
     const handleSubmit = async () => {
         setContent('');
         const createdAt = formatDate(timestamp.fromDate(new Date()));
         // const createdAt = "18/04/2024, 24:57:47";
-        await sendMessage (createdAt, content, "txt");
-       
+        await sendMessage(createdAt, content, 'txt');
     };
 
     function formatDate(timestamp) {
@@ -224,6 +241,7 @@ export default function PrivateChattingRoom() {
         setIsPageFocused(false);
         dispatch(close());
     };
+
     const handleImageClick = () => {
         fileInputRef.current.click();
     };
@@ -334,7 +352,7 @@ export default function PrivateChattingRoom() {
                                 roomId={roomId}
                                 myId={currentUser.id}
                                 doAction={doAction}
-                                sendURL= {receiveURL}
+                                sendURL={receiveURL}
                             />
                         </div>
                     </>

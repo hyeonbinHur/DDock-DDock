@@ -18,8 +18,11 @@ const chatRoomSlice = createSlice({
         close(state){
             state.openChatRoom = false;
         },
+        set(state ,action){
+            state.roomId = action.payload.roomId;
+        }
     },
 });
 
-export const { open, close } = chatRoomSlice.actions;
+export const { open, close, set } = chatRoomSlice.actions;
 export default chatRoomSlice.reducer;

@@ -2,9 +2,8 @@ import style from './ChattingRoomList.module.css';
 import { useEffect, useState } from 'react';
 import ChattingRoomListItem from './ChattingRoomListItem';
 
-export default function ChattingRoomList({user}) {
+export default function ChattingRoomList({ user }) {
     const [chattingRoomList, setChattingRoomList] = useState([]);
-
 
     useEffect(() => {
         if (user) {
@@ -12,18 +11,18 @@ export default function ChattingRoomList({user}) {
         }
     }, [user]);
 
-
     return (
         <div className={style.popupContainer}>
-            {chattingRoomList.map((roomInfo) => {
-                return (
-                    <ChattingRoomListItem
-                        room={roomInfo}
-                        key={roomInfo.roomId}
-                        userId = {user.uid}
-                    />
-                );
-            })}
+            {chattingRoomList.map(
+                (roomInfo) =>
+                    roomInfo.started === true && (
+                        <ChattingRoomListItem
+                            room={roomInfo}
+                            key={roomInfo.roomId}
+                            userId={user.uid}
+                        />
+                    )
+            )}
         </div>
     );
 }
