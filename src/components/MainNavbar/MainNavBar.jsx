@@ -15,10 +15,8 @@ const receiveDynamycUserInfo = async (id) => {
     const ref = projectFirestore.collection('User').doc(id);
     const senderRef = await ref.get();
     const senderData = senderRef.data();
-    return senderData;
-    
+    return senderData;    
 }
-
 
 export default function Navbar() {
     const { logout } = useLogout();
