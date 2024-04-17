@@ -17,6 +17,7 @@ import { useAuthContext } from './hooks/useAuth';
 import DisplayNameModal from './components/Modal/DisplayNameModal';
 import ProfilePage from './pages/User/Profile';
 import Memo from '../src/pages/Memo'
+import ErrorPage from './pages/error/ErrorPage';
 
 // import MarketList from './components/MarketItem/MarketItemList';
 
@@ -27,6 +28,7 @@ function App() {
         {
             path: '/',
             element: <RootLayout />,
+            errorElement: <ErrorPage />,
             children: [
                 { path: '', element: <HomePage /> },
                 {

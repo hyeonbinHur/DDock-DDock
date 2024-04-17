@@ -28,6 +28,7 @@ export default function ReplyForm({ collection, Item, comment }) {
         const commentIndex = Item.comments.findIndex(
             (c) => c.id === comment_id
         );
+        
         if (commentIndex !== -1) {
             const commentToUpdate = Item.comments[commentIndex];
 
