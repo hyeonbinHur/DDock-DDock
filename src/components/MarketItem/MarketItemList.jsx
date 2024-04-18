@@ -17,17 +17,16 @@ export default function MarketList({ documents }) {
     const { user } = useAuthContext();
     const modal = useRef();
     const placeModal = useRef();
+
     const { document: userInfo } = useDocument('User', user?.uid);
-    const { updateDocument } = useFirestore('User');
+    const { updateDocument, response } = useFirestore('User');
 
     const [searchTitle, setSearchTitle] = useState('');
     const [searchedItem, setSearchedItem] = useState([]);
     const [results, setResults] = useState([]);
-
     const [userSi, setUserSi] = useState('');
     const [userGu, setUserGu] = useState('');
     const [userDong, setUserDong] = useState('');
-
     const [hasedPlace, setHasedPlace] = useState('');
     const [selectedPlace, setSelectedPlace] = useState('dong');
 
@@ -176,8 +175,11 @@ export default function MarketList({ documents }) {
         setResults(emptyArray);
     };
 
-    return (
+    return response.error ? (
+        <p> error </p>
+    ) : (
         <div>
+            <button onClick={() => console.log(response.error)}>ddd</button>
             <input
                 type="search"
                 placeholder="찾는 물건을 검색해 보세요"
