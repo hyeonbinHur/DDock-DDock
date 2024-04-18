@@ -31,8 +31,6 @@ export default function MarketList({ documents }) {
     const [hasedPlace, setHasedPlace] = useState('');
     const [selectedPlace, setSelectedPlace] = useState('dong');
 
-
-    
     useEffect(() => {
         const emptyArray = [];
         setSearchedItem(emptyArray);
@@ -45,7 +43,6 @@ export default function MarketList({ documents }) {
                 setSearchedItem((prev) => [...prev, document]);
             }
         });
-
     }, [searchTitle, documents]);
 
     useEffect(() => {
@@ -56,7 +53,6 @@ export default function MarketList({ documents }) {
             setHasedPlace(userInfo.location.dong);
         }
     }, [userInfo?.location]);
-
 
     useEffect(() => {
         const emptyArray = [];
@@ -86,9 +82,8 @@ export default function MarketList({ documents }) {
             });
         }
 
-        setResults(emptyArray)
-    }, [hasedPlace, searchedItem, selectedPlace, userDong, userGu, userSi])
-
+        setResults(emptyArray);
+    }, [hasedPlace, searchedItem, selectedPlace, userDong, userGu, userSi]);
 
     function openPlaceModal() {
         placeModal.current.open();
@@ -147,7 +142,6 @@ export default function MarketList({ documents }) {
         setHasedPlace(dong);
     };
 
-
     const changeSelectedPlace = (event) => {
         setSelectedPlace(event.target.value);
         const emptyArray = [];
@@ -193,8 +187,6 @@ export default function MarketList({ documents }) {
 
             <button onClick={openPlaceModal}>Open Place modal</button>
 
-           
-
             <div>
                 <label>{hasedPlace}</label>
             </div>
@@ -236,44 +228,39 @@ export default function MarketList({ documents }) {
                                 >
                                     X
                                 </button>
-
-                                <div className={style.pngContainer}>
-                                    <img
-                                        src={commentPng}
-                                        className={style.basicPng}
-                                    />
-                                    <p>
-                                        {doc.comments.reduce(
-                                            (acc, comment) =>
-                                                acc +
-                                                1 +
-                                                (comment.childComment
-                                                    ? comment.childComment
-                                                          .length
-                                                    : 0),
-                                            0
-                                        )}
-                                        개
-                                    </p>
-
-                                    {userInfo.interests.includes(doc.id) ? (
-                                        <img
-                                            src={heartPng}
-                                            className={style.basicPng}
-                                            onClick={() => toggleHeart(doc)}
-                                        />
-                                    ) : (
-                                        <img
-                                            src={emptyHeart}
-                                            className={style.basicPng}
-                                            onClick={() => toggleHeart(doc)}
-                                        />
-                                    )}
-
-                                    <p>{doc.interests} 개</p>
-                                </div>
                             </div>
                         )}
+                        <div className={style.pngContainer}>
+                            <img src={commentPng} className={style.basicPng} />
+                            <p>
+                                {doc.comments.reduce(
+                                    (acc, comment) =>
+                                        acc +
+                                        1 +
+                                        (comment.childComment
+                                            ? comment.childComment.length
+                                            : 0),
+                                    0
+                                )}
+                                개
+                            </p>
+
+                            {userInfo.interests.includes(doc.id) ? (
+                                <img
+                                    src={heartPng}
+                                    className={style.basicPng}
+                                    onClick={() => toggleHeart(doc)}
+                                />
+                            ) : (
+                                <img
+                                    src={emptyHeart}
+                                    className={style.basicPng}
+                                    onClick={() => toggleHeart(doc)}
+                                />
+                            )}
+
+                            <p>{doc.interests} 개</p>
+                        </div>
                     </li>
                 ))}
             </ul>

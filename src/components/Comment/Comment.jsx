@@ -41,13 +41,9 @@ export default function Comment({ Item, collection }) {
         }
     };
 
-    function HelloWorld() {
-        console.log(userInfo.userComment[0].id);
-    }
 
     return (
         <div>
-            <button onClick={HelloWorld}>Check user</button>
             <h4>ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ</h4>
             <h4>Comments</h4>
             <ul>

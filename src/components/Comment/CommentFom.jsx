@@ -32,6 +32,7 @@ export default function CommentForm({ collection, Item, comment }) {
             [id]: !prev[id],
         }));
     };
+    
     const deleteComment = async (id) => {
         const commentIndex = Item.comments.findIndex((c) => c.id === id);
 

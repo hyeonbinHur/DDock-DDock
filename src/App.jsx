@@ -22,9 +22,11 @@ import ErrorPage from './pages/error/ErrorPage';
 // import MarketList from './components/MarketItem/MarketItemList';
 
 function App() {
-    const { user } = useAuthContext();
+
+    const {user} = useAuthContext();
     const modal = useRef();
     const router = createBrowserRouter([
+
         {
             path: '/',
             element: <RootLayout />,

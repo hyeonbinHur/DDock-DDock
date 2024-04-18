@@ -14,17 +14,20 @@ import InterestsItemModal from './interestsModal';
 import MarketItem from '../../components/MarketItem/MarketItem';
 
 export default function ProfilePage() {
-    const { userId } = useParams();
-    const { document: user, error: user_error } = useDocument('User', userId);
+
+    const { userId } = useParams(); //꼭 필요
+
+    const { document: user, error: user_error} = useDocument('User', userId);
+
     const { document: marketItems } = useCollection('MarketItem', [
         'createdAt',
         'desc',
     ]);
+
     const [startEditDisplayName, setStartEditDisplayName] = useState(false);
     const [newDisplayName, setNewDisplayName] = useState('');
     const { updateDocument, loading } = useFirestore('User');
     const [userMarketItem, setUserMarktItem] = useState([]);
-
     const [imageUrl, setImageUrl] = useState();
     const [imageUpload, setImageUpload] = useState(null);
     const [imagePreview, setImagePreview] = useState(undefined);
@@ -193,7 +196,7 @@ export default function ProfilePage() {
 
     return (
         <>
-            {(!user || userLoading) && <p>Loading...</p>}
+            {(!user || userLoading ) && <p>Loading...</p>}
             {user && !userLoading ? (
                 !loading ? (
                     <div>
@@ -290,6 +293,7 @@ export default function ProfilePage() {
                                 return (
                                     <UserCommentForm
                                         comment={comment}
+                                        currentUser = {user}
                                         key={comment.id}
                                     />
                                 );
