@@ -35,6 +35,7 @@ export default function ProfilePage() {
     const modal = useRef();
 
     const [userLoading, setUserLoading] = useState(true); // 맨처음이나, 유저가 정보를 바꾸면 로딩
+    const [imageLoading, setImageloading] = useState(false);
 
     function openConfirmModal() {
         if (modal.current) {
@@ -64,10 +65,12 @@ export default function ProfilePage() {
         if (user?.Avatar) {
             // 유저 아바타 로드
             setImageUrl(user.Avatar);
+            setImageloading(true);
         }
-        if (!user?.Avatar) {
+        if(user){
             setUserLoading(false);
         }
+       
     }, [marketItems, user?.userItem, user]);
 
     const handleImageClick = () => {
@@ -206,7 +209,6 @@ export default function ProfilePage() {
                             ref={fileInputRef}
                             onChange={handleImageChange}
                         />
-
                         <div className={style.tmpContainer}>
                             <div>
                                 <div className={style.imageContainer}>
@@ -214,13 +216,12 @@ export default function ProfilePage() {
                                         className={style.userImage}
                                         src={
                                             imagePreview ||
-                                            imageUrl ||
+                                            imageUrl || imageLoading ||
                                             defaultUserImg
                                         }
-                                        onLoad={() => setUserLoading(false)}
+                                        onLoad={() => setImageloading(false)}
                                         alt="Default"
                                     />
-
                                     <div className={style.cameraContainer}>
                                         <img
                                             src={cameraPlus}
