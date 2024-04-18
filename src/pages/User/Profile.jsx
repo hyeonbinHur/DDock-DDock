@@ -14,10 +14,13 @@ import InterestsItemModal from './interestsModal';
 import MarketItem from '../../components/MarketItem/MarketItem';
 
 export default function ProfilePage() {
-
     const { userId } = useParams(); //꼭 필요
 
-    const { document: user, error: user_error} = useDocument('User', userId);
+    const {
+        document: user,
+        error: user_error,
+        loading: user_loading,
+    } = useDocument('User', userId);
 
     const { document: marketItems } = useCollection('MarketItem', [
         'createdAt',
@@ -26,7 +29,7 @@ export default function ProfilePage() {
 
     const [startEditDisplayName, setStartEditDisplayName] = useState(false);
     const [newDisplayName, setNewDisplayName] = useState('');
-    const { updateDocument, loading } = useFirestore('User');
+    const { updateDocument, loading: updateLoading } = useFirestore('User');
     const [userMarketItem, setUserMarktItem] = useState([]);
     const [imageUrl, setImageUrl] = useState();
     const [imageUpload, setImageUpload] = useState(null);
@@ -34,7 +37,6 @@ export default function ProfilePage() {
     const fileInputRef = useRef();
     const modal = useRef();
 
-    const [userLoading, setUserLoading] = useState(true); // 맨처음이나, 유저가 정보를 바꾸면 로딩
     const [imageLoading, setImageloading] = useState(false);
 
     function openConfirmModal() {
@@ -61,16 +63,11 @@ export default function ProfilePage() {
             });
             setUserMarktItem(userItemDetails);
         }
-
         if (user?.Avatar) {
             // 유저 아바타 로드
             setImageUrl(user.Avatar);
             setImageloading(true);
         }
-        if(user){
-            setUserLoading(false);
-        }
-       
     }, [marketItems, user?.userItem, user]);
 
     const handleImageClick = () => {
@@ -113,9 +110,9 @@ export default function ProfilePage() {
                 canvas.toBlob(
                     (blob) => {
                         if (blob.size > maxFileSize && quality > 0.1) {
-                            quality -= 0.1; 
+                            quality -= 0.1;
                             canvas.toDataURL('image/jpeg', quality);
-                            attemptResize(); 
+                            attemptResize();
                         } else {
                             const resizedFile = new File([blob], file.name, {
                                 type: 'image/jpeg',
@@ -139,7 +136,6 @@ export default function ProfilePage() {
     const uploadImage = async () => {
         if (!imageUpload) return;
 
-        setUserLoading(true);
         const maxWidth = 1920;
         const maxHeight = 1080;
         const maxFileSize = 500 * 1024;
@@ -181,7 +177,6 @@ export default function ProfilePage() {
                     });
             }
         );
-        setUserLoading(false);
     };
 
     const handleImageChange = (event) => {
@@ -199,118 +194,116 @@ export default function ProfilePage() {
 
     return (
         <>
-            {(!user || userLoading ) && <p>Loading...</p>}
-            {user && !userLoading ? (
-                !loading ? (
-                    <div>
-                        <input
-                            type="file"
-                            className={style.fileInput}
-                            ref={fileInputRef}
-                            onChange={handleImageChange}
-                        />
-                        <div className={style.tmpContainer}>
-                            <div>
-                                <div className={style.imageContainer}>
-                                    <img
-                                        className={style.userImage}
-                                        src={
-                                            imagePreview ||
-                                            imageUrl || imageLoading ||
-                                            defaultUserImg
-                                        }
-                                        onLoad={() => setImageloading(false)}
-                                        alt="Default"
-                                    />
-                                    <div className={style.cameraContainer}>
-                                        <img
-                                            src={cameraPlus}
-                                            className={style.cameraPlus}
-                                            onClick={handleImageClick}
-                                        />
-                                    </div>
-                                </div>
-                                <button onClick={uploadImage}>
-                                    사진 변경 확인
-                                </button>
-                            </div>
-
-                            <div className={style.heartContainer}>
+            {user_error ? (
+                <p>{user_error.message}</p>
+            ) : user && !updateLoading && !user_loading ? (
+                <div>
+                    <input
+                        type="file"
+                        className={style.fileInput}
+                        ref={fileInputRef}
+                        onChange={handleImageChange}
+                    />
+                    <div className={style.tmpContainer}>
+                        <div>
+                            <div className={style.imageContainer}>
                                 <img
-                                    src={emptyHeart}
-                                    className={style.emptyHeart}
+                                    className={style.userImage}
+                                    src={
+                                        imagePreview ||
+                                        imageUrl ||
+                                        imageLoading ||
+                                        defaultUserImg
+                                    }
+                                    onLoad={() => setImageloading(false)}
+                                    alt="Default"
                                 />
-                                <p>관심 상품</p>
-                                <button onClick={openConfirmModal}>
-                                    open modal
-                                </button>
+                                <div className={style.cameraContainer}>
+                                    <img
+                                        src={cameraPlus}
+                                        className={style.cameraPlus}
+                                        onClick={handleImageClick}
+                                    />
+                                </div>
                             </div>
-                        </div>
-
-                        <div>
-                            <div>
-                                <label>Display name</label>
-                            </div>
-                            {startEditDisplayName ? (
-                                <input
-                                    defaultValue={user.displayName}
-                                    onChange={(e) =>
-                                        setNewDisplayName(e.target.value)
-                                    }
-                                ></input>
-                            ) : (
-                                <span>{user.displayName}</span>
-                            )}
-                        </div>
-                        <div>
-                            <button
-                                onClick={() => {
-                                    if (startEditDisplayName) {
-                                        changeDisplayName();
-                                    } else {
-                                        setStartEditDisplayName(true);
-                                    }
-                                }}
-                            >
-                                {startEditDisplayName ? '완료' : '닉네임 변경'}
+                            <button onClick={uploadImage}>
+                                사진 변경 확인
                             </button>
                         </div>
 
-                        <div>----M ITEM----</div>
-
-                        {userMarketItem.map((item) => (
-                            <li key={item.id}>
-                                <Link to={`/market/${item.id}`}>
-                                    <MarketItem document={item} />
-                                </Link>
-                            </li>
-                        ))}
-                        <div>----H ITEM----</div>
-                        <div>----J ITEM----</div>
-                        <div>----C ITEM----</div>
-                        <div>---Comments---</div>
-                        {user.userComment.length > 0 &&
-                            user.userComment.map((comment) => {
-                                return (
-                                    <UserCommentForm
-                                        comment={comment}
-                                        currentUser = {user}
-                                        key={comment.id}
-                                    />
-                                );
-                            })}
-                        <InterestsItemModal
-                            ref={modal}
-                            itemIds={user.interests}
-                            displayName={user.displayName}
-                        />
+                        <div className={style.heartContainer}>
+                            <img
+                                src={emptyHeart}
+                                className={style.emptyHeart}
+                            />
+                            <p>관심 상품</p>
+                            <button onClick={openConfirmModal}>
+                                open modal
+                            </button>
+                        </div>
                     </div>
-                ) : (
-                    <p>Loading..</p>
-                )
-            ) : null}
 
-            {user_error && <p>{user_error.message}</p>}
+                    <div>
+                        <div>
+                            <label>Display name</label>
+                        </div>
+                        {startEditDisplayName ? (
+                            <input
+                                defaultValue={user.displayName}
+                                onChange={(e) =>
+                                    setNewDisplayName(e.target.value)
+                                }
+                            ></input>
+                        ) : (
+                            <span>{user.displayName}</span>
+                        )}
+                    </div>
+                    <div>
+                        <button
+                            onClick={() => {
+                                if (startEditDisplayName) {
+                                    changeDisplayName();
+                                } else {
+                                    setStartEditDisplayName(true);
+                                }
+                            }}
+                        >
+                            {startEditDisplayName ? '완료' : '닉네임 변경'}
+                        </button>
+                    </div>
+
+                    <div>----M ITEM----</div>
+
+                    {userMarketItem.map((item) => (
+                        <li key={item.id}>
+                            <Link to={`/market/${item.id}`}>
+                                <MarketItem document={item} />
+                            </Link>
+                        </li>
+                    ))}
+                    <div>----H ITEM----</div>
+                    <div>----J ITEM----</div>
+                    <div>----C ITEM----</div>
+                    <div>---Comments---</div>
+                    {user.userComment.length > 0 &&
+                        user.userComment.map((comment) => {
+                            return (
+                                <UserCommentForm
+                                    comment={comment}
+                                    currentUser={user}
+                                    key={comment.id}
+                                />
+                            );
+                        })}
+                    <InterestsItemModal
+                        ref={modal}
+                        itemIds={user.interests}
+                        displayName={user.displayName}
+                    />
+                </div>
+            ) : (
+                <p>Loading..</p>
+            )}
         </>
     );
 }
