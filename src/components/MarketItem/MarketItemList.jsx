@@ -30,6 +30,8 @@ export default function MarketList({ documents }) {
     const [hasedPlace, setHasedPlace] = useState('');
     const [selectedPlace, setSelectedPlace] = useState('dong');
 
+    
+
     useEffect(() => {
         const emptyArray = [];
         setSearchedItem(emptyArray);

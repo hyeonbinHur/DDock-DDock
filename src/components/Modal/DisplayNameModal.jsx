@@ -13,7 +13,6 @@ const DisplayNameModal = forwardRef(function DisplayNameModal({user},ref) {
         },
     }));
 
-    // 여기서 async 키워드의 올바른 위치
     const handleClose = async () => {
         if (user && typeof user.updateProfile === 'function') {
             try {
