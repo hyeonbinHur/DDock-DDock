@@ -15,7 +15,7 @@ export default function MarketPage() {
     // ]);
     const dispatch = useDispatch();
     const reduxDocument = useSelector((state) => state.marketCollection.marketItems);
-
+    const [clientMarketCollection, setClientMarketCollection] = useState(reduxDocument);
     const { data, error, isLoading } = useQuery({
         queryKey: ['MarketItem'],
         queryFn: () => getCollection('MarketItem', ['createdAt', 'desc']),
@@ -27,6 +27,7 @@ export default function MarketPage() {
         
         if (!isLoading && !error && data) {
             dispatch(fetchCollection({ documents: data }));
+            setClientMarketCollection(reduxDocument)
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data, isLoading, error, dispatch]);
@@ -47,7 +48,10 @@ export default function MarketPage() {
 
                     <Link to="/market/mupload">Add New Item</Link>
                     {error && <p>{error}</p>}
-                    <ul>{data && <MarketList documents={reduxDocument} />}</ul>
+                    {clientMarketCollection.length > 0}{
+                    <ul>{data && <MarketList documents={clientMarketCollection} />}</ul>
+
+                    }
                 </>
             )}
         </div>

@@ -36,9 +36,9 @@ export default function MarketList({ documents }) {
     useEffect(() => {
         const emptyArray = [];
         setSearchedItem(emptyArray);
-
+        console.log(clientDocument)
         clientDocument.map((document) => {
-            console.log(document.title)
+            
             if (
                 
                 document.title.includes(searchTitle) ||
