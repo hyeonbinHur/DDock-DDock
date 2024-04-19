@@ -10,17 +10,18 @@ export default function Comment({ serverItem, collection }) {
     const { user } = useAuthContext();
     const { updateDocument: updateUser } = useFirestore('User');
     const { document: userInfo } = useDocument('User', user.uid);
-
     const [comment, setComment] = useState('');
-
     const [clientComments, setClientComments] = useState([]);
 
     useEffect(() => {
         setClientComments(serverItem.comments);
-    }, [serverItem.comments])
+    }, [serverItem.comments]);
 
     const addComment = async (event) => {
+    
         event.preventDefault();
+        setComment('');
+
         const addedComment = {
             displayName: user.displayName,
             userId: user.uid,
@@ -30,9 +31,8 @@ export default function Comment({ serverItem, collection }) {
             childComment: [],
             serverItemId: serverItem.id,
         };
+        setClientComments((prevState) => [...prevState, addedComment]);
 
-        setClientComments((prevState) => [...prevState, addedComment])
-        
         await updateDocument(
             serverItem.id,
             {
@@ -46,18 +46,24 @@ export default function Comment({ serverItem, collection }) {
         originalUser.userComment = updatedUserComment;
 
         await updateUser(user.uid, originalUser, 'User');
-        
-        if (!response.error) {
-            setComment('');
-        }
     };
 
-    return(response.error ? (
+    return response.error ? (
         <p>error</p>
     ) : (
         <div>
             <h4>ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ</h4>
             <h4>Comments</h4>
+            <form onSubmit={addComment}>
+                <label>
+                    <span>add new comment</span>
+                    <textarea
+                        onChange={(event) => setComment(event.target.value)}
+                        value={comment}
+                    ></textarea>
+                </label>
+                <button>submit</button>
+            </form>
             <ul>
                 {clientComments.length > 0 &&
                     clientComments.map((clientComment) => {
@@ -72,18 +78,6 @@ export default function Comment({ serverItem, collection }) {
                         );
                     })}
             </ul>
-
-            <form onSubmit={addComment}>
-                <label>
-                    <span>add new comment</span>
-                    <textarea
-                        onChange={(event) => setComment(event.target.value)}
-                        value={comment}
-                    ></textarea>
-                </label>
-                <button>submit</button>
-            </form>
         </div>
-    ));
-
+    );
 }

@@ -10,21 +10,19 @@ export default function ReplyForm({
     clientReply,
 }) {
     const { updateDocument } = useFirestore('MarketItem');
-
     const [addReplyLoading, setAddReplyLoading] = useState(true);
     const [isEdittingReply, setIsEdittingReply] = useState(false);
     const [editReplyContent, setEditReplyContent] = useState(clientReply?.content);
 
     useEffect(() => {
-        if (comment) {
-            if (
-                comment.childComment.some((reply) => reply.id == clientReply.id)
-            ) {
-                setAddReplyLoading(false);
-            }
+        const targetComment = serverItem?.comments?.find(c => c.id === comment.id);
+        const targetReply = targetComment?.childComment.find(r => r.id === clientReply.id);
+    
+        if (targetReply) {
+            setAddReplyLoading(false);
         }
-    }, [clientReply?.id, comment]);
-
+    }, [clientReply?.id, comment.id, serverItem?.comments]);
+    
     function formatDate(timestamp) {
         return new Date(timestamp.seconds * 1000).toLocaleString('en-AU', {
             timeZone: 'Australia/Sydney',

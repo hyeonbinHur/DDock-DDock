@@ -43,7 +43,6 @@ export default function MarketItemDetail() {
     //     setLoading(false);
     // };
 
-    console.log(imageUrls.length);
 
     return (
         <>
