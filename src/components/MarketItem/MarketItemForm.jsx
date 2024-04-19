@@ -6,9 +6,14 @@ import rightArrow from '../../assets/right.png';
 import deleteImg from '../../assets/close.png';
 import { projectStorage } from '../../firebase/config';
 import {v4 as uuidv4} from 'uuid'
+import { useNavigate } from 'react-router-dom';
+import ItemModal from '../Modal/ItemStatusModal';
 
-export default function MarketItemForm({ doAction, data }) {
+
+export default function MarketItemForm({ doAction, data, response, loading }) {
     const [title, setTitle] = useState(data ? data.title : '');
+    const navigate = useNavigate();
+    const modal = useRef();
     const [description, setDescription] = useState(
         data ? data.description : ''
     );
@@ -82,6 +87,7 @@ export default function MarketItemForm({ doAction, data }) {
     const handleSubmit = async (event) => {
         event.preventDefault();
         if (!imageUploads) return;
+        modal.current.open();
 
         console.log("버튼 눌림")
         const uuid = uuidv4();
@@ -114,7 +120,6 @@ export default function MarketItemForm({ doAction, data }) {
             const urls = await Promise.all(uploadPromises);
 
             doAction(title, description, urls, `/${title}_${uuid}`); // 모든 이미지 업로드 후 doAction 호출
-        
         } catch (error) {
             console.error("Error uploading images: ", error);
         }
@@ -231,6 +236,8 @@ export default function MarketItemForm({ doAction, data }) {
                 </p>
                 <button type="submit">Save</button>
             </form>
+        <ItemModal ref={modal} response={response} loading={loading} navigate={navigate}  from={"market"} />
+
         </>
     );
 }

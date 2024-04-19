@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import spinner from '../../assets/spinner.svg';
 import { useQuery } from '@tanstack/react-query';
 import { getCollection } from '../../api/getCollection';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCollection } from '../../store/marketCollectionSlice';
 
@@ -14,8 +14,10 @@ export default function MarketPage() {
     //     'desc',
     // ]);
     const dispatch = useDispatch();
-    const reduxDocument = useSelector((state) => state.marketCollection.marketItems);
-    const [clientMarketCollection, setClientMarketCollection] = useState(reduxDocument);
+    const reduxDocument = useSelector(
+        (state) => state.marketCollection.marketItems
+    );
+    
     const { data, error, isLoading } = useQuery({
         queryKey: ['MarketItem'],
         queryFn: () => getCollection('MarketItem', ['createdAt', 'desc']),
@@ -24,15 +26,11 @@ export default function MarketPage() {
     });
 
     useEffect(() => {
-        
         if (!isLoading && !error && data) {
             dispatch(fetchCollection({ documents: data }));
-            setClientMarketCollection(reduxDocument)
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [data, isLoading, error, dispatch]);
-
-    
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [data, isLoading, error]);
 
     return (
         <div>
@@ -42,16 +40,28 @@ export default function MarketPage() {
                 <img src={spinner} />
             ) : (
                 <>
-                 <button onClick={()=> {console.log(reduxDocument)}}>console1</button>
-                 <button onClick={()=> {console.log(data)}}>console2</button>
-
-
+                    <button
+                        onClick={() => {
+                            console.log(reduxDocument);
+                        }}
+                    >
+                        console redux document
+                    </button>
+                    <button
+                        onClick={() => {
+                            console.log(data);
+                        }}
+                    >
+                        console sever document
+                    </button>
+                   
                     <Link to="/market/mupload">Add New Item</Link>
                     {error && <p>{error}</p>}
-                    {clientMarketCollection.length > 0}{
-                    <ul>{data && <MarketList documents={clientMarketCollection} />}</ul>
-
-                    }
+                    {reduxDocument.length > 0 && (
+                        <ul>
+                            {data && <MarketList documents={reduxDocument} />}
+                        </ul>
+                    )}
                 </>
             )}
         </div>
