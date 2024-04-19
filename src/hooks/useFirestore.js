@@ -2,6 +2,7 @@ import { useEffect, useReducer, useState } from 'react';
 import { projectFirestore, timestamp, FieldValue } from '../firebase/config';
 import { useAuthContext } from './useAuth';
 import { useDocument } from './useDocument';
+import {formatDate} from '../util/formDate'
 
 let initalState = {
     document: null,
@@ -95,7 +96,7 @@ export const useFirestore = (collection) => {
         setLoading(true);
         dispatch({ type: 'IS_PENDING' });
         try {
-            const createdAt = timestamp.fromDate(new Date());
+            const createdAt = formatDate(timestamp.fromDate(new Date()));
             const userId = user.uid;
             const newDocument = await ref.add({
                 ...doc,
@@ -393,18 +394,18 @@ export const useFirestore = (collection) => {
         setLoading(false);
     };
 
-    function formatDate(timestamp) {
-        return new Date(timestamp.seconds * 1000).toLocaleString('en-AU', {
-            timeZone: 'Australia/Sydney',
-            year: 'numeric',
-            month: 'numeric',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: false,
-        });
-    }
+    // function formatDate(timestamp) {
+    //     return new Date(timestamp.seconds * 1000).toLocaleString('en-AU', {
+    //         timeZone: 'Australia/Sydney',
+    //         year: 'numeric',
+    //         month: 'numeric',
+    //         day: 'numeric',
+    //         hour: '2-digit',
+    //         minute: '2-digit',
+    //         second: '2-digit',
+    //         hour12: false,
+    //     });
+    // }
 
     const readChat = async (collection, roomId, myId) => {
         const userRef = projectFirestore.collection(collection);

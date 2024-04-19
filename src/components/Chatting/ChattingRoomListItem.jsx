@@ -3,9 +3,10 @@ import { useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { open } from '../../store/chatRoomSlice';
 
-export default function ChattingRoomListItem({ room, userId }) {
-    const { document: partner } = useDocument('User', room.partner);
 
+export default function ChattingRoomListItem({ room, userId }){
+
+    const { document: partner } = useDocument('User', room.partner);
     const [unreadChat, setUnreadChat] = useState([]);
     const { document: currentUser } = useDocument('User', userId);
 

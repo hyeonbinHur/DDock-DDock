@@ -32,7 +32,6 @@ export default function AddMarketItem(){
                     gu: userInfo.location.gu,
                     dong: userInfo.location.dong,
                 },
-                
             }
             await addDocument(newMItem,"M_Item","M_Item");
         }

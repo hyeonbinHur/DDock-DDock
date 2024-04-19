@@ -1,28 +1,22 @@
 import style from './ChattingRoomList.module.css';
-import { useEffect, useState } from 'react';
 import ChattingRoomListItem from './ChattingRoomListItem';
 
-export default function ChattingRoomList({ user }) {
-    const [chattingRoomList, setChattingRoomList] = useState([]);
-
-    useEffect(() => {
-        if (user) {
-            setChattingRoomList(user.chatRoom);
-        }
-    }, [user]);
+export default function ChattingRoomList({ chatRoom, userId }) {
 
     return (
         <div className={style.popupContainer}>
-            {chattingRoomList.map(
-                (roomInfo) =>
-                    roomInfo.started === true && (
-                        <ChattingRoomListItem
-                            room={roomInfo}
-                            key={roomInfo.roomId}
-                            userId={user.uid}
-                        />
-                    )
-            )}
+            {document &&
+                chatRoom.map(
+                    (roomInfo) =>
+                        roomInfo.started === true && (
+                            <ChattingRoomListItem
+                                room={roomInfo}
+                                key={roomInfo.roomId}
+                                userId={userId}
+                            />
+                            // <li key={roomInfo.roomId}> Hello</li>
+                        )
+                )}
         </div>
     );
 }

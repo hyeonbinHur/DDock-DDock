@@ -22,29 +22,32 @@ export default function MarketList({ documents }) {
     const { updateDocument, response } = useFirestore('User');
 
     const [searchTitle, setSearchTitle] = useState('');
+
     const [searchedItem, setSearchedItem] = useState([]);
     const [results, setResults] = useState([]);
+
     const [userSi, setUserSi] = useState('');
     const [userGu, setUserGu] = useState('');
     const [userDong, setUserDong] = useState('');
     const [hasedPlace, setHasedPlace] = useState('');
     const [selectedPlace, setSelectedPlace] = useState('dong');
-
-    
+    const [clientDocument, setClientDocument] = useState(documents);
 
     useEffect(() => {
         const emptyArray = [];
         setSearchedItem(emptyArray);
 
-        documents.map((document) => {
+        clientDocument.map((document) => {
+            console.log(document.title)
             if (
+                
                 document.title.includes(searchTitle) ||
                 document.description.includes(searchTitle)
             ) {
                 setSearchedItem((prev) => [...prev, document]);
             }
         });
-    }, [searchTitle, documents]);
+    }, [searchTitle, clientDocument]);
 
     useEffect(() => {
         if (userInfo?.location) {
@@ -117,6 +120,23 @@ export default function MarketList({ documents }) {
     };
 
     const plusInterest = async (item) => {
+        const originalClientDocument = clientDocument;
+        const itemIndex = originalClientDocument.findIndex(
+            (ogClientItem) => ogClientItem.id === item.id
+        );
+
+        if (itemIndex !== -1) {
+            // 아이템을 찾았고, 이제 해당 항목의 interests를 1 증가시킵니다.
+            const updatedClientDocument = [...originalClientDocument]; // 배열을 복사합니다.
+            updatedClientDocument[itemIndex] = {
+                ...updatedClientDocument[itemIndex],
+                interests: updatedClientDocument[itemIndex].interests + 1,
+            };
+
+            // 업데이트된 배열을 상태로 설정합니다.
+            setClientDocument(updatedClientDocument);
+        }
+
         const originalItem = item;
         const updatedInterets = item.interests + 1;
         const updatedItem = {
@@ -127,6 +147,22 @@ export default function MarketList({ documents }) {
     };
 
     const minusInterest = async (item) => {
+
+        const originalClientDocument = clientDocument;
+        const itemIndex = originalClientDocument.findIndex(
+            (ogClientItem) => ogClientItem.id === item.id
+        );
+
+        if (itemIndex !== -1) {
+            const updatedClientDocument = [...originalClientDocument]; 
+            updatedClientDocument[itemIndex] = {
+                ...updatedClientDocument[itemIndex],
+                interests: updatedClientDocument[itemIndex].interests - 1,
+            };
+
+            setClientDocument(updatedClientDocument);
+        }
+
         const originalItem = item;
         const updatedInterets = item.interests - 1;
         const updatedItem = {
@@ -181,7 +217,6 @@ export default function MarketList({ documents }) {
         <p> error </p>
     ) : (
         <div>
-            <button onClick={() => console.log(response.error)}>ddd</button>
             <input
                 type="search"
                 placeholder="찾는 물건을 검색해 보세요"

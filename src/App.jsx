@@ -16,17 +16,19 @@ import MarketItemDetail from './pages/Market/MarketItemDetail';
 import { useAuthContext } from './hooks/useAuth';
 import DisplayNameModal from './components/Modal/DisplayNameModal';
 import ProfilePage from './pages/User/Profile';
-import Memo from '../src/pages/Memo'
+import Memo from '../src/pages/Memo';
 import ErrorPage from './pages/error/ErrorPage';
+
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
 
 // import MarketList from './components/MarketItem/MarketItemList';
 
 function App() {
-
-    const {user} = useAuthContext();
+    const { user } = useAuthContext();
     const modal = useRef();
     const router = createBrowserRouter([
-
         {
             path: '/',
             element: <RootLayout />,
@@ -59,7 +61,6 @@ function App() {
                 { path: '/profile/:userId', element: <ProfilePage /> },
                 { path: '/csstest', element: <Memo /> },
                 { path: '/chatting', element: <Memo /> },
-
             ],
         },
     ]);
@@ -73,10 +74,12 @@ function App() {
 
     return (
         <Fragment>
-            <main>
-                <RouterProvider router={router} />
-            </main>
-            <DisplayNameModal user={user} ref={modal} />
+            <QueryClientProvider client={queryClient}>
+                <main>
+                    <RouterProvider router={router} />
+                </main>
+                <DisplayNameModal user={user} ref={modal} />
+            </QueryClientProvider>
         </Fragment>
     );
 }

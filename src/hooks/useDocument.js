@@ -4,10 +4,10 @@ import { useEffect, useState } from 'react';
 export function useDocument(collection, id) {
     const [document, setDocument] = useState(null);
     const [error, setError] = useState(null);
-    const [loading, setlodating] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        setlodating(true);
+        setLoading(true);
         const ref = projectFirestore.collection(collection).doc(id);
         const unsubscribe = ref.onSnapshot(
             (snapshot) => {
@@ -17,7 +17,7 @@ export function useDocument(collection, id) {
                 } else {
                     setError('No such document exists');
                 }
-                setlodating(false);
+                setLoading(false);
             },
             (err) => {
                 console.log(err.message);
