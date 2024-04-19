@@ -1,17 +1,23 @@
 import { useFirestore } from '../../hooks/useFirestore';
 import { useAuthContext } from '../../hooks/useAuth';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { timestamp } from '../../firebase/config';
 import CommentForm from './CommentFom';
 import { useDocument } from '../../hooks/useDocument';
 
-export default function Comment({ Item, collection }) {
+export default function Comment({ serverItem, collection }) {
     const { updateDocument, response } = useFirestore(collection);
     const { user } = useAuthContext();
     const { updateDocument: updateUser } = useFirestore('User');
     const { document: userInfo } = useDocument('User', user.uid);
 
     const [comment, setComment] = useState('');
+
+    const [clientComments, setClientComments] = useState([]);
+
+    useEffect(() => {
+        setClientComments(serverItem.comments);
+    }, [serverItem.comments])
 
     const addComment = async (event) => {
         event.preventDefault();
@@ -22,12 +28,15 @@ export default function Comment({ Item, collection }) {
             createdAt: timestamp.fromDate(new Date()),
             id: Math.random(),
             childComment: [],
-            itemId: Item.id,
+            serverItemId: serverItem.id,
         };
+
+        setClientComments((prevState) => [...prevState, addedComment])
+        
         await updateDocument(
-            Item.id,
+            serverItem.id,
             {
-                comments: [...Item.comments, addedComment],
+                comments: [...serverItem.comments, addedComment],
             },
             collection
         );
@@ -35,26 +44,29 @@ export default function Comment({ Item, collection }) {
         const originalUserComment = originalUser.userComment;
         const updatedUserComment = [...originalUserComment, addedComment];
         originalUser.userComment = updatedUserComment;
+
         await updateUser(user.uid, originalUser, 'User');
+        
         if (!response.error) {
             setComment('');
         }
     };
 
-
-    return (
+    return(response.error ? (
+        <p>error</p>
+    ) : (
         <div>
             <h4>ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ</h4>
             <h4>Comments</h4>
             <ul>
-                {Item.comments.length > 0 &&
-                    Item.comments.map((comment) => {
+                {clientComments.length > 0 &&
+                    clientComments.map((clientComment) => {
                         return (
                             <li key={comment.id}>
                                 <CommentForm
                                     collection={collection}
-                                    Item={Item}
-                                    comment={comment}
+                                    serverItem={serverItem}
+                                    clientComment={clientComment}
                                 />
                             </li>
                         );
@@ -72,5 +84,6 @@ export default function Comment({ Item, collection }) {
                 <button>submit</button>
             </form>
         </div>
-    );
+    ));
+
 }

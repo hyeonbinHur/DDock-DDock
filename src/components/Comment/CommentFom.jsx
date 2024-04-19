@@ -1,17 +1,37 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuthContext } from '../../hooks/useAuth';
 import { useFirestore } from '../../hooks/useFirestore';
 import { timestamp } from '../../firebase/config';
 import ReplyForm from './ReplyForm';
 import { useDocument } from '../../hooks/useDocument';
+import spinner from '../../assets/spinner.svg';
+import AddReplyForm from './AddReplyForm';
 
-export default function CommentForm({ collection, Item, comment }) {
-    const [currentEditComment, setCurrentEditComment] = useState({});
-    const [editingComment, setEdititngComment] = useState({});
-    const [commentOnComment, setCommentOnComment] = useState({});
+// import spinner from '../../assets/spinner.svg'
+
+export default function CommentForm({ collection, serverItem, clientComment }) {
+
     const { user } = useAuthContext();
     const { updateDocument } = useFirestore(collection);
     const { document: userInfo } = useDocument('User', user.uid);
+
+    const [addCommentLoading, setAddCommentLoading] = useState(true);
+    const [openReplys, setOpenReplys] = useState(false);
+    const [editCommentContent, setEditCommentContent] = useState(clientComment?.content);
+    const [isEditComment, setIsEditComment] = useState(false);
+
+    useEffect(() => {
+        if (serverItem?.comments) {
+            const serverComments = serverItem.comments;
+            if (
+                serverComments.some(
+                    (serverComment) => serverComment.id == clientComment.id
+                )
+            ) {
+                setAddCommentLoading(false);
+            }
+        }
+    }, [clientComment.id, serverItem?.comments]);
 
     function formatDate(timestamp) {
         return new Date(timestamp.seconds * 1000).toLocaleString('en-AU', {
@@ -25,25 +45,18 @@ export default function CommentForm({ collection, Item, comment }) {
             hour12: false,
         });
     }
-    
-    const openCommentArea = (id) => {
-        setCommentOnComment((prev) => ({
-            ...prev,
-            [id]: !prev[id],
-        }));
-    };
-    
+
     const deleteComment = async (id) => {
-        const commentIndex = Item.comments.findIndex((c) => c.id === id);
+        const commentIndex = serverItem.comments.findIndex((c) => c.id === id);
 
         if (commentIndex !== -1) {
             const updatedComments = [
-                ...Item.comments.slice(0, commentIndex),
-                ...Item.comments.slice(commentIndex + 1),
+                ...serverItem.comments.slice(0, commentIndex),
+                ...serverItem.comments.slice(commentIndex + 1),
             ];
 
             await updateDocument(
-                Item.id,
+                serverItem.id,
                 {
                     comments: updatedComments,
                 },
@@ -59,30 +72,26 @@ export default function CommentForm({ collection, Item, comment }) {
         }
     };
 
-    const editCommentCheck = async (id) => {
-        setCurrentEditComment((prev) => ({
-            ...prev,
-            [id]: !prev[id],
-        }));
-
-        const commentIndex = Item.comments.findIndex((c) => c.id === id);
+    const editComment = async () => {
+       
+        const commentIndex = serverItem.comments.findIndex((c) => c.id === clientComment.id);
         if (commentIndex !== -1) {
-            const originalComment = Item.comments[commentIndex];
+            const originalComment = serverItem.comments[commentIndex];
 
             const editedComment = {
                 ...originalComment,
-                content: editingComment[id],
+                content: editCommentContent,
                 createdAt: timestamp.fromDate(new Date()),
             };
 
             const updatedComments = [
-                ...Item.comments.slice(0, commentIndex),
+                ...serverItem.comments.slice(0, commentIndex),
                 editedComment,
-                ...Item.comments.slice(commentIndex + 1),
+                ...serverItem.comments.slice(commentIndex + 1),
             ];
 
             await updateDocument(
-                Item.id,
+                serverItem.id,
                 {
                     comments: updatedComments,
                 },
@@ -90,68 +99,115 @@ export default function CommentForm({ collection, Item, comment }) {
             );
 
             const originalUserInfo = userInfo;
-            const updatedUserComments = originalUserInfo.userComment.map((comment) => {
-                if(comment.id === id){
-                    return editedComment
+            const updatedUserComments = originalUserInfo.userComment.map(
+                (comment) => {
+                    if (comment.id === clientComment.id) {
+                        return editedComment;
+                    }
+                    return comment;
                 }
-                return comment;
-            });
+            );
             originalUserInfo.userComment = updatedUserComments;
             await updateDocument(user.uid, originalUserInfo, 'User');
+        }
+    };
 
+    const addReply = async (content) => {
+        const commentIndex = serverItem.comments.findIndex(
+            (c) => c.id === clientComment.id
+        );
+
+        if (commentIndex !== -1) {
+            const commentToUpdate = serverItem.comments[commentIndex];
+
+            // if (!commentToUpdate.childComment) {
+            //     commentToUpdate.childComment = [];
+            // }
+            const reply = {
+                displayName: userInfo.displayName,
+                userId: userInfo.id,
+                content: content,
+                createdAt: timestamp.fromDate(new Date()),
+                id: Math.random(),
+            };
+
+            commentToUpdate.childComment.push(reply);
+
+            await updateDocument(
+                serverItem.id,
+                {
+                    comments: [
+                        ...serverItem.comments.slice(0, commentIndex),
+                        commentToUpdate,
+                        ...serverItem.comments.slice(commentIndex + 1),
+                    ],
+                },
+                collection
+            );
         }
     };
 
     return (
         <div>
-            <label>{comment.displayName} </label>
-            <div>{formatDate(comment.createdAt)}</div>
-            {!currentEditComment[comment.id] && <div>{comment.content}</div>}
+            <label>{clientComment.displayName} </label>
+            <div>{formatDate(clientComment.createdAt)}</div>
 
-            {currentEditComment[comment.id] && (
+            {isEditComment ? (
                 <textarea
-                    value={editingComment[comment.id] || comment.content}
+                    value={
+                        editCommentContent
+                    }
                     onChange={(e) =>
-                        setEdititngComment((prev) => ({
-                            ...prev,
-                            [comment.id]: e.target.value,
-                        }))
+                        setEditCommentContent(e.target.value)
                     }
                 ></textarea>
-            )}
-            <button onClick={() => openCommentArea(comment.id)}>
-                {commentOnComment[comment.id]
-                    ? '대댓 닫기'
-                    : '대댓 달기 + ' + `${comment.childComment.length}`}
-            </button>
-
-            {user && user.uid === comment.userId && (
+            ) : (
                 <div>
-                    <button onClick={() => deleteComment(comment.id)}>
+                    {addCommentLoading && <img src={spinner} />}
+                    {clientComment.content}
+                </div>
+            )}
+
+            {user && user.uid === clientComment.userId && (
+                <div>
+                    <button onClick={() => deleteComment(clientComment.id)}>
                         댓글 삭제
                     </button>
                     <button
                         onClick={() => {
-                            if (currentEditComment[comment.id]) {
-                                editCommentCheck(comment.id);
+                            if (isEditComment) {
+                                editComment()
+                                setIsEditComment(!isEditComment);
                             } else {
-                                setCurrentEditComment((prev) => ({
-                                    ...prev,
-                                    [comment.id]: true,
-                                }));
+                                setIsEditComment(!isEditComment);
                             }
                         }}
                     >
-                        {currentEditComment[comment.id]
-                            ? '수정 완료'
-                            : '댓글 수정'}{' '}
+                        {isEditComment ? '수정 완료' : '댓글 수정'}
                     </button>
-                    {commentOnComment[comment.id] && (
-                        <ReplyForm
-                            collection={collection}
-                            Item={Item}
-                            comment={comment}
-                        />
+                    <div>
+                        <button onClick={() => setOpenReplys(!openReplys)}>
+                            {openReplys
+                                ? '대댓 닫기'
+                                : '대댓 달기 + ' +
+                                  `${clientComment.childComment.length}`}
+                        </button>
+                    </div>
+
+                    {openReplys && (
+                        <div>
+                            {clientComment.childComment.map((reply) => (
+                                <li key={reply.id}>
+                                    <ReplyForm
+                                        serverUser={userInfo}
+                                        serverItem={serverItem}
+                                        clientReply={reply}
+                                        comment={clientComment}
+                                    />
+                                </li>
+                            ))}
+                            <AddReplyForm addReply={addReply} />
+                        </div>
                     )}
                 </div>
             )}

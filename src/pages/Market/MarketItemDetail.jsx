@@ -81,7 +81,7 @@ export default function MarketItemDetail() {
                 <Link to={`/market/${mitemId}/mupdate`}>Go to edit</Link>
             )}
 
-            <Comment Item={document} collection="MarketItem" />
+            <Comment serverItem={document} collection="MarketItem" />
         </>
     );
 }

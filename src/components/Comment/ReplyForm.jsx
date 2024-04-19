@@ -1,13 +1,29 @@
-import { useState } from 'react';
-import { useAuthContext } from '../../hooks/useAuth';
+import { useEffect, useState } from 'react';
 import { timestamp } from '../../firebase/config';
 import { useFirestore } from '../../hooks/useFirestore';
-export default function ReplyForm({ collection, Item, comment }) {
-    const { user } = useAuthContext();
-    const [reply2Comment, setReply2Comment] = useState({});
-    const { updateDocument } = useFirestore(collection);
-    const [startEditReply, setStartEditReply] = useState({});
-    const [editReply, setEditReply] = useState({});
+import spinner from '../../assets/spinner.svg';
+
+export default function ReplyForm({
+    serverUser,
+    serverItem,
+    comment,
+    clientReply,
+}) {
+    const { updateDocument } = useFirestore('MarketItem');
+
+    const [addReplyLoading, setAddReplyLoading] = useState(true);
+    const [isEdittingReply, setIsEdittingReply] = useState(false);
+    const [editReplyContent, setEditReplyContent] = useState(clientReply?.content);
+
+    useEffect(() => {
+        if (comment) {
+            if (
+                comment.childComment.some((reply) => reply.id == clientReply.id)
+            ) {
+                setAddReplyLoading(false);
+            }
+        }
+    }, [clientReply?.id, comment]);
 
     function formatDate(timestamp) {
         return new Date(timestamp.seconds * 1000).toLocaleString('en-AU', {
@@ -21,47 +37,14 @@ export default function ReplyForm({ collection, Item, comment }) {
             hour12: false,
         });
     }
-    
-    const addReply2Comment = async (comment_id, event) => {
-        event.preventDefault();
 
-        const commentIndex = Item.comments.findIndex(
-            (c) => c.id === comment_id
-        );
-        
-        if (commentIndex !== -1) {
-            const commentToUpdate = Item.comments[commentIndex];
-
-            if (!commentToUpdate.childComment) {
-                commentToUpdate.childComment = [];
-            }
-            const added2Comment = {
-                displayName: user.displayName,
-                userId: user.uid,
-                content: reply2Comment[comment_id],
-                createdAt: timestamp.fromDate(new Date()),
-                id: Math.random(),
-            };
-
-            commentToUpdate.childComment.push(added2Comment);
-
-            await updateDocument(Item.id, {
-                comments: [
-                    ...Item.comments.slice(0, commentIndex),
-                    commentToUpdate,
-                    ...Item.comments.slice(commentIndex + 1),
-                ],
-            },collection);
-        }
-    };
-
-    const deleteReply2Comment = async (comment_id, replyId) => {
-        const commentIndex = Item.comments.findIndex(
-            (c) => c.id === comment_id
+    const deleteReply = async (replyId) => {
+        const commentIndex = serverItem.comments.findIndex(
+            (c) => c.id === comment.id
         );
 
         if (commentIndex !== -1) {
-            const commentToUpdate = Item.comments[commentIndex];
+            const commentToUpdate = serverItem.comments[commentIndex];
 
             if (commentToUpdate.childComment) {
                 const replyIndex = commentToUpdate.childComment.findIndex(
@@ -70,35 +53,32 @@ export default function ReplyForm({ collection, Item, comment }) {
                 if (replyIndex !== -1) {
                     commentToUpdate.childComment.splice(replyIndex, 1);
 
-                    await updateDocument(Item.id, {
-                        comments: [
-                            ...Item.comments.slice(0, commentIndex),
-                            commentToUpdate,
-                            ...Item.comments.slice(commentIndex + 1),
-                        ],
-                    }, collection);
+                    await updateDocument(
+                        serverItem.id,
+                        {
+                            comments: [
+                                ...serverItem.comments.slice(0, commentIndex),
+                                commentToUpdate,
+                                ...serverItem.comments.slice(commentIndex + 1),
+                            ],
+                        },
+                        'MarketItem'
+                    );
                 }
             }
         }
     };
 
-    const editReply2Comment = async (comment, reply_id) => {
-
-        console.log(editReply[reply_id])
-    
-        setStartEditReply((prev) => ({
-            ...prev,
-            [reply_id]: !prev[reply_id],
-        }));
-
-        const replyIndex = comment.childComment.findIndex((c) => c.id === reply_id);
+    const editReply = async (reply_id) => {
+        const replyIndex = comment.childComment.findIndex(
+            (c) => c.id === reply_id
+        );
         if (replyIndex !== -1) {
-
             const originalReply = comment.childComment[replyIndex];
-            
+
             const editedReply = {
                 ...originalReply,
-                content: editReply[reply_id],
+                content:editReplyContent,
                 createdAt: timestamp.fromDate(new Date()),
             };
 
@@ -108,103 +88,74 @@ export default function ReplyForm({ collection, Item, comment }) {
                 ...comment.childComment.slice(replyIndex + 1),
             ];
 
-            const comment_index = Item.comments.findIndex(
+            const comment_index = serverItem.comments.findIndex(
                 (c) => c.id === comment.id
             );
 
-
             if (comment_index !== -1) {
-                const originalComment = Item.comments[comment_index];
+                const originalComment = serverItem.comments[comment_index];
                 const edittedComment = {
                     ...originalComment,
                     childComment: updatedReply,
                 };
 
                 const updatedComments = [
-                    ...Item.comments.slice(0, comment_index),
+                    ...serverItem.comments.slice(0, comment_index),
                     edittedComment,
-                    ...Item.comments.slice(comment_index + 1),
+                    ...serverItem.comments.slice(comment_index + 1),
                 ];
 
-                await updateDocument(Item.id, {
-                    comments: updatedComments,
-                },collection);
+                await updateDocument(
+                    serverItem.id,
+                    {
+                        comments: updatedComments,
+                    },
+                    'MarketItem'
+                );
             }
         }
-   
     };
 
     return (
         <div>
-            {comment.childComment.length > 0 &&
-                comment.childComment.map((child) => (
-                    <ul key={child.id}>
-                        <label>{child.displayName} </label>
-                        <div>{formatDate(child.createdAt)}</div>
-                        {!startEditReply[child.id] && (
-                            <div>{child.content}</div>
-                        )}
-                        {startEditReply[child.id] && (
-                            <textarea
-                                value={editReply[child.id] || child.content}
-                                onChange={(e) => {
-                                    setEditReply((prev) => ({
-                                        ...prev,
-                                        [child.id]: e.target.value,
-                                    }));
-                                }}
-                            ></textarea>
-                        )}
-                        {user && user.uid === child.userId && (
-                            <div>
-                                <button
-                                    onClick={() =>
-                                        deleteReply2Comment(
-                                            comment.id,
-                                            child.id
-                                        )
-                                    }
-                                >
-                                    대댓 삭제
-                                </button>
-                                <button
-                                    onClick={() => {
-                                        if (!editReply) {
-                                            setStartEditReply((prev) => ({
-                                                ...prev,
-                                                [child.id]: true,
-                                            }));
-                                        } else {
-                                            editReply2Comment(
-                                                comment,
-                                                child.id
-                                            );
-                                        }
-                                    }}
-                                >
-                                    {startEditReply[child.id]
-                                        ? '수정 완료'
-                                        : '대댓 수정'}
-                                </button>
-                            </div>
-                        )}
-                    </ul>
-                ))}
+            <label>{clientReply.displayName} </label>
+            <div>{formatDate(clientReply.createdAt)}</div>
 
-            <form onSubmit={(event) => addReply2Comment(comment.id, event)}>
-                <p>one more comment here</p>
+            {isEdittingReply ? (
                 <textarea
-                    onChange={(e) =>
-                        setReply2Comment((prev) => ({
-                            ...prev,
-                            [comment.id]: e.target.value,
-                        }))
-                    }
-                    value={reply2Comment[comment.id] || ''}
+                    value={editReplyContent || clientReply.content}
+                    onChange={(e) => {
+                        setEditReplyContent(e.target.value);
+                    }}
                 ></textarea>
+            ) : (
+                <div>
+                    {addReplyLoading && <img src={spinner} />}
+                    {clientReply.content}
+                </div>
+            )}
 
-                <button>submit</button>
-            </form>
+            {serverUser && serverUser.id === clientReply.userId && (
+                <div>
+                    <button onClick={() => deleteReply(clientReply.id)}>
+                        대댓 삭제
+                    </button>
+
+                    <button
+                        onClick={() => {
+                            if (isEdittingReply) {
+                                setIsEdittingReply(!isEdittingReply);
+                                editReply(clientReply.id);
+
+                            } else {
+                                setIsEdittingReply(!isEdittingReply);
+                            }
+                        }}
+                    >
+                        {isEdittingReply ? '수정 완료' : '대댓 수정'}
+                    </button>
+                </div>
+            )}
         </div>
     );
 }
