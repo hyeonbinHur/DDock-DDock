@@ -11,7 +11,7 @@ import AddReplyForm from './AddReplyForm';
 
 export default function CommentForm({ collection, serverItem, clientComment }) {
     const { user } = useAuthContext();
-    const { updateDocument } = useFirestore(collection);
+    const { updateDocument, loading } = useFirestore(collection);
     const { document: userInfo } = useDocument('User', user.uid);
 
     const [addCommentLoading, setAddCommentLoading] = useState(true);
@@ -19,6 +19,7 @@ export default function CommentForm({ collection, serverItem, clientComment }) {
     const [editCommentContent, setEditCommentContent] = useState(
         clientComment?.content
     );
+
     const [isEditComment, setIsEditComment] = useState(false);
     const [clientReply, setClientReply] = useState([]);
 
@@ -176,6 +177,7 @@ export default function CommentForm({ collection, serverItem, clientComment }) {
                 <div>
                     {addCommentLoading && <img src={spinner} />}
                     {clientComment.content}
+                    {loading && <img src={spinner}/> }
                 </div>
             )}
 

@@ -9,20 +9,26 @@ export default function ReplyForm({
     comment,
     clientReply,
 }) {
-    const { updateDocument } = useFirestore('MarketItem');
+    const { updateDocument, loading } = useFirestore('MarketItem');
     const [addReplyLoading, setAddReplyLoading] = useState(true);
     const [isEdittingReply, setIsEdittingReply] = useState(false);
-    const [editReplyContent, setEditReplyContent] = useState(clientReply?.content);
+    const [editReplyContent, setEditReplyContent] = useState(
+        clientReply?.content
+    );
 
     useEffect(() => {
-        const targetComment = serverItem?.comments?.find(c => c.id === comment.id);
-        const targetReply = targetComment?.childComment.find(r => r.id === clientReply.id);
-    
+        const targetComment = serverItem?.comments?.find(
+            (c) => c.id === comment.id
+        );
+        const targetReply = targetComment?.childComment.find(
+            (r) => r.id === clientReply.id
+        );
+
         if (targetReply) {
             setAddReplyLoading(false);
         }
     }, [clientReply?.id, comment.id, serverItem?.comments]);
-    
+
     function formatDate(timestamp) {
         return new Date(timestamp.seconds * 1000).toLocaleString('en-AU', {
             timeZone: 'Australia/Sydney',
@@ -76,7 +82,7 @@ export default function ReplyForm({
 
             const editedReply = {
                 ...originalReply,
-                content:editReplyContent,
+                content: editReplyContent,
                 createdAt: timestamp.fromDate(new Date()),
             };
 
@@ -130,6 +136,7 @@ export default function ReplyForm({
                 <div>
                     {addReplyLoading && <img src={spinner} />}
                     {clientReply.content}
+                    {loading && <img src={spinner} />}
                 </div>
             )}
 
@@ -144,7 +151,6 @@ export default function ReplyForm({
                             if (isEdittingReply) {
                                 setIsEdittingReply(!isEdittingReply);
                                 editReply(clientReply.id);
-
                             } else {
                                 setIsEdittingReply(!isEdittingReply);
                             }

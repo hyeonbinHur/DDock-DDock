@@ -31,6 +31,7 @@ export default function Comment({ serverItem, collection }) {
             childComment: [],
             serverItemId: serverItem.id,
         };
+        
         setClientComments((prevState) => [...prevState, addedComment]);
 
         await updateDocument(
