@@ -3,7 +3,6 @@ import { projectFirestore, timestamp, FieldValue } from '../firebase/config';
 import { useAuthContext } from './useAuth';
 import { useDocument } from './useDocument';
 import {formatDate} from '../util/formDate'
-import {getSydneyTimeISO} from '../util/formDate'
 
 let initalState = {
     document: null,
@@ -93,20 +92,12 @@ export const useFirestore = (collection) => {
         }
     };
 
-    const addDocument = async (doc, type, subtype) => {
+    const addDocument = async (doc,) => {
         setLoading(true);
         dispatch({ type: 'IS_PENDING' });
         try {
-            
-            const createdAt = getSydneyTimeISO();
-            const userId = user.uid;
             const newDocument = await ref.add({
-                ...doc,
-                createdAt: createdAt,
-                userId: userId,
-                type: type,
-                subtype: subtype,
-                interests: 0,
+                ...doc
             });
 
             const addedDocument = newDocument;

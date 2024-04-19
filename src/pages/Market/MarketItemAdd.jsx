@@ -1,13 +1,16 @@
 import { useFirestore } from '../../hooks/useFirestore';
 import MarketItemForm from '../../components/MarketItem/MarketItemForm';
-
+import { useDispatch } from 'react-redux';
 import { useAuthContext } from '../../hooks/useAuth';
+import { addItem } from '../../store/marketCollectionSlice';
+import { getSydneyTimeISO } from '../../util/formDate';
+
 
 import { useDocument } from '../../hooks/useDocument';
 
 export default function AddMarketItem(){
     const { addDocument, response, loading} = useFirestore('MarketItem');
-
+    const dispatch = useDispatch();
     const {user} = useAuthContext();
     const {document: userInfo} = useDocument('User', user?.uid)
     
@@ -15,7 +18,7 @@ export default function AddMarketItem(){
 
     const doAddDocument = async (title,description,images,bucket) => {
         if(userInfo) {
-            
+            const createdAt = getSydneyTimeISO();
             const newMItem = {
                 title,
                 description,
@@ -27,8 +30,14 @@ export default function AddMarketItem(){
                     gu: userInfo.location.gu,
                     dong: userInfo.location.dong,
                 },
+                createdAt: createdAt,
+                userId: userInfo.id,
+                type: "M_Item",
+                subtype: "M_Item",
+                interests: 0,
             }
             await addDocument(newMItem,"M_Item","M_Item");
+            dispatch(addItem(newMItem));
         }
      
     };

@@ -12,7 +12,9 @@ const marketCollectionSlice = createSlice({
         minuseInterest() {},
         addComment() {},
         deleteComment() {},
-        addItem() {},
+        addItem(state , action) {
+            state.marketItems = [action.payload, ...state.marketItems];
+        },
         deleteItem() {},
         fetchCollection(state, action) {
             state.marketItems = action.payload.documents

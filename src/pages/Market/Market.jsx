@@ -7,6 +7,8 @@ import { getCollection } from '../../api/getCollection';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCollection } from '../../store/marketCollectionSlice';
+import { useCollection } from '../../hooks/useCollection';
+
 
 export default function MarketPage() {
     // const { document, error, loading } = useCollection('MarketItem', [
@@ -17,14 +19,16 @@ export default function MarketPage() {
     const reduxDocument = useSelector(
         (state) => state.marketCollection.marketItems
     );
+
+    const {document} = useCollection('MarketItem', ['createdAt', 'desc']);
     
-    const { data, error, isLoading } = useQuery({
+    const { data, error, isLoading } = useQuery({   
         queryKey: ['MarketItem'],
         queryFn: () => getCollection('MarketItem', ['createdAt', 'desc']),
         cacheTime: Infinity,
         staleTime: Infinity,
     });
-
+    // const severData = getCollection('MarketItem', ['createdAt', 'desc']);
     useEffect(() => {
         if (!isLoading && !error && data) {
             dispatch(fetchCollection({ documents: data }));
@@ -49,7 +53,7 @@ export default function MarketPage() {
                     </button>
                     <button
                         onClick={() => {
-                            console.log(data);
+                            console.log(document);
                         }}
                     >
                         console sever document
