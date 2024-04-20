@@ -2,6 +2,9 @@ import { useEffect, useState } from 'react';
 import { timestamp } from '../../firebase/config';
 import { useFirestore } from '../../hooks/useFirestore';
 import spinner from '../../assets/spinner.svg';
+import { useDispatch } from 'react-redux';
+import {delteReplyOnItem, updateReplyOnItem} from '../../store/ItemSlice'
+import { getSydneyTimeISO } from '../../util/formDate';
 
 export default function ReplyForm({
     serverUser,
@@ -15,6 +18,7 @@ export default function ReplyForm({
     const [editReplyContent, setEditReplyContent] = useState(
         clientReply?.content
     );
+    const dispatch = useDispatch();
 
     useEffect(() => {
         const targetComment = serverItem?.comments?.find(
@@ -74,6 +78,7 @@ export default function ReplyForm({
     };
 
     const editReply = async (reply_id) => {
+
         const replyIndex = comment.childComment.findIndex(
             (c) => c.id === reply_id
         );
@@ -83,7 +88,7 @@ export default function ReplyForm({
             const editedReply = {
                 ...originalReply,
                 content: editReplyContent,
-                createdAt: timestamp.fromDate(new Date()),
+                createdAt: getSydneyTimeISO(timestamp.fromDate(new Date())),
             };
 
             const updatedReply = [
@@ -116,6 +121,8 @@ export default function ReplyForm({
                     },
                     'MarketItem'
                 );
+
+                dispatch(updateReplyOnItem({reply: editedReply, commentId : comment.id }))
             }
         }
     };

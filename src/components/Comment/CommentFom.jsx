@@ -7,7 +7,7 @@ import { useDocument } from '../../hooks/useDocument';
 import spinner from '../../assets/spinner.svg';
 import AddReplyForm from './AddReplyForm';
 import { useDispatch } from 'react-redux';
-import { deleteCommentOnItem, updateCommentOnItem } from '../../store/ItemSlice';
+import { deleteCommentOnItem, updateCommentOnItem, addReplyOnItem } from '../../store/ItemSlice';
 import { getSydneyTimeISO } from '../../util/formDate';
 
 // import spinner from '../../assets/spinner.svg'
@@ -24,19 +24,18 @@ export default function CommentForm({ collection, serverItem, clientComment }) {
     );
 
     const [isEditComment, setIsEditComment] = useState(false);
-    const [clientReply, setClientReply] = useState([]);
 
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        const matchedComment = serverItem?.comments?.find(comment => comment.id === clientComment.id);
-        if (matchedComment) {
-            setClientReply(matchedComment.childComment);
-        }
-    }, [
-        clientComment?.id,
-        serverItem?.comments
-    ]);
+    // useEffect(() => {
+    //     const matchedComment = serverItem?.comments?.find(comment => comment.id === clientComment.id);
+    //     if (matchedComment) {
+    //         setClientReply(matchedComment.childComment);
+    //     }
+    // }, [
+    //     clientComment?.id,
+    //     serverItem?.comments
+    // ]);
 
     useEffect(() => {
         if (serverItem?.comments) {
@@ -130,7 +129,7 @@ export default function CommentForm({ collection, serverItem, clientComment }) {
             );
             originalUserInfo.userComment = updatedUserComments;
             await updateDocument(user.uid, originalUserInfo, 'User');
-            
+
             dispatch(updateCommentOnItem({comment: editedComment}))
         }
     };
@@ -139,38 +138,36 @@ export default function CommentForm({ collection, serverItem, clientComment }) {
         const commentIndex = serverItem.comments.findIndex(
             (c) => c.id === clientComment.id
         );
-
+    
         if (commentIndex !== -1) {
-            const commentToUpdate = serverItem.comments[commentIndex];
-
-            // if (!commentToUpdate.childComment) {
-            //     commentToUpdate.childComment = [];
-            // }
-
+            const commentToUpdate = {...serverItem.comments[commentIndex]};
             const reply = {
                 displayName: userInfo.displayName,
                 userId: userInfo.id,
                 content: content,
-                createdAt: timestamp.fromDate(new Date()),
+                createdAt: getSydneyTimeISO(timestamp.fromDate(new Date())),
                 id: Math.random(),
             };
-            setClientReply((prevState) => [...prevState, reply]);
-
-            commentToUpdate.childComment.push(reply);
-
+    
+            commentToUpdate.childComment = commentToUpdate.childComment ? 
+                [...commentToUpdate.childComment, reply] : [reply];
+    
+            const updatedComments = [
+                ...serverItem.comments.slice(0, commentIndex),
+                commentToUpdate,
+                ...serverItem.comments.slice(commentIndex + 1),
+            ];
+    
             await updateDocument(
                 serverItem.id,
-                {
-                    comments: [
-                        ...serverItem.comments.slice(0, commentIndex),
-                        commentToUpdate,
-                        ...serverItem.comments.slice(commentIndex + 1),
-                    ],
-                },
+                { comments: updatedComments },
                 collection
             );
+    
+            dispatch(addReplyOnItem({ reply: reply, commentId: clientComment.id}));
         }
     };
+    
 
     return (
         <div>
@@ -219,21 +216,22 @@ export default function CommentForm({ collection, serverItem, clientComment }) {
                     {openReplys && (
                         <div>
                             <div>
-                                {clientReply && clientReply.length > 0 &&
-                                    clientReply.map((reply) => (
-                                        <li key={reply.id}>
+                                {clientComment.childComment && clientComment.childComment.length > 0 &&
+                                    clientComment.childComment.map((reply) => (
+                                        <ul key={reply.id}>
                                             <ReplyForm
                                                 serverUser={userInfo}
                                                 serverItem={serverItem}
                                                 clientReply={reply}
                                                 comment={clientComment}
                                             />
-                                        </li>
+                                        </ul>
                                         // <li key ={index}> Hello world</li>
                                     ))}
                             </div>
 
                             <AddReplyForm addReply={addReply} />
+
                         </div>
                     )}
                 </div>
