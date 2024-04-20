@@ -1,19 +1,20 @@
 import style from './MarketItem.module.css';
 import spinner from '../../assets/spinner.svg';
 import { useFirestore } from '../../hooks/useFirestore';
-import { useDocument } from '../../hooks/useDocument';
-import UserDropDown from '../DropDown/userDropDown';
 
+// import { useDocument } from '../../hooks/useDocument';
+// import UserDropDown from '../DropDown/userDropDown';
 // import rightArrow from '../../assets/right.png';
 // import leftArrow from '../../assets/left.png';
 // import { useState } from 'react';
 
 export default function MarketItem({ document }) {
     const { loading } = useFirestore('MarketItem');
-    const { document: writer, loading: writerLoading } = useDocument(
-        'User',
-        document?.userId
-    );
+
+    // const { document: writer, loading: writerLoading } = useDocument(
+    //     'User',
+    //     document?.userId
+    // );
 
     // const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -43,7 +44,8 @@ export default function MarketItem({ document }) {
                     <span>{document.location.si} 시 </span>
                     <span>{document.location.gu} 구 </span>
                     <span>{document.location.dong} 동 </span>
-                    {writerLoading ? (
+
+                    {/* {writerLoading ? (
                         <p>작성자 불러오는중.. </p>
                     ) : (
                         writer && (
@@ -51,7 +53,7 @@ export default function MarketItem({ document }) {
                                 <UserDropDown writer={writer} />
                             </div>
                         )
-                    )}
+                    )} */}
                 </div>
             )}
 

@@ -3,6 +3,8 @@ import { projectFirestore, timestamp, FieldValue } from '../firebase/config';
 import { useAuthContext } from './useAuth';
 import { useDocument } from './useDocument';
 import {formatDate} from '../util/formDate'
+import { useDispatch } from 'react-redux';
+import {addItem} from '../store/marketCollectionSlice'
 
 let initalState = {
     document: null,
@@ -86,6 +88,8 @@ export const useFirestore = (collection) => {
     const { user } = useAuthContext();
     const { document } = useDocument('User', user?.uid);
 
+    const reduxDispatch = useDispatch()
+
     const dispatchIsNotCancelled = (action) => {
         if (!isCancelled) {
             dispatch(action);
@@ -99,6 +103,13 @@ export const useFirestore = (collection) => {
             const newDocument = await ref.add({
                 ...doc
             });
+            console.log(newDocument.id)
+            
+            const reduxItem = {
+                ...doc,
+                id: newDocument.id
+            }
+            reduxDispatch(addItem(reduxItem));
 
             const addedDocument = newDocument;
             const originalUser = document;

@@ -11,6 +11,8 @@ import { Link } from 'react-router-dom';
 import { useAuthContext } from '../../hooks/useAuth';
 import { useDocument } from '../../hooks/useDocument';
 import { useFirestore } from '../../hooks/useFirestore';
+import { useDispatch } from 'react-redux';
+import { plusInterest, minusInterest } from '../../store/marketCollectionSlice';
 
 export default function MarketList({ documents }) {
     const [deleteItemId, setDeleteItemId] = useState(null);
@@ -25,29 +27,26 @@ export default function MarketList({ documents }) {
 
     const [searchedItem, setSearchedItem] = useState([]);
     const [results, setResults] = useState([]);
+    const dispatch = useDispatch();
 
     const [userSi, setUserSi] = useState('');
     const [userGu, setUserGu] = useState('');
     const [userDong, setUserDong] = useState('');
     const [hasedPlace, setHasedPlace] = useState('');
     const [selectedPlace, setSelectedPlace] = useState('dong');
-    const [clientDocument, setClientDocument] = useState(documents);
 
     useEffect(() => {
         const emptyArray = [];
         setSearchedItem(emptyArray);
-        console.log(clientDocument)
-        clientDocument.map((document) => {
-            
+        documents.map((document) => {
             if (
-                
                 document.title.includes(searchTitle) ||
                 document.description.includes(searchTitle)
             ) {
                 setSearchedItem((prev) => [...prev, document]);
             }
         });
-    }, [searchTitle, clientDocument]);
+    }, [searchTitle, documents]);
 
     useEffect(() => {
         if (userInfo?.location) {
@@ -103,12 +102,28 @@ export default function MarketList({ documents }) {
         const updatedInterests = originalUser.interests;
 
         const index = updatedInterests.indexOf(item.id);
+
         if (index > -1) {
             updatedInterests.splice(index, 1);
-            minusInterest(item);
+            dispatch(minusInterest({ id: item.id }));
+            const originalItem = item;
+            const updatedInterets = item.interests - 1;
+            const updatedItem = {
+                ...originalItem,
+                interests: updatedInterets,
+            };
+            await updateDocument(item.id, updatedItem, 'MarketItem');
+
         } else {
             updatedInterests.push(item.id);
-            plusInterest(item);
+            dispatch(plusInterest({ id: item.id }));
+            const originalItem = item;
+            const updatedInterets = item.interests + 1;
+            const updatedItem = {
+                ...originalItem,
+                interests: updatedInterets,
+            };
+            await updateDocument(item.id, updatedItem, 'MarketItem');
         }
 
         const updatedUser = {
@@ -119,58 +134,58 @@ export default function MarketList({ documents }) {
         await updateDocument(userInfo.id, updatedUser, 'User');
     };
 
-    const plusInterest = async (item) => {
-        const originalClientDocument = clientDocument;
-        const itemIndex = originalClientDocument.findIndex(
-            (ogClientItem) => ogClientItem.id === item.id
-        );
+    // const plusInterest = async (item) => {
+    //     const originalClientDocument = clientDocument;
+    //     const itemIndex = originalClientDocument.findIndex(
+    //         (ogClientItem) => ogClientItem.id === item.id
+    //     );
 
-        if (itemIndex !== -1) {
-            // 아이템을 찾았고, 이제 해당 항목의 interests를 1 증가시킵니다.
-            const updatedClientDocument = [...originalClientDocument]; // 배열을 복사합니다.
-            updatedClientDocument[itemIndex] = {
-                ...updatedClientDocument[itemIndex],
-                interests: updatedClientDocument[itemIndex].interests + 1,
-            };
+    //     if (itemIndex !== -1) {
+    //         // 아이템을 찾았고, 이제 해당 항목의 interests를 1 증가시킵니다.
+    //         const updatedClientDocument = [...originalClientDocument]; // 배열을 복사합니다.
+    //         updatedClientDocument[itemIndex] = {
+    //             ...updatedClientDocument[itemIndex],
+    //             interests: updatedClientDocument[itemIndex].interests + 1,
+    //         };
 
-            // 업데이트된 배열을 상태로 설정합니다.
-            setClientDocument(updatedClientDocument);
-        }
+    //         // 업데이트된 배열을 상태로 설정합니다.
+    //         setClientDocument(updatedClientDocument);
+    //     }
 
-        const originalItem = item;
-        const updatedInterets = item.interests + 1;
-        const updatedItem = {
-            ...originalItem,
-            interests: updatedInterets,
-        };
-        await updateDocument(item.id, updatedItem, 'MarketItem');
-    };
+    //     const originalItem = item;
+    //     const updatedInterets = item.interests + 1;
+    //     const updatedItem = {
+    //         ...originalItem,
+    //         interests: updatedInterets,
+    //     };
+    //     await updateDocument(item.id, updatedItem, 'MarketItem');
+    // };
 
-    const minusInterest = async (item) => {
+    // const minusInterest = async (item) => {
 
-        const originalClientDocument = clientDocument;
-        const itemIndex = originalClientDocument.findIndex(
-            (ogClientItem) => ogClientItem.id === item.id
-        );
+    //     const originalClientDocument = clientDocument;
+    //     const itemIndex = originalClientDocument.findIndex(
+    //         (ogClientItem) => ogClientItem.id === item.id
+    //     );
 
-        if (itemIndex !== -1) {
-            const updatedClientDocument = [...originalClientDocument]; 
-            updatedClientDocument[itemIndex] = {
-                ...updatedClientDocument[itemIndex],
-                interests: updatedClientDocument[itemIndex].interests - 1,
-            };
+    //     if (itemIndex !== -1) {
+    //         const updatedClientDocument = [...originalClientDocument];
+    //         updatedClientDocument[itemIndex] = {
+    //             ...updatedClientDocument[itemIndex],
+    //             interests: updatedClientDocument[itemIndex].interests - 1,
+    //         };
 
-            setClientDocument(updatedClientDocument);
-        }
+    //         setClientDocument(updatedClientDocument);
+    //     }
 
-        const originalItem = item;
-        const updatedInterets = item.interests - 1;
-        const updatedItem = {
-            ...originalItem,
-            interests: updatedInterets,
-        };
-        await updateDocument(item.id, updatedItem, 'MarketItem');
-    };
+    //     const originalItem = item;
+    //     const updatedInterets = item.interests - 1;
+    //     const updatedItem = {
+    //         ...originalItem,
+    //         interests: updatedInterets,
+    //     };
+    //     await updateDocument(item.id, updatedItem, 'MarketItem');
+    // };
 
     const placeSetting = (si, gu, dong) => {
         setUserSi(si);
@@ -214,7 +229,7 @@ export default function MarketList({ documents }) {
     };
 
     return response.error ? (
-        <p> error </p>
+        <p> {response.error} </p>
     ) : (
         <div>
             <input
@@ -256,9 +271,9 @@ export default function MarketList({ documents }) {
             </div>
 
             <ul>
-                {results.map((doc) => (
-                    <li key={doc.id}>
-                        <MarketItem document={doc} />
+                {results.map((doc, index) => (
+                    <li key={index}>
+                        <MarketItem document={doc} writer={user?.uid} />
                         <Link to={`/market/${doc.id}`}>{doc.title}</Link>
                         {userInfo && doc.userId === user.uid && (
                             <div>
