@@ -32,6 +32,7 @@ export default function AddMarketItem(){
                 type: "M_Item",
                 subtype: "M_Item",
                 interests: 0,
+                numOfComment:0
             }
             await addDocument(newMItem,"M_Item","M_Item");
         }

@@ -3,8 +3,10 @@ import { timestamp } from '../../firebase/config';
 import { useFirestore } from '../../hooks/useFirestore';
 import spinner from '../../assets/spinner.svg';
 import { useDispatch } from 'react-redux';
-import {delteReplyOnItem, updateReplyOnItem} from '../../store/ItemSlice'
+import { delteReplyOnItem, updateReplyOnItem } from '../../store/ItemSlice';
 import { getSydneyTimeISO } from '../../util/formDate';
+// import { deleteComment } from '../../store/marketCollectionSlice';
+import { deleteCommentOnCollection } from '../../store/marketCollectionSlice';
 
 export default function ReplyForm({
     serverUser,
@@ -50,10 +52,10 @@ export default function ReplyForm({
         const commentIndex = serverItem.comments.findIndex(
             (c) => c.id === comment.id
         );
-    
+
         if (commentIndex !== -1) {
             const commentToUpdate = serverItem.comments[commentIndex];
-    
+
             if (commentToUpdate.childComment) {
                 const replyIndex = commentToUpdate.childComment.findIndex(
                     (r) => r.id === replyId
@@ -62,37 +64,46 @@ export default function ReplyForm({
                     // 불변성을 유지하면서 배열에서 답글 제거
                     const updatedChildComments = [
                         ...commentToUpdate.childComment.slice(0, replyIndex),
-                        ...commentToUpdate.childComment.slice(replyIndex + 1)
+                        ...commentToUpdate.childComment.slice(replyIndex + 1),
                     ];
-    
+
                     // 업데이트할 댓글 객체에 새로운 답글 배열 할당
                     // commentToUpdate.childComment = updatedChildComments;
 
-                    let updatedReply =  commentToUpdate.childComment
+                    let updatedReply = commentToUpdate.childComment;
                     updatedReply = updatedChildComments;
-    
+
                     // 전체 댓글 배열 업데이트
                     const updatedComments = [
                         ...serverItem.comments.slice(0, commentIndex),
                         updatedReply,
                         ...serverItem.comments.slice(commentIndex + 1),
                     ];
-    
+                    const newNumOfComment = serverItem.numOfComment - 1;
                     await updateDocument(
                         serverItem.id,
-                        { comments: updatedComments },
+                        {
+                            comments: updatedComments,
+                            numOfComment: newNumOfComment,
+                        },
                         'MarketItem'
                     );
-    
-                    dispatch(delteReplyOnItem({ replyId: replyId, commentId: comment.id }));
+
+                    dispatch(
+                        delteReplyOnItem({
+                            replyId: replyId,
+                            commentId: comment.id,
+                        })
+                    );
+                    dispatch(
+                        deleteCommentOnCollection({ itemId: serverItem.id })
+                    );
                 }
             }
         }
     };
-    
 
     const editReply = async (reply_id) => {
-
         const replyIndex = comment.childComment.findIndex(
             (c) => c.id === reply_id
         );
@@ -136,7 +147,12 @@ export default function ReplyForm({
                     'MarketItem'
                 );
 
-                dispatch(updateReplyOnItem({reply: editedReply, commentId : comment.id }))
+                dispatch(
+                    updateReplyOnItem({
+                        reply: editedReply,
+                        commentId: comment.id,
+                    })
+                );
             }
         }
     };

@@ -35,10 +35,19 @@ const marketCollectionSlice = createSlice({
         },
 
 
-        addComment() {},
-        deleteComment() {},
+        addCommentOnCollection(state, action) {
+            const index = state.marketItems.findIndex((item) => item.id == action.payload.itemId)
+            if(index !== -1){
+               state.marketItems[index].numOfComment =state.marketItems[index].numOfComment +1
+            }
+        },
 
-
+        deleteCommentOnCollection(state, action) {
+            const index = state.marketItems.findIndex((item) => item.id == action.payload.itemId)
+            if(index !== -1){
+               state.marketItems[index].numOfComment =state.marketItems[index].numOfComment-1 
+            }
+        },
 
         deleteItemFromRedux(state, action) {
             console.log("딜리트 시작")
@@ -65,8 +74,8 @@ const marketCollectionSlice = createSlice({
 export const {
     plusInterest,
     minusInterest,
-    addComment,
-    deleteComment,
+    addCommentOnCollection,
+    deleteCommentOnCollection,
     addItem,
     deleteItemFromRedux,
     fetchCollection,

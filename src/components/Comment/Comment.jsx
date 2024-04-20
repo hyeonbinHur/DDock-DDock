@@ -6,6 +6,7 @@ import CommentForm from './CommentFom';
 import { useDocument } from '../../hooks/useDocument';
 import { useDispatch } from 'react-redux';
 import {addCommentOnItem} from '../../store/ItemSlice'
+import { addCommentOnCollection } from '../../store/marketCollectionSlice';
 import { getSydneyTimeISO } from '../../util/formDate';
 
 export default function Comment({ serverItem, collection }) {
@@ -37,16 +38,18 @@ export default function Comment({ serverItem, collection }) {
         };
         
         setClientComments((prevState) => [...prevState, addedComment]);
-
+        const newNumOfComment = serverItem.numOfComment+1;
         await updateDocument(
             serverItem.id,
             {
                 comments: [...serverItem.comments, addedComment],
+                numOfComment: newNumOfComment
             },
             collection
         );
 
         dispatch(addCommentOnItem({comment: addedComment}))
+        dispatch(addCommentOnCollection({itemId:serverItem.id }))
 
 
         const originalUser = userInfo;

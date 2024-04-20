@@ -7,8 +7,16 @@ import { useDocument } from '../../hooks/useDocument';
 import spinner from '../../assets/spinner.svg';
 import AddReplyForm from './AddReplyForm';
 import { useDispatch } from 'react-redux';
-import { deleteCommentOnItem, updateCommentOnItem, addReplyOnItem } from '../../store/ItemSlice';
+import {
+    deleteCommentOnItem,
+    updateCommentOnItem,
+    addReplyOnItem,
+} from '../../store/ItemSlice';
 import { getSydneyTimeISO } from '../../util/formDate';
+import {
+    addCommentOnCollection,
+    deleteCommentOnCollection,
+} from '../../store/marketCollectionSlice';
 
 // import spinner from '../../assets/spinner.svg'
 
@@ -71,11 +79,13 @@ export default function CommentForm({ collection, serverItem, clientComment }) {
                 ...serverItem.comments.slice(0, commentIndex),
                 ...serverItem.comments.slice(commentIndex + 1),
             ];
+            const newNumOfComment = serverItem.numOfComment - 1;
 
             await updateDocument(
                 serverItem.id,
                 {
                     comments: updatedComments,
+                    numOfComment: newNumOfComment,
                 },
                 collection
             );
@@ -87,7 +97,8 @@ export default function CommentForm({ collection, serverItem, clientComment }) {
             originalUserInfo.userComment = updatedUserComments;
             await updateDocument(user.uid, originalUserInfo, 'User');
 
-            dispatch(deleteCommentOnItem({id:id}))
+            dispatch(deleteCommentOnItem({ id: id }));
+            dispatch(deleteCommentOnCollection({ itemId: serverItem.id }));
         }
     };
 
@@ -130,7 +141,7 @@ export default function CommentForm({ collection, serverItem, clientComment }) {
             originalUserInfo.userComment = updatedUserComments;
             await updateDocument(user.uid, originalUserInfo, 'User');
 
-            dispatch(updateCommentOnItem({comment: editedComment}))
+            dispatch(updateCommentOnItem({ comment: editedComment }));
         }
     };
 
@@ -138,9 +149,9 @@ export default function CommentForm({ collection, serverItem, clientComment }) {
         const commentIndex = serverItem.comments.findIndex(
             (c) => c.id === clientComment.id
         );
-    
+
         if (commentIndex !== -1) {
-            const commentToUpdate = {...serverItem.comments[commentIndex]};
+            const commentToUpdate = { ...serverItem.comments[commentIndex] };
             const reply = {
                 displayName: userInfo.displayName,
                 userId: userInfo.id,
@@ -148,26 +159,30 @@ export default function CommentForm({ collection, serverItem, clientComment }) {
                 createdAt: getSydneyTimeISO(timestamp.fromDate(new Date())),
                 id: Math.random(),
             };
-    
-            commentToUpdate.childComment = commentToUpdate.childComment ? 
-                [...commentToUpdate.childComment, reply] : [reply];
-    
+
+            commentToUpdate.childComment = commentToUpdate.childComment
+                ? [...commentToUpdate.childComment, reply]
+                : [reply];
+
             const updatedComments = [
                 ...serverItem.comments.slice(0, commentIndex),
                 commentToUpdate,
                 ...serverItem.comments.slice(commentIndex + 1),
             ];
-    
+            const newNumOfComment = serverItem.numOfComment + 1;
+
             await updateDocument(
                 serverItem.id,
-                { comments: updatedComments },
+                { comments: updatedComments, numOfComment: newNumOfComment },
                 collection
             );
-    
-            dispatch(addReplyOnItem({ reply: reply, commentId: clientComment.id}));
+
+            dispatch(
+                addReplyOnItem({ reply: reply, commentId: clientComment.id })
+            );
+            dispatch(addCommentOnCollection({ itemId: serverItem.id }));
         }
     };
-    
 
     return (
         <div>
@@ -183,7 +198,7 @@ export default function CommentForm({ collection, serverItem, clientComment }) {
                 <div>
                     {addCommentLoading && <img src={spinner} />}
                     {clientComment.content}
-                    {loading && <img src={spinner}/> }
+                    {loading && <img src={spinner} />}
                 </div>
             )}
 
@@ -216,7 +231,8 @@ export default function CommentForm({ collection, serverItem, clientComment }) {
                     {openReplys && (
                         <div>
                             <div>
-                                {clientComment.childComment && clientComment.childComment.length > 0 &&
+                                {clientComment.childComment &&
+                                    clientComment.childComment.length > 0 &&
                                     clientComment.childComment.map((reply) => (
                                         <ul key={reply.id}>
                                             <ReplyForm
@@ -231,7 +247,6 @@ export default function CommentForm({ collection, serverItem, clientComment }) {
                             </div>
 
                             <AddReplyForm addReply={addReply} />
-
                         </div>
                     )}
                 </div>

@@ -287,15 +287,7 @@ export default function MarketList({ documents }) {
                         <div className={style.pngContainer}>
                             <img src={commentPng} className={style.basicPng} />
                             <p>
-                                {doc.comments.reduce(
-                                    (acc, comment) =>
-                                        acc +
-                                        1 +
-                                        (comment.childComment
-                                            ? comment.childComment.length
-                                            : 0),
-                                    0
-                                )}
+                                {doc.numOfComment}
                                 개
                             </p>
 
