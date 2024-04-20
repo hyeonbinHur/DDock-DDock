@@ -4,6 +4,9 @@ import { useEffect, useState } from 'react';
 import { timestamp } from '../../firebase/config';
 import CommentForm from './CommentFom';
 import { useDocument } from '../../hooks/useDocument';
+import { useDispatch } from 'react-redux';
+import {addCommentOnItem} from '../../store/ItemSlice'
+import { getSydneyTimeISO } from '../../util/formDate';
 
 export default function Comment({ serverItem, collection }) {
     const { updateDocument, response } = useFirestore(collection);
@@ -12,6 +15,7 @@ export default function Comment({ serverItem, collection }) {
     const { document: userInfo } = useDocument('User', user.uid);
     const [comment, setComment] = useState('');
     const [clientComments, setClientComments] = useState([]);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         setClientComments(serverItem.comments);
@@ -26,7 +30,7 @@ export default function Comment({ serverItem, collection }) {
             displayName: user.displayName,
             userId: user.uid,
             content: comment,
-            createdAt: timestamp.fromDate(new Date()),
+            createdAt: getSydneyTimeISO(timestamp.fromDate(new Date())),
             id: Math.random(),
             childComment: [],
             serverItemId: serverItem.id,
@@ -41,6 +45,10 @@ export default function Comment({ serverItem, collection }) {
             },
             collection
         );
+
+        dispatch(addCommentOnItem({comment: addedComment}))
+
+
         const originalUser = userInfo;
         const originalUserComment = originalUser.userComment;
         const updatedUserComment = [...originalUserComment, addedComment];
@@ -69,7 +77,7 @@ export default function Comment({ serverItem, collection }) {
                 {clientComments.length > 0 &&
                     clientComments.map((clientComment) => {
                         return (
-                            <li key={comment.id}>
+                            <li key={clientComment.id}>
                                 <CommentForm
                                     collection={collection}
                                     serverItem={serverItem}

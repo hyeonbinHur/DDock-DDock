@@ -6,6 +6,9 @@ import ReplyForm from './ReplyForm';
 import { useDocument } from '../../hooks/useDocument';
 import spinner from '../../assets/spinner.svg';
 import AddReplyForm from './AddReplyForm';
+import { useDispatch } from 'react-redux';
+import { deleteCommentOnItem, updateCommentOnItem } from '../../store/ItemSlice';
+import { getSydneyTimeISO } from '../../util/formDate';
 
 // import spinner from '../../assets/spinner.svg'
 
@@ -22,6 +25,8 @@ export default function CommentForm({ collection, serverItem, clientComment }) {
 
     const [isEditComment, setIsEditComment] = useState(false);
     const [clientReply, setClientReply] = useState([]);
+
+    const dispatch = useDispatch();
 
     useEffect(() => {
         const matchedComment = serverItem?.comments?.find(comment => comment.id === clientComment.id);
@@ -82,6 +87,8 @@ export default function CommentForm({ collection, serverItem, clientComment }) {
             );
             originalUserInfo.userComment = updatedUserComments;
             await updateDocument(user.uid, originalUserInfo, 'User');
+
+            dispatch(deleteCommentOnItem({id:id}))
         }
     };
 
@@ -95,7 +102,7 @@ export default function CommentForm({ collection, serverItem, clientComment }) {
             const editedComment = {
                 ...originalComment,
                 content: editCommentContent,
-                createdAt: timestamp.fromDate(new Date()),
+                createdAt: getSydneyTimeISO(timestamp.fromDate(new Date())),
             };
 
             const updatedComments = [
@@ -123,6 +130,8 @@ export default function CommentForm({ collection, serverItem, clientComment }) {
             );
             originalUserInfo.userComment = updatedUserComments;
             await updateDocument(user.uid, originalUserInfo, 'User');
+            
+            dispatch(updateCommentOnItem({comment: editedComment}))
         }
     };
 
