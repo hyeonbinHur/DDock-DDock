@@ -12,7 +12,8 @@ import {
     minusInterestOnJCollection,
 } from '../../store/jobCollectionSlice';
 import { useDispatch } from 'react-redux';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import PlaceSettingModal from '../Modal/PlaceSettingModal';
 
 export default function JobItemList({ Items, collection }) {
     const { user } = useAuthContext();
@@ -25,8 +26,9 @@ export default function JobItemList({ Items, collection }) {
     const [selectedSi, setSeletedSi] = useState('');
     const [selectedGu, setSeletedGu] = useState('');
     const [selectedDong, setSeletedDong] = useState('');
-
     const [filterByPlace, setFilterByPlace] = useState([]);
+
+    const placeModal = useRef();
 
     useEffect(() => {
         const emptyArray = [];
@@ -56,7 +58,7 @@ export default function JobItemList({ Items, collection }) {
             });
         }
 
-        setFilterByPlace(emptyArray)
+        setFilterByPlace(emptyArray);
     }, [Items, selectedDong, selectedGu, selectedPlace, selectedSi]);
 
     useEffect(() => {
@@ -121,6 +123,12 @@ export default function JobItemList({ Items, collection }) {
         setSelectedPlace(event.target.value);
     };
 
+    const placeSetting = (si, gu, dong) => {
+        setSeletedSi(si);
+        setSeletedGu(gu);
+        setSeletedDong(dong);
+    };
+
     return (
         <>
             <div>
@@ -164,6 +172,7 @@ export default function JobItemList({ Items, collection }) {
                     />
                     /
                 </span>
+                <button onClick={()=>placeModal.current.open()}> 내 위치 설정 </button>
             </div>
 
             <div>
@@ -211,6 +220,11 @@ export default function JobItemList({ Items, collection }) {
                     ))}
                 </ul>
             </div>
+            <PlaceSettingModal
+                ref={placeModal}
+                placeSettingFn={placeSetting}
+                user={userData}
+            />
         </>
     );
 }
