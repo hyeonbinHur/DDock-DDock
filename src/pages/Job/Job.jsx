@@ -50,7 +50,7 @@ export default function JobPage() {
                     <Link to="/job/add"> Add Job Page </Link>
                     <p> {jobCollectionFromRedux.length}</p>
                     {jobCollectionFromRedux.length > 0 && (
-                        <JobItemList collection={jobCollectionFromRedux} />
+                        <JobItemList Items={jobCollectionFromRedux} collection="JobItem" />
                     )}
                 </div>
             )}
