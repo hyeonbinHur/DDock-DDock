@@ -10,7 +10,7 @@ import ItemDeleteModal from '../../components/Modal/ItemDeleteModal';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getDocument } from '../../api/getDocument';
-import { addCommentOnItem, readItem } from '../../store/ItemSlice';
+import { readItem } from '../../store/ItemSlice';
 
 export default function MarketItemDetail() {
     const { mitemId } = useParams();
@@ -118,11 +118,11 @@ export default function MarketItemDetail() {
                             <button onClick={() => openConfirmModal()}>
                                 delete Item
                             </button>
-                            <button
+                            {/* <button
                                 onClick={() => dispatch(addCommentOnItem())}
                             >
                                 Hello add Comment
-                            </button>
+                            </button> */}
                         </div>
                     )}
                     <Comment serverItem={reduxItem} collection="MarketItem" />
@@ -131,6 +131,7 @@ export default function MarketItemDetail() {
                         id={mitemId}
                         navigate={navigate}
                         from={'market'}
+                        collection='MarketItem'
                     />
                 </div>
             )}

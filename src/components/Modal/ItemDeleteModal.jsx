@@ -12,9 +12,11 @@ import { useDocument } from '../../hooks/useDocument';
 import { useAuthContext } from '../../hooks/useAuth';
 import { deleteItemFromRedux } from '../../store/marketCollectionSlice';
 import { useDispatch } from 'react-redux';
+import { deleteJobItem } from '../../store/jobCollectionSlice';
+
 
 const ItemDeleteModal = forwardRef(function ItemStatusModal(
-    { id, from, navigate },
+    { id, from, navigate,collection },
     ref
 ) {
     const { deleteDocument, updateDocument, loading, response } =
@@ -39,16 +41,17 @@ const ItemDeleteModal = forwardRef(function ItemStatusModal(
     useEffect(() => {
         if (!loading && response.success) {
             if (from == 'market') {
-                console.log('네비게이트');
                 dispatch(deleteItemFromRedux({ id: id }));
-               
+            }else if(from == 'job'){
+                dispatch(deleteJobItem({id:id}))
             }
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [loading, response]);
 
     const deleteItem = async () => {
         setConfirm(true);
-        await deleteDocument(id);
+        await deleteDocument(id,collection);
 
         const originalUserInfo = userInfo;
         const updatedUserItem = originalUserInfo.userItem.filter(
@@ -61,7 +64,11 @@ const ItemDeleteModal = forwardRef(function ItemStatusModal(
     function handleClose() {
         modal.current.close();
         setConfirm(false); // 모달을 닫을 때 confirm 상태도 초기화
-        navigate('/market');
+        if(from == 'market'){
+            navigate('/market');
+        }else if(from == 'job'){
+            navigate('/job');
+        }
     }
 
     return createPortal(

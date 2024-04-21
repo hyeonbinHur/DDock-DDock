@@ -11,6 +11,12 @@ const jobCollectionSlice = createSlice({
         fetchCollection(state, action) {
             state.jobItems = action.payload.collection;
         },
+        deleteJobItem(state, action){
+            const index = state.jobItems.forEach((item) => item.id == action.payload.id)
+            if(index != -1){
+                state.jobItems.splice(index,1);
+            }
+        },
         addJobItem(state, action) {
             state.jobItems = [action.payload.item, ...state.jobItems];
         },
@@ -79,5 +85,6 @@ export const {
     deleteCommentOnJCollection,
     plusInteresOnJCollection,
     minusInterestOnJCollection,
+    deleteJobItem,
 } = jobCollectionSlice.actions;
 export default jobCollectionSlice.reducer;

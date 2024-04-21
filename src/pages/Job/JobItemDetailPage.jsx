@@ -1,11 +1,14 @@
 import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { getDocument } from '../../api/getDocument';
 import { readItem } from '../../store/ItemSlice';
 import Condition from '../../components/JobItem/Condition';
 import Comment from '../../components/Comment/Comment';
+import { useAuthContext } from '../../hooks/useAuth';
+import ItemDeleteModal from '../../components/Modal/ItemDeleteModal';
+import { useNavigate } from 'react-router-dom';
 
 export default function JobItemDetailPage() {
     const dispatch = useDispatch();
@@ -15,6 +18,9 @@ export default function JobItemDetailPage() {
     const [isLoading, setIsLoading] = useState(false);
     const [imageUrls, setImageUrls] = useState([]);
     const [currentIndxe, setCurrentIndex] = useState(0);
+    const { user } = useAuthContext();
+    const modal = useRef();
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (jItemId) {
@@ -49,7 +55,6 @@ export default function JobItemDetailPage() {
             {!error ? (
                 !isLoading && reduxItem ? (
                     <div>
-
                         <div>
                             {currentIndxe > 0 && (
                                 <button
@@ -63,7 +68,6 @@ export default function JobItemDetailPage() {
 
                             <img src={imageUrls[currentIndxe]} />
 
-
                             {currentIndxe + 1 < imageUrls.length && (
                                 <button
                                     onClick={() =>
@@ -73,18 +77,28 @@ export default function JobItemDetailPage() {
                                     next
                                 </button>
                             )}
-                            <p>{currentIndxe+1}/{imageUrls.length}</p>
+                            <p>
+                                {currentIndxe + 1}/{imageUrls.length}
+                            </p>
                         </div>
                         {/* title layout */}
                         <div>
-                            <p>{reduxItem.title}</p>
-                            <Link to={`edit`}>go to edit</Link>
+                            <h1>{reduxItem.title}</h1>
                         </div>
+
+                        {user?.uid == reduxItem.userId && (
+                            <div>
+                                <Link to={`edit`}>go to edit</Link>
+                                <button onClick={()=>modal.current.open()}> Delete Item </button>{' '}
+                            </div>
+                        )}
+
                         {/* condition layout */}
                         <ul>
                             {reduxItem.conditions.map((condition) => (
                                 <li key={condition.id}>
                                     <Condition content={condition.value} />
+
                                 </li>
                             ))}
                         </ul>
@@ -97,6 +111,13 @@ export default function JobItemDetailPage() {
                                 collection="JobItem"
                             />
                         </div>
+                        <ItemDeleteModal
+                        ref={modal}
+                        id={jItemId}
+                        navigate={navigate}
+                        from={'job'}
+                        collection ='JobItem'
+                    />
                     </div>
                 ) : (
                     <p>Loading</p>
