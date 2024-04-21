@@ -7,12 +7,13 @@ import { delteReplyOnItem, updateReplyOnItem } from '../../store/ItemSlice';
 import { getSydneyTimeISO } from '../../util/formDate';
 // import { deleteComment } from '../../store/marketCollectionSlice';
 import { deleteCommentOnCollection } from '../../store/marketCollectionSlice';
-
+import { deleteCommentOnJCollection } from '../../store/jobCollectionSlice';
 export default function ReplyForm({
     serverUser,
     serverItem,
     comment,
     clientReply,
+    collection
 }) {
     const { updateDocument, loading } = useFirestore('MarketItem');
     const [addReplyLoading, setAddReplyLoading] = useState(true);
@@ -95,9 +96,17 @@ export default function ReplyForm({
                             commentId: comment.id,
                         })
                     );
-                    dispatch(
-                        deleteCommentOnCollection({ itemId: serverItem.id })
-                    );
+
+                    if(collection == "MarketItem"){
+                        dispatch(
+                            deleteCommentOnCollection({ itemId: serverItem.id, num:1 })
+                        );
+                    }else if(collection == "JobItem"){
+                        dispatch(
+                            deleteCommentOnJCollection({ item: serverItem, num: 1 })
+                        );
+                    }
+                  
                 }
             }
         }

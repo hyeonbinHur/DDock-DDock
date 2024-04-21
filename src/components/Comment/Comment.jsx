@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 import {addCommentOnItem} from '../../store/ItemSlice'
 import { addCommentOnCollection } from '../../store/marketCollectionSlice';
 import { getSydneyTimeISO } from '../../util/formDate';
+import { addCommentOnJCollection } from '../../store/jobCollectionSlice';
 
 export default function Comment({ serverItem, collection }) {
     const { updateDocument, response } = useFirestore(collection);
@@ -49,7 +50,12 @@ export default function Comment({ serverItem, collection }) {
         );
 
         dispatch(addCommentOnItem({comment: addedComment}))
-        dispatch(addCommentOnCollection({itemId:serverItem.id }))
+
+        if(collection == "MarketItem"){
+            dispatch(addCommentOnCollection({itemId:serverItem.id }))
+        }else if (collection == "JobItem"){
+            dispatch(addCommentOnJCollection({item:serverItem }))
+        }
 
 
         const originalUser = userInfo;

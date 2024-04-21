@@ -5,6 +5,7 @@ import { useDocument } from './useDocument';
 import {formatDate} from '../util/formDate'
 import { useDispatch } from 'react-redux';
 import {addItem} from '../store/marketCollectionSlice'
+import { addJobItem } from '../store/jobCollectionSlice';
 
 let initalState = {
     document: null,
@@ -96,7 +97,7 @@ export const useFirestore = (collection) => {
         }
     };
 
-    const addDocument = async (doc,) => {
+    const addDocument = async (doc,type) => {
         setLoading(true);
         dispatch({ type: 'IS_PENDING' });
         try {
@@ -109,7 +110,12 @@ export const useFirestore = (collection) => {
                 ...doc,
                 id: newDocument.id
             }
-            reduxDispatch(addItem(reduxItem));
+            if(type == "marketItem"){
+                reduxDispatch(addItem(reduxItem));
+            }else if(type == "jobItem"){
+                reduxDispatch(addJobItem({item : reduxItem}))
+            }
+
 
             const addedDocument = newDocument;
             const originalUser = document;

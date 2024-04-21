@@ -29,13 +29,14 @@ export default function AddJobPage() {
                     gu: userData.location.gu,
                     dong: userData.location.dong,
                 },
+                comments:[],
                 createdAt,
                 userId: userData.id,
                 type: 'J_Item',
                 interests: 0,
                 numOfComment: 0,
             };
-            await addDocument(newItem, 'J_Item', 'J_Item');
+            await addDocument(newItem, "jobItem");
         }
     };
 

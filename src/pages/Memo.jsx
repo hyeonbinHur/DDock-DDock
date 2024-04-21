@@ -1,14 +1,10 @@
 
-import { useCollection } from "../hooks/useCollection";
 export default function Memo() {
-    const { document, } = useCollection('MarketItem', [
-        'createdAt',
-        'desc',
-    ]);
+    const a = [1,2,3].concat();
     return (
         <>
             <div>
-                <button onClick={console.log(document)}>Make me a toast</button>
+                <p>{a}</p>
             </div>
         </>
     );

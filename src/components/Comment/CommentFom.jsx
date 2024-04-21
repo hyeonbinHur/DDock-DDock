@@ -18,6 +18,11 @@ import {
     deleteCommentOnCollection,
 } from '../../store/marketCollectionSlice';
 
+import {
+    addCommentOnJCollection,
+    deleteCommentOnJCollection,
+} from '../../store/jobCollectionSlice';
+
 // import spinner from '../../assets/spinner.svg'
 
 export default function CommentForm({ collection, serverItem, clientComment }) {
@@ -73,7 +78,6 @@ export default function CommentForm({ collection, serverItem, clientComment }) {
 
     const deleteComment = async (id) => {
         const commentIndex = serverItem.comments.findIndex((c) => c.id === id);
-
         if (commentIndex !== -1) {
             const updatedComments = [
                 ...serverItem.comments.slice(0, commentIndex),
@@ -98,7 +102,23 @@ export default function CommentForm({ collection, serverItem, clientComment }) {
             await updateDocument(user.uid, originalUserInfo, 'User');
 
             dispatch(deleteCommentOnItem({ id: id }));
-            dispatch(deleteCommentOnCollection({ itemId: serverItem.id }));
+            const num = serverItem.comments[commentIndex].childComment.length;
+
+            if (collection == 'MarketItem') {
+                dispatch(
+                    deleteCommentOnCollection({
+                        itemId: serverItem.id,
+                        numOfReply: num + 1,
+                    })
+                );
+            } else if (collection == 'JobItem') {
+                dispatch(
+                    deleteCommentOnJCollection({
+                        item: serverItem,
+                        numOfReply: num + 1,
+                    })
+                );
+            }
         }
     };
 
@@ -180,7 +200,11 @@ export default function CommentForm({ collection, serverItem, clientComment }) {
             dispatch(
                 addReplyOnItem({ reply: reply, commentId: clientComment.id })
             );
-            dispatch(addCommentOnCollection({ itemId: serverItem.id }));
+            if (collection == 'MarketItem') {
+                dispatch(addCommentOnCollection({ itemId: serverItem.id }));
+            } else if (collection == 'JobItem') {
+                dispatch(addCommentOnJCollection({ item: serverItem }));
+            }
         }
     };
 
@@ -240,6 +264,7 @@ export default function CommentForm({ collection, serverItem, clientComment }) {
                                                 serverItem={serverItem}
                                                 clientReply={reply}
                                                 comment={clientComment}
+                                                collection={collection}
                                             />
                                         </ul>
                                         // <li key ={index}> Hello world</li>

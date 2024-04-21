@@ -21,6 +21,7 @@ const marketCollectionSlice = createSlice({
                 state.marketItems = updatedCollection;
             }
         },
+
         minusInterest(state, action) {
             const index = state.marketItems.findIndex(item => item.id == action.payload.id);
             if(index !== -1){
@@ -45,22 +46,15 @@ const marketCollectionSlice = createSlice({
         deleteCommentOnCollection(state, action) {
             const index = state.marketItems.findIndex((item) => item.id == action.payload.itemId)
             if(index !== -1){
-               state.marketItems[index].numOfComment =state.marketItems[index].numOfComment-1 
+               state.marketItems[index].numOfComment =state.marketItems[index].numOfComment-action.payload.numOfReply
             }
         },
 
         deleteItemFromRedux(state, action) {
-            console.log("딜리트 시작")
-            console.log(state.marketItems.length);
-
             const index = state.marketItems.findIndex(item => item.id === action.payload.id);
             if (index !== -1) {
                 state.marketItems.splice(index, 1);
             }
-            console.log("딜리트 끝")
-            console.log(state.marketItems.length);
-
-
         },
         addItem(state , action) {
             state.marketItems = [action.payload, ...state.marketItems];

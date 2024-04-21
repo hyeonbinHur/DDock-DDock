@@ -3,7 +3,6 @@ import MarketItemForm from '../../components/MarketItem/MarketItemForm';
 import { useAuthContext } from '../../hooks/useAuth';
 import { getSydneyTimeISO } from '../../util/formDate';
 
-
 import { useDocument } from '../../hooks/useDocument';
 
 export default function AddMarketItem(){
@@ -34,7 +33,7 @@ export default function AddMarketItem(){
                 interests: 0,
                 numOfComment:0
             }
-            await addDocument(newMItem,"M_Item","M_Item");
+            await addDocument(newMItem,"marketItem");
         }
      
     };

@@ -105,7 +105,7 @@ export default function MarketItemForm({ doAction, data, response, loading }) {
                         maxFileSize,
                         async (resizedFile) => {
                             try {
-                                const imageRef = projectStorage.ref(`/${title}_${uuid}/${imageUpload.name}`);
+                                const imageRef = projectStorage.ref(`/Market/${title}_${uuid}/${imageUpload.name}`);
                                 await imageRef.put(resizedFile);
                                 const url = await imageRef.getDownloadURL();
                                 resolve(url);
@@ -119,7 +119,7 @@ export default function MarketItemForm({ doAction, data, response, loading }) {
     
             const urls = await Promise.all(uploadPromises);
 
-            doAction(title, description, urls, `/${title}_${uuid}`); // 모든 이미지 업로드 후 doAction 호출
+            doAction(title, description, urls, `/Market/${title}_${uuid}`); // 모든 이미지 업로드 후 doAction 호출
         } catch (error) {
             console.error("Error uploading images: ", error);
         }
@@ -167,6 +167,7 @@ export default function MarketItemForm({ doAction, data, response, loading }) {
     return (
         <>
             <form className={style.form} onSubmit={handleSubmit}>
+
                 <input
                     type="file"
                     className={style.fileInput}

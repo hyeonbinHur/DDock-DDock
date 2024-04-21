@@ -20,9 +20,10 @@ import Memo from '../src/pages/Memo';
 import ErrorPage from './pages/error/ErrorPage';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-
 import AddJobPage from './pages/Job/AddJobPage';
 import JobRoot from './pages/Job/JobRoot';
+import JobItemDetailPage from './pages/Job/JobItemDetailPage';
+import JobItemEditPage from './pages/Job/JobItemEditPage';
 
 const queryClient = new QueryClient();
 
@@ -56,10 +57,19 @@ function App() {
                         { path: 'mupload', element: <MarketItemAdd /> },
                     ],
                 },
-                { path: '/job', element: <JobRoot />, children: [
-                    {path: '', element: <JobPage/>},
-                    {path: 'add', element: <AddJobPage/>}
-                ]},
+                {
+                    path: 'job',
+                    element: <JobRoot />,
+                    children: [
+                        {
+                            path: '',
+                            element: <JobPage />,
+                        },
+                        { path: ':jItemId', element: <JobItemDetailPage /> },
+                        { path: ':jItemId/edit', element: <JobItemEditPage /> },
+                        { path: 'add', element: <AddJobPage /> },
+                    ],
+                },
                 { path: '/house', element: <HousePage /> },
                 { path: '/community', element: <CommunityPage /> },
                 { path: '/signup', element: <SignUpPage /> },

@@ -1,15 +1,15 @@
-// import { NavLink } from 'react-router-dom';
+// // import { NavLink } from 'react-router-dom';
 
-function MarketNav() {
-    return (
-        <header>
-            <nav>
-                <ul>
+// function MarketNav() {
+//     return (
+//         <header>
+//             <nav>
+//                 <ul>
          
-                </ul>
-            </nav>
-        </header>
-    );
-}
+//                 </ul>
+//             </nav>
+//         </header>
+//     );
+// }
 
-export default MarketNav;
+// export default MarketNav;

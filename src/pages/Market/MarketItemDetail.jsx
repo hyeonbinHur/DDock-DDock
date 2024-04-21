@@ -82,6 +82,8 @@ export default function MarketItemDetail() {
             {!isLoading && reduxItem && (
                 <div>
                     <p>{reduxItem.title}</p>
+
+
                     <div className={style.imageContainer}>
                         {imageUrls[currentIndex - 1] && (
                             <img
@@ -119,7 +121,6 @@ export default function MarketItemDetail() {
                             <button
                                 onClick={() => dispatch(addCommentOnItem())}
                             >
-                                {' '}
                                 Hello add Comment
                             </button>
                         </div>
