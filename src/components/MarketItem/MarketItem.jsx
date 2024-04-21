@@ -1,6 +1,4 @@
 import style from './MarketItem.module.css';
-import spinner from '../../assets/spinner.svg';
-import { useFirestore } from '../../hooks/useFirestore';
 
 // import { useDocument } from '../../hooks/useDocument';
 // import UserDropDown from '../DropDown/userDropDown';
@@ -9,7 +7,6 @@ import { useFirestore } from '../../hooks/useFirestore';
 // import { useState } from 'react';
 
 export default function MarketItem({ document }) {
-    const { loading } = useFirestore('MarketItem');
 
     // const { document: writer, loading: writerLoading } = useDocument(
     //     'User',
@@ -57,8 +54,7 @@ export default function MarketItem({ document }) {
                 </div>
             )}
 
-            {loading === true && <img src={spinner} />}
-            <menu></menu>
+           
         </article>
     );
 }

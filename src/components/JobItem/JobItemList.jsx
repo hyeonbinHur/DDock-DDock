@@ -1,5 +1,4 @@
 import JobListItem from './JobListItem';
-import { Link } from 'react-router-dom';
 import commentPng from '../../assets/comment.png';
 import heartPng from '../../assets/heart.png';
 import emptyHeart from '../../assets/emptyHeart.png';
@@ -119,9 +118,6 @@ export default function JobItemList({ Items, collection }) {
         }
     };
 
-    const selectPlace = (event) => {
-        setSelectedPlace(event.target.value);
-    };
 
     const placeSetting = (si, gu, dong) => {
         setSeletedSi(si);
@@ -141,12 +137,12 @@ export default function JobItemList({ Items, collection }) {
             </div>
             <div>
                 <span>
-                    {selectedSi}{' '}
+                    {selectedSi}
                     <input
                         type="radio"
                         value="si"
                         checked={selectedPlace == 'si'}
-                        onChange={(event) => selectPlace(event)}
+                        onChange={(event) => setSelectedPlace(event.target.value)}
                     />
                     /
                 </span>
@@ -156,18 +152,18 @@ export default function JobItemList({ Items, collection }) {
                     <input
                         type="radio"
                         value="gu"
-                        onChange={(event) => selectPlace(event)}
+                        onChange={(event) => setSelectedPlace(event.target.value)}
                         checked={selectedPlace == 'gu'}
                     />
                     /
                 </span>
 
                 <span>
-                    {selectedDong}{' '}
+                    {selectedDong}
                     <input
                         type="radio"
                         value="dong"
-                        onChange={(event) => selectPlace(event)}
+                        onChange={(event) => setSelectedPlace(event.target.value)}
                         checked={selectedPlace == 'dong'}
                     />
                     /
@@ -179,8 +175,8 @@ export default function JobItemList({ Items, collection }) {
                 <ul>
                     {searchedItem.map((item) => (
                         <li key={item.id}>
-                            <JobListItem item={item} />
-                            <Link to={`/job/${item.id}`}>{item.title}</Link>
+                            <JobListItem item={item}/>
+                          
                             {userData && (
                                 <div>
                                     <img
