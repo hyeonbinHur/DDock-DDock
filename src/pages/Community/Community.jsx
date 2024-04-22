@@ -1,7 +1,11 @@
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCollection } from '../../api/getCollection';
-import { fetchCollection,plusInteresOnCCollection,minusInterestOnCCollection } from '../../store/communityCollectionSlice';
+import {
+    fetchCollection,
+    plusInteresOnCCollection,
+    minusInterestOnCCollection,
+} from '../../store/communityCollectionSlice';
 import { useState, useEffect } from 'react';
 import spinner from '../../assets/spinner.svg';
 import ItemList from '../../components/Common/ItemList';
@@ -44,17 +48,28 @@ export default function HousePage() {
             {isLoading ? (
                 <img src={spinner} />
             ) : (
-                <div>
-                    <div>Community page</div>
-                    <Link
-                        to={'add'}
-                        onClick={() => console.log('hello link click')}
-                    >
-                        add item
-                    </Link>
-                    {reduxtCollection.length > 0 && (
-                        <ItemList Items={reduxtCollection} collection={'CommunityItem'} addInterest={plusInteresOnCCollection} minusInterest={minusInterestOnCCollection} Topic={"community"}/>
-                    )}
+                <div className='relative ml-20 '>
+                    <div className='absolute top-0 right-64'>
+                        <div className="border-2 mr-12 w-28 border-blue-200 rounded-md bg-blue-400 text-white">
+                            <Link
+                                to={'add'}
+                                onClick={() => console.log('hello link click')}
+                            >
+                                add item
+                            </Link>
+                        </div>
+                    </div>
+                    <div>
+                        {reduxtCollection.length > 0 && (
+                            <ItemList
+                                Items={reduxtCollection}
+                                collection={'CommunityItem'}
+                                addInterest={plusInteresOnCCollection}
+                                minusInterest={minusInterestOnCCollection}
+                                Topic={'community'}
+                            />
+                        )}
+                    </div>
                 </div>
             )}
         </>

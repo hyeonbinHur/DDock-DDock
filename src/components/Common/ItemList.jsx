@@ -3,7 +3,7 @@ import commentPng from '../../assets/comment.png';
 import heartPng from '../../assets/heart.png';
 import emptyHeart from '../../assets/emptyHeart.png';
 import { useAuthContext } from '../../hooks/useAuth';
-import style from './ItemList.module.css';
+// import style from './ItemList.module.css';
 import { useDocument } from '../../hooks/useDocument';
 import { useFirestore } from '../../hooks/useFirestore';
 import { useDispatch } from 'react-redux';
@@ -139,23 +139,22 @@ export default function ItemList({ Items, collection,addInterest,minusInterest, 
                 />
             </div>
 
-            <div>
-                <ul>
+            <div className='grid grid-cols-2 gap-4'>
                     {searchedItem.map((item) => (
-                        <li key={item.id}>
+                        <div className='border-blue-600 border-2' key={item.id} >
                             <ListItem item={item} topic={Topic} />
 
                             {userData && (
-                                <div>
+                                <div className='border-red-300 border-2 '>
                                     <img
                                         src={commentPng}
-                                        className={style.png}
+                                        className='w-8'
                                     />
                                     <span>{item.numOfComment}개</span>
                                     {userData.interests.includes(item.id) ? (
                                         <img
                                             src={heartPng}
-                                            className={style.png}
+                                            className='w-8'
                                             onClick={() =>
                                                 toggleHeart(
                                                     item,
@@ -167,7 +166,7 @@ export default function ItemList({ Items, collection,addInterest,minusInterest, 
                                     ) : (
                                         <img
                                             src={emptyHeart}
-                                            className={style.png}
+                                            className='w-8'
                                             onClick={() =>
                                                 toggleHeart(
                                                     item,
@@ -180,9 +179,8 @@ export default function ItemList({ Items, collection,addInterest,minusInterest, 
                                     <span>{item.interests}개</span>
                                 </div>
                             )}
-                        </li>
+                        </div>
                     ))}
-                </ul>
             </div>
             <PlaceSettingModal
                 ref={placeModal}
