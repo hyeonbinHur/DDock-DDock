@@ -8,12 +8,13 @@ import { getSydneyTimeISO } from '../../util/formDate';
 // import { deleteComment } from '../../store/marketCollectionSlice';
 import { deleteCommentOnCollection } from '../../store/marketCollectionSlice';
 import { deleteCommentOnJCollection } from '../../store/jobCollectionSlice';
+import { deleteCommentOnHCollection } from '../../store/houseCollectionSilce';
 export default function ReplyForm({
     serverUser,
     serverItem,
     comment,
     clientReply,
-    collection
+    collection,
 }) {
     const { updateDocument, loading } = useFirestore('MarketItem');
     const [addReplyLoading, setAddReplyLoading] = useState(true);
@@ -53,64 +54,79 @@ export default function ReplyForm({
         const commentIndex = serverItem.comments.findIndex(
             (c) => c.id === comment.id
         );
-
+        console.log('comment index :' + commentIndex);
         if (commentIndex !== -1) {
-            const commentToUpdate = serverItem.comments[commentIndex];
-
+            const commentToUpdate = { ...serverItem.comments[commentIndex] };
             if (commentToUpdate.childComment) {
                 const replyIndex = commentToUpdate.childComment.findIndex(
                     (r) => r.id === replyId
                 );
+                console.log('replyIndex index :' + replyIndex);
+    
                 if (replyIndex !== -1) {
                     // 불변성을 유지하면서 배열에서 답글 제거
                     const updatedChildComments = [
                         ...commentToUpdate.childComment.slice(0, replyIndex),
-                        ...commentToUpdate.childComment.slice(replyIndex + 1),
+                        ...commentToUpdate.childComment.slice(replyIndex + 1)
                     ];
-
+                    console.log(updatedChildComments);
                     // 업데이트할 댓글 객체에 새로운 답글 배열 할당
-                    // commentToUpdate.childComment = updatedChildComments;
-
-                    let updatedReply = commentToUpdate.childComment;
-                    updatedReply = updatedChildComments;
-
+                   
+                    const updatedComment = {
+                        ...commentToUpdate,
+                        childComment: updatedChildComments
+                    };
                     // 전체 댓글 배열 업데이트
                     const updatedComments = [
                         ...serverItem.comments.slice(0, commentIndex),
-                        updatedReply,
+                        updatedComment,
                         ...serverItem.comments.slice(commentIndex + 1),
                     ];
                     const newNumOfComment = serverItem.numOfComment - 1;
+                    console.log(updatedComments)
                     await updateDocument(
                         serverItem.id,
                         {
                             comments: updatedComments,
                             numOfComment: newNumOfComment,
                         },
-                        'MarketItem'
+                        collection
                     );
-
+    
                     dispatch(
                         delteReplyOnItem({
                             replyId: replyId,
                             commentId: comment.id,
                         })
                     );
-
-                    if(collection == "MarketItem"){
+    
+                    if (collection == 'MarketItem') {
                         dispatch(
-                            deleteCommentOnCollection({ itemId: serverItem.id, num:1 })
+                            deleteCommentOnCollection({
+                                itemId: serverItem.id,
+                                num: 1,
+                            })
                         );
-                    }else if(collection == "JobItem"){
+                    } else if (collection == 'JobItem') {
                         dispatch(
-                            deleteCommentOnJCollection({ item: serverItem, num: 1 })
+                            deleteCommentOnJCollection({
+                                item: serverItem,
+                                numOfReply: 1,
+                            })
+                        );
+                    } else if (collection == 'HouseItem') {
+                        dispatch(
+                            deleteCommentOnHCollection({
+                                item: serverItem,
+                                numOfReply: 1,
+                            })
                         );
                     }
-                  
                 }
             }
         }
     };
+    
 
     const editReply = async (reply_id) => {
         const replyIndex = comment.childComment.findIndex(
@@ -153,7 +169,7 @@ export default function ReplyForm({
                     {
                         comments: updatedComments,
                     },
-                    'MarketItem'
+                    collection
                 );
 
                 dispatch(

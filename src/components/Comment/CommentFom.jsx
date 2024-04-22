@@ -23,6 +23,8 @@ import {
     deleteCommentOnJCollection,
 } from '../../store/jobCollectionSlice';
 
+import { addCommentOnHCollection,deleteCommentOnHCollection } from '../../store/houseCollectionSilce';
+
 // import spinner from '../../assets/spinner.svg'
 
 export default function CommentForm({ collection, serverItem, clientComment }) {
@@ -118,6 +120,13 @@ export default function CommentForm({ collection, serverItem, clientComment }) {
                         numOfReply: num + 1,
                     })
                 );
+            } else if(collection == 'HouseItem'){
+                dispatch(
+                    deleteCommentOnHCollection({
+                        item:serverItem,
+                        numOfReply: num+1,
+                    })
+                )
             }
         }
     };
@@ -204,6 +213,8 @@ export default function CommentForm({ collection, serverItem, clientComment }) {
                 dispatch(addCommentOnCollection({ itemId: serverItem.id }));
             } else if (collection == 'JobItem') {
                 dispatch(addCommentOnJCollection({ item: serverItem }));
+            } else if(collection == 'HouseItem'){
+                dispatch(addCommentOnHCollection({item: serverItem}))
             }
         }
     };

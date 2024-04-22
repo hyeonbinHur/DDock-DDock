@@ -9,6 +9,7 @@ import {addCommentOnItem} from '../../store/ItemSlice'
 import { addCommentOnCollection } from '../../store/marketCollectionSlice';
 import { getSydneyTimeISO } from '../../util/formDate';
 import { addCommentOnJCollection } from '../../store/jobCollectionSlice';
+import { addCommentOnHCollection } from '../../store/houseCollectionSilce';
 
 export default function Comment({ serverItem, collection }) {
     const { updateDocument, response } = useFirestore(collection);
@@ -55,6 +56,8 @@ export default function Comment({ serverItem, collection }) {
             dispatch(addCommentOnCollection({itemId:serverItem.id }))
         }else if (collection == "JobItem"){
             dispatch(addCommentOnJCollection({item:serverItem }))
+        }else if (collection == "HouseItem"){
+            dispatch(addCommentOnHCollection({item:serverItem}))
         }
 
 
