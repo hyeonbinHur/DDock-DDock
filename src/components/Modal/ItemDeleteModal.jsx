@@ -13,6 +13,7 @@ import { useAuthContext } from '../../hooks/useAuth';
 import { deleteItemFromRedux } from '../../store/marketCollectionSlice';
 import { useDispatch } from 'react-redux';
 import { deleteJobItem } from '../../store/jobCollectionSlice';
+import { deleteHouseItem } from '../../store/houseCollectionSilce';
 
 
 const ItemDeleteModal = forwardRef(function ItemStatusModal(
@@ -44,6 +45,8 @@ const ItemDeleteModal = forwardRef(function ItemStatusModal(
                 dispatch(deleteItemFromRedux({ id: id }));
             }else if(from == 'job'){
                 dispatch(deleteJobItem({id:id}))
+            }else if(from == 'House'){
+                dispatch(deleteHouseItem({id:id}))
             }
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -68,6 +71,8 @@ const ItemDeleteModal = forwardRef(function ItemStatusModal(
             navigate('/market');
         }else if(from == 'job'){
             navigate('/job');
+        }else if (from == 'House'){
+            navigate('/house')
         }
     }
 

@@ -237,7 +237,7 @@ export default function MarketItemForm({ doAction, data, response, loading }) {
                 </p>
                 <button type="submit">Save</button>
             </form>
-        <ItemModal ref={modal} response={response} loading={loading} navigate={navigate}  from={"market"} />
+        <ItemModal ref={modal} response={response} loading={loading} navigate={navigate}  from={"Market"} />
 
         </>
     );

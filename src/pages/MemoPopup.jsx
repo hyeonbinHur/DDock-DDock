@@ -1,7 +1,7 @@
-export default function MemoPopUp() {
+export default function MemoPopUp({...props}) {
     return (
         <>
-            <div>Hello Pop Up</div>
+            <div>{props.title}</div>
         </>
     );
 }

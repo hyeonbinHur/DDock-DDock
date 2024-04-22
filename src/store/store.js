@@ -3,6 +3,7 @@ import chatRoomReducer from './chatRoomSlice';
 import marketColelctionReducer from './marketCollectionSlice'
 import jobCollectionReducer from './jobCollectionSlice'
 import itemReducer from './ItemSlice'
+import houseCollectionReduce from './houseCollectionSilce'
 
 
 export const store = configureStore({
@@ -10,7 +11,8 @@ export const store = configureStore({
     openChatRoom: chatRoomReducer,
     marketCollection: marketColelctionReducer,
     itemInRedux: itemReducer,
-    jobCollection: jobCollectionReducer
+    jobCollection: jobCollectionReducer,
+    houseCollection: houseCollectionReduce,
     
   },
 });

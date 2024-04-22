@@ -20,12 +20,15 @@ const ItemModal = forwardRef(function ItemStatusModal(
             const timer = setTimeout(() => {
                 modal.current.close();
 
-                if (from === 'market') {
+                if (from === 'Market') {
                     navigate('/market');
                 }
 
-                if(from === 'job'){
+                if(from === 'Job'){
                     navigate('/job');
+                }
+                if(from == 'House'){
+                    navigate('/house')
                 }
             }, 1000);
             return () => clearTimeout(timer); // 컴포넌트가 언마운트 될 때 타이머 클리어

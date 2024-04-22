@@ -24,6 +24,10 @@ import AddJobPage from './pages/Job/AddJobPage';
 import JobRoot from './pages/Job/JobRoot';
 import JobItemDetailPage from './pages/Job/JobItemDetailPage';
 import JobItemEditPage from './pages/Job/JobItemEditPage';
+import HouseRoot from './pages/House/HouseRoot';
+import AddHouseItemPage from './pages/House/AddHouseItemPage';
+
+import HouseItemDetailPage from './pages/House/HouseItemDetailPage';
 
 const queryClient = new QueryClient();
 
@@ -70,7 +74,12 @@ function App() {
                         { path: 'add', element: <AddJobPage /> },
                     ],
                 },
-                { path: '/house', element: <HousePage /> },
+                { path: 'house', element: <HouseRoot/>, children:[
+                    {path:'', element: <HousePage/>},
+                    {path:'add', element: <AddHouseItemPage/> },
+                    {path:':hItemId', element: <HouseItemDetailPage/> }
+
+                ]},
                 { path: '/community', element: <CommunityPage /> },
                 { path: '/signup', element: <SignUpPage /> },
                 { path: '/login', element: <LoginPage /> },

@@ -1,21 +1,18 @@
-import JobListItem from './JobListItem';
+// import JobListItem from './JobListItem';
 import commentPng from '../../assets/comment.png';
 import heartPng from '../../assets/heart.png';
 import emptyHeart from '../../assets/emptyHeart.png';
 import { useAuthContext } from '../../hooks/useAuth';
-import style from './JobItemList.module.css';
+import style from './ItemList.module.css';
 import { useDocument } from '../../hooks/useDocument';
 import { useFirestore } from '../../hooks/useFirestore';
-import {
-    plusInteresOnJCollection,
-    minusInterestOnJCollection,
-} from '../../store/jobCollectionSlice';
 import { useDispatch } from 'react-redux';
 import { useEffect, useRef, useState } from 'react';
 import PlaceSettingModal from '../Modal/PlaceSettingModal';
 import ListHeader from './ListHeader';
+import ListItem from './listItem';
 
-export default function JobItemList({ Items, collection }) {
+export default function ItemList({ Items, collection,addInterest,minusInterest  }) {
     const { user } = useAuthContext();
     const { document: userData } = useDocument('User', user?.uid);
     const { updateDocument } = useFirestore('User');
@@ -27,7 +24,6 @@ export default function JobItemList({ Items, collection }) {
     const [selectedGu, setSeletedGu] = useState('');
     const [selectedDong, setSeletedDong] = useState('');
     const [filterByPlace, setFilterByPlace] = useState([]);
-
     const placeModal = useRef();
 
     useEffect(() => {
@@ -57,7 +53,6 @@ export default function JobItemList({ Items, collection }) {
                 }
             });
         }
-
         setFilterByPlace(emptyArray);
     }, [Items, selectedDong, selectedGu, selectedPlace, selectedSi]);
 
@@ -83,14 +78,12 @@ export default function JobItemList({ Items, collection }) {
         }
     }, [userData?.location]);
 
-    useEffect(() => {}, []);
-
     const toggleHeart = async (item, collection, userData) => {
         const interestIndex = userData.interests.findIndex(
             (id) => id == item.id
         );
         if (interestIndex == -1) {
-            dispatch(plusInteresOnJCollection({ item: item }));
+            dispatch(addInterest({ item: item }));
             const updatedUser = {
                 ...userData,
                 interests: [...userData.interests, item.id],
@@ -102,8 +95,7 @@ export default function JobItemList({ Items, collection }) {
             };
             await updateDocument(item.id, updatedItem, collection);
         } else {
-            dispatch(minusInterestOnJCollection({ item: item }));
-
+            dispatch(minusInterest({ item: item }));
             const updatedUserInterests = userData.interests;
             updatedUserInterests.splice(interestIndex, 1);
             const updatedUser = {
@@ -118,7 +110,6 @@ export default function JobItemList({ Items, collection }) {
             await updateDocument(item.id, updatedItem, collection);
         }
     };
-
     const placeSetting = (si, gu, dong) => {
         setSeletedSi(si);
         setSeletedGu(gu);
@@ -152,7 +143,7 @@ export default function JobItemList({ Items, collection }) {
                 <ul>
                     {searchedItem.map((item) => (
                         <li key={item.id}>
-                            <JobListItem item={item} />
+                            <ListItem item={item} topic={'House'} />
 
                             {userData && (
                                 <div>
