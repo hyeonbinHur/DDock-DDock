@@ -3,8 +3,8 @@ import chatRoomReducer from './chatRoomSlice';
 import marketColelctionReducer from './marketCollectionSlice'
 import jobCollectionReducer from './jobCollectionSlice'
 import itemReducer from './ItemSlice'
-import houseCollectionReduce from './houseCollectionSilce'
-
+import houseCollectionReducer from './houseCollectionSilce'
+import communityCollectionReducer from './communityCollectionSlice';
 
 export const store = configureStore({
   reducer: {
@@ -12,8 +12,8 @@ export const store = configureStore({
     marketCollection: marketColelctionReducer,
     itemInRedux: itemReducer,
     jobCollection: jobCollectionReducer,
-    houseCollection: houseCollectionReduce,
-    
+    houseCollection: houseCollectionReducer,
+    communityCollection: communityCollectionReducer
   },
 });
 

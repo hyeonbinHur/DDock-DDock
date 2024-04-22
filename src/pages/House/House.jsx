@@ -53,7 +53,7 @@ export default function HousePage() {
                         add item
                     </Link>
                     {reduxtCollection.length > 0 && (
-                        <ItemList Items={reduxtCollection} collection={'HouseItem'} addInterest={plusInteresOnHCollection} minusInterest={minusInterestOnHCollection} />
+                        <ItemList Items={reduxtCollection} collection={'HouseItem'} addInterest={plusInteresOnHCollection} minusInterest={minusInterestOnHCollection}  Topic={"house"}/>
                     )}
                 </div>
             )}

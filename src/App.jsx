@@ -28,6 +28,9 @@ import HouseRoot from './pages/House/HouseRoot';
 import AddHouseItemPage from './pages/House/AddHouseItemPage';
 
 import HouseItemDetailPage from './pages/House/HouseItemDetailPage';
+import CommunityRoot from './pages/Community/CommunityRoot';
+import AddCommunityItemPage from './pages/Community/AddCommunityItemPage';
+import CommunityItemDetailPage from './pages/Community/CommunityItemDtail';
 
 const queryClient = new QueryClient();
 
@@ -80,7 +83,13 @@ function App() {
                     {path:':hItemId', element: <HouseItemDetailPage/> }
 
                 ]},
-                { path: '/community', element: <CommunityPage /> },
+                { path: 'community', element: <CommunityRoot/>, children:[
+                    {path: '', element: <CommunityPage/>},
+                    {path:'add', element: <AddCommunityItemPage />},
+                    {path:':cItemId', element: <CommunityItemDetailPage/>}
+                ] },
+
+
                 { path: '/signup', element: <SignUpPage /> },
                 { path: '/login', element: <LoginPage /> },
                 { path: '/profile/:userId', element: <ProfilePage /> },

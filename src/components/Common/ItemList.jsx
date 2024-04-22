@@ -12,7 +12,7 @@ import PlaceSettingModal from '../Modal/PlaceSettingModal';
 import ListHeader from './ListHeader';
 import ListItem from './listItem';
 
-export default function ItemList({ Items, collection,addInterest,minusInterest  }) {
+export default function ItemList({ Items, collection,addInterest,minusInterest, Topic  }) {
     const { user } = useAuthContext();
     const { document: userData } = useDocument('User', user?.uid);
     const { updateDocument } = useFirestore('User');
@@ -143,7 +143,7 @@ export default function ItemList({ Items, collection,addInterest,minusInterest  
                 <ul>
                     {searchedItem.map((item) => (
                         <li key={item.id}>
-                            <ListItem item={item} topic={'House'} />
+                            <ListItem item={item} topic={Topic} />
 
                             {userData && (
                                 <div>

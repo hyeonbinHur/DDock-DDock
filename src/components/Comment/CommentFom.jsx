@@ -23,6 +23,8 @@ import {
     deleteCommentOnJCollection,
 } from '../../store/jobCollectionSlice';
 
+import { addCommentOnCCollection, deleteCommentOnCCollection } from '../../store/communityCollectionSlice';
+
 import { addCommentOnHCollection,deleteCommentOnHCollection } from '../../store/houseCollectionSilce';
 
 // import spinner from '../../assets/spinner.svg'
@@ -127,6 +129,13 @@ export default function CommentForm({ collection, serverItem, clientComment }) {
                         numOfReply: num+1,
                     })
                 )
+            }else if(collection == 'CommunityItem'){
+                dispatch(
+                    deleteCommentOnCCollection({
+                        item:serverItem,
+                        numOfReply: num+1,
+                    })
+                )
             }
         }
     };
@@ -215,6 +224,8 @@ export default function CommentForm({ collection, serverItem, clientComment }) {
                 dispatch(addCommentOnJCollection({ item: serverItem }));
             } else if(collection == 'HouseItem'){
                 dispatch(addCommentOnHCollection({item: serverItem}))
+            }else if(collection == 'CommunityItem'){
+                dispatch(addCommentOnCCollection({item: serverItem}))
             }
         }
     };

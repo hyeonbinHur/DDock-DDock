@@ -80,7 +80,7 @@ const houseCollectionSlice = createSlice({
 
 export const {
     fetchCollection,
-    addJobItem,
+    addHouseItem,
     addCommentOnHCollection,
     deleteCommentOnHCollection,
     plusInteresOnHCollection,

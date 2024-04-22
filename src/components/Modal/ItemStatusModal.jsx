@@ -22,13 +22,12 @@ const ItemModal = forwardRef(function ItemStatusModal(
 
                 if (from === 'Market') {
                     navigate('/market');
-                }
-
-                if(from === 'Job'){
+                } else if (from === 'Job') {
                     navigate('/job');
-                }
-                if(from == 'House'){
-                    navigate('/house')
+                } else if (from == 'House') {
+                    navigate('/house');
+                } else if (from == 'Community') {
+                    navigate('/community');
                 }
             }, 1000);
             return () => clearTimeout(timer); // 컴포넌트가 언마운트 될 때 타이머 클리어

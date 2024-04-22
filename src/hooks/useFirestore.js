@@ -6,6 +6,8 @@ import {formatDate} from '../util/formDate'
 import { useDispatch } from 'react-redux';
 import {addItem} from '../store/marketCollectionSlice'
 import { addJobItem } from '../store/jobCollectionSlice';
+import { addHouseItem } from '../store/houseCollectionSilce';
+import { addCommunityItem } from '../store/communityCollectionSlice';
 
 let initalState = {
     document: null,
@@ -98,8 +100,10 @@ export const useFirestore = (collection) => {
     };
 
     const addDocument = async (doc,type) => {
+        
         setLoading(true);
         dispatch({ type: 'IS_PENDING' });
+
         try {
             const newDocument = await ref.add({
                 ...doc
@@ -114,6 +118,10 @@ export const useFirestore = (collection) => {
                 reduxDispatch(addItem(reduxItem));
             }else if(type == "jobItem"){
                 reduxDispatch(addJobItem({item : reduxItem}))
+            }else if (type == "HouseItem"){
+                reduxDispatch(addHouseItem({item : reduxItem}))
+            }else if(type == "CommunityItem"){
+                reduxDispatch(addCommunityItem({item : reduxItem}))
             }
 
 

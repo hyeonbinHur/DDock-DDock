@@ -9,6 +9,7 @@ import { getSydneyTimeISO } from '../../util/formDate';
 import { deleteCommentOnCollection } from '../../store/marketCollectionSlice';
 import { deleteCommentOnJCollection } from '../../store/jobCollectionSlice';
 import { deleteCommentOnHCollection } from '../../store/houseCollectionSilce';
+import { deleteCommentOnCCollection } from '../../store/communityCollectionSlice';
 export default function ReplyForm({
     serverUser,
     serverItem,
@@ -117,6 +118,13 @@ export default function ReplyForm({
                     } else if (collection == 'HouseItem') {
                         dispatch(
                             deleteCommentOnHCollection({
+                                item: serverItem,
+                                numOfReply: 1,
+                            })
+                        );
+                    }else if (collection == 'CommunityItem') {
+                        dispatch(
+                            deleteCommentOnCCollection({
                                 item: serverItem,
                                 numOfReply: 1,
                             })

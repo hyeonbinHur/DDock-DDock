@@ -9,7 +9,12 @@ import ItemModal from '../Modal/ItemStatusModal';
 import { useNavigate } from 'react-router-dom';
 import ConditionForm from './ConditionForm';
 
-export default function ItemAddForm({addDocumentToServer, response, Topic}){
+export default function ItemAddForm({
+    addDocumentToServer,
+    response,
+    Topic,
+    condition,
+}) {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [conditions, setConditions] = useState([]);
@@ -42,7 +47,7 @@ export default function ItemAddForm({addDocumentToServer, response, Topic}){
         );
         setConditions(updatedConditions);
     };
-    
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         if (!imageUploads) return;
@@ -83,11 +88,11 @@ export default function ItemAddForm({addDocumentToServer, response, Topic}){
                 conditions,
                 description,
                 urls,
-                `/Job/${title}_${uuid}/`
+                `/${Topic}/${title}_${uuid}/`
             );
             setIsLoading(false);
         } catch (error) {
-            console.log( error );
+            console.log(error);
         }
     };
 
@@ -119,90 +124,91 @@ export default function ItemAddForm({addDocumentToServer, response, Topic}){
         fileInputRef.current.click();
     };
 
-
-
-   
     return (
         <>
-        <form onSubmit={handleSubmit}>
-            <div>
+            <form onSubmit={handleSubmit}>
                 <div>
-                    {imagePreviews[currentIndex] && (
-                        <button type="button" onClick={() => deleteImage()}>
-                            delete
+                    <div>
+                        {imagePreviews[currentIndex] && (
+                            <button type="button" onClick={() => deleteImage()}>
+                                delete
+                            </button>
+                        )}
+                    </div>
+                    <input
+                        type="file"
+                        onChange={handleImageChange}
+                        className={style.fileInput}
+                        ref={fileInputRef}
+                    />
+                    {currentIndex > 0 && (
+                        <button
+                            type="button"
+                            onClick={() => setCurrentIndex((prev) => prev - 1)}
+                        >
+                            prev
                         </button>
                     )}
+                    {imagePreviews[currentIndex] && (
+                        <img src={imagePreviews[currentIndex]} />
+                    )}
+                    {!imagePreviews[currentIndex] && (
+                        <img src={defaultImg} onClick={handleImageClick} />
+                    )}
+
+                    {currentIndex < 10 && imagePreviews[currentIndex] && (
+                        <button
+                            type="button"
+                            onClick={() => setCurrentIndex((prev) => prev + 1)}
+                        >
+                            next
+                        </button>
+                    )}
+                    <div> {currentIndex + 1}/10 </div>
                 </div>
-                <input
-                    type="file"
-                    onChange={handleImageChange}
-                    className={style.fileInput}
-                    ref={fileInputRef}
-                />
-                {currentIndex > 0 && (
-                    <button
-                        type="button"
-                        onClick={() => setCurrentIndex((prev) => prev - 1)}
-                    >
-                        prev
-                    </button>
-                )}
-                {imagePreviews[currentIndex] && (
-                    <img src={imagePreviews[currentIndex]} />
-                )}
-                {!imagePreviews[currentIndex] && (
-                    <img src={defaultImg} onClick={handleImageClick} />
-                )}
 
-                {currentIndex < 10 && imagePreviews[currentIndex] && (
-                    <button
-                        type="button"
-                        onClick={() => setCurrentIndex((prev) => prev + 1)}
-                    >
-                        next
-                    </button>
-                )}
-                <div> {currentIndex + 1}/10 </div>
-            </div>
+                <div>
+                    <label>Set Title</label>
 
-            <div>
-                <label>Set Title</label>
-
-                <input
-                    type="text"
-                    onChange={(e) => setTitle(e.target.value)}
-                />
-            </div>
-            <div>
-                <label>Set Description</label>
-                <textarea
-                    onChange={(e) => setDescription(e.target.value)}
-                />
-            </div>
-
-            {conditions.map((condition) => (
-                <div key={condition.id}>
-                    <ConditionForm
-                        id={condition.id}
-                        updateCondition={updateCondition}
-                        deleteCondition={deleteCondition}
+                    <input
+                        type="text"
+                        onChange={(e) => setTitle(e.target.value)}
                     />
                 </div>
-            ))}
-            {conditions.length < 3 && (
-                <button type="button" onClick={addCondition}>
-                    Add Conditions
-                </button>
-            )}
-            <button onClick={() => console.log(conditions)}>save</button>
-        </form>
-        <ItemModal
-            ref={modal}
-            response={response}
-            loading={isLoading}
-            navigate={navigate}
-            from={Topic}
-        />
-    </>
-    )
+                <div>
+                    <label>Set Description</label>
+                    <textarea
+                        onChange={(e) => setDescription(e.target.value)}
+                    />
+                </div>
+                {condition && (
+                    <>
+                        {conditions.map((condition) => (
+                            <div key={condition.id}>
+                                <ConditionForm
+                                    id={condition.id}
+                                    updateCondition={updateCondition}
+                                    deleteCondition={deleteCondition}
+                                />
+                            </div>
+                        ))}
+                        {conditions.length < 3 && (
+                            <button type="button" onClick={addCondition}>
+                                Add Conditions
+                            </button>
+                        )}
+                    </>
+                )}
+
+                <button onClick={() => console.log(conditions)}>save</button>
+            </form>
+            <ItemModal
+                ref={modal}
+                response={response}
+                loading={isLoading}
+                navigate={navigate}
+                from={Topic}
+            />
+        </>
+    );
 }
