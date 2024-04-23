@@ -12,7 +12,13 @@ import PlaceSettingModal from '../Modal/PlaceSettingModal';
 import ListHeader from './ListHeader';
 import ListItem from './listItem';
 
-export default function ItemList({ Items, collection,addInterest,minusInterest, Topic  }) {
+export default function ItemList({
+    Items,
+    collection,
+    addInterest,
+    minusInterest,
+    Topic,
+}) {
     const { user } = useAuthContext();
     const { document: userData } = useDocument('User', user?.uid);
     const { updateDocument } = useFirestore('User');
@@ -139,22 +145,26 @@ export default function ItemList({ Items, collection,addInterest,minusInterest, 
                 />
             </div>
 
-            <div className='grid grid-cols-2 gap-4'>
-                    {searchedItem.map((item) => (
-                        <div className='border-blue-600 border-2' key={item.id} >
-                            <ListItem item={item} topic={Topic} />
+            <div className="grid grid-cols-2 gap-4">
+                {searchedItem.map((item) => (
+                    <div key={item.id}>
+                        <ListItem item={item} topic={Topic} />
 
-                            {userData && (
-                                <div className='border-red-300 border-2 '>
+                        {userData && (
+                            <div className="flex pl-10 font-extralight">
+                                <div className="flex mr-3">
                                     <img
                                         src={commentPng}
-                                        className='w-8'
+                                        className="w-4 h-4 mr-1"
                                     />
-                                    <span>{item.numOfComment}개</span>
+                                    <span>{item.numOfComment}</span>
+                                </div>
+
+                                <div className="flex">
                                     {userData.interests.includes(item.id) ? (
                                         <img
                                             src={heartPng}
-                                            className='w-8'
+                                            className="w-4 h-4 mr-1"
                                             onClick={() =>
                                                 toggleHeart(
                                                     item,
@@ -166,7 +176,7 @@ export default function ItemList({ Items, collection,addInterest,minusInterest, 
                                     ) : (
                                         <img
                                             src={emptyHeart}
-                                            className='w-8'
+                                            className="w-4 h-4 mr-1"
                                             onClick={() =>
                                                 toggleHeart(
                                                     item,
@@ -176,11 +186,17 @@ export default function ItemList({ Items, collection,addInterest,minusInterest, 
                                             }
                                         />
                                     )}
-                                    <span>{item.interests}개</span>
+                                    <span>{item.interests}</span>
                                 </div>
-                            )}
-                        </div>
-                    ))}
+
+                                <div className="text-right w-full ">
+                                    <span className='pr-9'>2 days ago</span>
+                                </div>
+
+                            </div>
+                        )}
+                    </div>
+                ))}
             </div>
             <PlaceSettingModal
                 ref={placeModal}

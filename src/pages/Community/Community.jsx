@@ -48,27 +48,36 @@ export default function HousePage() {
             {isLoading ? (
                 <img src={spinner} />
             ) : (
-                <div className='relative ml-20 '>
-                    <div className='absolute top-0 right-64'>
-                        <div className="border-2 mr-12 w-28 border-blue-200 rounded-md bg-blue-400 text-white">
-                            <Link
-                                to={'add'}
-                                onClick={() => console.log('hello link click')}
-                            >
-                                add item
-                            </Link>
-                        </div>
+                <div>
+
+                    <div className='text-3xl font font-extrabold'>
+                        Community
                     </div>
-                    <div>
-                        {reduxtCollection.length > 0 && (
-                            <ItemList
-                                Items={reduxtCollection}
-                                collection={'CommunityItem'}
-                                addInterest={plusInteresOnCCollection}
-                                minusInterest={minusInterestOnCCollection}
-                                Topic={'community'}
-                            />
-                        )}
+
+                    <div className="relative ml-32 mr-32 text-size text-sm">
+                        <div className="absolute top-2 right-44">
+                            <div className="border-2 w-28 h-6 border-blue-200 rounded-md bg-blue-400 text-white">
+                                <Link
+                                    to={'add'}
+                                    onClick={() =>
+                                        console.log('hello link click')
+                                    }
+                                >
+                                    Add item
+                                </Link>
+                            </div>
+                        </div>
+                        <div>
+                            {reduxtCollection.length > 0 && (
+                                <ItemList
+                                    Items={reduxtCollection}
+                                    collection={'CommunityItem'}
+                                    addInterest={plusInteresOnCCollection}
+                                    minusInterest={minusInterestOnCCollection}
+                                    Topic={'community'}
+                                />
+                            )}
+                        </div>
                     </div>
                 </div>
             )}

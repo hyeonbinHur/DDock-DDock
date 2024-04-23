@@ -56,7 +56,7 @@ export default function ItemAddForm({
         const uuid = uuidv4();
         const maxWidth = 850;
         const maxHeight = 650;
-        const maxFileSize = 1500 * 1024;
+        const maxFileSize = 10000 * 1024;
 
         try {
             const uploadPromises = imageUploads.map((imageUpload) => {

@@ -22,12 +22,12 @@ export default function ListHeader({
     return (
         <div className="mt-5">
             <div className="flex ml-48 justify-between">
-                <div className="flex h-10 w-2/5 border-2 border-gray-200 rounded-md items-center pl-2 hover:border-gray-500 hover:bg-gray-100">
-                    <img src={search} className="w-5 h-5 mr-2" />
+                <div className="flex  w-7/12 border-2 border-gray-200 rounded-md items-center pl-2 hover:border-gray-500 hover:bg-gray-100">
+                    <img src={search} className="w-5 h-7 mr-2" />
                     <input
                         className="w-full bg-transparent focus:outline-none"
                         type="search"
-                        placeholder="search title or description"
+                        placeholder="Search title or description"
                         value={searchContent}
                         onChange={onChangeSearchContent}
                     />
