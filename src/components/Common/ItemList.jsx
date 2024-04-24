@@ -133,76 +133,78 @@ export default function ItemList({
 
     return (
         <>
-            <div>
-                <ListHeader
-                    si={selectedSi}
-                    gu={selectedGu}
-                    dong={selectedDong}
-                    updateSearchContent={updateSearchContent}
-                    modalOpenFn={openModal}
-                    selectPlaceFn={selectPlace}
-                    checked={selectedPlace}
+            <ListHeader
+                si={selectedSi}
+                gu={selectedGu}
+                dong={selectedDong}
+                updateSearchContent={updateSearchContent}
+                modalOpenFn={openModal}
+                selectPlaceFn={selectPlace}
+                checked={selectedPlace}
+                topic={Topic}
+                //community
+            />
+            <div className="mr-40 ml-40">
+                <div className="grid grid-cols-3 gap-20 ">
+                    {searchedItem.map((item) => (
+                        <div key={item.id}>
+                            <ListItem item={item} topic={Topic} />
+
+                            {userData && (
+                                <div className="flex font-extralight">
+                                    <div className="flex mr-3">
+                                        <img
+                                            src={commentPng}
+                                            className="w-4 h-4 mr-1"
+                                        />
+                                        <span>{item.numOfComment}</span>
+                                    </div>
+
+                                    <div className="flex">
+                                        {userData.interests.includes(
+                                            item.id
+                                        ) ? (
+                                            <img
+                                                src={heartPng}
+                                                className="w-4 h-4 mr-1"
+                                                onClick={() =>
+                                                    toggleHeart(
+                                                        item,
+                                                        collection,
+                                                        userData
+                                                    )
+                                                }
+                                            />
+                                        ) : (
+                                            <img
+                                                src={emptyHeart}
+                                                className="w-4 h-4 mr-1"
+                                                onClick={() =>
+                                                    toggleHeart(
+                                                        item,
+                                                        collection,
+                                                        userData
+                                                    )
+                                                }
+                                            />
+                                        )}
+                                        <span>{item.interests}</span>
+                                    </div>
+
+                                    <div className="text-right w-full ">
+                                        <span className="pr-9">2 days ago</span>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    ))}
+                </div>
+                <PlaceSettingModal
+                    ref={placeModal}
+                    placeSettingFn={placeSetting}
+                    user={userData}
                 />
             </div>
-
-            <div className="grid grid-cols-2 gap-4">
-                {searchedItem.map((item) => (
-                    <div key={item.id}>
-                        <ListItem item={item} topic={Topic} />
-
-                        {userData && (
-                            <div className="flex pl-10 font-extralight">
-                                <div className="flex mr-3">
-                                    <img
-                                        src={commentPng}
-                                        className="w-4 h-4 mr-1"
-                                    />
-                                    <span>{item.numOfComment}</span>
-                                </div>
-
-                                <div className="flex">
-                                    {userData.interests.includes(item.id) ? (
-                                        <img
-                                            src={heartPng}
-                                            className="w-4 h-4 mr-1"
-                                            onClick={() =>
-                                                toggleHeart(
-                                                    item,
-                                                    collection,
-                                                    userData
-                                                )
-                                            }
-                                        />
-                                    ) : (
-                                        <img
-                                            src={emptyHeart}
-                                            className="w-4 h-4 mr-1"
-                                            onClick={() =>
-                                                toggleHeart(
-                                                    item,
-                                                    collection,
-                                                    userData
-                                                )
-                                            }
-                                        />
-                                    )}
-                                    <span>{item.interests}</span>
-                                </div>
-
-                                <div className="text-right w-full ">
-                                    <span className='pr-9'>2 days ago</span>
-                                </div>
-
-                            </div>
-                        )}
-                    </div>
-                ))}
-            </div>
-            <PlaceSettingModal
-                ref={placeModal}
-                placeSettingFn={placeSetting}
-                user={userData}
-            />
         </>
     );
 }

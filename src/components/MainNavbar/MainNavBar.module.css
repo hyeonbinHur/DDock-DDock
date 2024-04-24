@@ -1,7 +1,6 @@
-/* navbar styles */
+navbar styles
 .navbar {
     width: 100%;
-    padding: 10px 10px;
 }
 
 .navbar ul {
@@ -17,28 +16,29 @@
     letter-spacing: 1px;
     font-size: 1.2em;
 }
-
+/* 
 .navbar button,
 .navbar a {
     margin-left: 16px;
-}
+} */
 
 .navbar a {
     color: #333;
     text-decoration: none;
 }
+
 .popupContainer {
-    position: fixed; /* 또는 absolute, 필요에 따라 */
+    position: fixed; 
     top: 15%;
     left: 70%;
     transform: translate(-50%, -50%);
-    z-index: 1000; /* 충분히 높은 값으로 다른 요소들 위에 오도록 설정 */
-    padding: 20px; /* 내용에 여백을 줍니다 */
-    border: 1px solid #ccc; /* 테두리를 설정합니다 */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 팝업에 그림자를 추가합니다 */
+    z-index: 1000; 
+    padding: 20px; 
+    border: 1px solid #ccc; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
 }
 .ChatpopupContainer{
-    position: fixed; /* 또는 absolute, 필요에 따라 */
+    position: fixed; 
     top: 80%;
     left: 70%;
     z-index: 1;

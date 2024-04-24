@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 export default function ListItem({ item, topic }) {
     return (
-        <div className="pb-2 p-10">
+        <div className="pb-2 pt-10">
             <div>
                 <img
                     className="w-full h-80 rounded-2xl mb-3"
@@ -10,7 +10,7 @@ export default function ListItem({ item, topic }) {
                 />
             </div>
             <div className="text-left  ">
-                <div className="font-bold mb-3 text-xl overflow-hidden ">
+                <div className="font-bold mb-3 text-xl overflow-hidden h-14">
                     <Link
                         className="line-clamp-2 block"
                         to={`/${topic}/${item.id}`}

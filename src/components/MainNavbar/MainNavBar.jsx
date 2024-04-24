@@ -11,6 +11,9 @@ import toast, { Toaster } from 'react-hot-toast';
 import { projectFirestore } from '../../firebase/config';
 import { useQuery } from '@tanstack/react-query';
 import { getDocument } from '../../api/getDocument';
+import logo from '../../assets/logo/logo.png';
+import earth from '../../assets/vector/earth.png';
+import menu from '../../assets/vector/menu.png';
 
 const receiveDynamycUserInfo = async (id) => {
     const ref = projectFirestore.collection('User').doc(id);
@@ -19,7 +22,7 @@ const receiveDynamycUserInfo = async (id) => {
     return senderData;
 };
 
-export default function Navbar(){
+export default function Navbar() {
     const { logout } = useLogout();
     const { user } = useAuthContext();
     const [showChatList, setShowChatList] = useState(false);
@@ -37,13 +40,13 @@ export default function Navbar(){
         queryFn: () => getDocument('User', user?.uid),
         enabled: !!user?.uid, // user?.uid가 존재할 때만 쿼리 실행
         cacheTime: 1000 * 60 * 5, // 5분 동안 캐시 유지
-        staleTime: 1000 * 60, 
+        staleTime: 1000 * 60,
     });
 
     const activeChatList = () => {
         setShowChatList(!showChatList);
     };
-    
+
     useEffect(() => {
         // 올드 유저를 저장하고, 올드유저 unread값이랑 현 업데이트된 unread값이 다르면 토스트
         if (oldUser) {
@@ -109,66 +112,91 @@ export default function Navbar(){
     };
 
     return (
-        <div>
-            <nav className={style.navbar}>
-                <ul>
+        <div className="fixed h-24 w-full bg-blue-50 z-10">
+            <nav>
+                <ul className="flex ml-44 pt-5">
                     <li>
-                        <NavLink to="/">Home /</NavLink>
+                        <NavLink to="/">
+                            <img src={logo} className="w-32 h-15 mr-20" />
+                        </NavLink>
                     </li>
-                    <li>
-                        <NavLink to="/market">Market /</NavLink>
-                    </li>
-                    <li>
-                        <NavLink to="/job">Job /</NavLink>
-                    </li>
-                    <li>
-                        <NavLink to="/house">House /</NavLink>
-                    </li>
-                    <li>
-                        <NavLink to="/community">Community /</NavLink>
-                    </li>
-                    <li>
-                        <NavLink to="/csstest">memo /</NavLink>
-                    </li>
-                    {/* <li>
-                    <NavLink to="/signup">Login</NavLink>
-                </li>
-                <li>
-                    <NavLink to="/signup">Signup</NavLink>
-                </li> */}
-                    {!user && (
-                        <>
+                    <div className="flex pt-1.5">
+                        <li>
+                            <NavLink to="/market" className="mr-20 text-2xl">
+                                {' '}
+                                Market{' '}
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink to="/job" className="mr-20 text-2xl">
+                                Job{' '}
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink to="/house" className="mr-20 text-2xl">
+                                House{' '}
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink to="/community" className="mr-10 text-2xl">
+                                Community{' '}
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink to="/csstest" className="mr-10 text-2xl">
+                                memo{' '}
+                            </NavLink>
+                        </li>
+                        <div className="flex ml-96 pl-20">
                             <li>
-                                <NavLink to="/login">Login</NavLink>
+                                <img src={earth} className="w-8 mr-10" />
                             </li>
-                            <li>
-                                <NavLink to="/signup">Signup</NavLink>
-                            </li>
-                        </>
-                    )}
-
-                    {user && (
-                        <>
-                            <li>
-                                <button className="btn" onClick={logout}>
-                                    Logout
+                            <div className='relative'>
+                                <button>
+                                    <img src={menu} className="w-8 pb-5" />
                                 </button>
-                            </li>
-                            <li>
-                                <NavLink to={`/profile/${user.uid}`}>
-                                    Profile /
-                                </NavLink>
-                            </li>
-                            <li>
-                                <button onClick={activeChatList}> 채팅 </button>
-                            </li>
-                        </>
-                    )}
+                            </div>
+                        </div>
+
+                        {!user && (
+                            <>
+                                <li>
+                                    <NavLink to="/login">Login</NavLink>
+                                </li>
+                                <li>
+                                    <NavLink to="/signup">Signup</NavLink>
+                                </li>
+                            </>
+                        )}
+
+                        {user && (
+                            <>
+                                <li>
+                                    <button className="btn" onClick={logout}>
+                                        Logout
+                                    </button>
+                                </li>
+                                <li>
+                                    <NavLink to={`/profile/${user.uid}`}>
+                                        Profile /
+                                    </NavLink>
+                                </li>
+                                <li>
+                                    <button onClick={activeChatList}>
+                                        채팅
+                                    </button>
+                                </li>
+                            </>
+                        )}
+                    </div>
                 </ul>
             </nav>
             {showChatList && (
                 <div className={style.popupContainer}>
-                    <ChattingRoomList chatRoom={data.chatRoom} userId ={data.id} />
+                    <ChattingRoomList
+                        chatRoom={data.chatRoom}
+                        userId={data.id}
+                    />
                 </div>
             )}
             {openChatRoom && (

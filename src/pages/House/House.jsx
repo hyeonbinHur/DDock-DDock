@@ -1,7 +1,10 @@
-import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCollection } from '../../api/getCollection';
-import { fetchCollection,plusInteresOnHCollection,minusInterestOnHCollection } from '../../store/houseCollectionSilce';
+import {
+    fetchCollection,
+    plusInteresOnHCollection,
+    minusInterestOnHCollection,
+} from '../../store/houseCollectionSilce';
 import { useState, useEffect } from 'react';
 import spinner from '../../assets/spinner.svg';
 import ItemList from '../../components/Common/ItemList';
@@ -45,16 +48,26 @@ export default function HousePage() {
                 <img src={spinner} />
             ) : (
                 <div>
-                    <div>House page</div>
-                    <Link
+                    {/* <div>House page</div> */}
+                    {/* <Link
                         to={'add'}
                         onClick={() => console.log('hello link click')}
                     >
                         add item
-                    </Link>
-                    {reduxtCollection.length > 0 && (
-                        <ItemList Items={reduxtCollection} collection={'HouseItem'} addInterest={plusInteresOnHCollection} minusInterest={minusInterestOnHCollection}  Topic={"house"}/>
-                    )}
+                    </Link> */}
+
+                    <div className="pt-36"></div>
+                    <div className="relative text-size text-sm">
+                        {reduxtCollection.length > 0 && (
+                            <ItemList
+                                Items={reduxtCollection}
+                                collection={'HouseItem'}
+                                addInterest={plusInteresOnHCollection}
+                                minusInterest={minusInterestOnHCollection}
+                                Topic={'house'}
+                            />
+                        )}
+                    </div>
                 </div>
             )}
         </>

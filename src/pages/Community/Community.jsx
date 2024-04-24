@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCollection } from '../../api/getCollection';
 import {
@@ -9,6 +9,7 @@ import {
 import { useState, useEffect } from 'react';
 import spinner from '../../assets/spinner.svg';
 import ItemList from '../../components/Common/ItemList';
+// import comunityBanner from '../../assets/banners/communityBanner2.png';
 
 export default function HousePage() {
     const dispatch = useDispatch();
@@ -49,25 +50,10 @@ export default function HousePage() {
                 <img src={spinner} />
             ) : (
                 <div>
-
-                    <div className='text-3xl font font-extrabold'>
-                        Community
+                    <div className="pt-36">
                     </div>
 
-                    <div className="relative ml-32 mr-32 text-size text-sm">
-                        <div className="absolute top-2 right-44">
-                            <div className="border-2 w-28 h-6 border-blue-200 rounded-md bg-blue-400 text-white">
-                                <Link
-                                    to={'add'}
-                                    onClick={() =>
-                                        console.log('hello link click')
-                                    }
-                                >
-                                    Add item
-                                </Link>
-                            </div>
-                        </div>
-                        <div>
+                    <div className="relative text-size text-sm">
                             {reduxtCollection.length > 0 && (
                                 <ItemList
                                     Items={reduxtCollection}
@@ -77,7 +63,6 @@ export default function HousePage() {
                                     Topic={'community'}
                                 />
                             )}
-                        </div>
                     </div>
                 </div>
             )}
