@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import search from '../../assets/vector/search.png';
 import { Link } from 'react-router-dom';
+import style from './ListHeader.module.css';
 
 // Props를 객체 구조 분해를 사용해 정의
 export default function ListHeader({
@@ -11,9 +12,22 @@ export default function ListHeader({
     modalOpenFn,
     selectPlaceFn,
     checked,
-    topic
+    topic,
 }) {
     const [searchContent, setSearchContent] = useState('');
+    const [buttonStyleCss, setButtonStyleCss] = useState('');
+    useEffect(() => {
+        console.log(topic);
+        if (topic === 'community') {
+            setButtonStyleCss(style.community_container);
+        } else if (topic === 'house') {
+            setButtonStyleCss(style.house_container);
+        } else if (topic === 'job') {
+            setButtonStyleCss(style.job_container);
+        } else if (topic === 'market') {
+            setButtonStyleCss(style.market_container);
+        }
+    }, [topic]);
 
     const onChangeSearchContent = (event) => {
         const newContent = event.target.value;
@@ -25,7 +39,7 @@ export default function ListHeader({
         <div className="top-24 w-full z-10 bg-white">
             <div className="pl-44 w-full bg-white">
                 <div className="text-4xl font-bold pb-7 uppercase">{topic}</div>
-                <div className='flex justify-between'>
+                <div className="flex justify-between">
                     <div className="flex w-96 mt-2 max-h-10 min-h-10 justify-between">
                         <div className="flex rounded-lg w-full border-2 border-black items-center pl-2 hover:border-gray-500 hover:bg-gray-100 focus:bg-gray-100">
                             <img src={search} className="w-5 h-5 mr-2" />
@@ -39,13 +53,11 @@ export default function ListHeader({
                             />
                         </div>
                     </div>
-                    <div className='pr-40'>
-                        <div className="border-2 rounded-md w-24 h-9 mb-5 border-blue-400  text-blue-400 flex items-center justify-center">
-                            <button  onClick={modalOpenFn}>
-                                Set position
-                            </button>
-                        </div> 
-                        <div className="border-2 rounded-md h-9 border-blue-400  text-blue-400 flex items-center justify-center">
+                    <div className="pr-40">
+                        <div className={buttonStyleCss}>
+                            <button onClick={modalOpenFn}>Set position</button>
+                        </div>
+                        <div className={buttonStyleCss}>
                             <Link to={`/${topic}/add`}>Add item</Link>
                         </div>
                     </div>

@@ -8,6 +8,9 @@ export default {
                     1: '#d0dff8',
                 },
             },
+            width: {
+                '120' :'60rem' 
+            }
         },
     },
     plugins: [],

@@ -3,7 +3,7 @@ import commentPng from '../../assets/comment.png';
 import heartPng from '../../assets/heart.png';
 import emptyHeart from '../../assets/emptyHeart.png';
 import { useAuthContext } from '../../hooks/useAuth';
-// import style from './ItemList.module.css';
+import style from './ItemList.module.css';
 import { useDocument } from '../../hooks/useDocument';
 import { useFirestore } from '../../hooks/useFirestore';
 import { useDispatch } from 'react-redux';
@@ -31,6 +31,26 @@ export default function ItemList({
     const [selectedDong, setSeletedDong] = useState('');
     const [filterByPlace, setFilterByPlace] = useState([]);
     const placeModal = useRef();
+
+    const [listItemCss, setListItemCss] = useState('');
+
+    useEffect(() => {
+        if(Topic == "community"){
+            setListItemCss(style.community_listItem_container)
+        }
+        else if(Topic == "house"){
+            setListItemCss(style.house_listItem_container)
+            
+        }
+        else if(Topic == "job"){
+            setListItemCss(style.job_listItem_container)
+            
+        }
+        else if(Topic == "market"){
+            setListItemCss(style.market_listItem_container)
+            
+        }
+    }, [Topic])
 
     useEffect(() => {
         const emptyArray = [];
@@ -145,13 +165,13 @@ export default function ItemList({
                 //community
             />
             <div className="mr-40 ml-40">
-                <div className="grid grid-cols-3 gap-20 ">
+                <div className={listItemCss}>
                     {searchedItem.map((item) => (
-                        <div key={item.id}>
+                        // 밑에다가 flex
+                        <div key={item.id} className='border-2 rounded-2xl flex h-52'> 
                             <ListItem item={item} topic={Topic} />
-
                             {userData && (
-                                <div className="flex font-extralight">
+                                <div className="flex font-extralight p-2">
                                     <div className="flex mr-3">
                                         <img
                                             src={commentPng}

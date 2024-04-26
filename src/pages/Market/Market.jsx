@@ -1,13 +1,18 @@
-import MarketList from '../../components/MarketItem/MarketItemList';
+// import MarketList from '../../components/MarketItem/MarketItemList';
 // import { useCollection } from '../../hooks/useCollection';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import spinner from '../../assets/spinner.svg';
 // import { useQuery } from '@tanstack/react-query';
 import { getCollection } from '../../api/getCollection';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchCollection } from '../../store/marketCollectionSlice';
+import {
+    fetchCollection,
+    plusInterest,
+    minusInterest,
+} from '../../store/marketCollectionSlice';
 // import { useCollection } from '../../hooks/useCollection';
+import ItemList from '../../components/Common/ItemList';
 
 export default function MarketPage() {
     // const { document, error, loading } = useCollection('MarketItem', [
@@ -17,7 +22,7 @@ export default function MarketPage() {
 
     const dispatch = useDispatch();
 
-    const reduxDocument = useSelector(
+    const reduxtCollection = useSelector(
         (state) => state.marketCollection.marketItems
     );
 
@@ -32,7 +37,9 @@ export default function MarketPage() {
                     'createdAt',
                     'desc',
                 ]);
+                console.log(response)
                 dispatch(fetchCollection({ documents: response }));
+
                 setError(null); // 에러 상태 초기화
             } catch (err) {
                 setError(err.message); // 에러 처리
@@ -40,47 +47,40 @@ export default function MarketPage() {
                 setIsLoading(false); // 로딩 종료
             }
         };
-        if (reduxDocument.length == 0) {
+        if (reduxtCollection.length == 0) {
+            console.log("Hello world")
             fetchData();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch]);
 
+    // if (error != false) {
+    //     return <div> Error occured from house page</div>;
+    // }
+
     return (
         <div>
             {error ? (
-                <p>
-                    {error}
-                </p>
+                <p>{error}</p>
             ) : isLoading ? (
                 <img src={spinner} />
             ) : (
-                <>
-                    <button
-                        onClick={() => {
-                            console.log(reduxDocument);
-                        }}
-                    >
-                        console redux document
-                    </button>
-                    <button
-                        onClick={() => {
-                            console.log(document);
-                        }}
-                    >
-                        console sever document
-                    </button>
+                <div>
+                    <div className="pt-36"></div>
+                
 
-                    <Link to="/market/mupload">Add New Item</Link>
-                    {error && <p>{error}</p>}
-                    {reduxDocument.length > 0 && (
-                        <ul>
-                            {reduxDocument && (
-                                <MarketList documents={reduxDocument} />
-                            )}
-                        </ul>
-                    )}
-                </>
+                    <div className="relative text-size text-sm">
+                        {reduxtCollection.length > 0 && (
+                            <ItemList
+                                Items={reduxtCollection}
+                                collection={'MarketItem'}
+                                addInterest={plusInterest}
+                                minusInterest={minusInterest}
+                                Topic={'market'}
+                            />
+                        )}
+                    </div>
+                </div>
             )}
         </div>
     );

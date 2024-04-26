@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import style from './ItemAddForm.module.css';
 import defaultImg from '../../assets/defaultImg.png';
 import { v4 as uuidv4 } from 'uuid';
-import { resizeImageToMaxSize } from '../../util/formDate';
+// import { resizeImageToMaxSize } from '../../util/formDate';
 // import { projectFirestore } from '../../firebase/config';
 import { projectStorage } from '../../firebase/config';
 import ItemModal from '../Modal/ItemStatusModal';
@@ -54,46 +54,53 @@ export default function ItemAddForm({
         modal.current.open();
         setIsLoading(true);
         const uuid = uuidv4();
-        const maxWidth = 850;
-        const maxHeight = 650;
-        const maxFileSize = 10000 * 1024;
+        // const maxWidth = 850;
+        // const maxHeight = 650;
+        // const maxFileSize = 10000 * 1024;
 
-        try {
-            const uploadPromises = imageUploads.map((imageUpload) => {
-                return new Promise((resolve, reject) => {
-                    resizeImageToMaxSize(
-                        imageUpload,
-                        maxWidth,
-                        maxHeight,
-                        maxFileSize,
-                        async (resizedFile) => {
-                            try {
-                                const imageRef = projectStorage.ref(
-                                    `/${Topic}/${title}_${uuid}/${imageUpload.name}`
-                                );
-                                await imageRef.put(resizedFile);
-                                const url = await imageRef.getDownloadURL();
-                                resolve(url);
-                            } catch (error) {
-                                reject(error);
-                            }
-                        }
-                    );
-                });
-            });
+        // // const uploadPromises = imageUploads.map((imageUpload) => {
+        // //     return new Promise((resolve, reject) => {
+        // //         resizeImageToMaxSize(
+        // //             imageUpload,
+        // //             maxWidth,
+        // //             maxHeight,
+        // //             maxFileSize,
+        // //             async (resizedFile) => {
+        // //                 try {
+        // //                     const imageRef = projectStorage.ref(
+        // //                         `/${Topic}/${title}_${uuid}/${imageUpload.name}`
+        // //                     );
+        // //                     await imageRef.put(resizedFile);
+        // //                     const url = await imageRef.getDownloadURL();
+        // //                     resolve(url);
+        // //                 } catch (error) {
+        // //                     reject(error);
+        // //                 }
+        // //             }
+        // //         );
+        // //     });
+        // // });
 
-            const urls = await Promise.all(uploadPromises);
-            await addDocumentToServer(
-                title,
-                conditions,
-                description,
-                urls,
-                `/${Topic}/${title}_${uuid}/`
-            );
-            setIsLoading(false);
-        } catch (error) {
-            console.log(error);
-        }
+        let uploadPromises = imageUploads.map(async (imageUpload) => {
+            try {
+                const imageRef = projectStorage.ref(`/${Topic}/${title}_${uuid}/${imageUpload.name}`);
+                await imageRef.put(imageUpload); // 이미지 업로드를 기다립니다.
+                return await imageRef.getDownloadURL(); // 업로드된 이미지의 URL을 반환합니다.
+            } catch (error) {
+                console.log(error);
+                return null; // 에러가 발생한 경우 null을 반환합니다.
+            }
+        });
+    
+        let images = await Promise.all(uploadPromises);
+        // const urls = await Promise.all(uploadPromises);
+        await addDocumentToServer(
+            title,
+            conditions,
+            description,
+            images,
+            `/${Topic}/${title}_${uuid}/`
+        );
     };
 
     const handleImageChange = (event) => {

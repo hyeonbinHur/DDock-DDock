@@ -1,0 +1,59 @@
+/* .job_image_container{
+    @apply w-full h-80 rounded-t-2xl mb-3
+
+} */
+.other_image_container{
+    @apply w-full h-80 rounded-t-2xl mb-3
+}
+.jobListItemConatiner{
+    @apply flex 
+}
+
+.job_image_container{
+    @apply h-full rounded-l-xl rounded-r-none w-56
+}
+.jobImage{
+    @apply h-full w-56
+
+}
+
+
+.title{
+    @apply line-clamp-2 block
+}
+.descContaier{
+    @apply mb-3 h-20 overflow-hidden 
+}
+.desc{
+    @apply line-clamp-4
+}
+.other_image_container{
+    @apply w-full h-20 
+} 
+.textConatiner{
+    @apply text-left p-1 border-2 
+}
+
+
+.titleContainer{
+    @apply mt-3 h-16
+}
+.jobTitleConatiner{ 
+    @apply mb-2
+}
+
+.jobDesc{
+    @apply line-clamp-3 mb-2 mt-2 h-16 w-2/3 
+}
+.jobTitle{
+    @apply font-bold line-clamp-1 w-2/3 
+}
+.jobTextConatiner{
+    @apply ml-10 mt-3 w-120
+}
+.jobConditionContainer{
+    @apply text-xs h-12 
+}
+.jobConditions{
+    @apply line-clamp-1 w-2/3
+}

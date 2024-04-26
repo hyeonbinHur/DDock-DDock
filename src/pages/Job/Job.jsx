@@ -1,14 +1,15 @@
-import { Link } from 'react-router-dom';
-import JobItemList from '../../components/JobItem/JobItemList';
+// import { Link } from 'react-router-dom';
+// import JobItemList from '../../components/JobItem/JobItemList';
+import ItemList from '../../components/Common/ItemList';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCollection } from '../../api/getCollection';
 import { useEffect, useState } from 'react';
-import { fetchCollection } from '../../store/jobCollectionSlice';
+import { fetchCollection,plusInteresOnJCollection,minusInterestOnJCollection } from '../../store/jobCollectionSlice';
 import spinner from '../../assets/spinner.svg';
 
 export default function JobPage() {
     const dispatch = useDispatch();
-    const jobCollectionFromRedux = useSelector(
+    const reduxtCollection = useSelector(
         (state) => state.jobCollection.jobItems
     );
     const [isLoading, setIsLoading] = useState(false);
@@ -30,7 +31,7 @@ export default function JobPage() {
             }
         };
 
-        if (jobCollectionFromRedux.length == 0) {
+        if (reduxtCollection.length == 0) {
             fetchData();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -46,13 +47,21 @@ export default function JobPage() {
                 <img src={spinner} />
             ) : (
                 <div>
-                    <div> Job Page</div>
-                    <Link to="/job/add"> Add Job Page </Link>
-                    <p> {jobCollectionFromRedux.length}</p>
-                    {jobCollectionFromRedux.length > 0 && (
-                        <JobItemList Items={jobCollectionFromRedux} collection="JobItem" />
-                    )}
+                <div className="pt-36">
                 </div>
+
+                <div className="relative text-size text-sm">
+                        {reduxtCollection.length > 0 && (
+                            <ItemList
+                                Items={reduxtCollection}
+                                collection={'JobItem'}
+                                addInterest={plusInteresOnJCollection}
+                                minusInterest={minusInterestOnJCollection}
+                                Topic={'job'}
+                            />
+                        )}
+                </div>
+            </div>
             )}
         </>
     );

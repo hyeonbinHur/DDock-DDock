@@ -26,7 +26,7 @@ export default function Navbar() {
     const { logout } = useLogout();
     const { user } = useAuthContext();
     const [showChatList, setShowChatList] = useState(false);
-
+    const [showMenu, isShowMenu] = useState(false);
     const { document: currentUser } = useDocument('User', user?.uid);
 
     const openChatRoom = useSelector(
@@ -142,51 +142,70 @@ export default function Navbar() {
                                 Community{' '}
                             </NavLink>
                         </li>
-                        <li>
+                        {/* <li>
                             <NavLink to="/csstest" className="mr-10 text-2xl">
                                 memo{' '}
                             </NavLink>
-                        </li>
+                        </li> */}
                         <div className="flex ml-96 pl-20">
                             <li>
                                 <img src={earth} className="w-8 mr-10" />
                             </li>
-                            <div className='relative'>
-                                <button>
+                            <div>
+                                <button
+                                    onClick={() => isShowMenu((prev) => !prev)}
+                                >
                                     <img src={menu} className="w-8 pb-5" />
                                 </button>
                             </div>
                         </div>
+                        {showMenu && (
+                            <div className="bg-blue-50 z-11 w-40 absolute flex flex-col border-4 border-white top-24 right-72 items-center p-2 rounded-2xl justify-between">
+                                {!user && (
+                                    <>
+                                        <div className="w-full items-center font-bold">
+                                            <NavLink to="/login">Login</NavLink>
+                                        </div>
+                                        <div>
+                                            <NavLink to="/signup">
+                                                Signup
+                                            </NavLink>
+                                        </div>
+                                    </>
+                                )}
 
-                        {!user && (
-                            <>
-                                <li>
-                                    <NavLink to="/login">Login</NavLink>
-                                </li>
-                                <li>
-                                    <NavLink to="/signup">Signup</NavLink>
-                                </li>
-                            </>
-                        )}
+                                {user && (
+                                    <>
+                                        <div className="font-bold mb-2 hover:bg-white rounded-lg cursor-pointer w-full flex flex-col items-center align-middle">
+                                            <div
+                                                className="btn p-3"
+                                                onClick={logout}
+                                            >
+                                                Logout
+                                            </div>
+                                        </div>
+                                        <div className='w-full border-2 border-white'></div>
+                                        <div className="font-bold mb-2 mt-2 hover:bg-white rounded-lg cursor-pointer w-full flex flex-col items-center align-middle">
+                                            <NavLink
+                                                className="p-3"
+                                                to={`/profile/${user.uid}`}
+                                            >
+                                                Profile
+                                            </NavLink>
+                                        </div>
+                                        <div className='w-full border-2 border-white'></div>
 
-                        {user && (
-                            <>
-                                <li>
-                                    <button className="btn" onClick={logout}>
-                                        Logout
-                                    </button>
-                                </li>
-                                <li>
-                                    <NavLink to={`/profile/${user.uid}`}>
-                                        Profile /
-                                    </NavLink>
-                                </li>
-                                <li>
-                                    <button onClick={activeChatList}>
-                                        채팅
-                                    </button>
-                                </li>
-                            </>
+                                        <div className="font-bold mb-2 mt-2 hover:bg-white rounded-lg cursor-pointer w-full flex flex-col items-center align-middle">
+                                            <button
+                                                onClick={activeChatList}
+                                                className="p-3"
+                                            >
+                                                채팅
+                                            </button>
+                                        </div>
+                                    </>
+                                )}
+                            </div>
                         )}
                     </div>
                 </ul>

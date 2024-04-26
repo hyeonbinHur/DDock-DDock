@@ -46,22 +46,35 @@ function App() {
             errorElement: <ErrorPage />,
             children: [
                 { path: '', element: <HomePage /> },
+                // {
+                //     path: 'market',
+                //     element: <MarketRoot />,
+                //     children: [
+                //         { path: '', element: <MarketPage /> },
+                //         {
+                //             path: ':mitemId',
+                //             children: [
+                //                 { index: true, element: <MarketItemDetail /> },
+                //                 {
+                //                     path: 'mupdate',
+                //                     element: <MarketItemEdit />,
+                //                 },
+                //             ],
+                //         },
+                //         { path: 'mupload', element: <MarketItemAdd /> },
+                //     ],
+                // },
                 {
                     path: 'market',
                     element: <MarketRoot />,
                     children: [
-                        { path: '', element: <MarketPage /> },
                         {
-                            path: ':mitemId',
-                            children: [
-                                { index: true, element: <MarketItemDetail /> },
-                                {
-                                    path: 'mupdate',
-                                    element: <MarketItemEdit />,
-                                },
-                            ],
+                            path: '',
+                            element: <MarketPage />,
                         },
-                        { path: 'mupload', element: <MarketItemAdd /> },
+                        { path: ':mitemId', element: <MarketItemDetail /> },
+                        { path: ':mitemId/edit', element: <MarketItemEdit /> },
+                        { path: 'add', element: <MarketItemAdd /> },
                     ],
                 },
                 {

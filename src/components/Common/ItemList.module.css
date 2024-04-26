@@ -1,4 +1,14 @@
-.png{
-    width: 2rem;
-    height: 2rem;
+.community_listItem_container{
+    @apply grid grid-cols-3 gap-20
 }
+.house_listItem_container{
+    @apply grid grid-cols-3 gap-20
+}
+.job_listItem_container{
+    @apply grid  gap-5 w-full
+}
+.market_listItem_container{
+    @apply grid grid-cols-4 gap-20
+}
+
+
