@@ -6,6 +6,7 @@ import { getCollection } from '../../api/getCollection';
 import { useEffect, useState } from 'react';
 import { fetchCollection,plusInteresOnJCollection,minusInterestOnJCollection } from '../../store/jobCollectionSlice';
 import spinner from '../../assets/spinner.svg';
+import style from '../page.module.css'
 
 export default function JobPage() {
     const dispatch = useDispatch();
@@ -14,6 +15,8 @@ export default function JobPage() {
     );
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(false);
+    const [spinnerContainerCss, setSpinncerContainerCss] = useState(style.spinnerContainer)
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -36,13 +39,20 @@ export default function JobPage() {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch]);
+    useEffect(() => {
+        if(!isLoading){
+            setSpinncerContainerCss();
+        }else{
+            setSpinncerContainerCss(style.spinnerContainer);
+        }
+    },[isLoading])
 
     if (error != false) {
         return <div> Error ocuured from job page </div>;
     }
 
     return (
-        <>
+        <div className={spinnerContainerCss}>
             {isLoading ? (
                 <img src={spinner} />
             ) : (
@@ -63,6 +73,6 @@ export default function JobPage() {
                 </div>
             </div>
             )}
-        </>
+        </div >
     );
 }

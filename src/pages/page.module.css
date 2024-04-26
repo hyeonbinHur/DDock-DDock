@@ -1,0 +1,3 @@
+.spinnerContainer{
+    @apply h-screen items-center flex justify-center
+}

@@ -13,6 +13,7 @@ import {
 } from '../../store/marketCollectionSlice';
 // import { useCollection } from '../../hooks/useCollection';
 import ItemList from '../../components/Common/ItemList';
+import style from '../page.module.css'
 
 export default function MarketPage() {
     // const { document, error, loading } = useCollection('MarketItem', [
@@ -28,6 +29,7 @@ export default function MarketPage() {
 
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [spinnerContainerCss, setSpinncerContainerCss] = useState(style.spinnerContainer)
 
     useEffect(() => {
         const fetchData = async () => {
@@ -54,16 +56,24 @@ export default function MarketPage() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch]);
 
+    useEffect(() => {
+        if(!isLoading){
+            setSpinncerContainerCss();
+        }else{
+            setSpinncerContainerCss(style.spinnerContainer);
+        }
+    },[isLoading])
+
     // if (error != false) {
     //     return <div> Error occured from house page</div>;
     // }
 
     return (
-        <div>
+        <div className={spinnerContainerCss}>
             {error ? (
                 <p>{error}</p>
             ) : isLoading ? (
-                <img src={spinner} />
+                <img src={spinner} className='w-72' />
             ) : (
                 <div>
                     <div className="pt-36"></div>
@@ -81,6 +91,7 @@ export default function MarketPage() {
                         )}
                     </div>
                 </div>
+
             )}
         </div>
     );

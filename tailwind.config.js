@@ -10,6 +10,9 @@ export default {
             },
             width: {
                 '120' :'60rem' 
+            },
+            height:{
+                'jobItem':'21rem'
             }
         },
     },

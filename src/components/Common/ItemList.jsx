@@ -11,6 +11,7 @@ import { useEffect, useRef, useState } from 'react';
 import PlaceSettingModal from '../Modal/PlaceSettingModal';
 import ListHeader from './ListHeader';
 import ListItem from './listItem';
+import JobListItem from './JobListItem';
 
 export default function ItemList({
     Items,
@@ -33,22 +34,34 @@ export default function ItemList({
     const placeModal = useRef();
 
     const [listItemCss, setListItemCss] = useState('');
+    const [listItemContainerCss, setListItemContainerCss] = useState('')
+    const [itemStatusCss, setItemStatusCss]= useState('');
+    const [dateContainerCss, setDateContainerCss] = useState('')
 
     useEffect(() => {
         if(Topic == "community"){
             setListItemCss(style.community_listItem_container)
+            setListItemContainerCss(style.community_listItem_container_real)
+            setItemStatusCss(style.item_status)
+            setDateContainerCss(style.date_container)
         }
         else if(Topic == "house"){
             setListItemCss(style.house_listItem_container)
-            
+            setListItemContainerCss(style.house_listItem_container_real)
+            setItemStatusCss(style.item_status)
+            setDateContainerCss(style.date_container)
         }
         else if(Topic == "job"){
             setListItemCss(style.job_listItem_container)
-            
+            setListItemContainerCss(style.job_listItem_container_real)
+            setItemStatusCss(style.job_item_status)
+            setDateContainerCss(style.job_date_container)
         }
         else if(Topic == "market"){
             setListItemCss(style.market_listItem_container)
-            
+            setListItemContainerCss(style.market_listItem_container_real)
+            setItemStatusCss(style.item_status)
+            setDateContainerCss(style.date_container)
         }
     }, [Topic])
 
@@ -167,11 +180,12 @@ export default function ItemList({
             <div className="mr-40 ml-40">
                 <div className={listItemCss}>
                     {searchedItem.map((item) => (
-                        // 밑에다가 flex
-                        <div key={item.id} className='border-2 rounded-2xl flex h-52'> 
-                            <ListItem item={item} topic={Topic} />
+                        // 밑에다가 flex h-52
+                        <div key={item.id} className={listItemContainerCss}> 
+                        {Topic == 'job' ? ( <JobListItem item={item} topic={Topic} />): ( <ListItem item={item} topic={Topic} />)}
+                        
                             {userData && (
-                                <div className="flex font-extralight p-2">
+                                <div className={itemStatusCss}>
                                     <div className="flex mr-3">
                                         <img
                                             src={commentPng}
@@ -211,8 +225,8 @@ export default function ItemList({
                                         <span>{item.interests}</span>
                                     </div>
 
-                                    <div className="text-right w-full ">
-                                        <span className="pr-9">2 days ago</span>
+                                    <div className={dateContainerCss}>
+                                        <span>2 days ago</span>
                                     </div>
                                 </div>
                             )}

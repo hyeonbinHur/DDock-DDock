@@ -8,6 +8,8 @@ import {
 import { useState, useEffect } from 'react';
 import spinner from '../../assets/spinner.svg';
 import ItemList from '../../components/Common/ItemList';
+import style from '../page.module.css'
+
 
 export default function HousePage() {
     const dispatch = useDispatch();
@@ -16,6 +18,7 @@ export default function HousePage() {
     );
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(false);
+    const [spinnerContainerCss, setSpinncerContainerCss] = useState(style.spinnerContainer)
 
     useEffect(() => {
         const fetchData = async () => {
@@ -37,13 +40,21 @@ export default function HousePage() {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch]);
+    useEffect(() => {
+        if(!isLoading){
+            setSpinncerContainerCss();
+        }else{
+            setSpinncerContainerCss(style.spinnerContainer);
+        }
+    },[isLoading])
 
     if (error != false) {
         return <div> Error occured from house page</div>;
     }
 
     return (
-        <>
+        <div className={spinnerContainerCss}>
+        
             {isLoading ? (
                 <img src={spinner} />
             ) : (
@@ -70,6 +81,6 @@ export default function HousePage() {
                     </div>
                 </div>
             )}
-        </>
+        </div>
     );
 }
