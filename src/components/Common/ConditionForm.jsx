@@ -1,6 +1,11 @@
-import { useState } from "react";
+import { TiDeleteOutline } from 'react-icons/ti';
+import { useState } from 'react';
 
-export default function ConditionForm({ id, updateCondition, deleteCondition }) {
+export default function ConditionForm({
+    id,
+    updateCondition,
+    deleteCondition,
+}) {
     const [inputValue, setInputValue] = useState('');
 
     const handleInputChange = (e) => {
@@ -9,9 +14,20 @@ export default function ConditionForm({ id, updateCondition, deleteCondition }) 
     };
 
     return (
-        <div>
-            <input type="text" value={inputValue} onChange={handleInputChange} />
-            <button type="button" onClick={() => deleteCondition(id)}> delete current condition</button>
+        <div className="w-full h-full flex justify-between p-1 space-x-2">
+            <input
+                className="w-full focus:outline-sky-500 p-2 border border-stone-400 rounded-lg"
+                type="text"
+                value={inputValue}
+                onChange={handleInputChange}
+            />
+            <div className="hover:scale-90 cursor-pointer transition">
+                <TiDeleteOutline
+                    type="button"
+                    className="size-9"
+                    onClick={() => deleteCondition(id)}
+                />
+            </div>
         </div>
     );
 }

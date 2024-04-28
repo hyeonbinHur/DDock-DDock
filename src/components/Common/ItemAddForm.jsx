@@ -141,7 +141,7 @@ export default function ItemAddForm({
         <>
             <form
                 onSubmit={handleSubmit}
-                className="pt-32 flex flex-col items-center justify-between space-y-5"
+                className="pt-32 flex flex-col items-center justify-between space-y-5 mb-10"
             >
                 <div className="flex items-center lg:w-1/3 justify-center w-3/4">
                     {/* // <button
@@ -229,17 +229,9 @@ export default function ItemAddForm({
                     placeholder="Title"
                     className="lg:w-1/4 w-3/5 placeholder:text-transparent lg:placeholder:text-slate-400 border border-black rounded-md p-2 focus:outline-none placeholder:italic placeholder:text-slate-400 shadow-sm focus:border focus:border-sky-500 focus-ring-1"
                 />
-                {/* </label> */}
-                <label className="text-left w-3/5 lg:hidden text-base italic">
-                    Description
-                </label>
-                <textarea
-                    className="placeholder:text-transparent w-3/5 text-sm lg:w-1/4 lg:placeholder:text-slate-400 size-min border  h-36 p-2 rounded-lg border-black  focus:outline-none placeholder:italic placeholder:text-slate-400 shadow-sm focus:border focus:border-sky-500 focus-ring-1"
-                    onChange={(e) => setDescription(e.target.value)}
-                    placeholder="Descriptions..."
-                />
+
                 {condition && (
-                    <>
+                    <div className="lg:w-1/4 w-3/5 space-y-2">
                         {conditions.map((condition) => (
                             <div key={condition.id}>
                                 <ConditionForm
@@ -250,15 +242,31 @@ export default function ItemAddForm({
                             </div>
                         ))}
                         {conditions.length < 3 && (
-                            <button type="button" onClick={addCondition}>
-                                Add Conditions
-                            </button>
+                            <div className="flex items-end justify-end">
+                                <button
+                                    type="button"
+                                    className="border hover:scale-90 transition border-stone-300 rounded-lg hover:bg-stone-300 p-1 text-sm italic"
+                                    onClick={addCondition}
+                                >
+                                    Add Conditions
+                                </button>
+                            </div>
                         )}
-                    </>
+                    </div>
                 )}
 
+                {/* </label> */}
+                <label className="text-left w-3/5 lg:hidden text-base italic">
+                    Description
+                </label>
+                <textarea
+                    className="placeholder:text-transparent w-3/5 text-sm lg:w-1/4 lg:placeholder:text-slate-400 size-min border  h-36 p-2 rounded-lg border-black  focus:outline-none placeholder:italic placeholder:text-slate-400 shadow-sm focus:border focus:border-sky-500 focus-ring-1"
+                    onChange={(e) => setDescription(e.target.value)}
+                    placeholder="Descriptions..."
+                />
+
                 <button
-                    className="border hover:bg-blue-200 p-2 rounded-lg "
+                    className="border hover:bg-blue-200 p-2 hover:scale-90 transition rounded-lg "
                     onClick={() => console.log(conditions)}
                 >
                     save
