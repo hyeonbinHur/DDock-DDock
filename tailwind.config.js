@@ -9,11 +9,14 @@ export default {
                 },
             },
             width: {
-                '120' :'60rem' 
+                120: '60rem',
             },
-            height:{
-                'jobItem':'21rem'
-            }
+            height: {
+                jobItem: '21rem',
+            },
+            placeholderColor: {
+                none: 'transparent',
+            },
         },
     },
     plugins: [],

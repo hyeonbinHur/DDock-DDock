@@ -1,8 +1,10 @@
+import { FcAddImage } from 'react-icons/fc';
+import { TiDeleteOutline } from 'react-icons/ti';
 import { FcPrevious } from 'react-icons/fc';
 import { FcNext } from 'react-icons/fc';
 import { useRef, useState } from 'react';
 import style from './ItemAddForm.module.css';
-import defaultImg from '../../assets/defaultImg.png';
+// import defaultImg from '../../assets/defaultImg.png';
 import { v4 as uuidv4 } from 'uuid';
 // import { resizeImageToMaxSize } from '../../util/formDate';
 // import { projectFirestore } from '../../firebase/config';
@@ -141,78 +143,101 @@ export default function ItemAddForm({
                 onSubmit={handleSubmit}
                 className="pt-32 flex flex-col items-center justify-between space-y-5"
             >
-                <div className="flex items-center">
-                    {currentIndex > 0 && (
-                        // <button
+                <div className="flex items-center lg:w-1/3 justify-center w-3/4">
+                    {/* // <button
                         //     type="button"
                         //     onClick={}
                         // >
                         //     prev
-                        // </button>
-                        <div
-                            type="button"
-                            onClick={() => setCurrentIndex((prev) => prev - 1)}
-                        >
-                            <FcPrevious className="size-14" />
-                        </div>
-                    )}
-                    <div className="border size-96">
-                        <div>
-                            {imagePreviews[currentIndex] && (
+                        // </button> */}
+                    <div
+                        type="button"
+                        onClick={() => setCurrentIndex((prev) => prev - 1)}
+                        className="size-14"
+                    >
+                        {currentIndex > 0 && (
+                            <FcPrevious className="size-full" />
+                        )}
+                    </div>
+                    <div className="w-full items-center justify-center flex">
+                        {/* <div>
+                            
                                 <button
-                                    type="button"
-                                    onClick={() => deleteImage()}
+                                   
                                 >
                                     delete
                                 </button>
+                            
+                        </div> */}
+
+                        <div className="lg:w-11/12 border rounded-lg border-stone-300 w-full h-96 transform flex items-center justify-center">
+                            <div className="absolute size-10 hover:scale-90 top-[2%] right-[2%]">
+                                {imagePreviews[currentIndex] && (
+                                    <TiDeleteOutline
+                                        className="size-full"
+                                        type="button"
+                                        onClick={() => deleteImage()}
+                                    />
+                                )}
+                            </div>
+                            <input
+                                type="file"
+                                onChange={handleImageChange}
+                                className={style.fileInput}
+                                ref={fileInputRef}
+                            />
+
+                            {imagePreviews[currentIndex] && (
+                                <img
+                                    className="w-full h-full"
+                                    src={imagePreviews[currentIndex]}
+                                />
+                            )}
+                            {!imagePreviews[currentIndex] && (
+                                <div className="flex items-center justify-center">
+                                    <FcAddImage
+                                        className="size-28 hover:scale-110"
+                                        onClick={handleImageClick}
+                                    />
+                                </div>
                             )}
                         </div>
-                        <input
-                            type="file"
-                            onChange={handleImageChange}
-                            className={style.fileInput}
-                            ref={fileInputRef}
-                        />
+                    </div>
 
-                        {imagePreviews[currentIndex] && (
-                            <img src={imagePreviews[currentIndex]} />
-                        )}
-                        {!imagePreviews[currentIndex] && (
-                            <img src={defaultImg} onClick={handleImageClick} />
+                    <div
+                        type="button"
+                        onClick={() => setCurrentIndex((prev) => prev + 1)}
+                        className="size-14"
+                    >
+                        {currentIndex < 10 && imagePreviews[currentIndex] && (
+                            <FcNext className="size-full" />
                         )}
                     </div>
-                    {currentIndex < 10 && imagePreviews[currentIndex] && (
-                        // <button
-                        //     type="button"
-                        //     onClick={}
-                        // >
-                        //     next
-                        // </button>
-                        <div
-                            type="button"
-                            onClick={() => setCurrentIndex((prev) => prev + 1)}
-                        >
-                            <FcNext className="size-14" />
-                        </div>
-                    )}
                 </div>
 
-                <div className="border text-center">{currentIndex + 1}/10 </div>
+                <div className="text-center font-bold">
+                    {currentIndex + 1}/10{' '}
+                </div>
 
-                <div className="border ">
-                    <input
-                        type="text"
-                        onChange={(e) => setTitle(e.target.value)}
-                        placeholder="Title"
-                    />
-                </div>
-                <div>
-                    <textarea
-                        className="border"
-                        onChange={(e) => setDescription(e.target.value)}
-                        placeholder="Descriptions..."
-                    />
-                </div>
+                {/* <label className="border  p-2 rounded-lg border-black "> */}
+                <label className="text-left w-3/5 lg:hidden text-base italic">
+                    Title
+                </label>
+                <input
+                    type="text"
+                    onChange={(e) => setTitle(e.target.value)}
+                    placeholder="Title"
+                    className="lg:w-1/4 w-3/5 placeholder:text-transparent lg:placeholder:text-slate-400 border border-black rounded-md p-2 focus:outline-none placeholder:italic placeholder:text-slate-400 shadow-sm focus:border focus:border-sky-500 focus-ring-1"
+                />
+                {/* </label> */}
+                <label className="text-left w-3/5 lg:hidden text-base italic">
+                    Description
+                </label>
+                <textarea
+                    className="placeholder:text-transparent w-3/5 text-sm lg:w-1/4 lg:placeholder:text-slate-400 size-min border  h-36 p-2 rounded-lg border-black  focus:outline-none placeholder:italic placeholder:text-slate-400 shadow-sm focus:border focus:border-sky-500 focus-ring-1"
+                    onChange={(e) => setDescription(e.target.value)}
+                    placeholder="Descriptions..."
+                />
                 {condition && (
                     <>
                         {conditions.map((condition) => (
@@ -233,7 +258,7 @@ export default function ItemAddForm({
                 )}
 
                 <button
-                    className="border hover:bg-blue-200"
+                    className="border hover:bg-blue-200 p-2 rounded-lg "
                     onClick={() => console.log(conditions)}
                 >
                     save
