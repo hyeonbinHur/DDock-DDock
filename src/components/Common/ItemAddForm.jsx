@@ -1,3 +1,5 @@
+import { FcPrevious } from 'react-icons/fc';
+import { FcNext } from 'react-icons/fc';
 import { useRef, useState } from 'react';
 import style from './ItemAddForm.module.css';
 import defaultImg from '../../assets/defaultImg.png';
@@ -83,7 +85,9 @@ export default function ItemAddForm({
 
         let uploadPromises = imageUploads.map(async (imageUpload) => {
             try {
-                const imageRef = projectStorage.ref(`/${Topic}/${title}_${uuid}/${imageUpload.name}`);
+                const imageRef = projectStorage.ref(
+                    `/${Topic}/${title}_${uuid}/${imageUpload.name}`
+                );
                 await imageRef.put(imageUpload); // 이미지 업로드를 기다립니다.
                 return await imageRef.getDownloadURL(); // 업로드된 이미지의 URL을 반환합니다.
             } catch (error) {
@@ -91,7 +95,7 @@ export default function ItemAddForm({
                 return null; // 에러가 발생한 경우 null을 반환합니다.
             }
         });
-    
+
         let images = await Promise.all(uploadPromises);
         // const urls = await Promise.all(uploadPromises);
         await addDocumentToServer(
@@ -133,59 +137,80 @@ export default function ItemAddForm({
 
     return (
         <>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <div>
-                        {imagePreviews[currentIndex] && (
-                            <button type="button" onClick={() => deleteImage()}>
-                                delete
-                            </button>
-                        )}
-                    </div>
-                    <input
-                        type="file"
-                        onChange={handleImageChange}
-                        className={style.fileInput}
-                        ref={fileInputRef}
-                    />
+            <form
+                onSubmit={handleSubmit}
+                className="pt-32 flex flex-col items-center justify-between space-y-5"
+            >
+                <div className="flex items-center">
                     {currentIndex > 0 && (
-                        <button
+                        // <button
+                        //     type="button"
+                        //     onClick={}
+                        // >
+                        //     prev
+                        // </button>
+                        <div
                             type="button"
                             onClick={() => setCurrentIndex((prev) => prev - 1)}
                         >
-                            prev
-                        </button>
+                            <FcPrevious className="size-14" />
+                        </div>
                     )}
-                    {imagePreviews[currentIndex] && (
-                        <img src={imagePreviews[currentIndex]} />
-                    )}
-                    {!imagePreviews[currentIndex] && (
-                        <img src={defaultImg} onClick={handleImageClick} />
-                    )}
+                    <div className="border size-96">
+                        <div>
+                            {imagePreviews[currentIndex] && (
+                                <button
+                                    type="button"
+                                    onClick={() => deleteImage()}
+                                >
+                                    delete
+                                </button>
+                            )}
+                        </div>
+                        <input
+                            type="file"
+                            onChange={handleImageChange}
+                            className={style.fileInput}
+                            ref={fileInputRef}
+                        />
 
+                        {imagePreviews[currentIndex] && (
+                            <img src={imagePreviews[currentIndex]} />
+                        )}
+                        {!imagePreviews[currentIndex] && (
+                            <img src={defaultImg} onClick={handleImageClick} />
+                        )}
+                    </div>
                     {currentIndex < 10 && imagePreviews[currentIndex] && (
-                        <button
+                        // <button
+                        //     type="button"
+                        //     onClick={}
+                        // >
+                        //     next
+                        // </button>
+                        <div
                             type="button"
                             onClick={() => setCurrentIndex((prev) => prev + 1)}
                         >
-                            next
-                        </button>
+                            <FcNext className="size-14" />
+                        </div>
                     )}
-                    <div> {currentIndex + 1}/10 </div>
                 </div>
 
-                <div>
-                    <label>Set Title</label>
+                <div className="border text-center">{currentIndex + 1}/10 </div>
 
+                <div className="border ">
                     <input
                         type="text"
                         onChange={(e) => setTitle(e.target.value)}
+                        placeholder="Title"
                     />
                 </div>
                 <div>
-                    <label>Set Description</label>
                     <textarea
+                        className="border"
                         onChange={(e) => setDescription(e.target.value)}
+                        placeholder="Descriptions..."
                     />
                 </div>
                 {condition && (
@@ -207,7 +232,12 @@ export default function ItemAddForm({
                     </>
                 )}
 
-                <button onClick={() => console.log(conditions)}>save</button>
+                <button
+                    className="border hover:bg-blue-200"
+                    onClick={() => console.log(conditions)}
+                >
+                    save
+                </button>
             </form>
             <ItemModal
                 ref={modal}

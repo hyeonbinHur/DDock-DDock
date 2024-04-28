@@ -4,13 +4,18 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  font-family: "Raleway", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: <weight>;
-  font-style: normal;
-  font-size: 1.1em;
+@layer utilities: {
+    .btn-pressed {
+        @apply transition active:scale-75;
+    }
+}
 
+body {
+    font-family: 'Raleway', sans-serif;
+    font-optical-sizing: auto;
+    font-weight: <weight>;
+    font-style: normal;
+    font-size: 1.1em;
 }
 /* ul, li, p, h1, h2, h3, h4 {
   margin: 0;

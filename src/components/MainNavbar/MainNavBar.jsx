@@ -1,5 +1,4 @@
 import { BsChatHeart } from 'react-icons/bs';
-import { AiFillWechat } from 'react-icons/ai';
 import { SlMenu } from 'react-icons/sl';
 import { NavLink } from 'react-router-dom';
 import style from './MainNavBar.module.css';
@@ -143,8 +142,8 @@ export default function Navbar() {
                             <img src={logo} className="w-20" />
                         </NavLink>
                     </div>
-                    <ul className="hidden lg:flex space-x-3">
-                        <div className="flex">
+                    <ul className="hidden lg:flex space-x-3 ">
+                        <div className="flex space-x-10 text-lg">
                             <li>
                                 <NavLink to="/market" className="">
                                     {' '}
@@ -256,7 +255,7 @@ export default function Navbar() {
                 </div>
             </div>
             {mobileMenu && (
-                <div className="absolute top-[12%] z-20 w-full border-2 rounded-lg border-white p-2 bg-blue-50 lg:hidden">
+                <div className="absolute top-[10%] z-20 w-full border-2 rounded-lg border-white p-2 bg-blue-50 lg:hidden">
                     <div className="space-y-3 p-3">
                         <div
                             onClick={clickPage}
@@ -269,22 +268,34 @@ export default function Navbar() {
                                 {' '}
                                 <div className="border border-white"> </div>
                                 <div className="px-7 space-y-3">
-                                    <div className="hover:bg-white rounded-lg p-2 w-full">
+                                    <div
+                                        onClick={() => setMobileMenu(false)}
+                                        className="hover:bg-white rounded-lg p-2 w-full"
+                                    >
                                         <NavLink to="/market" className="">
                                             Market
                                         </NavLink>
                                     </div>
-                                    <div className="hover:bg-white rounded-lg p-2 w-full">
+                                    <div
+                                        onClick={() => setMobileMenu(false)}
+                                        className="hover:bg-white rounded-lg p-2 w-full"
+                                    >
                                         <NavLink to="/job" className="">
                                             Job
                                         </NavLink>
                                     </div>
-                                    <div className="hover:bg-white rounded-lg p-2 w-full">
+                                    <div
+                                        onClick={() => setMobileMenu(false)}
+                                        className="hover:bg-white rounded-lg p-2 w-full"
+                                    >
                                         <NavLink to="/house" className="">
                                             House
                                         </NavLink>
                                     </div>
-                                    <div className="hover:bg-white rounded-lg p-2 w-full">
+                                    <div
+                                        onClick={() => setMobileMenu(false)}
+                                        className="hover:bg-white rounded-lg p-2 w-full"
+                                    >
                                         <NavLink to="/coummunity" className="">
                                             Community
                                         </NavLink>
@@ -305,7 +316,7 @@ export default function Navbar() {
                                 {' '}
                                 <div className="border border-white"> </div>
                                 {!user && (
-                                    <div className="px-7 space-y-3 font-bold">
+                                    <div className="px-7 space-y-3">
                                         <div className="font-bold">
                                             <NavLink to="/login">Login</NavLink>
                                         </div>
@@ -317,7 +328,7 @@ export default function Navbar() {
                                     </div>
                                 )}
                                 {user && (
-                                    <div className="px-7 space-y-3 font-bold">
+                                    <div className="px-7 space-y-3">
                                         <div className="hover:bg-white rounded-lg p-2 w-full">
                                             <NavLink
                                                 to={`/profile/${user.uid}`}
