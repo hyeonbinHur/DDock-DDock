@@ -1,3 +1,6 @@
+import { BsChatHeart } from 'react-icons/bs';
+import { AiFillWechat } from 'react-icons/ai';
+import { SlMenu } from 'react-icons/sl';
 import { NavLink } from 'react-router-dom';
 import style from './MainNavBar.module.css';
 import { useLogout } from '../../hooks/useLogout';
@@ -28,6 +31,10 @@ export default function Navbar() {
     const [showChatList, setShowChatList] = useState(false);
     const [showMenu, isShowMenu] = useState(false);
     const { document: currentUser } = useDocument('User', user?.uid);
+    const [mobileMenu, setMobileMenu] = useState(false);
+    const [isPageClick, setIsPageClick] = useState(false);
+    const [isProfile, setIsProfile] = useState(false);
+    const [isLanguage, setIsLanguage] = useState(false);
 
     const openChatRoom = useSelector(
         (state) => state.openChatRoom.openChatRoom
@@ -111,59 +118,195 @@ export default function Navbar() {
         notify(senderInfo.displayName, content.content, type);
     };
 
+    const clickPage = () => {
+        setIsPageClick(!isPageClick);
+        setIsProfile(false);
+        setIsLanguage(false);
+    };
+    const clickProfile = () => {
+        setIsPageClick(false);
+        setIsProfile(!isProfile);
+        setIsLanguage(false);
+    };
+    const clickLanguage = () => {
+        setIsPageClick(false);
+        setIsProfile(false);
+        setIsLanguage(!isLanguage);
+    };
+
     return (
-        <div className="fixed h-24 w-full bg-blue-50 z-10">
-            <nav>
-                <ul className="flex ml-44 pt-5">
-                    <li>
+        <div>
+            <div className="fixed h-24 w-full bg-blue-50 z-10 p-7">
+                <nav className="flex items-center justify-between ">
+                    <div>
                         <NavLink to="/">
-                            <img src={logo} className="w-32 h-15 mr-20" />
+                            <img src={logo} className="w-20" />
                         </NavLink>
-                    </li>
-                    <div className="flex pt-1.5">
-                        <li>
-                            <NavLink to="/market" className="mr-20 text-2xl">
-                                {' '}
-                                Market{' '}
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink to="/job" className="mr-20 text-2xl">
-                                Job{' '}
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink to="/house" className="mr-20 text-2xl">
-                                House{' '}
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink to="/community" className="mr-10 text-2xl">
-                                Community{' '}
-                            </NavLink>
-                        </li>
-                        {/* <li>
+                    </div>
+                    <ul className="hidden lg:flex space-x-3">
+                        <div className="flex">
+                            <li>
+                                <NavLink to="/market" className="">
+                                    {' '}
+                                    Market{' '}
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink to="/job" className=" ">
+                                    Job{' '}
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink to="/house" className="">
+                                    House{' '}
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink to="/community" className="">
+                                    Community{' '}
+                                </NavLink>
+                            </li>
+                            {/* <li>
                             <NavLink to="/csstest" className="mr-10 text-2xl">
                                 memo{' '}
                             </NavLink>
                         </li> */}
-                        <div className="flex ml-96 pl-20">
-                            <li>
-                                <img src={earth} className="w-8 mr-10" />
-                            </li>
-                            <div>
-                                <button
-                                    onClick={() => isShowMenu((prev) => !prev)}
-                                >
-                                    <img src={menu} className="w-8 pb-5" />
-                                </button>
-                            </div>
                         </div>
-                        {showMenu && (
-                            <div className="bg-blue-50 z-11 w-40 absolute flex flex-col border-4 border-white top-24 right-72 items-center p-2 rounded-2xl justify-between">
+                    </ul>
+                    <div className=" space-x-5 hidden lg:flex">
+                        <div>
+                            <img src={earth} className="w-8" />
+                        </div>
+                        <div>
+                            <button onClick={() => isShowMenu((prev) => !prev)}>
+                                <img src={menu} className="w-8" />
+                            </button>
+                        </div>
+                    </div>
+                    <div
+                        onClick={() => setMobileMenu((prev) => !prev)}
+                        className="hover:bg-gray-200 hover:border hover:border-gray-300 rounded-xl p-2 lg:hidden"
+                    >
+                        <SlMenu />
+                    </div>
+
+                    {showMenu && (
+                        <div className="hidden bg-blue-50 z-10 w-40 absolute lg:flex flex-col border-4 border-white top-[100%] right-[5%] items-center p-2 rounded-2xl justify-between">
+                            {!user && (
+                                <>
+                                    <div className="w-full items-center font-bold">
+                                        <NavLink to="/login">Login</NavLink>
+                                    </div>
+                                    <div>
+                                        <NavLink to="/signup">Signup</NavLink>
+                                    </div>
+                                </>
+                            )}
+
+                            {user && (
+                                <>
+                                    <div className="font-bold mb-2 hover:bg-white rounded-lg cursor-pointer w-full flex flex-col items-center align-middle">
+                                        <div
+                                            className="btn p-3"
+                                            onClick={logout}
+                                        >
+                                            Logout
+                                        </div>
+                                    </div>
+                                    <div className="w-full border-2 border-white"></div>
+                                    <div className="font-bold mb-2 mt-2 hover:bg-white rounded-lg cursor-pointer w-full flex flex-col items-center align-middle">
+                                        <NavLink
+                                            className="p-3"
+                                            to={`/profile/${user.uid}`}
+                                        >
+                                            Profile
+                                        </NavLink>
+                                    </div>
+                                    <div className="w-full border-2 border-white"></div>
+
+                                    <div className="font-bold mb-2 mt-2 hover:bg-white rounded-lg cursor-pointer w-full flex flex-col items-center align-middle">
+                                        <button
+                                            onClick={activeChatList}
+                                            className="p-3"
+                                        >
+                                            채팅
+                                        </button>
+                                    </div>
+                                </>
+                            )}
+                        </div>
+                    )}
+                </nav>
+                {showChatList && (
+                    <div className={style.popupContainer}>
+                        <ChattingRoomList
+                            chatRoom={data.chatRoom}
+                            userId={data.id}
+                        />
+                    </div>
+                )}
+                {openChatRoom && (
+                    <div className={style.ChatpopupContainer}>
+                        <PrivateChattingRoom />
+                    </div>
+                )}
+
+                <div>
+                    <Toaster />
+                </div>
+            </div>
+            {mobileMenu && (
+                <div className="absolute top-[12%] z-20 w-full border-2 rounded-lg border-white p-2 bg-blue-50 lg:hidden">
+                    <div className="space-y-3 p-3">
+                        <div
+                            onClick={clickPage}
+                            className="hover:bg-white p-3 w-full rounded-lg font-bold text-xl"
+                        >
+                            page
+                        </div>
+                        {isPageClick && (
+                            <>
+                                {' '}
+                                <div className="border border-white"> </div>
+                                <div className="px-7 space-y-3">
+                                    <div className="hover:bg-white rounded-lg p-2 w-full">
+                                        <NavLink to="/market" className="">
+                                            Market
+                                        </NavLink>
+                                    </div>
+                                    <div className="hover:bg-white rounded-lg p-2 w-full">
+                                        <NavLink to="/job" className="">
+                                            Job
+                                        </NavLink>
+                                    </div>
+                                    <div className="hover:bg-white rounded-lg p-2 w-full">
+                                        <NavLink to="/house" className="">
+                                            House
+                                        </NavLink>
+                                    </div>
+                                    <div className="hover:bg-white rounded-lg p-2 w-full">
+                                        <NavLink to="/coummunity" className="">
+                                            Community
+                                        </NavLink>
+                                    </div>
+                                    <div className="border border-white"> </div>
+                                </div>
+                            </>
+                        )}
+
+                        <div
+                            onClick={clickProfile}
+                            className="hover:bg-white p-3 text-xl rounded-lg font-bold"
+                        >
+                            profile
+                        </div>
+                        {isProfile && (
+                            <>
+                                {' '}
+                                <div className="border border-white"> </div>
                                 {!user && (
-                                    <>
-                                        <div className="w-full items-center font-bold">
+                                    <div className="px-7 space-y-3 font-bold">
+                                        <div className="font-bold">
                                             <NavLink to="/login">Login</NavLink>
                                         </div>
                                         <div>
@@ -171,62 +314,62 @@ export default function Navbar() {
                                                 Signup
                                             </NavLink>
                                         </div>
-                                    </>
+                                    </div>
                                 )}
-
                                 {user && (
-                                    <>
-                                        <div className="font-bold mb-2 hover:bg-white rounded-lg cursor-pointer w-full flex flex-col items-center align-middle">
-                                            <div
-                                                className="btn p-3"
-                                                onClick={logout}
-                                            >
-                                                Logout
-                                            </div>
-                                        </div>
-                                        <div className='w-full border-2 border-white'></div>
-                                        <div className="font-bold mb-2 mt-2 hover:bg-white rounded-lg cursor-pointer w-full flex flex-col items-center align-middle">
+                                    <div className="px-7 space-y-3 font-bold">
+                                        <div className="hover:bg-white rounded-lg p-2 w-full">
                                             <NavLink
-                                                className="p-3"
                                                 to={`/profile/${user.uid}`}
                                             >
                                                 Profile
                                             </NavLink>
                                         </div>
-                                        <div className='w-full border-2 border-white'></div>
 
-                                        <div className="font-bold mb-2 mt-2 hover:bg-white rounded-lg cursor-pointer w-full flex flex-col items-center align-middle">
-                                            <button
-                                                onClick={activeChatList}
-                                                className="p-3"
-                                            >
-                                                채팅
-                                            </button>
+                                        <div
+                                            onClick={activeChatList}
+                                            className="hover:bg-white rounded-lg p-2 w-full flex space-x-2"
+                                        >
+                                            <div>Chatting</div>
+                                            <div>
+                                                <BsChatHeart className="font-bold" />
+                                            </div>
                                         </div>
-                                    </>
+
+                                        <div
+                                            className="hover:bg-red-50 rounded-lg p-2 w-full"
+                                            onClick={logout}
+                                        >
+                                            Logout
+                                        </div>
+                                    </div>
                                 )}
-                            </div>
+                                <div className="border border-white"> </div>
+                            </>
+                        )}
+
+                        <div
+                            onClick={clickLanguage}
+                            className="hover:bg-white p-3 text-xl  rounded-lg font-bold"
+                        >
+                            language
+                        </div>
+                        {isLanguage && (
+                            <>
+                                <div className="border border-white"> </div>
+                                <div className="px-7 space-y-3 font-bold">
+                                    <div className="hover:bg-white rounded-lg p-2 w-full">
+                                        English
+                                    </div>
+                                    <div className="hover:bg-white rounded-lg p-2 w-full">
+                                        한국어
+                                    </div>
+                                </div>
+                            </>
                         )}
                     </div>
-                </ul>
-            </nav>
-            {showChatList && (
-                <div className={style.popupContainer}>
-                    <ChattingRoomList
-                        chatRoom={data.chatRoom}
-                        userId={data.id}
-                    />
                 </div>
             )}
-            {openChatRoom && (
-                <div className={style.ChatpopupContainer}>
-                    <PrivateChattingRoom />
-                </div>
-            )}
-
-            <div>
-                <Toaster />
-            </div>
         </div>
     );
 }
