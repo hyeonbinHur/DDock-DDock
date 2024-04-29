@@ -9,9 +9,9 @@ import { TbCameraPlus } from 'react-icons/tb';
 // import { CgPocket } from 'react-icons/cg';
 import { useParams } from 'react-router-dom';
 import { useDocument } from '../../hooks/useDocument';
-import { useEffect, useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { useFirestore } from '../../hooks/useFirestore';
-import { useCollection } from '../../hooks/useCollection';
+// import { useCollection } from '../../hooks/useCollection';
 // import UserCommentForm from '../../components/User/UserCommentForm';
 import defaultUserImg from '../../assets/user.png';
 import style from './profile.module.css';
@@ -19,7 +19,7 @@ import style from './profile.module.css';
 // import emptyHeart from '../../assets/emptyHeart.png';
 import { projectStorage } from '../../firebase/config';
 import { v4 as uuidv4 } from 'uuid';
-import InterestsItemModal from './interestsModal';
+// import InterestsItemModal from './interestsModal';
 import UserItemsPopUp from './UserItemsPopUp';
 
 export default function ProfilePage() {
@@ -31,15 +31,15 @@ export default function ProfilePage() {
         loading: user_loading,
     } = useDocument('User', userId);
 
-    const { document: marketItems } = useCollection('MarketItem', [
-        'createdAt',
-        'desc',
-    ]);
+    // const { document: marketItems } = useCollection('MarketItem', [
+    //     'createdAt',
+    //     'desc',
+    // ]);
 
     const [startEditDisplayName, setStartEditDisplayName] = useState(false);
     const [newDisplayName, setNewDisplayName] = useState('');
     const { updateDocument, loading: updateLoading } = useFirestore('User');
-    const [userMarketItem, setUserMarktItem] = useState([]);
+    // const [userMarketItem, setUserMarktItem] = useState([]);
     const [imageUrl, setImageUrl] = useState();
     const [imageUpload, setImageUpload] = useState(null);
     const [imagePreview, setImagePreview] = useState(undefined);
@@ -69,21 +69,21 @@ export default function ProfilePage() {
         await updateDocument(userId, updatedUser, 'User');
     };
 
-    useEffect(() => {
-        //유저 마켓 아이템 로드
-        if (user?.userItem && marketItems) {
-            const userIds = user.userItem.map((item) => item.id);
-            const userItemDetails = marketItems.filter((doc) => {
-                return userIds.includes(doc.id);
-            });
-            setUserMarktItem(userItemDetails);
-        }
-        if (user?.Avatar) {
-            // 유저 아바타 로드
-            setImageUrl(user.Avatar);
-            setImageloading(true);
-        }
-    }, [marketItems, user?.userItem, user]);
+    // useEffect(() => {
+    //     //유저 마켓 아이템 로드
+    //     if (user?.userItem && marketItems) {
+    //         const userIds = user.userItem.map((item) => item.id);
+    //         const userItemDetails = marketItems.filter((doc) => {
+    //             return userIds.includes(doc.id);
+    //         });
+    //         setUserMarktItem(userItemDetails);
+    //     }
+    //     if (user?.Avatar) {
+    //         // 유저 아바타 로드
+    //         setImageUrl(user.Avatar);
+    //         setImageloading(true);
+    //     }
+    // }, [marketItems, user?.userItem, user]);
 
     const handleImageClick = () => {
         fileInputRef.current.click();
@@ -376,16 +376,19 @@ export default function ProfilePage() {
                                 </div>
                             </li>
 
-                            {/* {isLikeOpen && (
+                            {isLikeOpen && (
                                 <div>
                                     <UserItemsPopUp
-                                        items={user.Mitem}
-                                        topic="market"
+                                        items={user.interests}
+                                        topic="like"
                                     />
                                 </div>
-                            )} */}
+                            )}
 
-                            <li className="p-1">
+                            <li
+                                className="p-1"
+                                onClick={() => openItems('Market')}
+                            >
                                 <div className="flex  hover:bg-white w-full rounded-md ">
                                     <AiOutlineShop className="mr-2" />
                                     Market
@@ -400,7 +403,10 @@ export default function ProfilePage() {
                                 </div>
                             )}
 
-                            <li className="p-1">
+                            <li
+                                className="p-1"
+                                onClick={() => openItems('Job')}
+                            >
                                 <div className="flex space-x-2 hover:bg-white w-full rounded-md ">
                                     <FcMoneyTransfer className="mr-2" />
                                     Job
@@ -415,7 +421,10 @@ export default function ProfilePage() {
                                 </div>
                             )}
 
-                            <li className="p-1">
+                            <li
+                                className="p-1"
+                                onClick={() => openItems('House')}
+                            >
                                 <div className="flex space-x-2 hover:bg-white w-full rounded-md ">
                                     <FcHome className="mr-2" />
                                     House

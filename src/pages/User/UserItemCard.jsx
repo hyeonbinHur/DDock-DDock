@@ -23,9 +23,10 @@ export default function UserItemCard({ item, topic }) {
                 className={`${topic == 'community' && `hover:border-blue-200`}
             ${topic == 'market' && `hover:border-green-200`}
             ${topic == 'job' && `hover:border-yellow-200`}
+            ${topic == 'house' && `hover:border-red-200`}
             ${
-                topic == 'house' && `hover:border-red-200`
-            } border rounded-lg space-y-4 p-4 w-full h-full`}
+                topic == 'like' && `hover:border-red-200`
+            }  border rounded-lg space-y-4 p-4 w-full h-full`}
             >
                 <div className="w-full h-2/3 rounded-lg">
                     <img
