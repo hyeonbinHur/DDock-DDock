@@ -44,7 +44,7 @@ export default function ProfilePage() {
     const [imageUpload, setImageUpload] = useState(null);
     const [imagePreview, setImagePreview] = useState(undefined);
     const fileInputRef = useRef();
-    const modal = useRef();
+    // const modal = useRef();
 
     const [isLikeOpen, setIsLikeOepn] = useState(false);
     const [isMarketOpen, setIsMarketOpen] = useState(false);
@@ -54,11 +54,11 @@ export default function ProfilePage() {
     const [isCommentOpen, setIsCommpentOpen] = useState(false);
     const [imageLoading, setImageloading] = useState(false);
 
-    function openConfirmModal() {
-        if (modal.current) {
-            modal.current.open();
-        }
-    }
+    // function openConfirmModal() {
+    //     if (modal.current) {
+    //         modal.current.open();
+    //     }
+    // }
     const changeDisplayName = async () => {
         setStartEditDisplayName(false);
         const originalUser = user;
@@ -71,7 +71,6 @@ export default function ProfilePage() {
 
     useEffect(() => {
         //유저 마켓 아이템 로드
-
         if (user?.Avatar) {
             setImageUrl(user.Avatar);
             setImageloading(true);
@@ -283,9 +282,6 @@ export default function ProfilePage() {
                                     <TbCameraPlus className="size-9" />
                                 </div>
                             </div>
-                            {/* <button  className="border">
-                                사진 변경 확인
-                            </button> */}
                         </div>
 
                         <div
@@ -295,13 +291,6 @@ export default function ProfilePage() {
                             } bg-blue-100 p-2  rounded-lg shadow-md absolute top-[13%] right-[11%] cursor-pointer hover:scale-110`}
                         >
                             Update
-                        </div>
-
-                        <div
-                            className="border rounded-full p-2 shadow-md hover:scale-110"
-                            onClick={openConfirmModal}
-                        >
-                            <FcLike className=" size-10" />
                         </div>
                     </div>
                     {/* display name div */}
