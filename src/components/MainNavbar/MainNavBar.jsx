@@ -135,7 +135,7 @@ export default function Navbar() {
 
     return (
         <div>
-            <div className="fixed h-24 w-full bg-blue-50 z-10 p-7">
+            <div className="fixed h-24 w-full bg-blue-50 z-20 p-7">
                 <nav className="flex items-center justify-between ">
                     <div>
                         <NavLink to="/">
@@ -190,7 +190,7 @@ export default function Navbar() {
                     </div>
 
                     {showMenu && (
-                        <div className="hidden bg-blue-50 z-10 w-40 absolute lg:flex flex-col border-4 border-white top-[100%] right-[5%] items-center p-2 rounded-2xl justify-between">
+                        <div className="hidden bg-blue-50 z-20 w-40 absolute lg:flex flex-col border-4 border-white top-[100%] right-[5%] items-center p-2 rounded-2xl justify-between">
                             {!user && (
                                 <>
                                     <div className="w-full items-center font-bold">
@@ -255,7 +255,7 @@ export default function Navbar() {
                 </div>
             </div>
             {mobileMenu && (
-                <div className="absolute top-[10%] z-20 w-full border-2 rounded-lg border-white p-2 bg-blue-50 lg:hidden">
+                <div className="absolute top-[10%] z-30 w-full border-2 rounded-lg border-white p-2 bg-blue-50 lg:hidden">
                     <div className="space-y-3 p-3">
                         <div
                             onClick={clickPage}

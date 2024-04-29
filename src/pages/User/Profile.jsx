@@ -1,3 +1,13 @@
+import { FcConferenceCall } from 'react-icons/fc';
+import { FcComments } from 'react-icons/fc';
+import { FaCommentAlt } from 'react-icons/fa';
+import { FcHome } from 'react-icons/fc';
+import { FcMoneyTransfer } from 'react-icons/fc';
+import { AiOutlineShop } from 'react-icons/ai';
+import { FcLike } from 'react-icons/fc';
+import { TbCameraPlus } from 'react-icons/tb';
+// import { TbBrandPocket } from 'react-icons/tb';
+// import { CgPocket } from 'react-icons/cg';
 import { useParams, Link } from 'react-router-dom';
 import { useDocument } from '../../hooks/useDocument';
 import { useEffect, useState, useRef } from 'react';
@@ -6,8 +16,8 @@ import { useCollection } from '../../hooks/useCollection';
 import UserCommentForm from '../../components/User/UserCommentForm';
 import defaultUserImg from '../../assets/user.png';
 import style from './profile.module.css';
-import cameraPlus from '../../assets/cameraPlus.png';
-import emptyHeart from '../../assets/emptyHeart.png';
+// import cameraPlus from '../../assets/cameraPlus.png';
+// import emptyHeart from '../../assets/emptyHeart.png';
 import { projectStorage } from '../../firebase/config';
 import { v4 as uuidv4 } from 'uuid';
 import InterestsItemModal from './interestsModal';
@@ -170,6 +180,8 @@ export default function ProfilePage() {
                                 Avatar: url,
                             };
                             await updateDocument(userId, updatedUser, 'User');
+                            setImageUrl(url);
+                            setImagePreview(undefined);
                         });
                     })
                     .catch((error) => {
@@ -197,16 +209,17 @@ export default function ProfilePage() {
             {user_error ? (
                 <p>{user_error.message}</p>
             ) : user && !updateLoading && !user_loading ? (
-                <div>
+                <div className="pt-28 px-7 space-y-3">
                     <input
                         type="file"
                         className={style.fileInput}
                         ref={fileInputRef}
                         onChange={handleImageChange}
                     />
-                    <div className={style.tmpContainer}>
+                    {/* image div */}
+                    <div className="flex items-center justify-between px-9 mt-5">
                         <div>
-                            <div className={style.imageContainer}>
+                            <div className="flex transform">
                                 <img
                                     className={style.userImage}
                                     src={
@@ -218,61 +231,79 @@ export default function ProfilePage() {
                                     onLoad={() => setImageloading(false)}
                                     alt="Default"
                                 />
-                                <div className={style.cameraContainer}>
-                                    <img
-                                        src={cameraPlus}
-                                        className={style.cameraPlus}
-                                        onClick={handleImageClick}
-                                    />
+
+                                <div
+                                    onClick={handleImageClick}
+                                    className="hover:scale-110 absolute rounded-full p-1 top-[80%] right-[10%] bg-gray-200 borer-5"
+                                >
+                                    <TbCameraPlus className="size-9" />
                                 </div>
                             </div>
-                            <button onClick={uploadImage}>
+                            {/* <button  className="border">
                                 사진 변경 확인
-                            </button>
+                            </button> */}
                         </div>
 
-                        <div className={style.heartContainer}>
-                            <img
-                                src={emptyHeart}
-                                className={style.emptyHeart}
-                            />
-                            <p>관심 상품</p>
-                            <button onClick={openConfirmModal}>
-                                open modal
-                            </button>
-                        </div>
-                    </div>
-
-                    <div>
-                        <div>
-                            <label>Display name</label>
-                        </div>
-                        {startEditDisplayName ? (
-                            <input
-                                defaultValue={user.displayName}
-                                onChange={(e) =>
-                                    setNewDisplayName(e.target.value)
-                                }
-                            ></input>
-                        ) : (
-                            <span>{user.displayName}</span>
-                        )}
-                    </div>
-                    <div>
-                        <button
-                            onClick={() => {
-                                if (startEditDisplayName) {
-                                    changeDisplayName();
-                                } else {
-                                    setStartEditDisplayName(true);
-                                }
-                            }}
+                        <div
+                            onClick={uploadImage}
+                            className={`${
+                                imagePreview == undefined && `hidden`
+                            } bg-blue-100 p-2  rounded-lg shadow-md absolute top-[13%] right-[11%] cursor-pointer hover:scale-110`}
                         >
-                            {startEditDisplayName ? '완료' : '닉네임 변경'}
-                        </button>
-                    </div>
+                            Update
+                        </div>
 
-                    <div>----M ITEM----</div>
+                        <div
+                            className="border rounded-full p-2 shadow-md hover:scale-110"
+                            onClick={openConfirmModal}
+                        >
+                            <FcLike className=" size-10" />
+                        </div>
+                    </div>
+                    {/* display name div */}
+                    <div className="space-y-3">
+                        <div className="pt-5 w-36">
+                            {startEditDisplayName ? (
+                                <div className="w-full">
+                                    <input
+                                        defaultValue={user.displayName}
+                                        onChange={(e) =>
+                                            setNewDisplayName(e.target.value)
+                                        }
+                                        className="border w-full rounded-md"
+                                    ></input>
+                                </div>
+                            ) : (
+                                <div>{user.displayName}</div>
+                            )}
+                        </div>
+                        <div className="space-x-3">
+                            <button
+                                className="border p-1 cursor-pointer hover:scale-110 rounded-lg bg-blue-200 italic"
+                                onClick={() => {
+                                    if (startEditDisplayName) {
+                                        changeDisplayName();
+                                    } else {
+                                        setStartEditDisplayName(true);
+                                    }
+                                }}
+                            >
+                                {startEditDisplayName
+                                    ? 'Update'
+                                    : 'Change display name'}
+                            </button>
+                            {startEditDisplayName && (
+                                <button
+                                    onClick={() =>
+                                        setStartEditDisplayName(false)
+                                    }
+                                    className="border p-1 cursor-pointer hover:scale-110 rounded-lg bg-red-200 italic"
+                                >
+                                    Cancel
+                                </button>
+                            )}
+                        </div>
+                    </div>
 
                     {userMarketItem.map((item) => (
                         <li key={item.id}>
@@ -281,11 +312,38 @@ export default function ProfilePage() {
                             </Link>
                         </li>
                     ))}
-                    <div>----H ITEM----</div>
-                    <div>----J ITEM----</div>
-                    <div>----C ITEM----</div>
-                    <div>---Comments---</div>
-                    {user.userComment.length > 0 &&
+                    <div className="border-dotted w-full border"></div>
+                    <div className="space-y-5">
+                        <div className="font-bold text-xl">My Items</div>
+                        <ul className="space-y-2 bg-gray-100 rounded-lg p-2">
+                            <li className="flex space-x-2 hover:bg-white w-full rounded-md p-1">
+                                <FcLike />
+                                <div>Like</div>
+                            </li>
+                            <li className="flex space-x-2 hover:bg-white w-full rounded-md p-1">
+                                <AiOutlineShop />
+                                <div>Market</div>
+                            </li>
+                            <li className="flex space-x-2 hover:bg-white w-full rounded-md p-1">
+                                <FcMoneyTransfer />
+                                <div>Job</div>
+                            </li>
+                            <li className="flex space-x-2 hover:bg-white w-full rounded-md p-1">
+                                <FcHome />
+                                <div>House</div>
+                            </li>
+                            <li className="flex space-x-2 hover:bg-white w-full rounded-md p-1">
+                                <FcConferenceCall />
+                                <div>Community</div>
+                            </li>
+                            <li className="flex space-x-2 hover:bg-white w-full rounded-md p-1">
+                                <FcComments />
+                                <div>Comment</div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    {/* {user.userComment.length > 0 &&
                         user.userComment.map((comment) => {
                             return (
                                 <UserCommentForm
@@ -294,7 +352,7 @@ export default function ProfilePage() {
                                     key={comment.id}
                                 />
                             );
-                        })}
+                        })} */}
                     <InterestsItemModal
                         ref={modal}
                         itemIds={user.interests}

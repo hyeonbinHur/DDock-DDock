@@ -1,10 +1,10 @@
 import { useEffect, useReducer, useState } from 'react';
 import { projectFirestore, timestamp, FieldValue } from '../firebase/config';
-import { useAuthContext } from './useAuth';
-import { useDocument } from './useDocument';
-import {formatDate} from '../util/formDate'
+// import { useAuthContext } from './useAuth';
+// import { useDocument } from './useDocument';
+import { formatDate } from '../util/formDate';
 import { useDispatch } from 'react-redux';
-import {addItem} from '../store/marketCollectionSlice'
+import { addItem } from '../store/marketCollectionSlice';
 import { addJobItem } from '../store/jobCollectionSlice';
 import { addHouseItem } from '../store/houseCollectionSilce';
 import { addCommunityItem } from '../store/communityCollectionSlice';
@@ -88,10 +88,10 @@ export const useFirestore = (collection) => {
     const [loading, setLoading] = useState(false);
     const ref = projectFirestore.collection(collection);
 
-    const { user } = useAuthContext();
-    const { document } = useDocument('User', user?.uid);
+    // const { user } = useAuthContext();
+    // const { document } = useDocument('User', user?.uid);
 
-    const reduxDispatch = useDispatch()
+    const reduxDispatch = useDispatch();
 
     const dispatchIsNotCancelled = (action) => {
         if (!isCancelled) {
@@ -99,38 +99,60 @@ export const useFirestore = (collection) => {
         }
     };
 
-    const addDocument = async (doc,type) => {
-        
+    const addDocument = async (doc, type) => {
         setLoading(true);
         dispatch({ type: 'IS_PENDING' });
+        const userId = doc.userId;
+        const userRef = projectFirestore.collection('User');
+        const userDoc = userRef.doc(userId).get();
+        const userData = (await userDoc).data();
 
         try {
             const newDocument = await ref.add({
-                ...doc
+                ...doc,
             });
-            console.log(newDocument.id)
-            
+            console.log(newDocument.id);
+
             const reduxItem = {
                 ...doc,
-                id: newDocument.id
-            }
-            if(type == "marketItem"){
+                id: newDocument.id,
+            };
+            if (type == 'marketItem') {
                 reduxDispatch(addItem(reduxItem));
-            }else if(type == "jobItem"){
-                reduxDispatch(addJobItem({item : reduxItem}))
-            }else if (type == "HouseItem"){
-                reduxDispatch(addHouseItem({item : reduxItem}))
-            }else if(type == "CommunityItem"){
-                reduxDispatch(addCommunityItem({item : reduxItem}))
+                const oldUserMItem = userData.MItem;
+                const newMItem = [reduxItem, ...oldUserMItem];
+                await userRef.doc(userId).update({
+                    MItem: newMItem,
+                });
+            } else if (type == 'jobItem') {
+                reduxDispatch(addJobItem({ item: reduxItem }));
+                const oldUserJItem = userData.CItem;
+                const newJItem = [reduxItem, ...oldUserJItem];
+                await userRef.doc(userId).update({
+                    JItem: newJItem,
+                });
+            } else if (type == 'HouseItem') {
+                reduxDispatch(addHouseItem({ item: reduxItem }));
+                const oldUserHItem = userData.HItem;
+                const newHItem = [reduxItem, ...oldUserHItem];
+                await userRef.doc(userId).update({
+                    HItem: newHItem,
+                });
+            } else if (type == 'CommunityItem') {
+                reduxDispatch(addCommunityItem({ item: reduxItem }));
+                const oldUserCItem = userData.CItem;
+                const newCItem = [reduxItem, ...oldUserCItem];
+                await userRef.doc(userId).update({
+                    CItem: newCItem,
+                });
             }
 
-
-            const addedDocument = newDocument;
-            const originalUser = document;
-            const originalUserItem = originalUser.userItem;
-            const updatedUserItem = [...originalUserItem, addedDocument];
-            originalUser.userItem = updatedUserItem;
-            await updateDocument(user.uid, originalUser, 'User');
+            // const addedDocument = newDocument;
+            // const originalUser = document;
+            // const originalUserItem = originalUser.userItem;
+            // const updatedUserItem = [...originalUserItem, addedDocument];
+            // originalUser.userItem = updatedUserItem;
+            // await updateDocument(user.uid, originalUser, 'User');
 
             dispatchIsNotCancelled({
                 type: 'ADD_DOCUMENT',
@@ -174,7 +196,6 @@ export const useFirestore = (collection) => {
                             createdAt: newMessage.createdAt,
                             id: newMessage.id,
                             type: newMessage.type,
-
                         });
                     }
                 });
@@ -326,6 +347,10 @@ export const useFirestore = (collection) => {
                     },
                     chatRoom: [],
                     unread: [],
+                    MItem: [],
+                    CItem: [],
+                    JItem: [],
+                    HItem: [],
                 });
                 dispatchIsNotCancelled({
                     type: 'ADD_NEWCHATROOM',
@@ -389,7 +414,6 @@ export const useFirestore = (collection) => {
                     roomId: newChattingRoom.id,
                     partner: user2.id,
                     started: false,
-
                 };
                 const updatedUser1ChatRoom = [
                     ...olduser1ChatRoom,
@@ -466,46 +490,44 @@ export const useFirestore = (collection) => {
 
         setLoading(true);
         dispatch({ type: 'IS_PENDING' });
-        try{
+        try {
+            const myDoc = await myRef.doc(myId).get();
+            const myData = myDoc.data();
 
-            const myDoc = await myRef.doc(myId).get()
-            const myData = myDoc.data()
+            const partnerDoc = await partnerRef.doc(partnerId).get();
+            const partnerData = partnerDoc.data();
 
-            const partnerDoc = await partnerRef.doc(partnerId).get()
-            const partnerData = partnerDoc.data()
-
-            const myChatRoom = myData.chatRoom
-            myChatRoom.forEach((chatRoom)=>{
-                if(chatRoom.roomId === roomID){
+            const myChatRoom = myData.chatRoom;
+            myChatRoom.forEach((chatRoom) => {
+                if (chatRoom.roomId === roomID) {
                     chatRoom.started = true;
                 }
-            })
+            });
 
             await myRef.doc(myId).update({
-                chatRoom: myChatRoom
-            })
+                chatRoom: myChatRoom,
+            });
 
-            const partnerChatRoom = partnerData.chatRoom
+            const partnerChatRoom = partnerData.chatRoom;
             partnerChatRoom.map((chatRoom) => {
-                if(chatRoom.roomId === roomID){
-                    console.log("찾긴함")
+                if (chatRoom.roomId === roomID) {
+                    console.log('찾긴함');
                     chatRoom.started = true;
                 }
-            })
+            });
             await partnerRef.doc(partnerId).update({
-                chatRoom: partnerChatRoom
-            })
-            
+                chatRoom: partnerChatRoom,
+            });
+
             dispatchIsNotCancelled({
                 type: 'UPDATE_DOCUMENT',
                 payload: partnerChatRoom,
             });
             setLoading(false);
-        }catch(error){
-            console.log(error)
+        } catch (error) {
+            console.log(error);
         }
-         
-    }
+    };
 
     useEffect(() => {
         return () => setIsCancelled(!isCancelled);

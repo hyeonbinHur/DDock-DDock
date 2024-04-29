@@ -1,42 +1,40 @@
-.community_listItem_container{
-    @apply grid grid-cols-3 gap-20 pt-5
+.community_listItem_container {
+    @apply grid grid-cols-3 gap-20 pt-5;
 }
-.house_listItem_container{
-    @apply grid grid-cols-3 gap-20 pt-5
+.house_listItem_container {
+    @apply grid grid-cols-3 gap-20 pt-5;
 }
-.job_listItem_container{
-    @apply grid gap-5 w-full
+.job_listItem_container {
+    @apply grid gap-5 w-full;
 }
-.market_listItem_container{
-    @apply grid grid-cols-4 gap-20 pt-5
-}
-
-.community_listItem_container_real{
-   @apply border-2 rounded-2xl p-1 hover:border-blue-300 hover:border-2
-}
-.house_listItem_container_real{
-    @apply border-2 rounded-2xl p-1 hover:border-green-300 hover:border-2
+.market_listItem_container {
+    @apply grid grid-cols-4 gap-20 pt-5;
 }
 
-.job_listItem_container_real{
-    @apply border-2 rounded-2xl p-1 h-jobItem hover:border-orange-300 hover:border-2
+.community_listItem_container_real {
+    @apply border-2 rounded-2xl p-1;
+}
+.house_listItem_container_real {
+    @apply border-2 rounded-2xl p-1 hover:border-green-300 hover:border-2;
 }
 
-.market_listItem_container_real{
-    @apply border-2 rounded-2xl p-1 hover:border-purple-300 hover:border-2
+.job_listItem_container_real {
+    @apply border-2 rounded-2xl p-1 h-jobItem hover:border-orange-300 hover:border-2;
 }
 
+.market_listItem_container_real {
+    @apply border-2 rounded-2xl p-1 hover:border-purple-300 hover:border-2;
+}
 
-.job_item_status{
-    @apply flex font-extralight ml-64 p-2
+.job_item_status {
+    @apply flex font-extralight ml-64 p-2;
 }
-.item_status{
-    @apply flex font-extralight pl-3 pt-3
-
+.item_status {
+    @apply font-extralight pl-3 pt-10 flex;
 }
-.date_container{
-    @apply -ml-16 w-full text-right pr-4
+.date_container {
+    @apply -ml-16 w-full text-right pr-4;
 }
-.job_date_container{
-    @apply ml-20 w-full 
+.job_date_container {
+    @apply ml-20 w-full;
 }

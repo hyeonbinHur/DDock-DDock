@@ -40,9 +40,9 @@ export default function ListItem({ item, topic }) {
                 <div className="mb-3 h-20 overflow-hidden ">
                     <p className="line-clamp-4">{item.description}</p>
                 </div>
-               
+
                 <div className="w-full border-dotted mb-3 border-2"></div>
-                
+
                 <div className="font-light text-xs p-1 ">
                     <span>{item.location.si} 시 </span>
                     <span>{item.location.gu} 구 </span>
