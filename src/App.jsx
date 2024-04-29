@@ -31,6 +31,7 @@ import HouseItemDetailPage from './pages/House/HouseItemDetailPage';
 import CommunityRoot from './pages/Community/CommunityRoot';
 import AddCommunityItemPage from './pages/Community/AddCommunityItemPage';
 import CommunityItemDetailPage from './pages/Community/CommunityItemDtail';
+import ProfileRoot from './pages/User/ProfileRoot';
 
 const queryClient = new QueryClient();
 
@@ -90,22 +91,39 @@ function App() {
                         { path: 'add', element: <AddJobPage /> },
                     ],
                 },
-                { path: 'house', element: <HouseRoot/>, children:[
-                    {path:'', element: <HousePage/>},
-                    {path:'add', element: <AddHouseItemPage/> },
-                    {path:':hItemId', element: <HouseItemDetailPage/> }
-
-                ]},
-                { path: 'community', element: <CommunityRoot/>, children:[
-                    {path: '', element: <CommunityPage/>},
-                    {path:'add', element: <AddCommunityItemPage />},
-                    {path:':cItemId', element: <CommunityItemDetailPage/>}
-                ] },
-
+                {
+                    path: 'house',
+                    element: <HouseRoot />,
+                    children: [
+                        { path: '', element: <HousePage /> },
+                        { path: 'add', element: <AddHouseItemPage /> },
+                        { path: ':hItemId', element: <HouseItemDetailPage /> },
+                    ],
+                },
+                {
+                    path: 'community',
+                    element: <CommunityRoot />,
+                    children: [
+                        { path: '', element: <CommunityPage /> },
+                        { path: 'add', element: <AddCommunityItemPage /> },
+                        {
+                            path: ':cItemId',
+                            element: <CommunityItemDetailPage />,
+                        },
+                    ],
+                },
 
                 { path: '/signup', element: <SignUpPage /> },
                 { path: '/login', element: <LoginPage /> },
-                { path: '/profile/:userId', element: <ProfilePage /> },
+                {
+                    path: 'profile',
+                    element: <ProfileRoot />,
+                    children: [
+                        { path: ':userId', element: <ProfilePage /> },
+                        { path: ':userId/userItem', element: <ProfilePage /> },
+                    ],
+                },
+
                 { path: '/csstest', element: <Memo /> },
                 { path: '/chatting', element: <Memo /> },
             ],

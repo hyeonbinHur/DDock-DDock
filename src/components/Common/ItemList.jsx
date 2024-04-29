@@ -117,13 +117,14 @@ export default function ItemList({
     const toggleHeart = async (item, collection, userData) => {
         console.log('Hello heart');
         const interestIndex = userData.interests.findIndex(
-            (id) => id == item.id
+            (each) => each.id == item.id
         );
         if (interestIndex == -1) {
             dispatch(addInterest({ item: item }));
+
             const updatedUser = {
                 ...userData,
-                interests: [...userData.interests, item.id],
+                interests: [...userData.interests, item],
             };
             await updateDocument(userData.id, updatedUser, 'User');
             const updatedItem = {
@@ -197,8 +198,8 @@ export default function ItemList({
                                     </div>
 
                                     <div className="flex z-10">
-                                        {userData.interests.includes(
-                                            item.id
+                                        {userData.interests.some(
+                                            (each) => each.id === item.id
                                         ) ? (
                                             <img
                                                 src={heartPng}
@@ -224,6 +225,7 @@ export default function ItemList({
                                                 }
                                             />
                                         )}
+
                                         <span>{item.interests}</span>
                                     </div>
 

@@ -268,35 +268,39 @@ export default function Navbar() {
                                 {' '}
                                 <div className="border border-white"> </div>
                                 <div className="px-7 space-y-3">
-                                    <div
-                                        onClick={() => setMobileMenu(false)}
-                                        className="hover:bg-white rounded-lg p-2 w-full"
-                                    >
-                                        <NavLink to="/market" className="">
+                                    <div className="hover:bg-white rounded-lg p-2 w-full">
+                                        <NavLink
+                                            to="/market"
+                                            className=""
+                                            onClick={() => setMobileMenu(false)}
+                                        >
                                             Market
                                         </NavLink>
                                     </div>
-                                    <div
-                                        onClick={() => setMobileMenu(false)}
-                                        className="hover:bg-white rounded-lg p-2 w-full"
-                                    >
-                                        <NavLink to="/job" className="">
+                                    <div className="hover:bg-white rounded-lg p-2 w-full">
+                                        <NavLink
+                                            to="/job"
+                                            className=""
+                                            onClick={() => setMobileMenu(false)}
+                                        >
                                             Job
                                         </NavLink>
                                     </div>
-                                    <div
-                                        onClick={() => setMobileMenu(false)}
-                                        className="hover:bg-white rounded-lg p-2 w-full"
-                                    >
-                                        <NavLink to="/house" className="">
+                                    <div className="hover:bg-white rounded-lg p-2 w-full">
+                                        <NavLink
+                                            to="/house"
+                                            className=""
+                                            onClick={() => setMobileMenu(false)}
+                                        >
                                             House
                                         </NavLink>
                                     </div>
-                                    <div
-                                        onClick={() => setMobileMenu(false)}
-                                        className="hover:bg-white rounded-lg p-2 w-full"
-                                    >
-                                        <NavLink to="/coummunity" className="">
+                                    <div className="hover:bg-white rounded-lg p-2 w-full">
+                                        <NavLink
+                                            to="/community"
+                                            className=""
+                                            onClick={() => setMobileMenu(false)}
+                                        >
                                             Community
                                         </NavLink>
                                     </div>

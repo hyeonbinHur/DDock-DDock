@@ -1,6 +1,5 @@
 import { FcConferenceCall } from 'react-icons/fc';
-import { FcComments } from 'react-icons/fc';
-import { FaCommentAlt } from 'react-icons/fa';
+// import { FaCommentAlt } from 'react-icons/fa';
 import { FcHome } from 'react-icons/fc';
 import { FcMoneyTransfer } from 'react-icons/fc';
 import { AiOutlineShop } from 'react-icons/ai';
@@ -8,12 +7,12 @@ import { FcLike } from 'react-icons/fc';
 import { TbCameraPlus } from 'react-icons/tb';
 // import { TbBrandPocket } from 'react-icons/tb';
 // import { CgPocket } from 'react-icons/cg';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useDocument } from '../../hooks/useDocument';
 import { useEffect, useState, useRef } from 'react';
 import { useFirestore } from '../../hooks/useFirestore';
 import { useCollection } from '../../hooks/useCollection';
-import UserCommentForm from '../../components/User/UserCommentForm';
+// import UserCommentForm from '../../components/User/UserCommentForm';
 import defaultUserImg from '../../assets/user.png';
 import style from './profile.module.css';
 // import cameraPlus from '../../assets/cameraPlus.png';
@@ -21,7 +20,7 @@ import style from './profile.module.css';
 import { projectStorage } from '../../firebase/config';
 import { v4 as uuidv4 } from 'uuid';
 import InterestsItemModal from './interestsModal';
-import MarketItem from '../../components/MarketItem/MarketItem';
+import UserItemsPopUp from './UserItemsPopUp';
 
 export default function ProfilePage() {
     const { userId } = useParams(); //꼭 필요
@@ -47,6 +46,12 @@ export default function ProfilePage() {
     const fileInputRef = useRef();
     const modal = useRef();
 
+    const [isLikeOpen, setIsLikeOepn] = useState(false);
+    const [isMarketOpen, setIsMarketOpen] = useState(false);
+    const [isJobOpen, setIsJobOpen] = useState(false);
+    const [isHouseOpen, setIsHouseOpen] = useState(false);
+    const [isCommunityOpen, setIsCommunityOpen] = useState(false);
+    const [isCommentOpen, setIsCommpentOpen] = useState(false);
     const [imageLoading, setImageloading] = useState(false);
 
     function openConfirmModal() {
@@ -204,6 +209,52 @@ export default function ProfilePage() {
         }
     };
 
+    const openItems = (content) => {
+        if (content == 'Like') {
+            setIsLikeOepn(!isLikeOpen);
+            setIsMarketOpen(false);
+            setIsJobOpen(false);
+            setIsHouseOpen(false);
+            setIsCommunityOpen(false);
+            setIsCommpentOpen(false);
+        } else if (content == 'Market') {
+            setIsLikeOepn(false);
+            setIsMarketOpen(!isMarketOpen);
+            setIsJobOpen(false);
+            setIsHouseOpen(false);
+            setIsCommunityOpen(false);
+            setIsCommpentOpen(false);
+        } else if (content == 'Job') {
+            setIsLikeOepn(false);
+            setIsMarketOpen(false);
+            setIsJobOpen(!isJobOpen);
+            setIsHouseOpen(false);
+            setIsCommunityOpen(false);
+            setIsCommpentOpen(false);
+        } else if (content == 'House') {
+            setIsLikeOepn(false);
+            setIsMarketOpen(false);
+            setIsJobOpen(false);
+            setIsHouseOpen(!isHouseOpen);
+            setIsCommunityOpen(false);
+            setIsCommpentOpen(false);
+        } else if (content == 'Community') {
+            setIsLikeOepn(false);
+            setIsMarketOpen(false);
+            setIsJobOpen(false);
+            setIsHouseOpen(false);
+            setIsCommunityOpen(!isCommunityOpen);
+            setIsCommpentOpen(false);
+        } else if (content == 'Comment') {
+            setIsLikeOepn(false);
+            setIsMarketOpen(false);
+            setIsJobOpen(false);
+            setIsHouseOpen(false);
+            setIsCommunityOpen(false);
+            setIsCommpentOpen(!isCommentOpen);
+        }
+    };
+
     return (
         <>
             {user_error ? (
@@ -305,41 +356,96 @@ export default function ProfilePage() {
                         </div>
                     </div>
 
-                    {userMarketItem.map((item) => (
+                    {/* {userMarketItem.map((item) => (
                         <li key={item.id}>
                             <Link to={`/market/${item.id}`}>
                                 <MarketItem document={item} />
                             </Link>
                         </li>
-                    ))}
+                    ))} */}
                     <div className="border-dotted w-full border"></div>
                     <div className="space-y-5">
                         <div className="font-bold text-xl">My Items</div>
                         <ul className="space-y-2 bg-gray-100 rounded-lg p-2">
-                            <li className="flex space-x-2 hover:bg-white w-full rounded-md p-1">
-                                <FcLike />
-                                <div>Like</div>
+                            <li className="p-1">
+                                <div
+                                    onClick={() => openItems('Like')}
+                                    className="flex space-x-3 hover:bg-white w-full rounded-md "
+                                >
+                                    <FcLike className="mr-2" /> Like
+                                </div>
                             </li>
-                            <li className="flex space-x-2 hover:bg-white w-full rounded-md p-1">
-                                <AiOutlineShop />
-                                <div>Market</div>
+
+                            {/* {isLikeOpen && (
+                                <div>
+                                    <UserItemsPopUp
+                                        items={user.Mitem}
+                                        topic="market"
+                                    />
+                                </div>
+                            )} */}
+
+                            <li className="p-1">
+                                <div className="flex  hover:bg-white w-full rounded-md ">
+                                    <AiOutlineShop className="mr-2" />
+                                    Market
+                                </div>
                             </li>
-                            <li className="flex space-x-2 hover:bg-white w-full rounded-md p-1">
-                                <FcMoneyTransfer />
-                                <div>Job</div>
+                            {isMarketOpen && (
+                                <div>
+                                    <UserItemsPopUp
+                                        items={user.MItem}
+                                        topic="market"
+                                    />
+                                </div>
+                            )}
+
+                            <li className="p-1">
+                                <div className="flex space-x-2 hover:bg-white w-full rounded-md ">
+                                    <FcMoneyTransfer className="mr-2" />
+                                    Job
+                                </div>
                             </li>
-                            <li className="flex space-x-2 hover:bg-white w-full rounded-md p-1">
-                                <FcHome />
-                                <div>House</div>
+                            {isJobOpen && (
+                                <div>
+                                    <UserItemsPopUp
+                                        items={user.JItem}
+                                        topic="job"
+                                    />
+                                </div>
+                            )}
+
+                            <li className="p-1">
+                                <div className="flex space-x-2 hover:bg-white w-full rounded-md ">
+                                    <FcHome className="mr-2" />
+                                    House
+                                </div>
                             </li>
-                            <li className="flex space-x-2 hover:bg-white w-full rounded-md p-1">
-                                <FcConferenceCall />
-                                <div>Community</div>
+                            {isHouseOpen && (
+                                <div>
+                                    <UserItemsPopUp
+                                        items={user.HItem}
+                                        topic="house"
+                                    />
+                                </div>
+                            )}
+                            <li
+                                onClick={() => openItems('Community')}
+                                className="p-1"
+                            >
+                                <div className="flex space-x-2 hover:bg-white w-full rounded-md ">
+                                    <FcConferenceCall className="mr-2" />
+                                    Community
+                                </div>
                             </li>
-                            <li className="flex space-x-2 hover:bg-white w-full rounded-md p-1">
-                                <FcComments />
-                                <div>Comment</div>
-                            </li>
+                            {isCommunityOpen && (
+                                <div>
+                                    <UserItemsPopUp
+                                        items={user.CItem}
+                                        topic="community"
+                                    />
+                                </div>
+                            )}
                         </ul>
                     </div>
 
@@ -353,11 +459,11 @@ export default function ProfilePage() {
                                 />
                             );
                         })} */}
-                    <InterestsItemModal
+                    {/* <InterestsItemModal
                         ref={modal}
                         itemIds={user.interests}
                         displayName={user.displayName}
-                    />
+                    /> */}
                 </div>
             ) : (
                 <p>Loading..</p>
