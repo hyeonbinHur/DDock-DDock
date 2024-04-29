@@ -9,7 +9,7 @@ import { TbCameraPlus } from 'react-icons/tb';
 // import { CgPocket } from 'react-icons/cg';
 import { useParams } from 'react-router-dom';
 import { useDocument } from '../../hooks/useDocument';
-import { useState, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useFirestore } from '../../hooks/useFirestore';
 // import { useCollection } from '../../hooks/useCollection';
 // import UserCommentForm from '../../components/User/UserCommentForm';
@@ -69,21 +69,14 @@ export default function ProfilePage() {
         await updateDocument(userId, updatedUser, 'User');
     };
 
-    // useEffect(() => {
-    //     //유저 마켓 아이템 로드
-    //     if (user?.userItem && marketItems) {
-    //         const userIds = user.userItem.map((item) => item.id);
-    //         const userItemDetails = marketItems.filter((doc) => {
-    //             return userIds.includes(doc.id);
-    //         });
-    //         setUserMarktItem(userItemDetails);
-    //     }
-    //     if (user?.Avatar) {
-    //         // 유저 아바타 로드
-    //         setImageUrl(user.Avatar);
-    //         setImageloading(true);
-    //     }
-    // }, [marketItems, user?.userItem, user]);
+    useEffect(() => {
+        //유저 마켓 아이템 로드
+
+        if (user?.Avatar) {
+            setImageUrl(user.Avatar);
+            setImageloading(true);
+        }
+    }, [user]);
 
     const handleImageClick = () => {
         fileInputRef.current.click();
