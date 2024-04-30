@@ -8,6 +8,9 @@
     .btn-pressed {
         @apply transition active:scale-75;
     }
+    .detail-center {
+        @apply w-2/3 flex items-center justify-center;
+    }
 }
 
 body {

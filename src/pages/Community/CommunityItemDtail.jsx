@@ -53,49 +53,86 @@ export default function CommunityItemDetailPage() {
         <>
             {!error ? (
                 !isLoading && reduxItem ? (
-                    <div>
-                        <div>
-                            {currentIndxe > 0 && (
-                                <button
-                                    onClick={() =>
-                                        setCurrentIndex((prev) => prev - 1)
-                                    }
-                                >
-                                    prev
-                                </button>
-                            )}
+                    <div className="pt-36">
+                        {/* images */}
+                        <div className="space-y-6 w-full mb-3">
+                            <div className="flex flex-cols items-center justify-center w-full">
+                                {currentIndxe > 0 && (
+                                    <button
+                                        onClick={() =>
+                                            setCurrentIndex((prev) => prev - 1)
+                                        }
+                                    >
+                                        prev
+                                    </button>
+                                )}
 
-                            <img src={imageUrls[currentIndxe]} />
+                                <img
+                                    src={imageUrls[currentIndxe]}
+                                    className="rounded-lg w-2/3"
+                                />
 
-                            {currentIndxe + 1 < imageUrls.length && (
-                                <button
-                                    onClick={() =>
-                                        setCurrentIndex((prev) => prev + 1)
-                                    }
-                                >
-                                    next
-                                </button>
-                            )}
-                            <p>
-                                {currentIndxe + 1}/{imageUrls.length}
-                            </p>
-                        </div>
-                        {/* title layout */}
-                        <div>
-                            <h1>{reduxItem.title}</h1>
-                        </div>
-
-                        {user?.uid == reduxItem.userId && (
-                            <div>
-                                <Link to={`edit`}>go to edit</Link>
-                                <button onClick={() => modal.current.open()}>
-                                    Delete Item
-                                </button>
+                                {currentIndxe + 1 < imageUrls.length && (
+                                    <button
+                                        onClick={() =>
+                                            setCurrentIndex((prev) => prev + 1)
+                                        }
+                                    >
+                                        next
+                                    </button>
+                                )}
                             </div>
-                        )}
+                            <div className="flex items-center justify-center font-bold">
+                                {currentIndxe + 1}/{imageUrls.length}
+                            </div>
+                        </div>
+                        {/* text div*/}
+                        <div className="w-full space-y-5 px-24">
+                            {user?.uid == reduxItem.userId && (
+                                <div className="border">
+                                    <Link
+                                        className="border border-red-200"
+                                        to={`edit`}
+                                    >
+                                        go to edit
+                                    </Link>
+                                    <button
+                                        className="border border-blue-200"
+                                        onClick={() => modal.current.open()}
+                                    >
+                                        Delete Item
+                                    </button>
+                                </div>
+                            )}
+                            {/* writer */}
+                            <div className="">
+                                <div>writer</div>
+                            </div>
+                            <div className="border"></div>
+                            {/* location */}
+                            <div>
+                                <div>location</div>
+                            </div>
+                            <div className="border"></div>
 
-                        {/* description layout */}
-                        <div>{reduxItem.description}</div>
+                            {/* title layout */}
+                            <div className="font-bold text-lg ">
+                                <h1>{reduxItem.title}</h1>
+                            </div>
+
+                            {/* date */}
+                            <div>
+                                <div> date </div>
+                            </div>
+
+                            <div className="border"></div>
+
+                            {/* description layout */}
+                            <div className="">
+                                <div className="">{reduxItem.description}</div>
+                            </div>
+                        </div>
+
                         {/* comment Layout */}
                         <div>
                             <Comment
