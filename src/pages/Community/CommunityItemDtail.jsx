@@ -8,6 +8,7 @@ import Comment from '../../components/Comment/Comment';
 import { useAuthContext } from '../../hooks/useAuth';
 import ItemDeleteModal from '../../components/Modal/ItemDeleteModal';
 import { useNavigate } from 'react-router-dom';
+import { calculateTime } from '../../util/formDate';
 
 export default function CommunityItemDetailPage() {
     const dispatch = useDispatch();
@@ -49,11 +50,23 @@ export default function CommunityItemDetailPage() {
         }
     }, [reduxItem?.images]);
 
+    const timeTest = () => {
+        const { result, unit } = calculateTime(reduxItem.createdAt);
+        console.log(result);
+        console.log(unit);
+    };
+
     return (
         <>
             {!error ? (
                 !isLoading && reduxItem ? (
                     <div className="pt-36 h-screen ">
+                        <button
+                            className="border bg-red-200"
+                            onClick={() => timeTest()}
+                        >
+                            Hello
+                        </button>
                         {/* images */}
                         <div className="space-y-6 w-full h-2/3">
                             <div className="flex flex-cols items-center justify-center h-5/6 w-full">
@@ -110,8 +123,9 @@ export default function CommunityItemDetailPage() {
                             </div>
                             <div className="border"></div>
                             {/* location */}
-                            <div>
-                                <div>location</div>
+                            <div className="font-light flex space-x-10">
+                                <div>{reduxItem.location.gu}</div>
+                                <div>{reduxItem.location.dong}</div>
                             </div>
                             <div className="border"></div>
 
@@ -121,8 +135,8 @@ export default function CommunityItemDetailPage() {
                             </div>
 
                             {/* date */}
-                            <div>
-                                <div> date </div>
+                            <div className="font-light">
+                                <div> {reduxItem.createdAt} </div>
                             </div>
 
                             <div className="border"></div>
