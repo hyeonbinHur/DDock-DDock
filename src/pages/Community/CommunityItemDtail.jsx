@@ -152,15 +152,18 @@ export default function CommunityItemDetailPage() {
                             <div className="">
                                 <div className="">{reduxItem.description}</div>
                             </div>
+                            <div className="border"></div>
+
+                            <div>
+                                <Comment
+                                    serverItem={reduxItem}
+                                    collection="CommunityItem"
+                                />
+                            </div>
                         </div>
 
                         {/* comment Layout */}
-                        <div>
-                            <Comment
-                                serverItem={reduxItem}
-                                collection="CommunityItem"
-                            />
-                        </div>
+
                         <ItemDeleteModal
                             ref={modal}
                             id={cItemId}

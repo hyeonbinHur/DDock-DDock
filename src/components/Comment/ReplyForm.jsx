@@ -63,19 +63,19 @@ export default function ReplyForm({
                     (r) => r.id === replyId
                 );
                 console.log('replyIndex index :' + replyIndex);
-    
+
                 if (replyIndex !== -1) {
                     // 불변성을 유지하면서 배열에서 답글 제거
                     const updatedChildComments = [
                         ...commentToUpdate.childComment.slice(0, replyIndex),
-                        ...commentToUpdate.childComment.slice(replyIndex + 1)
+                        ...commentToUpdate.childComment.slice(replyIndex + 1),
                     ];
                     console.log(updatedChildComments);
                     // 업데이트할 댓글 객체에 새로운 답글 배열 할당
-                   
+
                     const updatedComment = {
                         ...commentToUpdate,
-                        childComment: updatedChildComments
+                        childComment: updatedChildComments,
                     };
                     // 전체 댓글 배열 업데이트
                     const updatedComments = [
@@ -84,7 +84,7 @@ export default function ReplyForm({
                         ...serverItem.comments.slice(commentIndex + 1),
                     ];
                     const newNumOfComment = serverItem.numOfComment - 1;
-                    console.log(updatedComments)
+                    console.log(updatedComments);
                     await updateDocument(
                         serverItem.id,
                         {
@@ -93,14 +93,14 @@ export default function ReplyForm({
                         },
                         collection
                     );
-    
+
                     dispatch(
                         delteReplyOnItem({
                             replyId: replyId,
                             commentId: comment.id,
                         })
                     );
-    
+
                     if (collection == 'MarketItem') {
                         dispatch(
                             deleteCommentOnCollection({
@@ -122,7 +122,7 @@ export default function ReplyForm({
                                 numOfReply: 1,
                             })
                         );
-                    }else if (collection == 'CommunityItem') {
+                    } else if (collection == 'CommunityItem') {
                         dispatch(
                             deleteCommentOnCCollection({
                                 item: serverItem,
@@ -134,7 +134,6 @@ export default function ReplyForm({
             }
         }
     };
-    
 
     const editReply = async (reply_id) => {
         const replyIndex = comment.childComment.findIndex(
@@ -191,9 +190,11 @@ export default function ReplyForm({
     };
 
     return (
-        <div>
-            <label>{clientReply.displayName} </label>
-            <div>{formatDate(clientReply.createdAt)}</div>
+        <div className="bg-stone-300 border-stone-500 shadow-inner mt-3 rounded-md p-2">
+            <div className="flex justify-between text-sm pl-1">
+                <label>{clientReply.displayName} </label>
+                <div>{formatDate(clientReply.createdAt)}</div>
+            </div>
 
             {isEdittingReply ? (
                 <textarea
@@ -203,7 +204,7 @@ export default function ReplyForm({
                     }}
                 ></textarea>
             ) : (
-                <div>
+                <div className="p-2 bg-neutral-100 rounded-md">
                     {addReplyLoading && <img src={spinner} />}
                     {clientReply.content}
                     {loading && <img src={spinner} />}
@@ -211,12 +212,16 @@ export default function ReplyForm({
             )}
 
             {serverUser && serverUser.id === clientReply.userId && (
-                <div>
-                    <button onClick={() => deleteReply(clientReply.id)}>
-                        대댓 삭제
+                <div className="text-xs space-x-3">
+                    <button
+                        onClick={() => deleteReply(clientReply.id)}
+                        className="border border-red-300 bg-red-100 rounded p-1 hover:scale-105 hover:text-red-600"
+                    >
+                        Delete
                     </button>
 
                     <button
+                        className="border mt-2 border-sky-200 bg-sky-200 p-1 rounded hover:scale-105 hover:text-blue-700"
                         onClick={() => {
                             if (isEdittingReply) {
                                 setIsEdittingReply(!isEdittingReply);
@@ -226,7 +231,7 @@ export default function ReplyForm({
                             }
                         }}
                     >
-                        {isEdittingReply ? '수정 완료' : '대댓 수정'}
+                        {isEdittingReply ? 'Confirm' : 'Modify'}
                     </button>
                 </div>
             )}

@@ -1,6 +1,6 @@
 import { useFirestore } from '../../hooks/useFirestore';
 import { useAuthContext } from '../../hooks/useAuth';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { timestamp } from '../../firebase/config';
 import CommentForm from './CommentFom';
 import { useDocument } from '../../hooks/useDocument';
@@ -20,6 +20,13 @@ export default function Comment({ serverItem, collection }) {
     const [comment, setComment] = useState('');
     const [clientComments, setClientComments] = useState([]);
     const dispatch = useDispatch();
+    const textarearRef = useRef(null);
+
+    useEffect(() => {
+        textarearRef.current.style.height = 'auto';
+        textarearRef.current.style.height =
+            textarearRef.current.scrollHeight + 'px';
+    }, [comment]);
 
     useEffect(() => {
         setClientComments(serverItem.comments);
@@ -73,19 +80,34 @@ export default function Comment({ serverItem, collection }) {
     return response.error ? (
         <p>error</p>
     ) : (
-        <div>
-            <h4>{serverItem.numOfComment} Comments</h4>
+        <div className="space-y-3 bg-stone-50 p-1 rounded-lg">
+            <h4 className="font-bold text-xl text-center">
+                {serverItem.numOfComment} comments
+            </h4>
             <form onSubmit={addComment}>
-                <label>
-                    <span>add new comment</span>
+                <div className="max-h-screen w-full ">
                     <textarea
+                        className="outline-none focus:outline-none active:outline-none  underline-offset-4 w-full bg-stone-100 rounded-lg p-2"
                         onChange={(event) => setComment(event.target.value)}
                         value={comment}
+                        ref={textarearRef}
+                        rows="2"
+                        placeholder="add comment..."
                     ></textarea>
-                </label>
-                <button>submit</button>
+                </div>
+                <div className="flex items-end justify-end space-x-3">
+                    <button
+                        className="border rounded-lg p-1 hover:scale-105 bg-gray-50"
+                        onClick={() => setComment('')}
+                    >
+                        cancel
+                    </button>
+                    <button className="border rounded-lg p-1 hover:scale-105 bg-gray-200">
+                        submit
+                    </button>
+                </div>
             </form>
-            <ul>
+            <ul className="space-y-3">
                 {clientComments.length > 0 &&
                     clientComments.map((clientComment) => {
                         return (

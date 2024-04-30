@@ -23,9 +23,15 @@ import {
     deleteCommentOnJCollection,
 } from '../../store/jobCollectionSlice';
 
-import { addCommentOnCCollection, deleteCommentOnCCollection } from '../../store/communityCollectionSlice';
+import {
+    addCommentOnCCollection,
+    deleteCommentOnCCollection,
+} from '../../store/communityCollectionSlice';
 
-import { addCommentOnHCollection,deleteCommentOnHCollection } from '../../store/houseCollectionSilce';
+import {
+    addCommentOnHCollection,
+    deleteCommentOnHCollection,
+} from '../../store/houseCollectionSilce';
 
 // import spinner from '../../assets/spinner.svg'
 
@@ -122,20 +128,20 @@ export default function CommentForm({ collection, serverItem, clientComment }) {
                         numOfReply: num + 1,
                     })
                 );
-            } else if(collection == 'HouseItem'){
+            } else if (collection == 'HouseItem') {
                 dispatch(
                     deleteCommentOnHCollection({
-                        item:serverItem,
-                        numOfReply: num+1,
+                        item: serverItem,
+                        numOfReply: num + 1,
                     })
-                )
-            }else if(collection == 'CommunityItem'){
+                );
+            } else if (collection == 'CommunityItem') {
                 dispatch(
                     deleteCommentOnCCollection({
-                        item:serverItem,
-                        numOfReply: num+1,
+                        item: serverItem,
+                        numOfReply: num + 1,
                     })
-                )
+                );
             }
         }
     };
@@ -222,18 +228,22 @@ export default function CommentForm({ collection, serverItem, clientComment }) {
                 dispatch(addCommentOnCollection({ itemId: serverItem.id }));
             } else if (collection == 'JobItem') {
                 dispatch(addCommentOnJCollection({ item: serverItem }));
-            } else if(collection == 'HouseItem'){
-                dispatch(addCommentOnHCollection({item: serverItem}))
-            }else if(collection == 'CommunityItem'){
-                dispatch(addCommentOnCCollection({item: serverItem}))
+            } else if (collection == 'HouseItem') {
+                dispatch(addCommentOnHCollection({ item: serverItem }));
+            } else if (collection == 'CommunityItem') {
+                dispatch(addCommentOnCCollection({ item: serverItem }));
             }
         }
     };
 
     return (
-        <div>
-            <label>{clientComment.displayName} </label>
-            <div>{formatDate(clientComment.createdAt)}</div>
+        <div className="p-3  rounded-lg bg-stone-200">
+            <div className="flex justify-between p-1 ">
+                <label className="text-sm">{clientComment.displayName} </label>
+                <div className="text-sm">
+                    {formatDate(clientComment.createdAt)}
+                </div>
+            </div>
 
             {isEditComment ? (
                 <textarea
@@ -241,7 +251,7 @@ export default function CommentForm({ collection, serverItem, clientComment }) {
                     onChange={(e) => setEditCommentContent(e.target.value)}
                 ></textarea>
             ) : (
-                <div>
+                <div className="rounded-md p-2 bg-stone-100 shadow-sm">
                     {addCommentLoading && <img src={spinner} />}
                     {clientComment.content}
                     {loading && <img src={spinner} />}
@@ -250,32 +260,45 @@ export default function CommentForm({ collection, serverItem, clientComment }) {
 
             {user && user.uid === clientComment.userId && (
                 <div>
-                    <button onClick={() => deleteComment(clientComment.id)}>
-                        댓글 삭제
-                    </button>
-                    <button
-                        onClick={() => {
-                            if (isEditComment) {
-                                editComment();
-                                setIsEditComment(!isEditComment);
-                            } else {
-                                setIsEditComment(!isEditComment);
-                            }
-                        }}
-                    >
-                        {isEditComment ? '수정 완료' : '댓글 수정'}
-                    </button>
-                    <div>
-                        <button onClick={() => setOpenReplys(!openReplys)}>
+                    <div className="flex space-x-5 text-xs mt-2">
+                        <div
+                            onClick={() => deleteComment(clientComment.id)}
+                            className="border border-red-300 bg-red-100 rounded p-1 hover:scale-105 hover:text-red-600"
+                        >
+                            Delete
+                        </div>
+
+                        <button
+                            className="border border-sky-200 bg-sky-200 p-1 rounded hover:scale-105 hover:text-blue-700 "
+                            onClick={() => {
+                                if (isEditComment) {
+                                    editComment();
+                                    setIsEditComment(!isEditComment);
+                                } else {
+                                    setIsEditComment(!isEditComment);
+                                }
+                            }}
+                        >
+                            {isEditComment ? 'Confirm' : 'Modify'}
+                        </button>
+                    </div>
+
+                    <div className="text-sm p-1">
+                        <button
+                            className="p-0.5  text-blue-700"
+                            onClick={() => setOpenReplys(!openReplys)}
+                        >
                             {openReplys
-                                ? '대댓 닫기'
-                                : '대댓 달기 + ' +
+                                ? 'close reply'
+                                : 'reply + ' +
                                   `${clientComment.childComment.length}`}
                         </button>
                     </div>
 
                     {openReplys && (
-                        <div>
+                        <div className="p-2 text-base">
+                            <AddReplyForm addReply={addReply} />
+
                             <div>
                                 {clientComment.childComment &&
                                     clientComment.childComment.length > 0 &&
@@ -292,8 +315,6 @@ export default function CommentForm({ collection, serverItem, clientComment }) {
                                         // <li key ={index}> Hello world</li>
                                     ))}
                             </div>
-
-                            <AddReplyForm addReply={addReply} />
                         </div>
                     )}
                 </div>
