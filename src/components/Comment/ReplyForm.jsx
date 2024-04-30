@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { timestamp } from '../../firebase/config';
 import { useFirestore } from '../../hooks/useFirestore';
-import spinner from '../../assets/spinner.svg';
 import { useDispatch } from 'react-redux';
 import { delteReplyOnItem, updateReplyOnItem } from '../../store/ItemSlice';
 import { getSydneyTimeISO } from '../../util/formDate';
@@ -10,6 +9,10 @@ import { deleteCommentOnCollection } from '../../store/marketCollectionSlice';
 import { deleteCommentOnJCollection } from '../../store/jobCollectionSlice';
 import { deleteCommentOnHCollection } from '../../store/houseCollectionSilce';
 import { deleteCommentOnCCollection } from '../../store/communityCollectionSlice';
+
+import { calculateTime } from '../../util/formDate';
+import spinner2 from '../../assets/logo/spinner2.svg';
+
 export default function ReplyForm({
     serverUser,
     serverItem,
@@ -24,6 +27,9 @@ export default function ReplyForm({
         clientReply?.content
     );
     const dispatch = useDispatch();
+    const { result: timeDif, unit: timeString } = calculateTime(
+        clientReply?.createdAt
+    );
 
     useEffect(() => {
         const targetComment = serverItem?.comments?.find(
@@ -37,19 +43,6 @@ export default function ReplyForm({
             setAddReplyLoading(false);
         }
     }, [clientReply?.id, comment.id, serverItem?.comments]);
-
-    function formatDate(timestamp) {
-        return new Date(timestamp.seconds * 1000).toLocaleString('en-AU', {
-            timeZone: 'Australia/Sydney',
-            year: 'numeric',
-            month: 'numeric',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: false,
-        });
-    }
 
     const deleteReply = async (replyId) => {
         const commentIndex = serverItem.comments.findIndex(
@@ -193,7 +186,22 @@ export default function ReplyForm({
         <div className="bg-stone-300 border-stone-500 shadow-inner mt-3 rounded-md p-2">
             <div className="flex justify-between text-sm pl-1">
                 <label>{clientReply.displayName} </label>
-                <div>{formatDate(clientReply.createdAt)}</div>
+                <div className="flex">
+                    {!addReplyLoading ||
+                        (loading && (
+                            <img
+                                src={spinner2}
+                                className="bg-transparent size-20"
+                            />
+                        ))}
+
+                    {addReplyLoading && (
+                        <div className="flex">
+                            {' '}
+                            {timeDif} {timeString}{' '}
+                        </div>
+                    )}
+                </div>
             </div>
 
             {isEdittingReply ? (
@@ -205,9 +213,7 @@ export default function ReplyForm({
                 ></textarea>
             ) : (
                 <div className="p-2 bg-neutral-100 rounded-md">
-                    {addReplyLoading && <img src={spinner} />}
                     {clientReply.content}
-                    {loading && <img src={spinner} />}
                 </div>
             )}
 

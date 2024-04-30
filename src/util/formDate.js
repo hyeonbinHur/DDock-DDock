@@ -124,8 +124,13 @@ export function calculateTime(timestamp) {
                 result = hours - iHours;
                 unit = 'hours ago';
             } else {
-                result = minutes - iMinutes;
-                unit = 'mins ago';
+                if (minutes == iMinutes) {
+                    result = 1;
+                    unit = 'mins ago';
+                } else {
+                    result = minutes - iMinutes;
+                    unit = 'mins ago';
+                }
             }
         } else {
             result = days;

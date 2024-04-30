@@ -4,7 +4,7 @@ import { useFirestore } from '../../hooks/useFirestore';
 import { timestamp } from '../../firebase/config';
 import ReplyForm from './ReplyForm';
 import { useDocument } from '../../hooks/useDocument';
-import spinner from '../../assets/spinner.svg';
+import spinner2 from '../../assets/logo/spinner2.svg';
 import AddReplyForm from './AddReplyForm';
 import { useDispatch } from 'react-redux';
 import {
@@ -33,6 +33,8 @@ import {
     deleteCommentOnHCollection,
 } from '../../store/houseCollectionSilce';
 
+import { calculateTime } from '../../util/formDate';
+
 // import spinner from '../../assets/spinner.svg'
 
 export default function CommentForm({ collection, serverItem, clientComment }) {
@@ -49,6 +51,10 @@ export default function CommentForm({ collection, serverItem, clientComment }) {
     const [isEditComment, setIsEditComment] = useState(false);
 
     const dispatch = useDispatch();
+
+    const { result: timeDif, unit: timeString } = calculateTime(
+        clientComment?.createdAt
+    );
 
     // useEffect(() => {
     //     const matchedComment = serverItem?.comments?.find(comment => comment.id === clientComment.id);
@@ -72,19 +78,6 @@ export default function CommentForm({ collection, serverItem, clientComment }) {
             }
         }
     }, [clientComment?.id, serverItem?.comments]);
-
-    function formatDate(timestamp) {
-        return new Date(timestamp.seconds * 1000).toLocaleString('en-AU', {
-            timeZone: 'Australia/Sydney',
-            year: 'numeric',
-            month: 'numeric',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: false,
-        });
-    }
 
     const deleteComment = async (id) => {
         const commentIndex = serverItem.comments.findIndex((c) => c.id === id);
@@ -240,8 +233,14 @@ export default function CommentForm({ collection, serverItem, clientComment }) {
         <div className="p-3  rounded-lg bg-stone-200">
             <div className="flex justify-between p-1 ">
                 <label className="text-sm">{clientComment.displayName} </label>
-                <div className="text-sm">
-                    {formatDate(clientComment.createdAt)}
+                <div className="text-sm flex">
+                    {addCommentLoading ||
+                        (loading && <img src={spinner2} className="size-20" />)}
+                    {!addCommentLoading && (
+                        <div className="flex">
+                            {timeDif} {timeString}
+                        </div>
+                    )}
                 </div>
             </div>
 
@@ -252,9 +251,7 @@ export default function CommentForm({ collection, serverItem, clientComment }) {
                 ></textarea>
             ) : (
                 <div className="rounded-md p-2 bg-stone-100 shadow-sm">
-                    {addCommentLoading && <img src={spinner} />}
                     {clientComment.content}
-                    {loading && <img src={spinner} />}
                 </div>
             )}
 
