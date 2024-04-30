@@ -53,10 +53,10 @@ export default function CommunityItemDetailPage() {
         <>
             {!error ? (
                 !isLoading && reduxItem ? (
-                    <div className="pt-36">
+                    <div className="pt-36 h-screen ">
                         {/* images */}
-                        <div className="space-y-6 w-full mb-3">
-                            <div className="flex flex-cols items-center justify-center w-full">
+                        <div className="space-y-6 w-full h-2/3">
+                            <div className="flex flex-cols items-center justify-center h-5/6 w-full">
                                 {currentIndxe > 0 && (
                                     <button
                                         onClick={() =>
@@ -69,7 +69,7 @@ export default function CommunityItemDetailPage() {
 
                                 <img
                                     src={imageUrls[currentIndxe]}
-                                    className="rounded-lg w-2/3"
+                                    className="rounded-lg w-2/3 h-full"
                                 />
 
                                 {currentIndxe + 1 < imageUrls.length && (
