@@ -21,11 +21,11 @@ export default function UserItemCard({ item, topic }) {
         <Link to={`/${destination}/${item.id}`}>
             <div
                 className={`${topic == 'community' && `hover:border-blue-200`}
-            ${topic == 'market' && `hover:border-green-200`}
-            ${topic == 'job' && `hover:border-yellow-200`}
-            ${topic == 'house' && `hover:border-red-200`}
+            ${topic == 'market' && `hover:border-purple-200`}
+            ${topic == 'job' && `hover:border-orange-200`}
+            ${topic == 'house' && `hover:border-green-300`}
             ${
-                topic == 'like' && `hover:border-red-200`
+                topic == 'like' && `hover:border-red-400`
             }  border rounded-lg space-y-4 p-4 w-full h-full`}
             >
                 <div className="w-full h-2/3 rounded-lg">

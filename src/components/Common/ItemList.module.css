@@ -12,7 +12,7 @@
 }
 
 .community_listItem_container_real {
-    @apply border-2 rounded-2xl p-1;
+    @apply border-2 rounded-2xl p-1 hover:border-blue-300 hover:border-2;
 }
 .house_listItem_container_real {
     @apply border-2 rounded-2xl p-1 hover:border-green-300 hover:border-2;

@@ -94,7 +94,6 @@ export default function CommunityItemDetailPage() {
                             </div>
                         )}
 
-                       
                         {/* description layout */}
                         <div>{reduxItem.description}</div>
                         {/* comment Layout */}
