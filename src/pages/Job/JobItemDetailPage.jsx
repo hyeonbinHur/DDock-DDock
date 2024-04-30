@@ -62,7 +62,7 @@ export default function JobItemDetailPage() {
         <>
             {!error ? (
                 !isLoading && reduxItem && writer ? (
-                    <div className="pt-36 lg:flex lg:flex-col lg:items-center lg:justify-center">
+                    <div className="pt-36 lg:flex lg:flex-col lg:items-center lg:justify-center mb-16">
                         <div className="space-y-6 w-full h-2/3 ">
                             <div className="flex flex-cols items-center justify-center h-5/6 w-full">
                                 {currentIndxe > 0 && (
@@ -169,7 +169,7 @@ export default function JobItemDetailPage() {
                             <div>
                                 <Comment
                                     serverItem={reduxItem}
-                                    collection="CommunityItem"
+                                    collection="JobItem"
                                 />
                             </div>
                         </div>
