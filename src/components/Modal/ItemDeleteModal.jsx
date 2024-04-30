@@ -14,10 +14,10 @@ import { deleteItemFromRedux } from '../../store/marketCollectionSlice';
 import { useDispatch } from 'react-redux';
 import { deleteJobItem } from '../../store/jobCollectionSlice';
 import { deleteHouseItem } from '../../store/houseCollectionSilce';
-
+import { deleteCommunityItem } from '../../store/communityCollectionSlice';
 
 const ItemDeleteModal = forwardRef(function ItemStatusModal(
-    { id, from, navigate,collection },
+    { id, from, navigate, collection },
     ref
 ) {
     const { deleteDocument, updateDocument, loading, response } =
@@ -43,18 +43,20 @@ const ItemDeleteModal = forwardRef(function ItemStatusModal(
         if (!loading && response.success) {
             if (from == 'market') {
                 dispatch(deleteItemFromRedux({ id: id }));
-            }else if(from == 'job'){
-                dispatch(deleteJobItem({id:id}))
-            }else if(from == 'House'){
-                dispatch(deleteHouseItem({id:id}))
+            } else if (from == 'job') {
+                dispatch(deleteJobItem({ id: id }));
+            } else if (from == 'House') {
+                dispatch(deleteHouseItem({ id: id }));
+            } else if (from == 'Community') {
+                dispatch(deleteCommunityItem({ id: id }));
             }
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [loading, response]);
 
     const deleteItem = async () => {
         setConfirm(true);
-        await deleteDocument(id,collection);
+        await deleteDocument(id, collection);
 
         const originalUserInfo = userInfo;
         const updatedUserItem = originalUserInfo.userItem.filter(
@@ -67,12 +69,14 @@ const ItemDeleteModal = forwardRef(function ItemStatusModal(
     function handleClose() {
         modal.current.close();
         setConfirm(false); // 모달을 닫을 때 confirm 상태도 초기화
-        if(from == 'market'){
+        if (from == 'market') {
             navigate('/market');
-        }else if(from == 'job'){
+        } else if (from == 'job') {
             navigate('/job');
-        }else if (from == 'House'){
-            navigate('/house')
+        } else if (from == 'House') {
+            navigate('/house');
+        } else if (from == 'Community') {
+            navigate('/community');
         }
     }
 
