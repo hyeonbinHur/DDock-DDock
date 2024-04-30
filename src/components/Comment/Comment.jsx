@@ -5,7 +5,7 @@ import { timestamp } from '../../firebase/config';
 import CommentForm from './CommentFom';
 import { useDocument } from '../../hooks/useDocument';
 import { useDispatch } from 'react-redux';
-import {addCommentOnItem} from '../../store/ItemSlice'
+import { addCommentOnItem } from '../../store/ItemSlice';
 import { addCommentOnCollection } from '../../store/marketCollectionSlice';
 import { getSydneyTimeISO } from '../../util/formDate';
 import { addCommentOnJCollection } from '../../store/jobCollectionSlice';
@@ -26,7 +26,6 @@ export default function Comment({ serverItem, collection }) {
     }, [serverItem.comments]);
 
     const addComment = async (event) => {
-    
         event.preventDefault();
         setComment('');
 
@@ -39,30 +38,29 @@ export default function Comment({ serverItem, collection }) {
             childComment: [],
             serverItemId: serverItem.id,
         };
-        
+
         setClientComments((prevState) => [...prevState, addedComment]);
-        const newNumOfComment = serverItem.numOfComment+1;
+        const newNumOfComment = serverItem.numOfComment + 1;
         await updateDocument(
             serverItem.id,
             {
                 comments: [...serverItem.comments, addedComment],
-                numOfComment: newNumOfComment
+                numOfComment: newNumOfComment,
             },
             collection
         );
 
-        dispatch(addCommentOnItem({comment: addedComment}))
+        dispatch(addCommentOnItem({ comment: addedComment }));
 
-        if(collection == "MarketItem"){
-            dispatch(addCommentOnCollection({itemId:serverItem.id }))
-        }else if (collection == "JobItem"){
-            dispatch(addCommentOnJCollection({item:serverItem }))
-        }else if (collection == "HouseItem"){
-            dispatch(addCommentOnHCollection({item:serverItem}))
-        }else if(collection == "CommunityItem"){
-            dispatch(addCommentOnCCollection({item:serverItem}))
+        if (collection == 'MarketItem') {
+            dispatch(addCommentOnCollection({ itemId: serverItem.id }));
+        } else if (collection == 'JobItem') {
+            dispatch(addCommentOnJCollection({ item: serverItem }));
+        } else if (collection == 'HouseItem') {
+            dispatch(addCommentOnHCollection({ item: serverItem }));
+        } else if (collection == 'CommunityItem') {
+            dispatch(addCommentOnCCollection({ item: serverItem }));
         }
-
 
         const originalUser = userInfo;
         const originalUserComment = originalUser.userComment;
@@ -76,8 +74,7 @@ export default function Comment({ serverItem, collection }) {
         <p>error</p>
     ) : (
         <div>
-            <h4>ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ</h4>
-            <h4>Comments</h4>
+            <h4>{serverItem.numOfComment} Comments</h4>
             <form onSubmit={addComment}>
                 <label>
                     <span>add new comment</span>

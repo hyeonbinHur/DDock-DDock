@@ -10,16 +10,24 @@ import ItemDeleteModal from '../../components/Modal/ItemDeleteModal';
 import { useNavigate } from 'react-router-dom';
 import { calculateTime } from '../../util/formDate';
 import { formDate2 } from '../../util/formDate';
+import { useDocument } from '../../hooks/useDocument';
 
 export default function CommunityItemDetailPage() {
     const dispatch = useDispatch();
     const reduxItem = useSelector((state) => state.itemInRedux.item);
+
     const { cItemId } = useParams();
     const [error, setError] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [imageUrls, setImageUrls] = useState([]);
     const [currentIndxe, setCurrentIndex] = useState(0);
     const { user } = useAuthContext();
+    const { year, month, day } = formDate2(reduxItem?.createdAt);
+    const { result: timeDif, unit: timeString } = calculateTime(
+        reduxItem?.createdAt
+    );
+    const { document: writer } = useDocument('User', reduxItem?.userId);
+
     const modal = useRef();
     const navigate = useNavigate();
 
@@ -51,26 +59,13 @@ export default function CommunityItemDetailPage() {
         }
     }, [reduxItem?.images]);
 
-    const timeTest = () => {
-        const { year, month, day } = formDate2(reduxItem.createdAt);
-        console.log(year);
-        console.log(month);
-        console.log(day);
-    };
-
     return (
         <>
             {!error ? (
-                !isLoading && reduxItem ? (
-                    <div className="pt-36 h-screen ">
-                        <button
-                            className="border bg-red-200"
-                            onClick={() => timeTest()}
-                        >
-                            Hello
-                        </button>
+                !isLoading && reduxItem && writer ? (
+                    <div className="pt-36 lg:flex lg:flex-col lg:items-center lg:justify-center">
                         {/* images */}
-                        <div className="space-y-6 w-full h-2/3">
+                        <div className="space-y-6 w-full h-2/3 ">
                             <div className="flex flex-cols items-center justify-center h-5/6 w-full">
                                 {currentIndxe > 0 && (
                                     <button
@@ -84,7 +79,7 @@ export default function CommunityItemDetailPage() {
 
                                 <img
                                     src={imageUrls[currentIndxe]}
-                                    className="rounded-lg w-2/3 h-full"
+                                    className="rounded-lg w-2/3 h-full lg:w-1/3"
                                 />
 
                                 {currentIndxe + 1 < imageUrls.length && (
@@ -102,7 +97,7 @@ export default function CommunityItemDetailPage() {
                             </div>
                         </div>
                         {/* text div*/}
-                        <div className="w-full space-y-5 px-24">
+                        <div className="w-full space-y-5 px-24 lg:w-1/3 lg:px-0">
                             {user?.uid == reduxItem.userId && (
                                 <div className="border">
                                     <Link
@@ -120,12 +115,29 @@ export default function CommunityItemDetailPage() {
                                 </div>
                             )}
                             {/* writer */}
-                            <div className="">
-                                <div>writer</div>
+                            <div className="flex h-28 justify-between">
+                                <div className="flex items-center space-x-5 space-y-3">
+                                    <img
+                                        src={writer.Avatar}
+                                        className="rounded-full h-20 w-20"
+                                    />
+                                    <div className="font-bold text-xl">
+                                        {writer.displayName}
+                                    </div>
+                                </div>
+                                <div className="font-light text-sm  grid grid-cols-2 place-items-end ">
+                                    <div>
+                                        {month}, {day}, {year}
+                                    </div>
+                                    <div>
+                                        {timeDif} {timeString}
+                                    </div>
+                                </div>
                             </div>
+
                             <div className="border"></div>
                             {/* location */}
-                            <div className="font-light flex space-x-10">
+                            <div className="font-light text-sm flex space-x-10">
                                 <div>{reduxItem.location.gu}</div>
                                 <div>{reduxItem.location.dong}</div>
                             </div>
@@ -135,13 +147,6 @@ export default function CommunityItemDetailPage() {
                             <div className="font-bold text-lg ">
                                 <h1>{reduxItem.title}</h1>
                             </div>
-
-                            {/* date */}
-                            <div className="font-light">
-                                <div> {reduxItem.createdAt} </div>
-                            </div>
-
-                            <div className="border"></div>
 
                             {/* description layout */}
                             <div className="">

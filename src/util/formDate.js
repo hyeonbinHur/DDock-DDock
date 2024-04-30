@@ -125,7 +125,7 @@ export function calculateTime(timestamp) {
                 unit = 'hours ago';
             } else {
                 result = minutes - iMinutes;
-                unit = 'minutes ago';
+                unit = 'mins ago';
             }
         } else {
             result = days;
