@@ -34,6 +34,11 @@ export default function Comment({ serverItem, collection }) {
 
     const addComment = async (event) => {
         event.preventDefault();
+
+        if (comment == '') {
+            textarearRef.focus();
+            return;
+        }
         setComment('');
 
         const addedComment = {
@@ -95,17 +100,19 @@ export default function Comment({ serverItem, collection }) {
                         placeholder="add comment..."
                     ></textarea>
                 </div>
-                <div className="flex items-end justify-end space-x-3">
-                    <button
-                        className="border rounded-lg p-1 hover:scale-105 bg-gray-50"
-                        onClick={() => setComment('')}
-                    >
-                        cancel
-                    </button>
-                    <button className="border rounded-lg p-1 hover:scale-105 bg-gray-200">
-                        submit
-                    </button>
-                </div>
+                {comment.length > 0 && (
+                    <div className="flex items-end justify-end space-x-3">
+                        <div
+                            className="border rounded-lg p-1 hover:scale-105 bg-gray-50"
+                            onClick={() => setComment('')}
+                        >
+                            cancel
+                        </div>
+                        <button className="border rounded-lg p-1 hover:scale-105 bg-gray-200">
+                            submit
+                        </button>
+                    </div>
+                )}
             </form>
             <ul className="space-y-3">
                 {clientComments.length > 0 &&

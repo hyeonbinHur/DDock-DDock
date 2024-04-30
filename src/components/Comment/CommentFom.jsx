@@ -238,6 +238,10 @@ export default function CommentForm({ collection, serverItem, clientComment }) {
             }
         }
     };
+    const cancelEdit = () => {
+        setIsEditComment(!isEditComment);
+        setEditCommentContent(clientComment?.content);
+    };
 
     return (
         <div className="p-3  rounded-lg bg-stone-200">
@@ -256,7 +260,7 @@ export default function CommentForm({ collection, serverItem, clientComment }) {
 
             {isEditComment ? (
                 <textarea
-                    className="outline-none focus:outline-none active:outline-none overflow-hidden underline-offset-4 w-full bg-stone-100 rounded-lg p-2"
+                    className="outline-none focus:outline-none active:outline-none overflow-hidden underline-offset-4 w-full bg-white rounded-lg p-2"
                     value={editCommentContent}
                     ref={textarearRef}
                     rows="2"
@@ -278,19 +282,29 @@ export default function CommentForm({ collection, serverItem, clientComment }) {
                             Delete
                         </div>
 
-                        <button
-                            className="border border-sky-200 bg-sky-200 p-1 rounded hover:scale-105 hover:text-blue-700 "
-                            onClick={() => {
-                                if (isEditComment) {
-                                    editComment();
-                                    setIsEditComment(!isEditComment);
-                                } else {
-                                    setIsEditComment(!isEditComment);
-                                }
-                            }}
-                        >
-                            {isEditComment ? 'Confirm' : 'Modify'}
-                        </button>
+                        {editCommentContent != '' && (
+                            <button
+                                className="border border-sky-200 bg-sky-200 p-1 rounded hover:scale-105 hover:text-blue-700 "
+                                onClick={() => {
+                                    if (isEditComment) {
+                                        editComment();
+                                        setIsEditComment(!isEditComment);
+                                    } else {
+                                        setIsEditComment(!isEditComment);
+                                    }
+                                }}
+                            >
+                                {isEditComment ? 'Confirm' : 'Modify'}
+                            </button>
+                        )}
+                        {isEditComment && (
+                            <div
+                                onClick={() => cancelEdit()}
+                                className="border border-gray-300 bg-gray-100 rounded p-1 hover:scale-105 hover:text-gray-600"
+                            >
+                                Cancel
+                            </div>
+                        )}
                     </div>
 
                     <div className="text-sm p-1">

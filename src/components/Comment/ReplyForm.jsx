@@ -190,6 +190,10 @@ export default function ReplyForm({
             }
         }
     };
+    const cancelEdit = () => {
+        setEditReplyContent(clientReply?.content);
+        setIsEdittingReply(!isEdittingReply);
+    };
 
     return (
         <div className="bg-stone-300 border-stone-500 shadow-inner mt-3 rounded-md p-2">
@@ -215,7 +219,7 @@ export default function ReplyForm({
 
             {isEdittingReply ? (
                 <textarea
-                    className="w-full rounded-md outline-none active:outline-none focus:outline-none p-1 px-2 bg-stone-100"
+                    className="w-full rounded-md outline-none active:outline-none focus:outline-none p-1 px-2 bg-white"
                     value={editReplyContent || clientReply.content}
                     onChange={(e) => {
                         setEditReplyContent(e.target.value);
@@ -237,20 +241,30 @@ export default function ReplyForm({
                     >
                         Delete
                     </button>
-
-                    <button
-                        className="border mt-2 border-sky-200 bg-sky-200 p-1 rounded hover:scale-105 hover:text-blue-700"
-                        onClick={() => {
-                            if (isEdittingReply) {
-                                setIsEdittingReply(!isEdittingReply);
-                                editReply(clientReply.id);
-                            } else {
-                                setIsEdittingReply(!isEdittingReply);
-                            }
-                        }}
-                    >
-                        {isEdittingReply ? 'Confirm' : 'Modify'}
-                    </button>
+                    {editReplyContent != ' ' && (
+                        <button
+                            className="border mt-2 border-sky-200 bg-sky-200 p-1 rounded hover:scale-105 hover:text-blue-700"
+                            onClick={() => {
+                                if (isEdittingReply) {
+                                    setIsEdittingReply(!isEdittingReply);
+                                    editReply(clientReply.id);
+                                } else {
+                                    setIsEdittingReply(!isEdittingReply);
+                                }
+                            }}
+                        >
+                            {isEdittingReply ? 'Confirm' : 'Modify'}
+                        </button>
+                    )}
+                    {isEdittingReply && (
+                        <button
+                            type="button"
+                            onClick={() => cancelEdit()}
+                            className="border border-gray-300 bg-gray-100 rounded p-1 hover:scale-105 hover:text-gray-600"
+                        >
+                            Cancel
+                        </button>
+                    )}
                 </div>
             )}
         </div>
