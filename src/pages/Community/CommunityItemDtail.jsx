@@ -98,22 +98,6 @@ export default function CommunityItemDetailPage() {
                         </div>
                         {/* text div*/}
                         <div className="w-full space-y-5 px-24 lg:w-1/3 lg:px-0">
-                            {user?.uid == reduxItem.userId && (
-                                <div className="border">
-                                    <Link
-                                        className="border border-red-200"
-                                        to={`edit`}
-                                    >
-                                        go to edit
-                                    </Link>
-                                    <button
-                                        className="border border-blue-200"
-                                        onClick={() => modal.current.open()}
-                                    >
-                                        Delete Item
-                                    </button>
-                                </div>
-                            )}
                             {/* writer */}
                             <div className="flex h-28 justify-between">
                                 <div className="flex items-center space-x-5 space-y-3">
@@ -125,12 +109,32 @@ export default function CommunityItemDetailPage() {
                                         {writer.displayName}
                                     </div>
                                 </div>
-                                <div className="font-light text-sm  grid grid-cols-2 place-items-end ">
-                                    <div>
-                                        {month}, {day}, {year}
-                                    </div>
-                                    <div>
-                                        {timeDif} {timeString}
+                                <div className="font-light text-sm  grid grid-cols-1 place-items-end ">
+                                    {user?.uid == reduxItem.userId && (
+                                        <div className="space-y-2 w-5/12">
+                                            <div className="w-full border rounded flex justify-center items-center border-sky-300 bg-sky-200 hover:scale-105 hover:text-sky-600">
+                                                <Link className="" to={`edit`}>
+                                                    Edit
+                                                </Link>
+                                            </div>
+
+                                            <div
+                                                className="border border-red-200 bg-red-100 hover:scale-105 hover:text-red-600 text-center rounded-sm"
+                                                onClick={() =>
+                                                    modal.current.open()
+                                                }
+                                            >
+                                                Delete
+                                            </div>
+                                        </div>
+                                    )}
+                                    <div className="flex">
+                                        <div>
+                                            {month}, {day}, {year}
+                                        </div>
+                                        <div>
+                                            {timeDif} {timeString}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
