@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useAuthContext } from '../../hooks/useAuth';
 import { useFirestore } from '../../hooks/useFirestore';
 import { timestamp } from '../../firebase/config';
@@ -55,6 +55,16 @@ export default function CommentForm({ collection, serverItem, clientComment }) {
     const { result: timeDif, unit: timeString } = calculateTime(
         clientComment?.createdAt
     );
+
+    const textarearRef = useRef(null);
+
+    useEffect(() => {
+        if (editCommentContent && isEditComment) {
+            textarearRef.current.style.height = 'auto';
+            textarearRef.current.style.height =
+                textarearRef.current.scrollHeight + 'px';
+        }
+    }, [editCommentContent, isEditComment]);
 
     // useEffect(() => {
     //     const matchedComment = serverItem?.comments?.find(comment => comment.id === clientComment.id);
@@ -246,7 +256,10 @@ export default function CommentForm({ collection, serverItem, clientComment }) {
 
             {isEditComment ? (
                 <textarea
+                    className="outline-none focus:outline-none active:outline-none overflow-hidden underline-offset-4 w-full bg-stone-100 rounded-lg p-2"
                     value={editCommentContent}
+                    ref={textarearRef}
+                    rows="2"
                     onChange={(e) => setEditCommentContent(e.target.value)}
                 ></textarea>
             ) : (

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { timestamp } from '../../firebase/config';
 import { useFirestore } from '../../hooks/useFirestore';
 import { useDispatch } from 'react-redux';
@@ -30,6 +30,15 @@ export default function ReplyForm({
     const { result: timeDif, unit: timeString } = calculateTime(
         clientReply?.createdAt
     );
+    const replyRef = useRef(null);
+
+    useEffect(() => {
+        if (isEdittingReply) {
+            replyRef.current.style.height = 'auto';
+            replyRef.current.style.height =
+                replyRef.current.scrollHeight + 'px';
+        }
+    }, [editReplyContent, isEdittingReply]);
 
     useEffect(() => {
         const targetComment = serverItem?.comments?.find(
@@ -206,10 +215,13 @@ export default function ReplyForm({
 
             {isEdittingReply ? (
                 <textarea
+                    className="w-full rounded-md outline-none active:outline-none focus:outline-none p-1 px-2 bg-stone-100"
                     value={editReplyContent || clientReply.content}
                     onChange={(e) => {
                         setEditReplyContent(e.target.value);
                     }}
+                    ref={replyRef}
+                    rows={1}
                 ></textarea>
             ) : (
                 <div className="p-2 bg-neutral-100 rounded-md">
