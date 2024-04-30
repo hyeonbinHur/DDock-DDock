@@ -9,7 +9,10 @@ import Comment from '../../components/Comment/Comment';
 import { useAuthContext } from '../../hooks/useAuth';
 import ItemDeleteModal from '../../components/Modal/ItemDeleteModal';
 import { useNavigate } from 'react-router-dom';
+import { formDate2 } from '../../util/formDate';
+import { calculateTime } from '../../util/formDate';
 
+import { useDocument } from '../../hooks/useDocument';
 export default function JobItemDetailPage() {
     const dispatch = useDispatch();
     const reduxItem = useSelector((state) => state.itemInRedux.item);
@@ -21,6 +24,11 @@ export default function JobItemDetailPage() {
     const { user } = useAuthContext();
     const modal = useRef();
     const navigate = useNavigate();
+    const { year, month, day } = formDate2(reduxItem?.createdAt);
+    const { result: timeDif, unit: timeString } = calculateTime(
+        reduxItem?.createdAt
+    );
+    const { document: writer } = useDocument('User', reduxItem?.userId);
 
     useEffect(() => {
         if (jItemId) {
@@ -53,71 +61,126 @@ export default function JobItemDetailPage() {
     return (
         <>
             {!error ? (
-                !isLoading && reduxItem ? (
-                    <div>
-                        <div>
-                            {currentIndxe > 0 && (
-                                <button
-                                    onClick={() =>
-                                        setCurrentIndex((prev) => prev - 1)
-                                    }
-                                >
-                                    prev
-                                </button>
-                            )}
+                !isLoading && reduxItem && writer ? (
+                    <div className="pt-36 lg:flex lg:flex-col lg:items-center lg:justify-center">
+                        <div className="space-y-6 w-full h-2/3 ">
+                            <div className="flex flex-cols items-center justify-center h-5/6 w-full">
+                                {currentIndxe > 0 && (
+                                    <button
+                                        onClick={() =>
+                                            setCurrentIndex((prev) => prev - 1)
+                                        }
+                                    >
+                                        prev
+                                    </button>
+                                )}
 
-                            <img src={imageUrls[currentIndxe]} />
+                                <img
+                                    src={imageUrls[currentIndxe]}
+                                    className="rounded-lg w-2/3 h-full lg:w-1/3"
+                                />
 
-                            {currentIndxe + 1 < imageUrls.length && (
-                                <button
-                                    onClick={() =>
-                                        setCurrentIndex((prev) => prev + 1)
-                                    }
-                                >
-                                    next
-                                </button>
-                            )}
-                            <p>
-                                {currentIndxe + 1}/{imageUrls.length}
-                            </p>
-                        </div>
-                        {/* title layout */}
-                        <div>
-                            <h1>{reduxItem.title}</h1>
-                        </div>
-
-                        {user?.uid == reduxItem.userId && (
-                            <div>
-                                <Link to={`edit`}>go to edit</Link>
-                                <button onClick={()=>modal.current.open()}> Delete Item </button>{' '}
+                                {currentIndxe + 1 < imageUrls.length && (
+                                    <button
+                                        onClick={() =>
+                                            setCurrentIndex((prev) => prev + 1)
+                                        }
+                                    >
+                                        next
+                                    </button>
+                                )}
                             </div>
-                        )}
-
-                        {/* condition layout */}
-                        <ul>
-                            {reduxItem.conditions.map((condition) => (
-                                <li key={condition.id}>
-                                    <Condition content={condition.value} />
-
-                                </li>
-                            ))}
-                        </ul>
-                        {/* description layout */}
-                        <div>{reduxItem.description}</div>
-                        {/* comment Layout */}
-                        <div>
-                            <Comment
-                                serverItem={reduxItem}
-                                collection="JobItem"
-                            />
+                            <div className="flex items-center justify-center font-bold">
+                                {currentIndxe + 1}/{imageUrls.length}
+                            </div>
                         </div>
+
+                        <div className="w-full space-y-5 px-24 lg:w-1/3 lg:px-0">
+                            <button onClick={() => console.log(writer)}>
+                                Hello
+                            </button>
+                            {/* writer */}
+                            <div className="flex h-28 justify-between">
+                                <div className="flex items-center space-x-5 space-y-3">
+                                    <img
+                                        src={writer.Avatar}
+                                        className="rounded-full h-20 w-20"
+                                    />
+                                    <div className="font-bold text-xl">
+                                        {writer.displayName}
+                                    </div>
+                                </div>
+                                <div className="font-light text-sm  grid grid-cols-1 place-items-end ">
+                                    {user?.uid == reduxItem.userId && (
+                                        <div className="space-y-2 w-5/12">
+                                            <div className="w-full border rounded flex justify-center items-center border-sky-300 bg-sky-200 hover:scale-105 hover:text-sky-600">
+                                                <Link className="" to={`edit`}>
+                                                    Edit
+                                                </Link>
+                                            </div>
+
+                                            <div
+                                                className="border border-red-200 bg-red-100 hover:scale-105 hover:text-red-600 text-center rounded-sm"
+                                                onClick={() =>
+                                                    modal.current.open()
+                                                }
+                                            >
+                                                Delete
+                                            </div>
+                                        </div>
+                                    )}
+                                    <div className="flex space-x-4">
+                                        <div>
+                                            {month}, {day}, {year}
+                                        </div>
+                                        <div>
+                                            {timeDif} {timeString}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="border"></div>
+                            {/* location */}
+                            <div className="font-light text-sm flex space-x-10">
+                                <div>{reduxItem.location.gu}</div>
+                                <div>{reduxItem.location.dong}</div>
+                            </div>
+                            <div className="border"></div>
+
+                            {/* title layout */}
+                            <div className="font-bold text-lg ">
+                                <h1>{reduxItem.title}</h1>
+                            </div>
+                            <ul>
+                                {reduxItem?.conditions.map((condition) => (
+                                    <li key={condition.id}>
+                                        <Condition content={condition.value} />
+                                    </li>
+                                ))}
+                            </ul>
+
+                            {/* description layout */}
+                            <div className="">
+                                <div className="">{reduxItem.description}</div>
+                            </div>
+                            <div className="border"></div>
+
+                            <div>
+                                <Comment
+                                    serverItem={reduxItem}
+                                    collection="CommunityItem"
+                                />
+                            </div>
+                        </div>
+
                         <ItemDeleteModal
-                        ref={modal}
-                        id={jItemId}
-                        navigate={navigate}
-                        from={'job'}
-                        collection ='JobItem'
-                    />
+                            ref={modal}
+                            id={jItemId}
+                            navigate={navigate}
+                            from={'job'}
+                            collection="JobItem"
+                        />
                     </div>
                 ) : (
                     <p>Loading</p>
