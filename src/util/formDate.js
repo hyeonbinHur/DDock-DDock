@@ -135,3 +135,29 @@ export function calculateTime(timestamp) {
 
     return { result, unit };
 }
+
+export function formDate2(timestamp) {
+    const time = new Date(timestamp);
+
+    const year = time.getFullYear();
+    const numMonth = (time.getMonth() + 1).toString().padStart(2, '0'); // 월은 0에서 시작하므로 1을 더하고, 두 자리수를 유지
+    const day = time.getDate().toString().padStart(2, '0');
+
+    const monthNames = [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec',
+    ];
+    const month = monthNames[numMonth - 1];
+
+    return { year, month, day };
+}

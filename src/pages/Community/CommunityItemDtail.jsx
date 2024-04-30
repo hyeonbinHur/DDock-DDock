@@ -9,6 +9,7 @@ import { useAuthContext } from '../../hooks/useAuth';
 import ItemDeleteModal from '../../components/Modal/ItemDeleteModal';
 import { useNavigate } from 'react-router-dom';
 import { calculateTime } from '../../util/formDate';
+import { formDate2 } from '../../util/formDate';
 
 export default function CommunityItemDetailPage() {
     const dispatch = useDispatch();
@@ -51,9 +52,10 @@ export default function CommunityItemDetailPage() {
     }, [reduxItem?.images]);
 
     const timeTest = () => {
-        const { result, unit } = calculateTime(reduxItem.createdAt);
-        console.log(result);
-        console.log(unit);
+        const { year, month, day } = formDate2(reduxItem.createdAt);
+        console.log(year);
+        console.log(month);
+        console.log(day);
     };
 
     return (
