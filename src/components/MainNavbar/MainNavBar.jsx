@@ -51,6 +51,13 @@ export default function Navbar() {
 
     const activeChatList = () => {
         setShowChatList(!showChatList);
+        setMobileMenu(false);
+        isShowMenu(false);
+    };
+
+    const closeMenu = () => {
+        setMobileMenu(false);
+        isShowMenu(false);
     };
 
     useEffect(() => {
@@ -133,6 +140,10 @@ export default function Navbar() {
         setIsLanguage(!isLanguage);
     };
 
+    const closeChatRoomList = () => {
+        setShowChatList(false);
+    };
+
     return (
         <div>
             <div className="fixed h-24 w-full bg-blue-50 z-20 p-7">
@@ -145,23 +156,39 @@ export default function Navbar() {
                     <ul className="hidden lg:flex space-x-3 ">
                         <div className="flex space-x-10 text-lg">
                             <li>
-                                <NavLink to="/market" className="">
+                                <NavLink
+                                    to="/market"
+                                    className=""
+                                    onClick={() => closeMenu()}
+                                >
                                     {' '}
-                                    Market{' '}
+                                    Market
                                 </NavLink>
                             </li>
                             <li>
-                                <NavLink to="/job" className=" ">
+                                <NavLink
+                                    to="/job"
+                                    className=" "
+                                    onClick={() => closeMenu()}
+                                >
                                     Job{' '}
                                 </NavLink>
                             </li>
                             <li>
-                                <NavLink to="/house" className="">
+                                <NavLink
+                                    to="/house"
+                                    className=""
+                                    onClick={() => closeMenu()}
+                                >
                                     House{' '}
                                 </NavLink>
                             </li>
                             <li>
-                                <NavLink to="/community" className="">
+                                <NavLink
+                                    to="/community"
+                                    className=""
+                                    onClick={() => closeMenu()}
+                                >
                                     Community{' '}
                                 </NavLink>
                             </li>
@@ -237,10 +264,11 @@ export default function Navbar() {
                     )}
                 </nav>
                 {showChatList && (
-                    <div className={style.popupContainer}>
+                    <div className="w-full  z-10 absolute top-[90%] left-[47%]">
                         <ChattingRoomList
                             chatRoom={data.chatRoom}
                             userId={data.id}
+                            closeChatRoom={closeChatRoomList}
                         />
                     </div>
                 )}
@@ -321,11 +349,19 @@ export default function Navbar() {
                                 <div className="border border-white"> </div>
                                 {!user && (
                                     <div className="px-7 space-y-3">
-                                        <div className="font-bold">
+                                        <div
+                                            className="font-bold"
+                                            onClick={() => setMobileMenu(false)}
+                                        >
                                             <NavLink to="/login">Login</NavLink>
                                         </div>
                                         <div>
-                                            <NavLink to="/signup">
+                                            <NavLink
+                                                to="/signup"
+                                                onClick={() =>
+                                                    setMobileMenu(false)
+                                                }
+                                            >
                                                 Signup
                                             </NavLink>
                                         </div>
@@ -333,7 +369,10 @@ export default function Navbar() {
                                 )}
                                 {user && (
                                     <div className="px-7 space-y-3">
-                                        <div className="hover:bg-white rounded-lg p-2 w-full">
+                                        <div
+                                            className="hover:bg-white rounded-lg p-2 w-full"
+                                            onClick={() => setMobileMenu(false)}
+                                        >
                                             <NavLink
                                                 to={`/profile/${user.uid}`}
                                             >

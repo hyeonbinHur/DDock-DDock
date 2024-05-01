@@ -34,8 +34,6 @@ export default function UserDropDown({ user1, user2, closeDropDown }) {
                 dispatch(open({ roomId: chatRoomID, partner: user2Data.id }));
                 closeDropDown();
             } else {
-                console.log('만들어라 참깨?');
-
                 if (user1Data.id !== user2Data.id) {
                     dispatch(
                         open({ roomId: undefined, partner: user2Data.id })
