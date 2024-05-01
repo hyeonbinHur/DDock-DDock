@@ -61,24 +61,6 @@ export default function MarketItemDetail() {
         }
     }, [dispatch, mitemId]);
 
-    // useEffect(() => {
-    //     if (reduxItem && !reduxItemWriter) {
-    //         const fetchData = async () => {
-    //             setIsLoading(true);
-    //             try {
-    //                 const Data = await getDocument('User', reduxItem?.userId);
-    //                 dispatch(readWriter({ writer: Data }));
-    //             } catch (error) {
-    //                 setError(error);
-    //             } finally {
-    //                 setIsLoading(false);
-    //             }
-    //         };
-    //         fetchData();
-    //     }
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [dispatch, mitemId, reduxItem]);
-
     useEffect(() => {
         if (reduxItem?.images) {
             const emptyArray = []; // 이거 안하면 코드 재시작할때마다 여기 들어와서 imageUrls이 버그냄
@@ -108,6 +90,10 @@ export default function MarketItemDetail() {
     // function openConfirmModal() {
     //     modal.current.open();
     // }
+
+    const closeUserDropDown = () => {
+        setIsUserDropDown((prev) => !prev);
+    };
 
     return (
         <>
@@ -169,7 +155,10 @@ export default function MarketItemDetail() {
                                         {isUserDropDown && (
                                             <UserDropDown
                                                 user1={user?.uid}
-                                                user2={reduxItemWriter.id}
+                                                user2={reduxItemWriter.uid}
+                                                closeDropDown={
+                                                    closeUserDropDown
+                                                }
                                             />
                                         )}
                                     </div>

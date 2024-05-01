@@ -11,25 +11,42 @@ import { useDocument } from '../../hooks/useDocument';
 import { useDispatch } from 'react-redux';
 import { open, set } from '../../store/chatRoomSlice';
 
-export default function UserDropDown({ user1, user2 }) {
+export default function UserDropDown({ user1, user2, closeDropDown }) {
     // const { user } = useAuthContext();
     const { createChattingRoom } = useFirestore('ChattingRoom');
-
     const { document: user1Data } = useDocument('User', user1);
     const { document: user2Data } = useDocument('User', user2);
 
     const dispatch = useDispatch();
 
     const startChatting = async () => {
+        let chatPartnerExist = false;
+        let chatRoomID;
         if (user1Data && user2Data) {
-            if (user1Data.id !== user2Data.id) {
-                dispatch(open({ roomId: undefined, partner: user2Data.id }));
-                const roomID = await createChattingRoom(
-                    user1Data,
-                    user2Data,
-                    'ChattingRoom'
-                );
-                dispatch(set({ roomId: roomID }));
+            user1Data.chatRoom.map((room) => {
+                if (room.partner == user2Data.id) {
+                    chatPartnerExist = true;
+                    chatRoomID = room.roomId;
+                }
+            });
+
+            if (chatPartnerExist) {
+                dispatch(open({ roomId: chatRoomID, partner: user2Data.id }));
+                closeDropDown();
+            } else {
+                console.log('만들어라 참깨?');
+
+                if (user1Data.id !== user2Data.id) {
+                    dispatch(
+                        open({ roomId: undefined, partner: user2Data.id })
+                    );
+                    const roomID = await createChattingRoom(
+                        user1Data,
+                        user2Data,
+                        'ChattingRoom'
+                    );
+                    dispatch(set({ roomId: roomID }));
+                }
             }
         }
     };
