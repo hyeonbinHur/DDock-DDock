@@ -10,11 +10,12 @@ import ItemDeleteModal from '../../components/Modal/ItemDeleteModal';
 import { useNavigate } from 'react-router-dom';
 import { calculateTime } from '../../util/formDate';
 import { formDate2 } from '../../util/formDate';
-import { useDocument } from '../../hooks/useDocument';
+import { readWriter } from '../../store/ItemSlice';
 
 export default function CommunityItemDetailPage() {
     const dispatch = useDispatch();
     const reduxItem = useSelector((state) => state.itemInRedux.item);
+    const reduxItemWriter = useSelector((state) => state.itemInRedux.writer);
 
     const { cItemId } = useParams();
     const [error, setError] = useState(false);
@@ -26,7 +27,6 @@ export default function CommunityItemDetailPage() {
     const { result: timeDif, unit: timeString } = calculateTime(
         reduxItem?.createdAt
     );
-    const { document: writer } = useDocument('User', reduxItem?.userId);
 
     const modal = useRef();
     const navigate = useNavigate();
@@ -50,6 +50,24 @@ export default function CommunityItemDetailPage() {
     }, [dispatch]);
 
     useEffect(() => {
+        if (reduxItem != null && reduxItemWriter == null) {
+            const fetchData = async () => {
+                setIsLoading(true);
+                try {
+                    const Data = await getDocument('User', reduxItem.userId);
+                    dispatch(readWriter({ writer: Data }));
+                } catch (error) {
+                    setError(error);
+                } finally {
+                    setIsLoading(false);
+                }
+            };
+            fetchData();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dispatch, cItemId, reduxItem]);
+
+    useEffect(() => {
         if (reduxItem?.images) {
             const emptyArray = [];
             setImageUrls(emptyArray);
@@ -62,7 +80,7 @@ export default function CommunityItemDetailPage() {
     return (
         <>
             {!error ? (
-                !isLoading && reduxItem && writer ? (
+                !isLoading && reduxItem && reduxItemWriter ? (
                     <div className="pt-36 lg:flex lg:flex-col lg:items-center lg:justify-center">
                         {/* images */}
                         <div className="space-y-6 w-full h-2/3 ">
@@ -102,15 +120,15 @@ export default function CommunityItemDetailPage() {
                             <div className="flex h-28 justify-between">
                                 <div className="flex items-center space-x-5 space-y-3">
                                     <img
-                                        src={writer.Avatar}
+                                        src={reduxItemWriter.Avatar}
                                         className="rounded-full h-20 w-20"
                                     />
                                     <div className="font-bold text-xl">
-                                        {writer.displayName}
+                                        {reduxItemWriter.displayName}
                                     </div>
                                 </div>
                                 <div className="font-light text-sm  grid grid-cols-1 place-items-end ">
-                                    {user?.uid == reduxItem.userId && (
+                                    {user?.uid == reduxItemWriter.id && (
                                         <div className="space-y-2 w-5/12">
                                             <div className="w-full border rounded flex justify-center items-center border-sky-300 bg-sky-200 hover:scale-105 hover:text-sky-600">
                                                 <Link className="" to={`edit`}>
@@ -128,7 +146,7 @@ export default function CommunityItemDetailPage() {
                                             </div>
                                         </div>
                                     )}
-                                    <div className="flex">
+                                    <div className="flex space-x-4">
                                         <div>
                                             {month}, {day}, {year}
                                         </div>

@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
     item: null,
+    writer: null,
 };
 
 const itemSlice = createSlice({
@@ -15,6 +16,8 @@ const itemSlice = createSlice({
                 action.payload.comment,
                 ...state.item.comments,
             ];
+
+            state.item.numOfComment = state.item.numOfComment + 1;
         },
         deleteCommentOnItem(state, action) {
             const index = state.item.comments.findIndex(
@@ -22,6 +25,7 @@ const itemSlice = createSlice({
             );
             if (index !== -1) {
                 state.item.comments.splice(index, 1);
+                state.item.numOfComment = state.item.numOfComment - 1;
             }
         },
         updateCommentOnItem(state, action) {
@@ -43,17 +47,23 @@ const itemSlice = createSlice({
                     ...state.item.comments[commentIndex].childComment,
                     action.payload.reply,
                 ];
+                state.item.numOfComment = state.item.numOfComment + 1;
             }
         },
         delteReplyOnItem: (state, action) => {
             const { replyId, commentId } = action.payload;
-            const commentIndex = state.item.comments.findIndex(c => c.id === commentId);
+            const commentIndex = state.item.comments.findIndex(
+                (c) => c.id === commentId
+            );
             if (commentIndex !== -1) {
                 const comment = state.item.comments[commentIndex];
-                const replyIndex = comment.childComment.findIndex(r => r.id === replyId);
+                const replyIndex = comment.childComment.findIndex(
+                    (r) => r.id === replyId
+                );
                 if (replyIndex !== -1) {
                     comment.childComment.splice(replyIndex, 1);
                 }
+                state.item.numOfComment = state.item.numOfComment - 1;
             }
         },
         updateReplyOnItem(state, action) {
@@ -76,7 +86,61 @@ const itemSlice = createSlice({
             }
         },
         readItem(state, action) {
-            state.item = action.payload.item;
+            const item = action.payload.item;
+
+            const serializedItem = {
+                title: item.title,
+                conditions: item.conditions,
+                description: item.description,
+                comments: item.comments,
+                images: item.images,
+                bucket: item.bucket,
+                location: item.location,
+                createdAt: item.createdAt,
+                userId: item.userId,
+                type: item.type,
+                interests: item.interests,
+                numOfComment: item.numOfComment,
+            };
+            state.item = serializedItem;
+        },
+
+        readWriter(state, action) {
+            const writer = action.payload.writer;
+
+            const serializedUserItem = writer.userItem.map((item) => ({
+                title: item.title,
+                conditions: item.conditions,
+                description: item.description,
+                comments: item.comments,
+                images: item.images,
+                bucket: item.bucket,
+                location: item.location,
+                createdAt: item.createdAt,
+                userId: item.userId,
+                type: item.type,
+                interests: item.interests,
+                numOfComment: item.numOfComment,
+            }));
+
+            const serializedItem = {
+                uid: writer.uid,
+                displayName: writer.displayName,
+                userItem: serializedUserItem,
+                userComment: writer.userComment,
+                Avatar: writer.Avatar,
+                setDisplayName: writer.setDisplayName,
+                email: writer.email,
+                interests: writer.interests,
+                location: writer.location,
+                chatRoom: writer.chatRoom,
+                unread: writer.unread,
+                MItem: writer.MItem,
+                CItem: writer.CItem,
+                JItem: writer.JItem,
+                HItem: writer.HItem,
+            };
+            state.writer = serializedItem;
         },
     },
 });
@@ -89,6 +153,7 @@ export const {
     delteReplyOnItem,
     updateReplyOnItem,
     readItem,
+    readWriter,
 } = itemSlice.actions;
 
 export default itemSlice.reducer;

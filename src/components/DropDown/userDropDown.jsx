@@ -1,47 +1,57 @@
-import { useState } from 'react';
-import { useAuthContext } from '../../hooks/useAuth';
+import { BsChatHeart } from 'react-icons/bs';
+import { RiUserSearchLine } from 'react-icons/ri';
+// import { FcDecision } from 'react-icons/fc';
+// import { FaRegUser } from 'react-icons/fa';
+// import { BiUser } from 'react-icons/bi';
+// import { AiOutlineUser } from 'react-icons/ai';
+// import { CgProfile } from 'react-icons/cg';
+// // import { useAuthContext } from '../../hooks/useAuth';
 import { useFirestore } from '../../hooks/useFirestore';
-import style from './UserDropDown.module.css';
 import { useDocument } from '../../hooks/useDocument';
 import { useDispatch } from 'react-redux';
+import { open, set } from '../../store/chatRoomSlice';
 
-import { open,set } from '../../store/chatRoomSlice';
-
-
-export default function UserDropDown({ writer }) {
-    const { user } = useAuthContext();
+export default function UserDropDown({ user1, user2 }) {
+    // const { user } = useAuthContext();
     const { createChattingRoom } = useFirestore('ChattingRoom');
-    const [isActive, setIsActive] = useState(false);
-    const { document: currentUser } = useDocument('User', user?.uid);
+
+    const { document: user1Data } = useDocument('User', user1);
+    const { document: user2Data } = useDocument('User', user2);
 
     const dispatch = useDispatch();
 
-
     const startChatting = async () => {
-        if(currentUser.id !== writer.id){
-            dispatch(
-                open({ roomId: undefined, partner: writer.id })
-            )
-            const roomID =  await createChattingRoom(currentUser,writer,'ChattingRoom')
-            dispatch(
-                set({ roomId: roomID})
-            )
-            console.log(roomID)
+        if (user1Data && user2Data) {
+            if (user1Data.id !== user2Data.id) {
+                dispatch(open({ roomId: undefined, partner: user2Data.id }));
+                const roomID = await createChattingRoom(
+                    user1Data,
+                    user2Data,
+                    'ChattingRoom'
+                );
+                dispatch(set({ roomId: roomID }));
+            }
         }
     };
 
     return (
-        <>
-            <div className={style.dropdown} onClick={()=>setIsActive(!isActive)}>
-                <div className={style.dropdown_btn}>{writer.displayName}</div>
-                {isActive && (
-                    <div className={style.dropdown_content}>
-                        <div className={style.dropdown_item}>정보보기</div>
-                        <div onClick={startChatting} className={style.dropdown_item}>채팅하기</div>
-                        <div className={style.dropdown_item}>신고하기</div>
-                    </div>
-                )}
+        <div className="border-2 shadow-md w-full space-y-3 p-3 bg-white  rounded-md">
+            <div className="flex border p-2 space-x-4 font-bold rounded-md hover:bg-gray-300">
+                <div className="flex items-center ">
+                    <RiUserSearchLine className="size-7" />
+                </div>
+                <div>Profile</div>
             </div>
-        </>
+            {/* <div >Chatting</div> */}
+            <div
+                onClick={startChatting}
+                className="border flex space-x-4 p-2 font-bold rounded-md hover:bg-gray-300"
+            >
+                <div className="flex items-center">
+                    <BsChatHeart className="size-7" />
+                </div>
+                <div>Chatting</div>
+            </div>
+        </div>
     );
 }

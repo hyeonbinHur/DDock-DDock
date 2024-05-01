@@ -11,11 +11,13 @@ import ItemDeleteModal from '../../components/Modal/ItemDeleteModal';
 import { useNavigate } from 'react-router-dom';
 import { formDate2 } from '../../util/formDate';
 import { calculateTime } from '../../util/formDate';
+import { readWriter } from '../../store/ItemSlice';
 
-import { useDocument } from '../../hooks/useDocument';
 export default function JobItemDetailPage() {
     const dispatch = useDispatch();
     const reduxItem = useSelector((state) => state.itemInRedux.item);
+    const reduxItemWriter = useSelector((state) => state.itemInRedux.writer);
+
     const { jItemId } = useParams();
     const [error, setError] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -28,7 +30,6 @@ export default function JobItemDetailPage() {
     const { result: timeDif, unit: timeString } = calculateTime(
         reduxItem?.createdAt
     );
-    const { document: writer } = useDocument('User', reduxItem?.userId);
 
     useEffect(() => {
         if (jItemId) {
@@ -49,6 +50,24 @@ export default function JobItemDetailPage() {
     }, [dispatch]);
 
     useEffect(() => {
+        if (reduxItem != null && reduxItemWriter == null) {
+            const fetchData = async () => {
+                setIsLoading(true);
+                try {
+                    const Data = await getDocument('User', reduxItem.userId);
+                    dispatch(readWriter({ writer: Data }));
+                } catch (error) {
+                    setError(error);
+                } finally {
+                    setIsLoading(false);
+                }
+            };
+            fetchData();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dispatch, jItemId, reduxItem]);
+
+    useEffect(() => {
         if (reduxItem?.images) {
             const emptyArray = [];
             setImageUrls(emptyArray);
@@ -61,7 +80,7 @@ export default function JobItemDetailPage() {
     return (
         <>
             {!error ? (
-                !isLoading && reduxItem && writer ? (
+                !isLoading && reduxItem && reduxItemWriter ? (
                     <div className="pt-36 lg:flex lg:flex-col lg:items-center lg:justify-center mb-16">
                         <div className="space-y-6 w-full h-2/3 ">
                             <div className="flex flex-cols items-center justify-center h-5/6 w-full">
@@ -96,22 +115,19 @@ export default function JobItemDetailPage() {
                         </div>
 
                         <div className="w-full space-y-5 px-24 lg:w-1/3 lg:px-0">
-                            <button onClick={() => console.log(writer)}>
-                                Hello
-                            </button>
                             {/* writer */}
                             <div className="flex h-28 justify-between">
                                 <div className="flex items-center space-x-5 space-y-3">
                                     <img
-                                        src={writer.Avatar}
+                                        src={reduxItemWriter.Avatar}
                                         className="rounded-full h-20 w-20"
                                     />
                                     <div className="font-bold text-xl">
-                                        {writer.displayName}
+                                        {reduxItemWriter.displayName}
                                     </div>
                                 </div>
                                 <div className="font-light text-sm  grid grid-cols-1 place-items-end ">
-                                    {user?.uid == reduxItem.userId && (
+                                    {user?.uid == reduxItemWriter.id && (
                                         <div className="space-y-2 w-5/12">
                                             <div className="w-full border rounded flex justify-center items-center border-sky-300 bg-sky-200 hover:scale-105 hover:text-sky-600">
                                                 <Link className="" to={`edit`}>

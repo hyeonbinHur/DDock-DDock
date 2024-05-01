@@ -25,6 +25,7 @@ export default function AddMarketItem() {
             const newMItem = {
                 title,
                 description,
+                conditions,
                 comments: [],
                 images,
                 bucket,
@@ -36,7 +37,6 @@ export default function AddMarketItem() {
                 createdAt: createdAt,
                 userId: userData.id,
                 type: 'M_Item',
-                subtype: 'M_Item',
                 interests: 0,
                 numOfComment: 0,
             };

@@ -14,7 +14,9 @@ import { readItem } from '../../store/ItemSlice';
 
 import { calculateTime } from '../../util/formDate';
 import { formDate2 } from '../../util/formDate';
-import { useDocument } from '../../hooks/useDocument';
+import { readWriter } from '../../store/ItemSlice';
+
+import UserDropDown from '../../components/DropDown/userDropDown';
 
 export default function MarketItemDetail() {
     const { mitemId } = useParams();
@@ -29,12 +31,14 @@ export default function MarketItemDetail() {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     const reduxItem = useSelector((state) => state.itemInRedux.item);
+    const reduxItemWriter = useSelector((state) => state.itemInRedux.writer);
 
     const { year, month, day } = formDate2(reduxItem?.createdAt);
     const { result: timeDif, unit: timeString } = calculateTime(
         reduxItem?.createdAt
     );
-    const { document: writer } = useDocument('User', reduxItem?.userId);
+
+    const [isUserDropDown, setIsUserDropDown] = useState(false);
 
     useEffect(() => {
         if (mitemId) {
@@ -43,6 +47,9 @@ export default function MarketItemDetail() {
                 try {
                     const response = await getDocument('MarketItem', mitemId);
                     dispatch(readItem({ item: response }));
+                    const Data = await getDocument('User', response.userId);
+                    dispatch(readWriter({ writer: Data }));
+
                     setError(null); // 에러 상태 초기화
                 } catch (err) {
                     setError(err.message); // 에러 처리
@@ -53,6 +60,24 @@ export default function MarketItemDetail() {
             fetchData();
         }
     }, [dispatch, mitemId]);
+
+    // useEffect(() => {
+    //     if (reduxItem && !reduxItemWriter) {
+    //         const fetchData = async () => {
+    //             setIsLoading(true);
+    //             try {
+    //                 const Data = await getDocument('User', reduxItem?.userId);
+    //                 dispatch(readWriter({ writer: Data }));
+    //             } catch (error) {
+    //                 setError(error);
+    //             } finally {
+    //                 setIsLoading(false);
+    //             }
+    //         };
+    //         fetchData();
+    //     }
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [dispatch, mitemId, reduxItem]);
 
     useEffect(() => {
         if (reduxItem?.images) {
@@ -87,7 +112,7 @@ export default function MarketItemDetail() {
     return (
         <>
             {!error ? (
-                !isLoading && reduxItem && writer ? (
+                !isLoading && reduxItem && reduxItemWriter ? (
                     <div className="pt-36 lg:flex lg:flex-col lg:items-center lg:justify-center">
                         {/* images */}
                         <div className="space-y-6 w-full h-2/3 ">
@@ -125,17 +150,33 @@ export default function MarketItemDetail() {
                         <div className="w-full space-y-5 px-24 lg:w-1/3 lg:px-0">
                             {/* writer */}
                             <div className="flex h-28 justify-between">
-                                <div className="flex items-center space-x-5 space-y-3">
-                                    <img
-                                        src={writer.Avatar}
-                                        className="rounded-full h-20 w-20"
-                                    />
-                                    <div className="font-bold text-xl">
-                                        {writer.displayName}
+                                <div className="relative">
+                                    <div className="flex items-center space-x-5 space-y-3">
+                                        <img
+                                            src={reduxItemWriter.Avatar}
+                                            className="rounded-full h-20 w-20"
+                                            onClick={() =>
+                                                setIsUserDropDown(
+                                                    (prev) => !prev
+                                                )
+                                            }
+                                        />
+                                        <div className="font-bold text-xl">
+                                            {reduxItemWriter.displayName}
+                                        </div>
+                                    </div>
+                                    <div className="w-full p-3 z-10 absolute">
+                                        {isUserDropDown && (
+                                            <UserDropDown
+                                                user1={user?.uid}
+                                                user2={reduxItemWriter.id}
+                                            />
+                                        )}
                                     </div>
                                 </div>
+
                                 <div className="font-light text-sm  grid grid-cols-1 place-items-end ">
-                                    {user?.uid == reduxItem.userId && (
+                                    {user?.uid == reduxItemWriter.id && (
                                         <div className="space-y-2 w-5/12">
                                             <div className="w-full border rounded flex justify-center items-center border-sky-300 bg-sky-200 hover:scale-105 hover:text-sky-600">
                                                 <Link className="" to={`edit`}>
@@ -153,7 +194,7 @@ export default function MarketItemDetail() {
                                             </div>
                                         </div>
                                     )}
-                                    <div className="flex">
+                                    <div className="flex space-x-4">
                                         <div>
                                             {month}, {day}, {year}
                                         </div>

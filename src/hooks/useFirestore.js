@@ -8,6 +8,7 @@ import { addItem } from '../store/marketCollectionSlice';
 import { addJobItem } from '../store/jobCollectionSlice';
 import { addHouseItem } from '../store/houseCollectionSilce';
 import { addCommunityItem } from '../store/communityCollectionSlice';
+// import { useDocument } from './useDocument';
 
 let initalState = {
     document: null,
