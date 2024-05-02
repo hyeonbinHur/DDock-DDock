@@ -21,11 +21,12 @@ export default function Comment({ serverItem, collection }) {
     const [clientComments, setClientComments] = useState([]);
     const dispatch = useDispatch();
     const textarearRef = useRef(null);
-
     useEffect(() => {
-        textarearRef.current.style.height = 'auto';
-        textarearRef.current.style.height =
-            textarearRef.current.scrollHeight + 'px';
+        if (textarearRef.current) {
+            textarearRef.current.style.height = 'auto';
+            textarearRef.current.style.height =
+                textarearRef.current.scrollHeight + 'px';
+        }
     }, [comment]);
 
     useEffect(() => {
