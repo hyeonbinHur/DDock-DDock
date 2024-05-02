@@ -3,7 +3,7 @@ import ChattingRoomListItem from './ChattingRoomListItem';
 
 export default function ChattingRoomList({ chatRoom, userId, closeChatRoom }) {
     return (
-        <div className=" w-1/2 bg-white absolute border-2 shadow-md rounded-md p-2">
+        <div className="lg:w-64 w-1/2 bg-white absolute border-2 shadow-md rounded-md p-2">
             <div
                 onClick={() => closeChatRoom()}
                 className="flex items-end justify-end px-2"

@@ -1,5 +1,4 @@
 import defaultUserImg from '../../assets/user.png';
-import style from './UserChat.module.css';
 import { useEffect, useState } from 'react';
 import { useDocument } from '../../hooks/useDocument';
 
@@ -15,8 +14,6 @@ export default function PartnerUserChat({
     const [day, month, year] = datePart.split('/').map(Number);
     // eslint-disable-next-line no-unused-vars
     const [hour, minute, second] = timePart.split(':').map(Number);
-
-    const [cssStyle, setCssSytle] = useState(style.partner_chat_container);
 
     const [read, setRead] = useState(false);
 
@@ -45,47 +42,45 @@ export default function PartnerUserChat({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentUser?.unread]);
 
-    useEffect(() => {
-        if (chat.showBasicInfo === false) {
-            setCssSytle(style.partner_chat_container);
-        } else {
-            setCssSytle(style.partner_chat_container);
-        }
-    }, [chat.showBasicInfo]);
-
     return (
-        <div className={cssStyle}>
+        <div
+            className={`flex space-x-2 ml-2 ${
+                chat.showBasicInfo ? `mt-5` : `mt-1`
+            }`}
+        >
             {chat.showBasicInfo && (
-                <div className={style.partner_chat_info}>
-                    <img
-                        className={style.partner_chat_avatar}
-                        src={avatar || defaultUserImg}
-                    />
-                    <div>
-                        <span className={style.partner_chat_displayName}>
-                            {displayName}
-                        </span>
-                    </div>
+                <div className="">
+                    <img className="w-10" src={avatar || defaultUserImg} />
                 </div>
             )}
 
-            <div>
-                {chat.type === 'txt' && (
-                    <span className={style.current_chat_content}>
-                        {chat.content}
-                    </span>
-                )}
-
-                {chat.type === 'img' && (
-                    <img className={style.partnerimageConatiner} src={chat.content} />
-                )}
-                {!read && <span>1</span>}
+            <div className="max-w-96 lg:max-w-80">
                 {chat.showBasicInfo && (
-                    <span className={style.partner_timeContainer}>
-                        {String(hour).padStart(2, '0')} :{' '}
-                        {String(minute).padStart(2, '0')}
-                    </span>
+                    <div>
+                        <span>{displayName}</span>
+                    </div>
                 )}
+                <div className="flex">
+                    {chat.type === 'txt' && (
+                        <div
+                            className={`${
+                                chat.showBasicInfo ? `` : `ml-12`
+                            } border-2 bg-white p-1 rounded-md max-w-60 break-words`}
+                        >
+                            {chat.content}
+                        </div>
+                    )}
+                    {chat.type === 'img' && <img src={chat.content} />}
+                    <div className="flex items-end">
+                        {!read && <span>1</span>}
+                        {chat.showBasicInfo && (
+                            <span className="text-sm ml-2">
+                                {String(hour).padStart(2, '0')} :{' '}
+                                {String(minute).padStart(2, '0')}
+                            </span>
+                        )}
+                    </div>
+                </div>
             </div>
         </div>
     );

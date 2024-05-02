@@ -8,8 +8,6 @@ export default function CurrentUserChat({ chat, partner, roomId }) {
     // eslint-disable-next-line no-unused-vars
     const [hour, minute, second] = timePart.split(':').map(Number);
 
-    const [cssStyle, setCssSytle] = useState(style.current_chat_container);
-
     const [read, setRead] = useState(false);
 
     const { document: chatRoom } = useDocument('ChattingRoom', roomId);
@@ -44,33 +42,41 @@ export default function CurrentUserChat({ chat, partner, roomId }) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [chatRoom, partnerInfo?.unread]);
 
-    useEffect(() => {
-        if (chat.showBasicInfo === false) {
-            setCssSytle(style.current_chat_container_without_info);
-        } else {
-            setCssSytle(style.current_chat_container);
-        }
-    }, [chat.showBasicInfo]);
-
     return (
-        <div className={cssStyle}>
-            {chat.showBasicInfo && (
-                <span className={style.current_timeContainer}>
-                    {hour === 24 ? '00' : String(hour).padStart(2, '0')} :
-                    {String(minute).padStart(2, '0')}
-                </span>
-            )}
-            {messageLoading && <span> 0 </span>}
-            {!read && !messageLoading && <span>1</span>}
-            {chat.type === 'txt' && (
-                <span className={style.current_chat_content}>
-                    {chat.content}
-                </span>
-            )}
-
-            {chat.type === 'img' && (
-                <img className={style.imageConatiner} src ={chat.content}/>
-            )}
+        <div>
+            <div
+                className={`${
+                    chat.showBasicInfo ? `mt-4` : `mt-1`
+                } flex justify-end pr-5`}
+            >
+                <div className="text-sm mr-2 flex space-x-2 items-end">
+                    {messageLoading && <div> 0 </div>}
+                    {!read && !messageLoading && (
+                        <div className="text-orange-300 font-bold">1</div>
+                    )}
+                    {chat.showBasicInfo && (
+                        <div>
+                            {hour === 24 ? '00' : String(hour).padStart(2, '0')}{' '}
+                            :{String(minute).padStart(2, '0')}
+                        </div>
+                    )}
+                </div>
+                <div className="bg-sky-200 border-2 rounded-md border-sky-300 text-lg min-w-9 flex justify-end px-2 max-w-80 ">
+                    {chat.type === 'txt' && (
+                        <div className="max-w-64 break-words ">
+                            {chat.content}
+                        </div>
+                    )}
+                </div>
+                <div>
+                    {chat.type === 'img' && (
+                        <img
+                            className={style.imageConatiner}
+                            src={chat.content}
+                        />
+                    )}
+                </div>
+            </div>
         </div>
     );
 }

@@ -1,3 +1,4 @@
+import { AiOutlineClose } from 'react-icons/ai';
 import style from './PrivateChattingRoom.module.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { close } from '../../store/chatRoomSlice';
@@ -205,6 +206,7 @@ export default function PrivateChattingRoom() {
     };
 
     const handleSubmit = async () => {
+        if (content.length == 0) return;
         setContent('');
         const createdAt = formatDate(timestamp.fromDate(new Date()));
         // const createdAt = "18/04/2024, 24:57:47";
@@ -251,61 +253,64 @@ export default function PrivateChattingRoom() {
     }
 
     return (
-        <>
-            <div className={style.container}>
-                {user && currentUser && (
-                    <>
-                        <div className={style.chat_header}>
+        <div className="h-full">
+            {user && currentUser && (
+                <div className="h-full">
+                    <div className="border border-separate mx-2 mb-3"></div>
+                    {/* chat content */}
+                    <div className="">
+                        <div className="flex justify-between rounded-t-md border-t font-bold px-4 py-2 sticky top-0 right-0 z-10 w-full bg-white">
                             {partner && <div> {partner.displayName}</div>}
-                            <button onClick={closeChatRoom}>X</button>
-                        </div>
-                        <div>
-                            {chatRoom?.chat.length > 0 &&
-                                currentChat.length > 0 &&
-                                currentChat.map((chat, index) => (
-                                    <ul key={index} className={style.chatItem}>
-                                        {chat.sender === currentUser.id && (
-                                            <CurrentUserChat
-                                                key={chat.id}
-                                                chat={chat}
-                                                partner={partner}
-                                                roomId={roomId}
-                                            />
-                                        )}
-                                        {chat.sender === partnerId && (
-                                            <PartnerUserChat
-                                                key={index}
-                                                avatar={partner.avatar}
-                                                displayName={
-                                                    partner.displayName
-                                                }
-                                                roomId={roomId}
-                                                chat={chat}
-                                                user={currentUser}
-                                            />
-                                        )}
-                                        {chat.sender == 'GM' && (
-                                            <ChatDate date={chat.createdAt} />
-                                        )}
-                                    </ul>
-                                ))}
-                        </div>
-                        <div ref={scrollDown}></div>
 
-                        <div className={style.chat_textfield}>
-                            <input
-                                type="file"
-                                className={style.fileInput}
-                                ref={fileInputRef}
-                                onChange={handleImageChange}
-                            />
-                            <div>
-                                <img
-                                    src={defaultImg}
-                                    className={style.defaultImg}
-                                    onClick={handleImageClick}
-                                />
+                            <p
+                                className="p-1 hover:scale-110 hover:bg-gray-200 rounded-md"
+                                onClick={closeChatRoom}
+                            >
+                                <AiOutlineClose className="size-6" />
+                            </p>
+                        </div>
+                        {chatRoom?.chat.length > 0 &&
+                            currentChat.length > 0 &&
+                            currentChat.map((chat, index) => (
+                                <ul key={index} className="max-h-80">
+                                    {chat.sender === currentUser.id && (
+                                        <CurrentUserChat
+                                            key={chat.id}
+                                            chat={chat}
+                                            partner={partner}
+                                            roomId={roomId}
+                                        />
+                                    )}
+                                    {chat.sender === partnerId && (
+                                        <PartnerUserChat
+                                            key={index}
+                                            avatar={partner.avatar}
+                                            displayName={partner.displayName}
+                                            roomId={roomId}
+                                            chat={chat}
+                                            user={currentUser}
+                                        />
+                                    )}
+                                    {chat.sender == 'GM' && (
+                                        <ChatDate date={chat.createdAt} />
+                                    )}
+                                </ul>
+                            ))}
+                    </div>
+
+                    <div ref={scrollDown}></div>
+                    {/* text area */}
+                    <div className={style.chat_textfield}>
+                        <input
+                            type="file"
+                            className="hidden"
+                            ref={fileInputRef}
+                            onChange={handleImageChange}
+                        />
+                        <div className="mt-8 p-3 h-36">
+                            <div className="bg-white">
                                 <textarea
+                                    className="w-full h-24 p-1 outline-none"
                                     type="text"
                                     value={content}
                                     onChange={(event) => {
@@ -326,25 +331,39 @@ export default function PrivateChattingRoom() {
                                         }
                                     }}
                                 ></textarea>
+                                <div className="flex justify-between px-3">
+                                    <img
+                                        src={defaultImg}
+                                        className="w-10 "
+                                        onClick={handleImageClick}
+                                    />
+
+                                    <button
+                                        onClick={handleSubmit}
+                                        className={`border px-2 rounded-md  ${
+                                            content.length > 0
+                                                ? `bg-sky-300 hover:scale-105`
+                                                : `bg-gray-100`
+                                        }`}
+                                    >
+                                        Send
+                                    </button>
+                                </div>
                             </div>
-
-                            {content.length > 0 && (
-                                <button onClick={handleSubmit}>send</button>
-                            )}
-
-                            <ImgMessageModal
-                                ref={modal}
-                                preview={imagePreview}
-                                uploadImg={imageUpload}
-                                roomId={roomId}
-                                myId={currentUser.id}
-                                doAction={doAction}
-                                sendURL={receiveURL}
-                            />
                         </div>
-                    </>
-                )}
-            </div>
-        </>
+
+                        <ImgMessageModal
+                            ref={modal}
+                            preview={imagePreview}
+                            uploadImg={imageUpload}
+                            roomId={roomId}
+                            myId={currentUser.id}
+                            doAction={doAction}
+                            sendURL={receiveURL}
+                        />
+                    </div>
+                </div>
+            )}
+        </div>
     );
 }

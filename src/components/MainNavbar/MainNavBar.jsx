@@ -1,7 +1,6 @@
 import { BsChatHeart } from 'react-icons/bs';
 import { SlMenu } from 'react-icons/sl';
 import { NavLink } from 'react-router-dom';
-import style from './MainNavBar.module.css';
 import { useLogout } from '../../hooks/useLogout';
 import { useAuthContext } from '../../hooks/useAuth';
 import { useEffect, useState } from 'react';
@@ -145,7 +144,7 @@ export default function Navbar() {
     };
 
     return (
-        <div>
+        <div className="static">
             <div className="fixed h-24 w-full bg-blue-50 z-20 p-7">
                 <nav className="flex items-center justify-between ">
                     <div>
@@ -264,17 +263,12 @@ export default function Navbar() {
                     )}
                 </nav>
                 {showChatList && (
-                    <div className="w-full  z-10 absolute top-[90%] left-[47%]">
+                    <div className="w-full  z-10 absolute top-[90%] left-[47%] lg:left-[82%]">
                         <ChattingRoomList
                             chatRoom={data.chatRoom}
                             userId={data.id}
                             closeChatRoom={closeChatRoomList}
                         />
-                    </div>
-                )}
-                {openChatRoom && (
-                    <div className={style.ChatpopupContainer}>
-                        <PrivateChattingRoom />
                     </div>
                 )}
 
@@ -422,6 +416,11 @@ export default function Navbar() {
                             </>
                         )}
                     </div>
+                </div>
+            )}
+            {openChatRoom && (
+                <div className="fixed w-screen border-l border-b h-screen bottom-[0%] no-scrollbar overflow-x-hidden rounded-t-md overflow-y-scroll bg-sky-50 z-30 lg:w-1/5 lg:h-3/5 lg:bottom-[5%] lg:left-[77%]">
+                    <PrivateChattingRoom />
                 </div>
             )}
         </div>

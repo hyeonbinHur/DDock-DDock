@@ -11,6 +11,9 @@
     .detail-center {
         @apply w-2/3 flex items-center justify-center;
     }
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
 }
 
 body {
