@@ -1,13 +1,23 @@
-import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
+import { CgClose } from 'react-icons/cg';
+import {
+    forwardRef,
+    useEffect,
+    useImperativeHandle,
+    useRef,
+    useState,
+} from 'react';
 import { createPortal } from 'react-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { projectStorage } from '../../firebase/config';
+import spinner3 from '../../assets/logo/spinner3.svg';
 
 const ImgMessageModal = forwardRef(function ImgMessageModal(
-    { preview, uploadImg, myId, doAction, roomId, sendURL },
+    { preview, uploadImg, doAction, roomId, sendURL },
     ref
 ) {
     const modal = useRef(null);
+    const [loading, setLoading] = useState(false);
+    const [sendingStart, isSendingStart] = useState(false);
 
     useImperativeHandle(ref, () => {
         return {
@@ -27,8 +37,16 @@ const ImgMessageModal = forwardRef(function ImgMessageModal(
     // console.log("업로드 이미지")
     // console.log(uploadImg)
 
+    useEffect(() => {
+        if (sendingStart) {
+            setLoading(true);
+        }
+    }, [sendingStart]);
+
     const sendImage = () => {
         if (!uploadImg) return;
+        isSendingStart(true);
+
         const maxWidth = 1920;
         const maxHeight = 1080;
         const maxFileSize = 500 * 1024;
@@ -54,11 +72,15 @@ const ImgMessageModal = forwardRef(function ImgMessageModal(
                             // };
                             // await updateDocument(userId, updatedUser, 'User');
                             await sendURL(url);
+                            setLoading(false);
+                            isSendingStart(false);
                             doAction('close');
                             modal.current.close();
                         });
                     })
                     .catch((error) => {
+                        setLoading(false);
+                        isSendingStart(false);
                         console.error('Error uploading image:', error);
                     });
             }
@@ -124,13 +146,30 @@ const ImgMessageModal = forwardRef(function ImgMessageModal(
     }
 
     return createPortal(
-        <div>
-            <dialog ref={modal}>
-                <button onClick={() => handleClose()}> x </button>
-                <div>
-                    <img src={preview} />
+        <div className="">
+            <dialog ref={modal} className="border rounded-lg">
+                <div className="flex items-center justify-end pr-3">
+                    <span
+                        className="p-1 my-1 hover:bg-gray-200 rounded-md flex items-center"
+                        onClick={() => handleClose()}
+                    >
+                        <button>
+                            <CgClose />
+                        </button>
+                    </span>
                 </div>
-                <button onClick={sendImage}>보내기</button>
+                <div>
+                    {loading ? (
+                        <img src={spinner3} className="h-52" />
+                    ) : (
+                        <img src={preview} className="h-72" />
+                    )}
+                </div>
+                <div className="flex items-center justify-start py-1 px-2">
+                    <span className="border px-2 py-1 rounded hover:bg-sky-200">
+                        <button onClick={sendImage}>Send</button>
+                    </span>
+                </div>
             </dialog>
         </div>,
         document.getElementById('modal')

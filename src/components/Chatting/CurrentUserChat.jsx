@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import style from './UserChat.module.css';
 import { useDocument } from '../../hooks/useDocument';
 export default function CurrentUserChat({ chat, partner, roomId }) {
     const [datePart, timePart] = chat.createdAt.split(', ');
@@ -70,10 +69,7 @@ export default function CurrentUserChat({ chat, partner, roomId }) {
                 </div>
                 <div>
                     {chat.type === 'img' && (
-                        <img
-                            className={style.imageConatiner}
-                            src={chat.content}
-                        />
+                        <img className="w-60" src={chat.content} />
                     )}
                 </div>
             </div>
