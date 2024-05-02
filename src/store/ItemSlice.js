@@ -88,21 +88,21 @@ const itemSlice = createSlice({
         readItem(state, action) {
             const item = action.payload.item;
 
-            const serializedItem = {
-                title: item.title,
-                conditions: item.conditions,
-                description: item.description,
-                comments: item.comments,
-                images: item.images,
-                bucket: item.bucket,
-                location: item.location,
-                createdAt: item.createdAt,
-                userId: item.userId,
-                type: item.type,
-                interests: item.interests,
-                numOfComment: item.numOfComment,
-            };
-            state.item = serializedItem;
+            // const serializedItem = {
+            //     title: item.title,
+            //     conditions: item.conditions,
+            //     description: item.description,
+            //     comments: item.comments,
+            //     images: item.images,
+            //     bucket: item.bucket,
+            //     location: item.location,
+            //     createdAt: item.createdAt,
+            //     userId: item.userId,
+            //     type: item.type,
+            //     interests: item.interests,
+            //     numOfComment: item.numOfComment,
+            // };
+            state.item = item;
         },
 
         readWriter(state, action) {

@@ -1,20 +1,27 @@
 import { configureStore } from '@reduxjs/toolkit';
 import chatRoomReducer from './chatRoomSlice';
-import marketColelctionReducer from './marketCollectionSlice'
-import jobCollectionReducer from './jobCollectionSlice'
-import itemReducer from './ItemSlice'
-import houseCollectionReducer from './houseCollectionSilce'
+import marketColelctionReducer from './marketCollectionSlice';
+import jobCollectionReducer from './jobCollectionSlice';
+import itemReducer from './ItemSlice';
+import houseCollectionReducer from './houseCollectionSilce';
 import communityCollectionReducer from './communityCollectionSlice';
+// import logger from 'redux-logger';
+
+// const customizedMiddleware = getDefaultMiddleware({
+//     serializableCheck: false,
+// });
 
 export const store = configureStore({
-  reducer: {
-    openChatRoom: chatRoomReducer,
-    marketCollection: marketColelctionReducer,
-    itemInRedux: itemReducer,
-    jobCollection: jobCollectionReducer,
-    houseCollection: houseCollectionReducer,
-    communityCollection: communityCollectionReducer
-  },
+    reducer: {
+        openChatRoom: chatRoomReducer,
+        marketCollection: marketColelctionReducer,
+        itemInRedux: itemReducer,
+        jobCollection: jobCollectionReducer,
+        houseCollection: houseCollectionReducer,
+        communityCollection: communityCollectionReducer,
+    },
+    // middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });
 
 export default store;

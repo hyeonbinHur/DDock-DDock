@@ -70,13 +70,19 @@ export default function PartnerUserChat({
                             {chat.content}
                         </div>
                     )}
-                    {chat.type === 'img' && <img src={chat.content} />}
-                    <div className="flex items-end">
-                        {!read && <span>1</span>}
+                    {chat.type === 'img' && (
+                        <img src={chat.content} className="w-40 rounded-md" />
+                    )}
+                    <div className="flex items-end space-x-3">
                         {chat.showBasicInfo && (
                             <span className="text-sm ml-2">
                                 {String(hour).padStart(2, '0')} :{' '}
                                 {String(minute).padStart(2, '0')}
+                            </span>
+                        )}
+                        {!read && (
+                            <span className="text-sm text-orange-300 font-semibold">
+                                1
                             </span>
                         )}
                     </div>

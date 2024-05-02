@@ -60,16 +60,20 @@ export default function CurrentUserChat({ chat, partner, roomId }) {
                         </div>
                     )}
                 </div>
-                <div className="bg-sky-200 border-2 rounded-md border-sky-300 text-lg min-w-9 flex justify-end px-2 max-w-80 ">
-                    {chat.type === 'txt' && (
+                {chat.type === 'txt' && (
+                    <div className="bg-sky-200 border-2 rounded-md border-sky-300 text-lg min-w-9 flex justify-end px-2 max-w-80 ">
                         <div className="max-w-64 break-words ">
                             {chat.content}
                         </div>
-                    )}
-                </div>
+                    </div>
+                )}
+
                 <div>
                     {chat.type === 'img' && (
-                        <img className="w-60" src={chat.content} />
+                        <img
+                            className="w-32 m-1 rounded-md"
+                            src={chat.content}
+                        />
                     )}
                 </div>
             </div>
