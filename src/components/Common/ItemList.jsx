@@ -26,8 +26,7 @@ export default function ItemList({
     const dispatch = useDispatch();
     const [searchedContent, setSearchedContent] = useState('');
     const [searchedItem, setSearchedItem] = useState([]);
-    const [selectedPlace, setSelectedPlace] = useState('dong');
-    const [selectedDong, setSeletedDong] = useState('');
+    const [selectedPlace, setSeletedPlace] = useState('');
     const [filterByPlace, setFilterByPlace] = useState([]);
     const placeModal = useRef();
 
@@ -62,15 +61,14 @@ export default function ItemList({
 
     useEffect(() => {
         const emptyArray = [];
-        if (selectedPlace == 'dong') {
-            Items.forEach((item) => {
-                if (item.location.dong == selectedDong) {
-                    emptyArray.push(item);
-                }
-            });
-        }
+
+        Items.forEach((item) => {
+            if (item.location.dong == selectedPlace) {
+                emptyArray.push(item);
+            }
+        });
         setFilterByPlace(emptyArray);
-    }, [Items, selectedDong, selectedPlace]);
+    }, [Items, selectedPlace]);
 
     useEffect(() => {
         const emptyArray = [];
@@ -87,7 +85,7 @@ export default function ItemList({
 
     useEffect(() => {
         if (userData?.location) {
-            setSeletedDong(userData.location.dong);
+            setSeletedPlace(userData.location.dong);
             // setHasedPlace(userInfo.location.dong);
         }
     }, [userData?.location]);
@@ -127,10 +125,10 @@ export default function ItemList({
         }
     };
     const placeSetting = (dong) => {
-        setSeletedDong(dong);
+        setSeletedPlace(dong);
     };
     const selectPlace = (value) => {
-        setSelectedPlace(value);
+        setSeletedPlace(value);
     };
     const openModal = () => {
         placeModal.current.open();
@@ -142,11 +140,9 @@ export default function ItemList({
     return (
         <>
             <ListHeader
-                dong={selectedDong}
                 updateSearchContent={updateSearchContent}
                 modalOpenFn={openModal}
                 selectPlaceFn={selectPlace}
-                checked={selectedPlace}
                 topic={Topic}
                 //community
             />

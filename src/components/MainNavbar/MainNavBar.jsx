@@ -145,7 +145,7 @@ export default function Navbar() {
 
     return (
         <div className="static">
-            <div className="fixed h-24 w-full bg-blue-50 z-20 p-7">
+            <div className="fixed h-24 w-full bg-blue-50 z-50 p-7">
                 <nav className="flex items-center justify-between ">
                     <div>
                         <NavLink to="/">
@@ -216,7 +216,7 @@ export default function Navbar() {
                     </div>
 
                     {showMenu && (
-                        <div className="hidden bg-blue-50 z-20 w-40 absolute lg:flex flex-col border-4 border-white top-[100%] right-[5%] items-center p-2 rounded-2xl justify-between">
+                        <div className="hidden bg-blue-50 z-50 w-40 absolute lg:flex flex-col border-4 border-white top-[100%] right-[5%] items-center p-2 rounded-2xl justify-between">
                             {!user && (
                                 <>
                                     <div className="w-full items-center font-bold">
@@ -263,7 +263,7 @@ export default function Navbar() {
                     )}
                 </nav>
                 {showChatList && (
-                    <div className="w-full  z-10 absolute top-[90%] left-[47%] lg:left-[82%]">
+                    <div className="w-full  z-40 absolute top-[90%] left-[47%] lg:left-[82%]">
                         <ChattingRoomList
                             chatRoom={data.chatRoom}
                             userId={data.id}
@@ -277,7 +277,7 @@ export default function Navbar() {
                 </div>
             </div>
             {mobileMenu && (
-                <div className="absolute top-[10%] z-30 w-full border-2 rounded-lg border-white p-2 bg-blue-50 lg:hidden">
+                <div className="absolute top-[10%] z-50 w-full border-2 rounded-lg border-white p-2 bg-blue-50 lg:hidden">
                     <div className="space-y-3 p-3">
                         <div
                             onClick={clickPage}
@@ -419,7 +419,7 @@ export default function Navbar() {
                 </div>
             )}
             {openChatRoom && (
-                <div className="fixed w-screen border-l border-b h-screen bottom-[0%] no-scrollbar overflow-x-hidden rounded-t-md overflow-y-scroll bg-sky-50 z-30 lg:w-1/5 lg:h-3/5 lg:bottom-[5%] lg:left-[77%]">
+                <div className="fixed w-screen border-l border-b h-screen bottom-[0%] no-scrollbar overflow-x-hidden rounded-t-md overflow-y-scroll bg-sky-50 z-50 lg:w-1/5 lg:h-3/5 lg:bottom-[5%] lg:left-[77%]">
                     <PrivateChattingRoom />
                 </div>
             )}

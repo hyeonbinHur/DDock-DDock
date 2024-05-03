@@ -5,15 +5,15 @@ import style from './ListHeader.module.css';
 
 // Props를 객체 구조 분해를 사용해 정의
 export default function ListHeader({
-    dong,
     updateSearchContent,
     modalOpenFn,
     selectPlaceFn,
-    checked,
     topic,
 }) {
     const [searchContent, setSearchContent] = useState('');
     const [buttonStyleCss, setButtonStyleCss] = useState('');
+    const [selectPlace, setSelectedPlace] = useState('All');
+    const [showPlaceMenu, setShowPlaceMenu] = useState(false);
     useEffect(() => {
         console.log(topic);
         if (topic === 'community') {
@@ -31,6 +31,12 @@ export default function ListHeader({
         const newContent = event.target.value;
         setSearchContent(newContent);
         updateSearchContent(newContent);
+    };
+
+    const setPlace = (value) => {
+        setShowPlaceMenu(false);
+        setSelectedPlace(value);
+        selectPlaceFn(value);
     };
 
     return (
@@ -62,28 +68,85 @@ export default function ListHeader({
                 </div>
 
                 <div className="flex pb-3">
-                    <div className="flex">
-                        <div className="border-2 rounded-md px-2 mr-6 cursor-pointer hover:bg-gray-200 hover:scale-105">
-                            Select place
-                        </div>
+                    <div className="flex space-x-5">
                         <div
                             className="border-2 rounded-md pr-2 mr-6 cursor-pointer "
-                            onClick={() => selectPlaceFn('dong')}
+                            onClick={() => setShowPlaceMenu((prev) => !prev)}
                         >
-                            <span className="pr-2 pl-2">{dong}</span>
-
-                            <input
-                                className="cursor-pointer"
-                                type="radio"
-                                value="dong"
-                                checked={checked === 'dong'}
-                                onChange={(event) =>
-                                    selectPlaceFn(event.target.value)
-                                }
-                            />
+                            <span className="pr-2 pl-2">{selectPlace}</span>
                         </div>
                     </div>
                 </div>
+                {showPlaceMenu && (
+                    <div className="border absolute z-20 bg-gray-50 w-1/3 p-3 space-y-2 rounded-md font-semibold text-lg">
+                        <div
+                            className="w-full hover:bg-neutral-200 p-2 rounded"
+                            onClick={() => setPlace('All Items')}
+                        >
+                            All Items
+                        </div>
+                        <div
+                            className="w-full hover:bg-neutral-200 p-2 rounded"
+                            onClick={() => setPlace('North Melbourne')}
+                        >
+                            North Melbourne
+                        </div>
+                        <div
+                            className="w-full hover:bg-neutral-200 p-2 rounded"
+                            onClick={() => setPlace('Parkville')}
+                        >
+                            Parkville
+                        </div>
+                        <div
+                            className="w-full hover:bg-neutral-200 p-2 rounded"
+                            onClick={() => setPlace('South Wharf')}
+                        >
+                            South Wharf
+                        </div>
+                        <div
+                            className="w-full hover:bg-neutral-200 p-2 rounded"
+                            onClick={() => setPlace('Southbank')}
+                        >
+                            Southbank
+                        </div>
+                        <div
+                            className="w-full hover:bg-neutral-200 p-2 rounded"
+                            onClick={() => setPlace('West Melbourne')}
+                        >
+                            West Melbourne
+                        </div>
+                        <div
+                            className="w-full hover:bg-neutral-200 p-2 rounded"
+                            onClick={() => setPlace('Carlton')}
+                        >
+                            Carlton
+                        </div>
+                        <div
+                            className="w-full hover:bg-neutral-200 p-2 rounded"
+                            onClick={() => setPlace('Docklands')}
+                        >
+                            Docklands
+                        </div>
+                        <div
+                            className="w-full hover:bg-neutral-200 p-2 rounded"
+                            onClick={() => setPlace('East Melbourne')}
+                        >
+                            East Melbourne
+                        </div>
+                        <div
+                            className="w-full hover:bg-neutral-200 p-2 rounded"
+                            onClick={() => setPlace('Kensington')}
+                        >
+                            Kensington
+                        </div>
+                        <div
+                            className="w-full hover:bg-neutral-200 p-2 rounded"
+                            onClick={() => setPlace('Melbourne CBD')}
+                        >
+                            Melbourne CBD
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );

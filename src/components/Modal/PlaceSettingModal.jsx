@@ -31,7 +31,6 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
     // -37.802210, 144.968553 // City of Melbounre Carlton // suburb: carlton, municiplity: city of melbourne
     //-37.819220, 144.949051 // dockland
     //-37.813388, 144.986925 // East Melbounre
-    //-37.784281, 144.923662 // flemington
     //-37.795001, 144.931653 // Kensington
     //-37.813430, 144.959031 //CBD
     //-37.796466, 144.945239 // North Melbourne
@@ -42,8 +41,8 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
     //-37.823733, 144.964144 // South Bank
     // -37.809176, 144.927688 //West Melbourne
     // eslint-disable-next-line no-unused-vars
-    const testLat = -37.825397; // chagne all testLat, testLng to currentLat,currentLng
-    const testLng = 144.951657;
+    const testLat = -37.81922; // chagne all testLat, testLng to currentLat,currentLng
+    const testLng = 144.949051;
 
     // eslint-disable-next-line no-unused-vars
     const [map, setMap] = useState(null);
