@@ -26,7 +26,7 @@ export default function ItemList({
     const dispatch = useDispatch();
     const [searchedContent, setSearchedContent] = useState('');
     const [searchedItem, setSearchedItem] = useState([]);
-    const [selectedPlace, setSeletedPlace] = useState('');
+    const [selectedPlace, setSeletedPlace] = useState('All Items');
     const [filterByPlace, setFilterByPlace] = useState([]);
     const placeModal = useRef();
 
@@ -61,13 +61,16 @@ export default function ItemList({
 
     useEffect(() => {
         const emptyArray = [];
-
-        Items.forEach((item) => {
-            if (item.location.dong == selectedPlace) {
-                emptyArray.push(item);
-            }
-        });
-        setFilterByPlace(emptyArray);
+        if (selectedPlace == 'All Items') {
+            setFilterByPlace(Items);
+        } else {
+            Items.forEach((item) => {
+                if (item.location.dong == selectedPlace) {
+                    emptyArray.push(item);
+                }
+            });
+            setFilterByPlace(emptyArray);
+        }
     }, [Items, selectedPlace]);
 
     useEffect(() => {

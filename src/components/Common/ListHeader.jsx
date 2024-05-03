@@ -1,3 +1,5 @@
+import { AiFillCaretUp } from 'react-icons/ai';
+import { AiFillCaretDown } from 'react-icons/ai';
 import { useEffect, useState } from 'react';
 import search from '../../assets/vector/search.png';
 import { Link } from 'react-router-dom';
@@ -12,7 +14,7 @@ export default function ListHeader({
 }) {
     const [searchContent, setSearchContent] = useState('');
     const [buttonStyleCss, setButtonStyleCss] = useState('');
-    const [selectPlace, setSelectedPlace] = useState('All');
+    const [selectPlace, setSelectedPlace] = useState('All Items');
     const [showPlaceMenu, setShowPlaceMenu] = useState(false);
     useEffect(() => {
         console.log(topic);
@@ -73,7 +75,14 @@ export default function ListHeader({
                             className="border-2 rounded-md pr-2 mr-6 cursor-pointer "
                             onClick={() => setShowPlaceMenu((prev) => !prev)}
                         >
-                            <span className="pr-2 pl-2">{selectPlace}</span>
+                            <span className="pl-3 flex items-center">
+                                {selectPlace}
+                                {showPlaceMenu ? (
+                                    <AiFillCaretUp className="ml-3" />
+                                ) : (
+                                    <AiFillCaretDown className="ml-3" />
+                                )}
+                            </span>
                         </div>
                     </div>
                 </div>
