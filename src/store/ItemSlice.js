@@ -13,8 +13,8 @@ const itemSlice = createSlice({
         addCommentOnItem(state, action) {
             // console.log("hello add comment");
             state.item.comments = [
-                action.payload.comment,
                 ...state.item.comments,
+                action.payload.comment,
             ];
 
             state.item.numOfComment = state.item.numOfComment + 1;
@@ -107,40 +107,7 @@ const itemSlice = createSlice({
 
         readWriter(state, action) {
             const writer = action.payload.writer;
-
-            const serializedUserItem = writer.userItem.map((item) => ({
-                title: item.title,
-                conditions: item.conditions,
-                description: item.description,
-                comments: item.comments,
-                images: item.images,
-                bucket: item.bucket,
-                location: item.location,
-                createdAt: item.createdAt,
-                userId: item.userId,
-                type: item.type,
-                interests: item.interests,
-                numOfComment: item.numOfComment,
-            }));
-
-            const serializedItem = {
-                uid: writer.uid,
-                displayName: writer.displayName,
-                userItem: serializedUserItem,
-                userComment: writer.userComment,
-                Avatar: writer.Avatar,
-                setDisplayName: writer.setDisplayName,
-                email: writer.email,
-                interests: writer.interests,
-                location: writer.location,
-                chatRoom: writer.chatRoom,
-                unread: writer.unread,
-                MItem: writer.MItem,
-                CItem: writer.CItem,
-                JItem: writer.JItem,
-                HItem: writer.HItem,
-            };
-            state.writer = serializedItem;
+            state.writer = writer;
         },
     },
 });

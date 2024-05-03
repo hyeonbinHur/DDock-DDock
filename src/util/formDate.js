@@ -102,6 +102,8 @@ export function calculateTime(timestamp) {
     const itemCreatedAt = new Date(timestamp);
     const diff = nowSydney - itemCreatedAt;
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const diffhours = Math.floor(diff / (1000 * 60 * 60));
+    const diffminutes = Math.floor(diff / (1000 * 60));
 
     const hours = nowSydney.getHours().toString().padStart(2, '0');
     const minutes = nowSydney.getMinutes().toString().padStart(2, '0');
@@ -121,14 +123,15 @@ export function calculateTime(timestamp) {
     } else {
         if (days == 0) {
             if (hours != iHours) {
-                result = hours - iHours;
+                result = diffhours;
+
                 unit = 'hours ago';
             } else {
                 if (minutes == iMinutes) {
                     result = 1;
                     unit = 'mins ago';
                 } else {
-                    result = minutes - iMinutes;
+                    result = diffminutes;
                     unit = 'mins ago';
                 }
             }

@@ -151,7 +151,7 @@ export default function MarketItemDetail() {
                                             {reduxItemWriter.displayName}
                                         </div>
                                     </div>
-                                    <div className="w-full p-3 z-10 absolute">
+                                    <div className="w-56 p-3 z-10 absolute">
                                         {isUserDropDown && (
                                             <UserDropDown
                                                 user1={user?.uid}
@@ -165,7 +165,7 @@ export default function MarketItemDetail() {
                                 </div>
 
                                 <div className="font-light text-sm  grid grid-cols-1 place-items-end ">
-                                    {user?.uid == reduxItemWriter.id && (
+                                    {user?.uid == reduxItemWriter.uid && (
                                         <div className="space-y-2 w-5/12">
                                             <div className="w-full border rounded flex justify-center items-center border-sky-300 bg-sky-200 hover:scale-105 hover:text-sky-600">
                                                 <Link className="" to={`edit`}>

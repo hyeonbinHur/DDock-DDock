@@ -5,6 +5,7 @@ import jobCollectionReducer from './jobCollectionSlice';
 import itemReducer from './ItemSlice';
 import houseCollectionReducer from './houseCollectionSilce';
 import communityCollectionReducer from './communityCollectionSlice';
+import userReducer from './userSlice';
 // import logger from 'redux-logger';
 
 // const customizedMiddleware = getDefaultMiddleware({
@@ -19,9 +20,12 @@ export const store = configureStore({
         jobCollection: jobCollectionReducer,
         houseCollection: houseCollectionReducer,
         communityCollection: communityCollectionReducer,
+        userCollection: userReducer,
     },
-    // middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({
+            serializableCheck: false,
+        }),
 });
 
 export default store;

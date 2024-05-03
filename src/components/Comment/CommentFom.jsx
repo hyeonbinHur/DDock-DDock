@@ -306,41 +306,38 @@ export default function CommentForm({ collection, serverItem, clientComment }) {
                             </div>
                         )}
                     </div>
+                </div>
+            )}
+            <div className="text-sm p-1">
+                <button
+                    className="p-0.5  text-blue-700"
+                    onClick={() => setOpenReplys(!openReplys)}
+                >
+                    {openReplys
+                        ? 'close reply'
+                        : 'reply + ' + `${clientComment.childComment.length}`}
+                </button>
+            </div>
+            {openReplys && (
+                <div className="p-2 text-base">
+                    <AddReplyForm addReply={addReply} />
 
-                    <div className="text-sm p-1">
-                        <button
-                            className="p-0.5  text-blue-700"
-                            onClick={() => setOpenReplys(!openReplys)}
-                        >
-                            {openReplys
-                                ? 'close reply'
-                                : 'reply + ' +
-                                  `${clientComment.childComment.length}`}
-                        </button>
+                    <div>
+                        {clientComment.childComment &&
+                            clientComment.childComment.length > 0 &&
+                            clientComment.childComment.map((reply) => (
+                                <ul key={reply.id}>
+                                    <ReplyForm
+                                        serverUser={userInfo}
+                                        serverItem={serverItem}
+                                        clientReply={reply}
+                                        comment={clientComment}
+                                        collection={collection}
+                                    />
+                                </ul>
+                                // <li key ={index}> Hello world</li>
+                            ))}
                     </div>
-
-                    {openReplys && (
-                        <div className="p-2 text-base">
-                            <AddReplyForm addReply={addReply} />
-
-                            <div>
-                                {clientComment.childComment &&
-                                    clientComment.childComment.length > 0 &&
-                                    clientComment.childComment.map((reply) => (
-                                        <ul key={reply.id}>
-                                            <ReplyForm
-                                                serverUser={userInfo}
-                                                serverItem={serverItem}
-                                                clientReply={reply}
-                                                comment={clientComment}
-                                                collection={collection}
-                                            />
-                                        </ul>
-                                        // <li key ={index}> Hello world</li>
-                                    ))}
-                            </div>
-                        </div>
-                    )}
                 </div>
             )}
         </div>

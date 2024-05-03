@@ -32,6 +32,7 @@ import CommunityRoot from './pages/Community/CommunityRoot';
 import AddCommunityItemPage from './pages/Community/AddCommunityItemPage';
 import CommunityItemDetailPage from './pages/Community/CommunityItemDtail';
 import ProfileRoot from './pages/User/ProfileRoot';
+import OtherUserProfile from './pages/User/OtherUserProfile';
 
 const queryClient = new QueryClient();
 
@@ -120,7 +121,10 @@ function App() {
                     element: <ProfileRoot />,
                     children: [
                         { path: ':userId', element: <ProfilePage /> },
-                        { path: ':userId/userItem', element: <ProfilePage /> },
+                        {
+                            path: ':userId/visit',
+                            element: <OtherUserProfile />,
+                        },
                     ],
                 },
 

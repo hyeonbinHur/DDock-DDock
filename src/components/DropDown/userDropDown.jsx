@@ -10,6 +10,7 @@ import { useFirestore } from '../../hooks/useFirestore';
 import { useDocument } from '../../hooks/useDocument';
 import { useDispatch } from 'react-redux';
 import { open, set } from '../../store/chatRoomSlice';
+import { Link } from 'react-router-dom';
 
 export default function UserDropDown({ user1, user2, closeDropDown }) {
     // const { user } = useAuthContext();
@@ -29,7 +30,12 @@ export default function UserDropDown({ user1, user2, closeDropDown }) {
                     chatRoomID = room.roomId;
                 }
             });
-
+            user2Data.chatRoom.map((room) => {
+                if (room.partner == user1Data.id) {
+                    chatPartnerExist = true;
+                    chatRoomID = room.roomId;
+                }
+            });
             if (chatPartnerExist) {
                 dispatch(open({ roomId: chatRoomID, partner: user2Data.id }));
                 closeDropDown();
@@ -51,12 +57,15 @@ export default function UserDropDown({ user1, user2, closeDropDown }) {
 
     return (
         <div className="border-2 shadow-md w-full space-y-3 p-3 bg-white  rounded-md">
-            <div className="flex border p-2 space-x-4 font-bold rounded-md hover:bg-gray-300">
-                <div className="flex items-center ">
-                    <RiUserSearchLine className="size-7" />
+            <Link to={`/profile/${user2}/visit`}>
+                <div className="flex border p-2 space-x-4 font-bold rounded-md hover:bg-gray-300">
+                    <div className="flex items-center ">
+                        <RiUserSearchLine className="size-7" />
+                    </div>
+                    <div>Profile</div>
                 </div>
-                <div>Profile</div>
-            </div>
+            </Link>
+
             {/* <div >Chatting</div> */}
             <div
                 onClick={startChatting}
