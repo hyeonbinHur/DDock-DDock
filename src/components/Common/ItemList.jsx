@@ -27,8 +27,6 @@ export default function ItemList({
     const [searchedContent, setSearchedContent] = useState('');
     const [searchedItem, setSearchedItem] = useState([]);
     const [selectedPlace, setSelectedPlace] = useState('dong');
-    const [selectedSi, setSeletedSi] = useState('');
-    const [selectedGu, setSeletedGu] = useState('');
     const [selectedDong, setSeletedDong] = useState('');
     const [filterByPlace, setFilterByPlace] = useState([]);
     const placeModal = useRef();
@@ -66,31 +64,13 @@ export default function ItemList({
         const emptyArray = [];
         if (selectedPlace == 'dong') {
             Items.forEach((item) => {
-                if (item.location.si == selectedSi) {
-                    if (item.location.gu == selectedGu) {
-                        if (item.location.dong == selectedDong) {
-                            emptyArray.push(item);
-                        }
-                    }
-                }
-            });
-        } else if (selectedPlace == 'gu') {
-            Items.forEach((item) => {
-                if (item.location.si == selectedSi) {
-                    if (item.location.gu == selectedGu) {
-                        emptyArray.push(item);
-                    }
-                }
-            });
-        } else if (selectedPlace == 'si') {
-            Items.forEach((item) => {
-                if (item.location.si == selectedSi) {
+                if (item.location.dong == selectedDong) {
                     emptyArray.push(item);
                 }
             });
         }
         setFilterByPlace(emptyArray);
-    }, [Items, selectedDong, selectedGu, selectedPlace, selectedSi]);
+    }, [Items, selectedDong, selectedPlace]);
 
     useEffect(() => {
         const emptyArray = [];
@@ -107,8 +87,6 @@ export default function ItemList({
 
     useEffect(() => {
         if (userData?.location) {
-            setSeletedSi(userData.location.si);
-            setSeletedGu(userData.location.gu);
             setSeletedDong(userData.location.dong);
             // setHasedPlace(userInfo.location.dong);
         }
@@ -148,9 +126,7 @@ export default function ItemList({
             await updateDocument(item.id, updatedItem, collection);
         }
     };
-    const placeSetting = (si, gu, dong) => {
-        setSeletedSi(si);
-        setSeletedGu(gu);
+    const placeSetting = (dong) => {
         setSeletedDong(dong);
     };
     const selectPlace = (value) => {
@@ -166,8 +142,6 @@ export default function ItemList({
     return (
         <>
             <ListHeader
-                si={selectedSi}
-                gu={selectedGu}
                 dong={selectedDong}
                 updateSearchContent={updateSearchContent}
                 modalOpenFn={openModal}

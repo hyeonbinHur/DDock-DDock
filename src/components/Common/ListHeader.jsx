@@ -5,8 +5,6 @@ import style from './ListHeader.module.css';
 
 // Props를 객체 구조 분해를 사용해 정의
 export default function ListHeader({
-    si,
-    gu,
     dong,
     updateSearchContent,
     modalOpenFn,
@@ -65,48 +63,15 @@ export default function ListHeader({
 
                 <div className="flex pb-3">
                     <div className="flex">
-                        {/* <div
-                            className="border-2 rounded-mdcursor-pointer"
-                            onClick={() => selectPlaceFn('si')}
-                        >
-                            <span className="pr-3 pl-3">{si}</span>
-                            <input
-                                className="cursor-pointer"
-                                type="radio"
-                                value="si"
-                                checked={checked === 'si'}
-                                onChange={(event) =>
-                                    selectPlaceFn(event.target.value)
-                                }
-                            />
-                        </div> */}
-
                         <div className="border-2 rounded-md px-2 mr-6 cursor-pointer hover:bg-gray-200 hover:scale-105">
                             Select place
                         </div>
-
-                        <div
-                            className="border-2 rounded-md pr-2 mr-6 cursor-pointer"
-                            onClick={() => selectPlaceFn('gu')}
-                        >
-                            <span className="pr-2 pl-2"> {gu}</span>
-
-                            <input
-                                className="cursor-pointer"
-                                type="radio"
-                                value="gu"
-                                checked={checked === 'gu'}
-                                onChange={(event) =>
-                                    selectPlaceFn(event.target.value)
-                                }
-                            />
-                        </div>
-
                         <div
                             className="border-2 rounded-md pr-2 mr-6 cursor-pointer "
                             onClick={() => selectPlaceFn('dong')}
                         >
                             <span className="pr-2 pl-2">{dong}</span>
+
                             <input
                                 className="cursor-pointer"
                                 type="radio"
