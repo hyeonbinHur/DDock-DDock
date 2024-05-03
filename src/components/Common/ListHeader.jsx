@@ -65,7 +65,7 @@ export default function ListHeader({
 
                 <div className="flex pb-3">
                     <div className="flex">
-                        <div
+                        {/* <div
                             className="border-2 rounded-mdcursor-pointer"
                             onClick={() => selectPlaceFn('si')}
                         >
@@ -79,6 +79,10 @@ export default function ListHeader({
                                     selectPlaceFn(event.target.value)
                                 }
                             />
+                        </div> */}
+
+                        <div className="border-2 rounded-md px-2 mr-6 cursor-pointer hover:bg-gray-200 hover:scale-105">
+                            Select place
                         </div>
 
                         <div

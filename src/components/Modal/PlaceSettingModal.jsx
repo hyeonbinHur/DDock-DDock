@@ -30,9 +30,20 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
     const [hashtagSi, setHashtagSi] = useState('');
     const [hashtagGu, setHashtagGu] = useState('');
     const [hashtagDong, setHashtagDong] = useState('');
-    const testLat = -37.818959; // chagne all testLat, testLng to currentLat,currentLng
-    const testLng = 144.943697;
-
+    const testLat = -37.840319; // chagne all testLat, testLng to currentLat,currentLng
+    const testLng = 144.997647;
+    // -37.802210, 144.968553 // City of Melbounre Carlton // suburb: carlton, municiplity: city of melbourne
+    // -37.784905, 144.970442 // carlton north // suburb: carlton north // municiplity: city of yarra // city melbourne
+    //-37.819220, 144.949051 // dockland
+    //-37.813388, 144.986925 // East Melbounre
+    //-37.784281, 144.923662 // flemington
+    //-37.795001, 144.931653 // Kensington
+    //-37.813430, 144.959031 //CBD
+    //-37.796466, 144.945239 // North Melbourne
+    //-37.778838, 144.946305 // parkvile
+    // -37.837814, 144.929717 // port melbourne
+    // -37.825397, 144.951657 //South Wharf
+    // -37.840319, 144.997647 //South Yarra
     const [location, setLocation] = useState(null);
     // eslint-disable-next-line no-unused-vars
     const [map, setMap] = useState(null);
@@ -228,6 +239,7 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
                 const si = address.municipality;
                 const gu = address.city;
                 const dong = address.suburb;
+
                 setCurrentSi(si);
                 setCurrentGu(gu);
                 setCurrentDong(dong);
@@ -235,15 +247,14 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
                 setHashtagSi(si);
                 setHashtagGu(gu);
                 setHashtagDong(dong);
+
                 if (dong === 'Melbourne') {
                     setCurrentDong('Melbourne CBD');
                 }
 
                 setBoundString(`${si} 시 ${gu} 구 ${dong} 동`);
 
-                console.log(
-                    `Country: ${country}, State: ${state}, Administrative Area Level 2: ${administrative_area_level_2}, Region: ${region}, Suburb: ${suburb}`
-                );
+                console.log(`gu : ${gu} , si: ${si}`);
             })
             .catch((error) => console.error('Error:', error));
     }
@@ -281,8 +292,11 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
     const hello = () => {
         console.log('test lat' + testLat);
         console.log('test lng' + testLng);
-        console.log("current si :" + currentSi )
-        console.log("user si :" + user.interests);
+        console.log('current si :' + currentSi);
+        console.log('current gu :' + currentGu);
+        console.log('current dong :' + currentDong);
+
+        console.log('user si :' + user.interests);
     };
 
     return createPortal(
@@ -301,6 +315,9 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
                             fullscreenControl: false,
                         }}
                     >
+                        {/* const testLat = -37.818959; // chagne all testLat, testLng to currentLat,currentLng
+    const testLng = 144.943697;
+    // */}
                         {location && (
                             <>
                                 <Marker
@@ -400,6 +417,14 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
                         </div>
                     )}
                     <button onClick={hello}>Console user info</button>
+
+                    <div
+                        className="border p-3 hover:bg-red-100"
+                        onClick={() => hello()}
+                    >
+                        {' '}
+                        Hello{' '}
+                    </div>
                 </dialog>
             ) : (
                 <p>Map is Loading...</p>

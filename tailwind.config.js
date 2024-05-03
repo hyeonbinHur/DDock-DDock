@@ -13,6 +13,7 @@ export default {
             },
             height: {
                 jobItem: '21rem',
+                100: '30rem',
             },
             placeholderColor: {
                 none: 'transparent',
