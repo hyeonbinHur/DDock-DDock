@@ -13,7 +13,7 @@ import {
 } from '../../store/marketCollectionSlice';
 // import { useCollection } from '../../hooks/useCollection';
 import ItemList from '../../components/Common/ItemList';
-import style from '../page.module.css'
+import style from '../page.module.css';
 
 export default function MarketPage() {
     // const { document, error, loading } = useCollection('MarketItem', [
@@ -29,7 +29,9 @@ export default function MarketPage() {
 
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [spinnerContainerCss, setSpinncerContainerCss] = useState(style.spinnerContainer)
+    const [spinnerContainerCss, setSpinncerContainerCss] = useState(
+        style.spinnerContainer
+    );
 
     useEffect(() => {
         const fetchData = async () => {
@@ -39,7 +41,7 @@ export default function MarketPage() {
                     'createdAt',
                     'desc',
                 ]);
-                console.log(response)
+                console.log(response);
                 dispatch(fetchCollection({ documents: response }));
 
                 setError(null); // 에러 상태 초기화
@@ -50,19 +52,19 @@ export default function MarketPage() {
             }
         };
         if (reduxtCollection.length == 0) {
-            console.log("Hello world")
+            console.log('Hello world');
             fetchData();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch]);
 
     useEffect(() => {
-        if(!isLoading){
+        if (!isLoading) {
             setSpinncerContainerCss();
-        }else{
+        } else {
             setSpinncerContainerCss(style.spinnerContainer);
         }
-    },[isLoading])
+    }, [isLoading]);
 
     // if (error != false) {
     //     return <div> Error occured from house page</div>;
@@ -73,11 +75,10 @@ export default function MarketPage() {
             {error ? (
                 <p>{error}</p>
             ) : isLoading ? (
-                <img src={spinner} className='w-72' />
+                <img src={spinner} className="w-72" />
             ) : (
                 <div>
                     <div className="pt-36"></div>
-                
 
                     <div className="relative text-size text-sm">
                         {reduxtCollection.length > 0 && (
@@ -91,7 +92,6 @@ export default function MarketPage() {
                         )}
                     </div>
                 </div>
-
             )}
         </div>
     );

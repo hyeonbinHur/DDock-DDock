@@ -30,8 +30,6 @@ export default function AddMarketItem() {
                 images,
                 bucket,
                 location: {
-                    si: userData.location.si,
-                    gu: userData.location.gu,
                     dong: userData.location.dong,
                 },
                 createdAt: createdAt,

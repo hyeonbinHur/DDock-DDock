@@ -1,0 +1,115 @@
+{
+    "place": {
+        "municipal": {
+            "City of Melbourne": {
+                "suburbs": [
+                    "Carlton",
+                    "Docklands",
+                    "East Melbourne",
+                    "Flemington",
+                    "Kensington",
+                    "Melbourne CBD",
+                    "North Melbourne",
+                    "Parkville",
+                    "Port Melbourne",
+                    "Southbank",
+                    "South Wharf",
+                    "South Yarra",
+                    "West Melbourne"
+                ]
+            },
+            "City of Port Phillip": {
+                "suburbs": [
+                    "Albert Park",
+                    "Balaclava",
+                    "Elwood",
+                    "Middle Park",
+                    "Port Melbourne",
+                    "Ripponlea",
+                    "St Kilda",
+                    "St Kilda East",
+                    "St Kilda West",
+                    "South Melbourne",
+                    "Southbank",
+                    "South Wharf"
+                ]
+            },
+            "City of Yarra": {
+                "suburbs": [
+                    "Abbotsford",
+                    "Alphington",
+                    "Burnley",
+                    "Carlton North",
+                    "Clifton Hill",
+                    "Collingwood",
+                    "Cremorne",
+                    "Fairfield",
+                    "Fitzroy",
+                    "Fitzroy North",
+                    "Princes Hill",
+                    "Richmond"
+                ]
+            },
+            "City of Banyule": {
+                "suburbs": [
+                    "Bellfield",
+                    "Briar Hill",
+                    "Bundoora",
+                    "Eaglemont",
+                    "Eltham North",
+                    "Greensborough",
+                    "Heidelberg",
+                    "Heidelberg Heights",
+                    "Heidelberg West",
+                    "Ivanhoe",
+                    "Ivanhoe East",
+                    "Lower Plenty",
+                    "Macleod",
+                    "Montmorency",
+                    "Rosanna",
+                    "St Helena",
+                    "Viewbank",
+                    "Watsonia",
+                    "Watsonia North",
+                    "Yallambie"
+                ]
+            },
+            "City of Darebin": {
+                "suburbs": [
+                    "Alphington",
+                    "Bundoora",
+                    "Coburg",
+                    "Coburg North",
+                    "Fairfield",
+                    "Kingsbury",
+                    "Macleod",
+                    "Northcote",
+                    "Preston",
+                    "Reservoir",
+                    "Thornbury"
+                ]
+            },
+            "City of Hume": {
+                "suburbs": [
+                    "Attwood",
+                    "Broadmeadows",
+                    "Campbellfield",
+                    "Coolaroo",
+                    "Craigieburn",
+                    "Dallas",
+                    "Gladstone Park",
+                    "Greenvale",
+                    "Jacana",
+                    "Meadow Heights",
+                    "Melbourne Airport",
+                    "Mickleham",
+                    "Roxburgh Park",
+                    "Somerton",
+                    "Sunbury",
+                    "Tullamarine",
+                    "Westmeadows"
+                ]
+            }
+        }
+    }
+}

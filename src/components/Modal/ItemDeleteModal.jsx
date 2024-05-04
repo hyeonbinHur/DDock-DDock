@@ -59,11 +59,31 @@ const ItemDeleteModal = forwardRef(function ItemStatusModal(
         await deleteDocument(id, collection);
 
         const originalUserInfo = userInfo;
-        const updatedUserItem = originalUserInfo.userItem.filter(
-            (item) => item.id !== id
-        );
-        originalUserInfo.userItem = updatedUserItem;
-        await updateDocument(user.uid, originalUserInfo, 'User');
+        if (from == 'market') {
+            const updatedUserItem = originalUserInfo.MItem.filter(
+                (item) => item.id !== id
+            );
+            originalUserInfo.MItem = updatedUserItem;
+            await updateDocument(user.uid, originalUserInfo, 'User');
+        } else if (from == 'job') {
+            const updatedUserItem = originalUserInfo.JItem.filter(
+                (item) => item.id !== id
+            );
+            originalUserInfo.JItem = updatedUserItem;
+            await updateDocument(user.uid, originalUserInfo, 'User');
+        } else if (from == 'House') {
+            const updatedUserItem = originalUserInfo.HItem.filter(
+                (item) => item.id !== id
+            );
+            originalUserInfo.HItem = updatedUserItem;
+            await updateDocument(user.uid, originalUserInfo, 'User');
+        } else if (from == 'Community') {
+            const updatedUserItem = originalUserInfo.CItem.filter(
+                (item) => item.id !== id
+            );
+            originalUserInfo.CItem = updatedUserItem;
+            await updateDocument(user.uid, originalUserInfo, 'User');
+        }
     };
 
     function handleClose() {
