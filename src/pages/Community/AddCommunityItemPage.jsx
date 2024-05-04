@@ -25,8 +25,6 @@ export default function AddCommunityItemPage() {
                 images,
                 bucket,
                 location: {
-                    si: userData.location.si,
-                    gu: userData.location.gu,
                     dong: userData.location.dong,
                 },
                 comments: [],

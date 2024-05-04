@@ -1,13 +1,13 @@
-import { useAuthContext } from "../../hooks/useAuth";
-import { useFirestore } from "../../hooks/useFirestore";
-import { useDocument } from "../../hooks/useDocument";
-import { getSydneyTimeISO } from "../../util/formDate";
-import ItemAddForm from "../../components/Common/ItemAddForm";
+import { useAuthContext } from '../../hooks/useAuth';
+import { useFirestore } from '../../hooks/useFirestore';
+import { useDocument } from '../../hooks/useDocument';
+import { getSydneyTimeISO } from '../../util/formDate';
+import ItemAddForm from '../../components/Common/ItemAddForm';
 
 export default function AddHouseItemPage() {
-    const {user} = useAuthContext();
-    const {document: userData} = useDocument('User', user?.uid)
-    const {addDocument, response} = useFirestore('HouseItem');
+    const { user } = useAuthContext();
+    const { document: userData } = useDocument('User', user?.uid);
+    const { addDocument, response } = useFirestore('HouseItem');
 
     const addDocumentToServer = async (
         title,
@@ -25,24 +25,29 @@ export default function AddHouseItemPage() {
                 images,
                 bucket,
                 location: {
-                    si: userData.location.si,
-                    gu: userData.location.gu,
                     dong: userData.location.dong,
                 },
-                comments:[],
+                comments: [],
                 createdAt,
                 userId: userData.id,
                 type: 'H_Item',
                 interests: 0,
                 numOfComment: 0,
             };
-            await addDocument(newItem, "HouseItem");
+            await addDocument(newItem, 'HouseItem');
         }
     };
 
     return (
         <>
-            {userData && <ItemAddForm  addDocumentToServer = {addDocumentToServer} response = {response} Topic = {'House'} condition={true}/>}
+            {userData && (
+                <ItemAddForm
+                    addDocumentToServer={addDocumentToServer}
+                    response={response}
+                    Topic={'House'}
+                    condition={true}
+                />
+            )}
         </>
     );
 }
