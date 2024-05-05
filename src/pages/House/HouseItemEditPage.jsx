@@ -70,6 +70,7 @@ export default function HouseItemEditPage() {
                         doAction={doEditDocument}
                         item={reduxItem}
                         response={response}
+                        condition={true}
                     />
                 </div>
             )}

@@ -5,8 +5,11 @@ export default function ConditionForm({
     id,
     updateCondition,
     deleteCondition,
+    oldCondition,
 }) {
-    const [inputValue, setInputValue] = useState('');
+    const [inputValue, setInputValue] = useState(
+        oldCondition ? oldCondition : ''
+    );
 
     const handleInputChange = (e) => {
         setInputValue(e.target.value);

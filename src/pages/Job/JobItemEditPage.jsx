@@ -70,6 +70,7 @@ export default function JobItemEditPage() {
                         doAction={doEditDocument}
                         item={reduxItem}
                         response={response}
+                        condition={true}
                     />
                 </div>
             )}

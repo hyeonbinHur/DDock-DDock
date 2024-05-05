@@ -198,6 +198,7 @@ export default function MarketItemForm({ doAction, item, condition }) {
                                     id={condition.id}
                                     updateCondition={updateCondition}
                                     deleteCondition={deleteCondition}
+                                    oldCondition={condition.value}
                                 />
                             </div>
                         ))}
