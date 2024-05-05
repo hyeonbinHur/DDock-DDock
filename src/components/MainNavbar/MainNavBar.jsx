@@ -219,11 +219,21 @@ export default function Navbar() {
                         <div className="hidden bg-blue-50 z-50 w-40 absolute lg:flex flex-col border-4 border-white top-[100%] right-[5%] items-center p-2 rounded-2xl justify-between">
                             {!user && (
                                 <>
-                                    <div className="w-full items-center font-bold">
-                                        <NavLink to="/login">Login</NavLink>
+                                    <div className="btn p-3 hover:bg-white w-full rounded-md font-bold">
+                                        <NavLink
+                                            to="/login"
+                                            onClick={() => closeMenu()}
+                                        >
+                                            Login
+                                        </NavLink>
                                     </div>
-                                    <div>
-                                        <NavLink to="/signup">Signup</NavLink>
+                                    <div className="btn p-3 hover:bg-white w-full rounded-md font-bold">
+                                        <NavLink
+                                            to="/signup"
+                                            onClick={() => closeMenu()}
+                                        >
+                                            Signup
+                                        </NavLink>
                                     </div>
                                 </>
                             )}

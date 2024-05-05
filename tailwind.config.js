@@ -18,6 +18,9 @@ export default {
             placeholderColor: {
                 none: 'transparent',
             },
+            zIndex: {
+                100: 100,
+            },
         },
     },
     plugins: [],
