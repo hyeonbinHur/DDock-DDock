@@ -81,6 +81,19 @@ const communityCollectionSlice = createSlice({
                 state.communityItems = updatedCollection;
             }
         },
+
+        updateItemInCollection(state, action) {
+            const updatedItem = action.payload.item;
+            const id = action.payload.id;
+
+            const index = state.communityItems.findIndex(
+                (item) => item.id === id
+            );
+
+            if (index !== -1) {
+                state.communityItems[index] = updatedItem;
+            }
+        },
     },
 });
 
@@ -92,6 +105,7 @@ export const {
     deleteCommentOnCCollection,
     plusInteresOnCCollection,
     minusInterestOnCCollection,
+    updateItemInCollection,
 } = communityCollectionSlice.actions;
 
 export default communityCollectionSlice.reducer;

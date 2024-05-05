@@ -1,20 +1,22 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    houseItems : [],
-}
+    houseItems: [],
+};
 
 const houseCollectionSlice = createSlice({
-    name:'houseCollection',
+    name: 'houseCollection',
     initialState,
     reducers: {
         fetchCollection(state, action) {
             state.houseItems = action.payload.collection;
         },
-        deleteHouseItem(state, action){
-            const index = state.houseItems.forEach((item) => item.id == action.payload.id)
-            if(index != -1){
-                state.houseItems.splice(index,1);
+        deleteHouseItem(state, action) {
+            const index = state.houseItems.forEach(
+                (item) => item.id == action.payload.id
+            );
+            if (index != -1) {
+                state.houseItems.splice(index, 1);
             }
         },
         addHouseItem(state, action) {
@@ -41,7 +43,9 @@ const houseCollectionSlice = createSlice({
                 const updatedCollection = state.houseItems;
                 updatedCollection[index] = {
                     ...updatedCollection[index],
-                    numOfComment: updatedCollection[index].numOfComment - action.payload.numOfReply,
+                    numOfComment:
+                        updatedCollection[index].numOfComment -
+                        action.payload.numOfReply,
                 };
                 state.houseItems = updatedCollection;
             }
@@ -51,7 +55,7 @@ const houseCollectionSlice = createSlice({
                 (item) => item.id == action.payload.item.id
             );
             if (index != -1) {
-                console.log("Hello add")
+                console.log('Hello add');
                 const updatedCollection = state.houseItems;
                 updatedCollection[index] = {
                     ...updatedCollection[index],
@@ -65,7 +69,7 @@ const houseCollectionSlice = createSlice({
                 (item) => item.id == action.payload.item.id
             );
             if (index != -1) {
-                console.log("Hello delete")
+                console.log('Hello delete');
 
                 const updatedCollection = state.houseItems;
                 updatedCollection[index] = {
@@ -75,8 +79,19 @@ const houseCollectionSlice = createSlice({
                 state.houseItems = updatedCollection;
             }
         },
-    }
-})
+
+        updateItemInCollection(state, action) {
+            const updatedItem = action.payload.item;
+            const id = action.payload.id;
+
+            const index = state.houseItems.findIndex((item) => item.id === id);
+
+            if (index !== -1) {
+                state.houseItems[index] = updatedItem;
+            }
+        },
+    },
+});
 
 export const {
     fetchCollection,
@@ -86,6 +101,7 @@ export const {
     plusInteresOnHCollection,
     minusInterestOnHCollection,
     deleteHouseItem,
+    updateItemInCollection,
 } = houseCollectionSlice.actions;
 
 export default houseCollectionSlice.reducer;

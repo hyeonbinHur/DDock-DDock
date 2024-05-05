@@ -53,7 +53,6 @@ export default function MarketItemEdit() {
             numOfComment: reduxItem.numOfComment,
         };
 
-        console.log(updatedItem);
         dispatch(updateItemInCollection({ item: updatedItem, id: mitemId }));
         await updateDocument(mitemId, updatedItem, 'MarketItem');
     };

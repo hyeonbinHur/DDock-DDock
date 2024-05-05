@@ -11,10 +11,12 @@ const jobCollectionSlice = createSlice({
         fetchCollection(state, action) {
             state.jobItems = action.payload.collection;
         },
-        deleteJobItem(state, action){
-            const index = state.jobItems.forEach((item) => item.id == action.payload.id)
-            if(index != -1){
-                state.jobItems.splice(index,1);
+        deleteJobItem(state, action) {
+            const index = state.jobItems.forEach(
+                (item) => item.id == action.payload.id
+            );
+            if (index != -1) {
+                state.jobItems.splice(index, 1);
             }
         },
         addJobItem(state, action) {
@@ -41,7 +43,9 @@ const jobCollectionSlice = createSlice({
                 const updatedCollection = state.jobItems;
                 updatedCollection[index] = {
                     ...updatedCollection[index],
-                    numOfComment: updatedCollection[index].numOfComment - action.payload.numOfReply,
+                    numOfComment:
+                        updatedCollection[index].numOfComment -
+                        action.payload.numOfReply,
                 };
                 state.jobItems = updatedCollection;
             }
@@ -51,7 +55,7 @@ const jobCollectionSlice = createSlice({
                 (item) => item.id == action.payload.item.id
             );
             if (index != -1) {
-                console.log("Hello add")
+                console.log('Hello add');
                 const updatedCollection = state.jobItems;
                 updatedCollection[index] = {
                     ...updatedCollection[index],
@@ -65,7 +69,7 @@ const jobCollectionSlice = createSlice({
                 (item) => item.id == action.payload.item.id
             );
             if (index != -1) {
-                console.log("Hello delete")
+                console.log('Hello delete');
 
                 const updatedCollection = state.jobItems;
                 updatedCollection[index] = {
@@ -73,6 +77,17 @@ const jobCollectionSlice = createSlice({
                     interests: updatedCollection[index].interests - 1,
                 };
                 state.jobItems = updatedCollection;
+            }
+        },
+
+        updateItemInCollection(state, action) {
+            const updatedItem = action.payload.item;
+            const id = action.payload.id;
+
+            const index = state.jobItems.findIndex((item) => item.id === id);
+
+            if (index !== -1) {
+                state.jobItems[index] = updatedItem;
             }
         },
     },
@@ -86,5 +101,6 @@ export const {
     plusInteresOnJCollection,
     minusInterestOnJCollection,
     deleteJobItem,
+    updateItemInCollection,
 } = jobCollectionSlice.actions;
 export default jobCollectionSlice.reducer;

@@ -9,6 +9,8 @@ import { getSydneyTimeISO } from '../../util/formDate';
 import MarketItemEditForm from '../../components/MarketItem/MarketItemEditForm';
 import ItemModal from '../../components/Modal/ItemStatusModal';
 
+import { updateItemInCollection } from '../../store/communityCollectionSlice';
+
 export default function HouseItemEditPage() {
     const { cItemId } = useParams();
 
@@ -51,7 +53,7 @@ export default function HouseItemEditPage() {
             numOfComment: reduxItem.numOfComment,
         };
 
-        console.log(updatedItem);
+        dispatch(updateItemInCollection({ item: updatedItem, id: cItemId }));
         await updateDocument(cItemId, updatedItem, 'CommunityItem');
     };
 
