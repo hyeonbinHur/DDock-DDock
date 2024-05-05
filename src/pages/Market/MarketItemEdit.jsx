@@ -8,6 +8,7 @@ import { readItem } from '../../store/ItemSlice';
 import { getSydneyTimeISO } from '../../util/formDate';
 import { useDispatch, useSelector } from 'react-redux';
 import { getDocument } from '../../api/getDocument';
+import { updateItemInCollection } from '../../store/marketCollectionSlice';
 
 export default function MarketItemEdit() {
     const { mitemId } = useParams();
@@ -53,6 +54,7 @@ export default function MarketItemEdit() {
         };
 
         console.log(updatedItem);
+        dispatch(updateItemInCollection({ item: updatedItem, id: mitemId }));
         await updateDocument(mitemId, updatedItem, 'MarketItem');
     };
 

@@ -74,6 +74,17 @@ const marketCollectionSlice = createSlice({
         fetchCollection(state, action) {
             state.marketItems = action.payload.documents;
         },
+
+        updateItemInCollection(state, action) {
+            const updatedItem = action.payload.item;
+            const id = action.payload.id;
+
+            const index = state.marketItems.findIndex((item) => item.id === id);
+
+            if (index !== -1) {
+                state.marketItems[index] = updatedItem;
+            }
+        },
     },
 });
 
@@ -85,5 +96,6 @@ export const {
     addItem,
     deleteItemFromRedux,
     fetchCollection,
+    updateItemInCollection,
 } = marketCollectionSlice.actions;
 export default marketCollectionSlice.reducer;
