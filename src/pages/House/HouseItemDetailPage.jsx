@@ -21,7 +21,6 @@ export default function HouseItemDetailPage() {
     const { hItemId } = useParams();
     const [error, setError] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [imageUrls, setImageUrls] = useState([]);
     const [currentIndxe, setCurrentIndex] = useState(0);
     const { user } = useAuthContext();
     const modal = useRef();
@@ -68,15 +67,15 @@ export default function HouseItemDetailPage() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch, hItemId, reduxItem]);
 
-    useEffect(() => {
-        if (reduxItem?.images) {
-            const emptyArray = [];
-            setImageUrls(emptyArray);
-            reduxItem.images.map((url) => {
-                setImageUrls((prev) => [...prev, url]);
-            });
-        }
-    }, [reduxItem?.images]);
+    // useEffect(() => {
+    //     if (reduxItem?.images) {
+    //         const emptyArray = [];
+    //         setImageUrls(emptyArray);
+    //         reduxItem.images.map((url) => {
+    //             setImageUrls((prev) => [...prev, url]);
+    //         });
+    //     }
+    // }, [reduxItem?.images]);
 
     return (
         <>
@@ -96,11 +95,11 @@ export default function HouseItemDetailPage() {
                                 )}
 
                                 <img
-                                    src={imageUrls[currentIndxe].url}
+                                    src={reduxItem.images[currentIndxe].url}
                                     className="rounded-lg w-2/3 h-full lg:w-1/3"
                                 />
 
-                                {currentIndxe + 1 < imageUrls.length && (
+                                {currentIndxe + 1 < reduxItem.images.length && (
                                     <button
                                         onClick={() =>
                                             setCurrentIndex((prev) => prev + 1)
@@ -111,7 +110,7 @@ export default function HouseItemDetailPage() {
                                 )}
                             </div>
                             <div className="flex items-center justify-center font-bold">
-                                {currentIndxe + 1}/{imageUrls.length}
+                                {currentIndxe + 1}/{reduxItem.images.length}
                             </div>
                         </div>
 

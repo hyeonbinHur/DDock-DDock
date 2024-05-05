@@ -4,9 +4,13 @@ import ItemList from '../../components/Common/ItemList';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCollection } from '../../api/getCollection';
 import { useEffect, useState } from 'react';
-import { fetchCollection,plusInteresOnJCollection,minusInterestOnJCollection } from '../../store/jobCollectionSlice';
+import {
+    fetchCollection,
+    plusInteresOnJCollection,
+    minusInterestOnJCollection,
+} from '../../store/jobCollectionSlice';
 import spinner from '../../assets/spinner.svg';
-import style from '../page.module.css'
+import style from '../page.module.css';
 
 export default function JobPage() {
     const dispatch = useDispatch();
@@ -15,8 +19,9 @@ export default function JobPage() {
     );
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(false);
-    const [spinnerContainerCss, setSpinncerContainerCss] = useState(style.spinnerContainer)
-
+    const [spinnerContainerCss, setSpinncerContainerCss] = useState(
+        style.spinnerContainer
+    );
 
     useEffect(() => {
         const fetchData = async () => {
@@ -40,12 +45,12 @@ export default function JobPage() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch]);
     useEffect(() => {
-        if(!isLoading){
+        if (!isLoading) {
             setSpinncerContainerCss();
-        }else{
+        } else {
             setSpinncerContainerCss(style.spinnerContainer);
         }
-    },[isLoading])
+    }, [isLoading]);
 
     if (error != false) {
         return <div> Error ocuured from job page </div>;
@@ -57,22 +62,19 @@ export default function JobPage() {
                 <img src={spinner} />
             ) : (
                 <div>
-                <div className="pt-36">
-                </div>
+                    <div className="pt-36"></div>
 
-                <div className="relative text-size text-sm">
-                        {reduxtCollection.length > 0 && (
-                            <ItemList
-                                Items={reduxtCollection}
-                                collection={'JobItem'}
-                                addInterest={plusInteresOnJCollection}
-                                minusInterest={minusInterestOnJCollection}
-                                Topic={'job'}
-                            />
-                        )}
+                    <div className="relative text-size text-sm">
+                        <ItemList
+                            Items={reduxtCollection}
+                            collection={'JobItem'}
+                            addInterest={plusInteresOnJCollection}
+                            minusInterest={minusInterestOnJCollection}
+                            Topic={'job'}
+                        />
+                    </div>
                 </div>
-            </div>
             )}
-        </div >
+        </div>
     );
 }

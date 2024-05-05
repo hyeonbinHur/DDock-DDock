@@ -20,7 +20,7 @@ export default function CommunityItemDetailPage() {
     const { cItemId } = useParams();
     const [error, setError] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [imageUrls, setImageUrls] = useState([]);
+    // const [imageUrls, setImageUrls] = useState([]);
     const [currentIndxe, setCurrentIndex] = useState(0);
     const { user } = useAuthContext();
     const { year, month, day } = formDate2(reduxItem?.createdAt);
@@ -67,15 +67,15 @@ export default function CommunityItemDetailPage() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch, cItemId, reduxItem]);
 
-    useEffect(() => {
-        if (reduxItem?.images) {
-            const emptyArray = [];
-            setImageUrls(emptyArray);
-            reduxItem.images.map((url) => {
-                setImageUrls((prev) => [...prev, url]);
-            });
-        }
-    }, [reduxItem?.images]);
+    // useEffect(() => {
+    //     if (reduxItem?.images) {
+    //         const emptyArray = [];
+    //         setImageUrls(emptyArray);
+    //         reduxItem.images.map((url) => {
+    //             setImageUrls((prev) => [...prev, url]);
+    //         });
+    //     }
+    // }, [reduxItem?.images]);
 
     return (
         <>
@@ -94,13 +94,12 @@ export default function CommunityItemDetailPage() {
                                         prev
                                     </button>
                                 )}
-
                                 <img
-                                    src={imageUrls[currentIndxe].url}
+                                    src={reduxItem.images[currentIndxe].url}
                                     className="rounded-lg w-2/3 h-full lg:w-1/3"
                                 />
 
-                                {currentIndxe + 1 < imageUrls.length && (
+                                {currentIndxe + 1 < reduxItem.images.length && (
                                     <button
                                         onClick={() =>
                                             setCurrentIndex((prev) => prev + 1)
@@ -111,7 +110,7 @@ export default function CommunityItemDetailPage() {
                                 )}
                             </div>
                             <div className="flex items-center justify-center font-bold">
-                                {currentIndxe + 1}/{imageUrls.length}
+                                {currentIndxe + 1}/{reduxItem.images.length}
                             </div>
                         </div>
                         {/* text div*/}
