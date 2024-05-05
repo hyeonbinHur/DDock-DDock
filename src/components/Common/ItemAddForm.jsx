@@ -93,8 +93,13 @@ export default function ItemAddForm({
         const file = event.target.files[0];
         setImageUploads((prev) => [...prev, file]);
         const reader = new FileReader();
+
         reader.onload = (event) => {
-            setImagePreviews((prev) => [...prev, event.target.result]);
+            const newPreview = {
+                url: event.target.result,
+                name: null,
+            };
+            setImagePreviews((prev) => [...prev, newPreview]);
         };
         reader.readAsDataURL(file);
     };
@@ -170,7 +175,7 @@ export default function ItemAddForm({
                             {imagePreviews[currentIndex] && (
                                 <img
                                     className="w-full h-full"
-                                    src={imagePreviews[currentIndex]}
+                                    src={imagePreviews[currentIndex].url}
                                 />
                             )}
                             {!imagePreviews[currentIndex] && (

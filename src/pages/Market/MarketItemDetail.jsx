@@ -114,7 +114,7 @@ export default function MarketItemDetail() {
                                 )}
 
                                 <img
-                                    src={imageUrls[currentIndex]}
+                                    src={imageUrls[currentIndex].url}
                                     className="rounded-lg w-2/3 h-full lg:w-1/3"
                                 />
 

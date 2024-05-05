@@ -41,7 +41,6 @@ export default function AddJobPage() {
 
     return (
         <>
-            {' '}
             {userData && (
                 <ItemAddForm
                     addDocumentToServer={addDocumentToServer}
@@ -49,7 +48,7 @@ export default function AddJobPage() {
                     Topic={'Job'}
                     condition={true}
                 />
-            )}{' '}
+            )}
         </>
     );
 }

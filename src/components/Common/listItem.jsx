@@ -22,7 +22,7 @@ export default function ListItem({ item, topic }) {
                 <div>
                     <img
                         className="w-full h-52 rounded-t-2xl"
-                        src={item.images[0]}
+                        src={item.images[0].url}
                     />
                 </div>
                 <div className="text-left p-2 w-full ">

@@ -81,15 +81,15 @@ export default function MarketPage() {
                     <div className="pt-36"></div>
 
                     <div className="relative text-size text-sm">
-                        {reduxtCollection.length > 0 && (
-                            <ItemList
-                                Items={reduxtCollection}
-                                collection={'MarketItem'}
-                                addInterest={plusInterest}
-                                minusInterest={minusInterest}
-                                Topic={'market'}
-                            />
-                        )}
+                        {/* {reduxtCollection.length > 0 && ( */}
+                        <ItemList
+                            Items={reduxtCollection}
+                            collection={'MarketItem'}
+                            addInterest={plusInterest}
+                            minusInterest={minusInterest}
+                            Topic={'market'}
+                        />
+                        {/* )} */}
                     </div>
                 </div>
             )}

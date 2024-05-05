@@ -31,7 +31,7 @@ export default function UserItemCard({ item, topic }) {
                 <div className="w-full h-2/3 rounded-lg">
                     <img
                         className="w-full h-full rounded-lg"
-                        src={item.images[0]}
+                        src={item.images[0].url}
                     />
                 </div>
                 <div className="h-1/3 space-y-3">

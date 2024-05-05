@@ -19,7 +19,7 @@ export default function JobListItem({ item, topic }) {
             <div className="h-80 w-56">
                 <img
                     className="h-full rounded-l-xl rounded-r-none w-56"
-                    src={item.images[0]}
+                    src={item.images[0].url}
                 />
             </div>
             <div className=" ml-10 mt-3 w-120">

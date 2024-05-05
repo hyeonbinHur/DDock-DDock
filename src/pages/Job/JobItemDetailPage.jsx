@@ -95,7 +95,7 @@ export default function JobItemDetailPage() {
                                 )}
 
                                 <img
-                                    src={imageUrls[currentIndxe]}
+                                    src={imageUrls[currentIndxe].url}
                                     className="rounded-lg w-2/3 h-full lg:w-1/3"
                                 />
 
