@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import pocketLogo from '../../assets/logo/logo.png';
 import googleLogo from '../../assets/logo/googleLogo.png';
 import facebookLogo from '../../assets/logo/facebookLogo.png';
+import { Link } from 'react-router-dom';
 
 export default function LoginPage() {
     const [email, setEmail] = useState('');
@@ -32,16 +33,19 @@ export default function LoginPage() {
     };
 
     return (
-        <form onSubmit={consoleInfo} className="lg:pt-32 w-screen h-screen">
+        <form onSubmit={consoleInfo} className=" w-screen h-screen">
             <div className="pt-5 pl-5" onClick={() => goBack()}>
                 <BiArrowBack className="size-10 text-gray-400" />
             </div>
-            <div className=" absolute top-[20%] flex flex-col space-y-5 mx-4 ">
-                <div className="w-full flex justify-center p-5 rounded-t-lg  flex-col items-center ">
-                    <img src={pocketLogo} className="w-1/3" />
+
+            <div className=" absolute top-[20%] lg:top-[12%] flex flex-col items-center space-y-5 mx-4 w-full ">
+                <div className="w-full flex justify-center p-5 rounded-t-lg mb-7">
+                    <Link to={'/'} className="w-44 flex items-center">
+                        <img src={pocketLogo} className="w-full" />
+                    </Link>
                 </div>
 
-                <div className=" flex flex-col items-center rounded-lg">
+                <div className="flex w-full flex-col items-center rounded-lg lg:w-2/5">
                     <div className="bg-gray-50 rounded-lg border w-10/12 p-1">
                         <div className="flex w-full h-12 bg-gray-50 flex-cols items-center rounded-lg">
                             <AiOutlineUser className="size-6 text-gray-500" />
@@ -86,21 +90,27 @@ export default function LoginPage() {
                     {error}
                     {isPending}
                 </p>
-                <div className="flex items-center justify-center">
-                    <button className="border w-10/12 h-11 rounded-lg bg-sky-400 font-bold text-white ">
+                <div className="flex items-center w-full lg:w-2/5 justify-center">
+                    <div className="border w-10/12 h-11 rounded-lg bg-sky-400 font-bold text-white flex items-center justify-center ">
                         Sign in
-                    </button>
+                    </div>
                 </div>
 
-                <div className="flex justify-center space-x-5">
+                <div>
+                    <div className="text-gray-500 pt-7">
+                        Sing in & Join With
+                    </div>
+                </div>
+
+                <div className="flex justify-center space-x-5 pt-3">
                     <div
                         onClick={googleLogin}
-                        className="w-11 h-11 flex items-center border justify-center border-gray-300 rounded-full"
+                        className="lg:w-16 lg:h-16 w-11 h-11 flex items-center border justify-center border-gray-300 rounded-full"
                     >
-                        <img src={googleLogo} className="w-7" />
+                        <img src={googleLogo} className="w-7 lg:w-9" />
                     </div>
-                    <div className="w-10">
-                        <img src={facebookLogo} className="w-11" />
+                    <div className="w-10 lg:w-16 lg:h-16 ">
+                        <img src={facebookLogo} className="w-11 lg:w-14" />
                     </div>
                 </div>
 
