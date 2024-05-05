@@ -304,6 +304,7 @@ export const useFirestore = (collection) => {
 
     const updateDocument = async (id, updates, collection) => {
         const ref = projectFirestore.collection(collection);
+
         setLoading(true);
         dispatch({ type: 'IS_PENDING' });
 
@@ -317,6 +318,7 @@ export const useFirestore = (collection) => {
             return updatedDocument;
         } catch (error) {
             setLoading(false);
+            console.error(error);
             dispatchIsNotCancelled({ type: 'ERROR', payload: error.message });
             return null;
         }

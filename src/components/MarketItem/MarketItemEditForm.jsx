@@ -1,283 +1,235 @@
-// import style from './MarketItemForm.module.css';
-// import { useState, useRef, useEffect } from 'react';
-// import defaultImg from '../../assets/defaultImg.png';
-// import leftArrow from '../../assets/left.png';
-// import rightArrow from '../../assets/right.png';
-// import deleteImg from '../../assets/close.png';
-// import { projectStorage } from '../../firebase/config';
+import { useState, useRef } from 'react';
+// import { projectFirestore, projectStorage } from '../../firebase/config';
+import ConditionForm from '../Common/ConditionForm';
 
-import { useEffect, useState } from "react"
+import { FcAddImage } from 'react-icons/fc';
+import { TiDeleteOutline } from 'react-icons/ti';
+import { FcPrevious } from 'react-icons/fc';
+import { FcNext } from 'react-icons/fc';
 
-// export default function MarketItemForm({ doAction, data }) {
+import { editImagesOnStorage } from '../../util/editImage';
 
-//     const [title, setTitle] = useState('');
-//     const [description, setDescription] = useState('');
-//     const [currentIndex, setCurrentIndex] = useState(0); //에로우 카운트임 일단
-//     const [uploadImageCount, setUploadImageCount] = useState(0); //현재까지 업로드된 이미지들 수
-//     const fileInputRef = useRef(); //이미지 누르면 안보이게 했던 input필드 눌리게
-//     const [imageUploads, setImageUploads] = useState([]); //업로드된 이미지들
-//     const [imagePreviews, setImagePreviews] = useState([]); //선택한 이미지 미리보기
-//     const [imageToFirestore, setImageTofirestore] = useState([]);//firebase에 업로드할 이미지 링크를 저장
+export default function MarketItemForm({ doAction, item, condition }) {
+    const [title, setTitle] = useState(item.title);
+    const [description, setDescription] = useState(item.description);
+    const [conditions, setConditions] = useState(item.conditions);
 
-//     // const [uploadedUrls, setUploadedUrls] = useState([]);
-//     // const [deleteUrls, setDeleteUrls] = useState([]);
-//     // const [deleteIndex, setDeleteIndex] = useState([]);
+    const fileInputRef = useRef();
+    const [currentIndex, setCurrentIndex] = useState(0);
 
-//     const [storageBucket, setStorageBucket] = useState('');
+    const [imageUploads, setImageUploads] = useState([]); // store user's img file, change the file to src value, then push the src value to the previews
+    const [editImagePreviews, setEditImagePreviews] = useState(item.images);
+    const [deletedImages, setDeletedImages] = useState([]);
 
-//     useEffect(() => {
-//         if(data?.title){
-//             setTitle(data.title)
-//         }
-//         if(data?.description){
-//             setDescription(data.description)
-//         }
-//         if(data?.bucket){
-//             setStorageBucket(data.bucket)
-//         }
-//         if(data?.images){
-//             setImagePreviews(data.images)
-//         }
-        
-//     }, [data?.title, data?.description, data?.bucket, data?.images])
-    
+    // const [response, setResponse] = useState(null);
 
-//     function resizeImageToMaxSize(
-//         file,
-//         maxWidth,
-//         maxHeight,
-//         maxFileSize,
-//         callback
-//     ) {
-//         const img = new Image();
-//         img.src = URL.createObjectURL(file);
-//         img.onload = () => {
-//             let canvas = document.createElement('canvas');
-//             let width = img.width;
-//             let height = img.height;
-
-//             if (width > height) {
-//                 if (width > maxWidth) {
-//                     height *= maxWidth / width;
-//                     width = maxWidth;
-//                 }
-//             } else {
-//                 if (height > maxHeight) {
-//                     width *= maxHeight / height;
-//                     height = maxHeight;
-//                 }
-//             }
-
-//             canvas.width = width;
-//             canvas.height = height;
-//             const ctx = canvas.getContext('2d');
-//             ctx.drawImage(img, 0, 0, width, height);
-
-//             let quality = 1; // 시작 품질
-//             const attemptResize = () => {
-//                 canvas.toBlob(
-//                     (blob) => {
-//                         if (blob.size > maxFileSize && quality > 0.1) {
-//                             quality -= 0.1; // 품질 감소
-//                             canvas.toDataURL('image/jpeg', quality);
-//                             attemptResize(); // 재귀적으로 품질 조절
-//                         } else {
-//                             const resizedFile = new File([blob], file.name, {
-//                                 type: 'image/jpeg',
-//                                 lastModified: Date.now(),
-//                             });
-//                             callback(resizedFile); // 최종 파일 콜백 함수로 반환
-//                         }
-//                     },
-//                     'image/jpeg',
-//                     quality
-//                 );
-//             };
-
-//             attemptResize();
-//         };
-//         img.onerror = (error) => {
-//             console.error('Error in resizing image: ', error);
-//         };
-//     }
-
-//     const handleSubmit = async (event) => {
-//         event.preventDefault();
-//         if (!imageUploads) return;
-
-//         console.log("버튼 눌림")
-//         const maxWidth = 850;
-//         const maxHeight = 650;
-//         const maxFileSize = 1000 * 1024;
-    
-//         try {
-//             const uploadPromises = imageUploads.map((imageUpload) => {
-//                 return new Promise((resolve, reject) => {
-//                     resizeImageToMaxSize(
-//                         imageUpload,
-//                         maxWidth,
-//                         maxHeight,
-//                         maxFileSize,
-//                         async (resizedFile) => {
-//                             try {
-//                                 const imageRef = projectStorage.ref(`/${title}_${uuid}/${imageUpload.name}`);
-//                                 await imageRef.put(resizedFile);
-//                                 const url = await imageRef.getDownloadURL();
-//                                 resolve(url);
-//                             } catch (error) {
-//                                 reject(error);
-//                             }
-//                         }
-//                     );
-//                 });
-//             });
-    
-//             const urls = await Promise.all(uploadPromises);
-
-//             setImageTofirestore(urls)
-           
-//             doAction(); // 모든 이미지 업로드 후 doAction 호출
-        
-//         } catch (error) {
-//             console.error("Error uploading images: ", error);
-//         }
-//     };
-
-//     const currentIndexMinus = () => {
-//         setCurrentIndex((prev) => prev - 1);
-//     };
-
-//     const currentIndexPlus = () => {
-//         setCurrentIndex((prev) => prev + 1);
-//     };
-
-//     const handleImageClick = () => {
-//         fileInputRef.current.click();
-//     };
-
-//     const handleImageChange = (event) => {
-//         const file = event.target.files[0];
-//         console.log(file);
-//         setImageUploads((prev) => [...prev, file]); // 프리뷰 되면 이미지 업로드
-
-//         if (file && file.type.match('image.*')) {
-//             const reader = new FileReader();
-//             reader.onload = (e) => {
-//                 setImagePreviews((prev) => [...prev, e.target.result]); // 이 결과를 `src`로 사용하여 이미지 미리보기를 보여줍니다.
-//                 setUploadImageCount((prev) => prev + 1);
-//             };
-//             reader.readAsDataURL(file);
-//         }
-//     };
-
-//     const deleteFromPreviewArray = () => {
-
-//         const newArray = [
-//             ...imagePreviews.slice(0, currentIndex),
-//             ...imagePreviews.slice(currentIndex + 1),
-//         ];
-//         setImagePreviews(newArray); // 프리뷰 배열에서 삭제
-
-//         const newUploadImages =[
-//             ...imageUploads.slice(0,currentIndex),
-//             ...imageUploads.slice(currentIndex+1)
-//         ]
-//         setImageUploads(newUploadImages) // 삭제되면 업로드 이미지 배열에서도 삭제
-//         setUploadImageCount((prev) => prev - 1);
-
-//     };
-
-
-
-//     return (
-//         <>
-//             <form className={style.form} onSubmit={handleSubmit}>
-//                 <input
-//                     type="file"
-//                     className={style.fileInput}
-//                     ref={fileInputRef}
-//                     onChange={handleImageChange}
-//                 />
-
-//                 <div className={style.imageContainer}>
-//                     {currentIndex > 0 && (
-//                         <img
-//                             src={leftArrow}
-//                             onClick={currentIndexMinus}
-//                             className={style.left}
-//                         />
-//                     )}
-//                     <div className={style.userImageContainer}>
-//                         <img
-//                             src={imagePreviews[currentIndex] || defaultImg}
-//                             className={style.defaultImg}
-//                             onClick={handleImageClick}
-//                         />
-
-//                         {imagePreviews[currentIndex] && (
-//                             <img
-//                                 src={deleteImg}
-//                                 className={style.deleteImg}
-//                                 onClick={deleteFromPreviewArray}
-//                             />
-//                         )}
-//                     </div>
-
-//                     {currentIndex < imagePreviews.length && currentIndex < 9 && (
-//                         <img
-//                             src={rightArrow}
-//                             onClick={currentIndexPlus}
-//                             className={style.right}
-//                         />
-//                     )}
-//                 </div>
-
-//                 <p>{imagePreviews.length}/10</p>
-
-//                 <p>
-//                     <label>
-//                         <span htmlFor="title">Title</span>
-//                         <input
-//                             type="text"
-//                             value={title}
-//                             required
-//                             onChange={(event) => {
-//                                 setTitle(event.target.value);
-//                             }}
-//                         />
-//                     </label>
-//                 </p>
-//                 <p>
-//                     <label>
-//                         <span>Description:</span>
-//                         <input
-//                             type="text"
-//                             value={description}
-//                             required
-//                             onChange={(event) => {
-//                                 setDescription(event.target.value);
-//                             }}
-//                         />
-//                     </label>
-//                 </p>
-//                 <button type="submit">Save</button>
-//             </form>
-//         </>
-//     );
-// }
-
-
-export default function MarketItemForm({ doAction, data }) {
-    const [title, setTitle] = useState('');
-    useEffect(() =>{
-        if(data?.title){
-            setTitle(data.title)
+    useState(() => {
+        if (item) {
+            item.images.forEach(() => {
+                const dummy = { nama: 'dummy' };
+                setImageUploads((prev) => [...prev, dummy]);
+            });
         }
-    }, [data?.title])
-    return(
-        <form onSubmit={doAction}>
-            <p>{data ? title : null}</p>
-            <p>업데이트 나중에 다시</p>
-        </form>
-    )
+    }, [item.images]);
+
+    const addCondition = () => {
+        const newConditionId = conditions.length + 1;
+        setConditions([...conditions, { id: newConditionId }]);
+    };
+
+    const updateCondition = (id, newValue) => {
+        const updatedConditions = conditions.map((condition) => {
+            if (condition.id === id) {
+                return { ...condition, value: newValue };
+            }
+            return condition;
+        });
+        setConditions(updatedConditions);
+    };
+
+    const deleteCondition = (id) => {
+        const updatedConditions = conditions.filter(
+            (condition) => condition.id !== id
+        );
+        setConditions(updatedConditions);
+    };
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+
+        const finalimages = await editImagesOnStorage(
+            editImagePreviews,
+            item.bucket,
+            deletedImages
+        );
+
+        await doAction(title, conditions, description, finalimages);
+
+        // setResponse()
+    };
+
+    const handleImageChange = (event) => {
+        const file = event.target.files[0];
+        setImageUploads((prev) => [...prev, file]);
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const newPreview = {
+                url: event.target.result,
+                name: null,
+                file: file,
+            };
+            console.log(newPreview);
+
+            setEditImagePreviews((prev) => [...prev, newPreview]);
+        };
+        reader.readAsDataURL(file);
+    };
+
+    const deleteImage = () => {
+        setDeletedImages((prev) => [...prev, editImagePreviews[currentIndex]]);
+
+        const newArray = [
+            ...editImagePreviews.slice(0, currentIndex),
+            ...editImagePreviews.slice(currentIndex + 1),
+        ];
+        setEditImagePreviews(newArray);
+        const newUploadImages = [
+            ...imageUploads.slice(0, currentIndex),
+            ...imageUploads.slice(currentIndex + 1),
+        ];
+        setImageUploads(newUploadImages);
+    };
+
+    const handleImageClick = () => {
+        fileInputRef.current.click();
+    };
+
+    return (
+        <>
+            <form
+                onSubmit={handleSubmit}
+                className="pt-32 flex flex-col items-center justify-between space-y-5 mb-10"
+            >
+                <div className="flex items-center lg:w-1/3 justify-center w-3/4">
+                    <div
+                        type="button"
+                        onClick={() => setCurrentIndex((prev) => prev - 1)}
+                        className="size-14"
+                    >
+                        {currentIndex > 0 && (
+                            <FcPrevious className="size-full" />
+                        )}
+                    </div>
+                    <div className="w-full items-center justify-center flex">
+                        <div className="lg:w-11/12 border rounded-lg border-stone-300 w-full h-96 transform flex items-center justify-center">
+                            <div className="absolute size-10 hover:scale-90 top-[2%] right-[2%]">
+                                {editImagePreviews[currentIndex] && (
+                                    <TiDeleteOutline
+                                        className="size-full"
+                                        type="button"
+                                        onClick={() => deleteImage()}
+                                    />
+                                )}
+                            </div>
+                            <input
+                                type="file"
+                                onChange={handleImageChange}
+                                ref={fileInputRef}
+                                className="hidden"
+                            />
+
+                            {editImagePreviews[currentIndex] && (
+                                <img
+                                    className="w-full h-full"
+                                    src={editImagePreviews[currentIndex].url}
+                                />
+                            )}
+                            {!editImagePreviews[currentIndex] && (
+                                <div className="flex items-center justify-center">
+                                    <FcAddImage
+                                        className="size-28 hover:scale-110"
+                                        onClick={handleImageClick}
+                                    />
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    <div
+                        type="button"
+                        onClick={() => setCurrentIndex((prev) => prev + 1)}
+                        className="size-14"
+                    >
+                        {currentIndex < 10 &&
+                            editImagePreviews[currentIndex] && (
+                                <FcNext className="size-full" />
+                            )}
+                    </div>
+                </div>
+
+                <div className="text-center font-bold">
+                    {currentIndex + 1}/10{' '}
+                </div>
+
+                {/* <label className="border  p-2 rounded-lg border-black "> */}
+                <label className="text-left w-3/5 lg:hidden text-base italic">
+                    Title
+                </label>
+                <button
+                    type="button"
+                    className="border bg-red-100"
+                    onClick={() => console.log(editImagePreviews)}
+                >
+                    Check
+                </button>
+                <input
+                    type="text"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    placeholder="Title"
+                    className="lg:w-1/4 w-3/5 placeholder:text-transparent lg:placeholder:text-slate-400 border border-black rounded-md p-2 focus:outline-none placeholder:italic placeholder:text-slate-400 shadow-sm focus:border focus:border-sky-500 focus-ring-1"
+                />
+
+                {condition && (
+                    <div className="lg:w-1/4 w-3/5 space-y-2">
+                        {conditions.map((condition) => (
+                            <div key={condition.id}>
+                                <ConditionForm
+                                    id={condition.id}
+                                    updateCondition={updateCondition}
+                                    deleteCondition={deleteCondition}
+                                />
+                            </div>
+                        ))}
+                        {conditions.length < 3 && (
+                            <div className="flex items-end justify-end">
+                                <button
+                                    type="button"
+                                    className="border hover:scale-90 transition border-stone-300 rounded-lg hover:bg-stone-300 p-1 text-sm italic"
+                                    onClick={addCondition}
+                                >
+                                    Add Conditions
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                )}
+
+                {/* </label> */}
+                <label className="text-left w-3/5 lg:hidden text-base italic">
+                    Description
+                </label>
+                <textarea
+                    className="placeholder:text-transparent w-3/5 text-sm lg:w-1/4 lg:placeholder:text-slate-400 size-min border  h-36 p-2 rounded-lg border-black  focus:outline-none placeholder:italic placeholder:text-slate-400 shadow-sm focus:border focus:border-sky-500 focus-ring-1"
+                    onChange={(e) => setDescription(e.target.value)}
+                    placeholder="Descriptions..."
+                    value={description}
+                />
+
+                <button className="border hover:bg-blue-200 p-2 hover:scale-90 transition rounded-lg ">
+                    save
+                </button>
+            </form>
+        </>
+    );
 }

@@ -30,6 +30,8 @@ export default function ItemAddForm({
     const modal = useRef();
     const navigate = useNavigate();
 
+    const [imageRefs, setImageRefs] = useState([]);
+
     const addCondition = () => {
         const newConditionId = conditions.length + 1;
         setConditions([...conditions, { id: newConditionId }]);
@@ -58,32 +60,6 @@ export default function ItemAddForm({
         modal.current.open();
         setIsLoading(true);
         const uuid = uuidv4();
-        // const maxWidth = 850;
-        // const maxHeight = 650;
-        // const maxFileSize = 10000 * 1024;
-
-        // // const uploadPromises = imageUploads.map((imageUpload) => {
-        // //     return new Promise((resolve, reject) => {
-        // //         resizeImageToMaxSize(
-        // //             imageUpload,
-        // //             maxWidth,
-        // //             maxHeight,
-        // //             maxFileSize,
-        // //             async (resizedFile) => {
-        // //                 try {
-        // //                     const imageRef = projectStorage.ref(
-        // //                         `/${Topic}/${title}_${uuid}/${imageUpload.name}`
-        // //                     );
-        // //                     await imageRef.put(resizedFile);
-        // //                     const url = await imageRef.getDownloadURL();
-        // //                     resolve(url);
-        // //                 } catch (error) {
-        // //                     reject(error);
-        // //                 }
-        // //             }
-        // //         );
-        // //     });
-        // // });
 
         let uploadPromises = imageUploads.map(async (imageUpload) => {
             try {
@@ -91,7 +67,9 @@ export default function ItemAddForm({
                     `/${Topic}/${title}_${uuid}/${imageUpload.name}`
                 );
                 await imageRef.put(imageUpload); // 이미지 업로드를 기다립니다.
-                return await imageRef.getDownloadURL(); // 업로드된 이미지의 URL을 반환합니다.
+                setImageRefs((prev) => [...prev, imageRef]);
+                const url = await imageRef.getDownloadURL();
+                return { url: url, name: imageUpload.name }; // 업로드된 이미지의 URL을 반환합니다.
             } catch (error) {
                 console.log(error);
                 return null; // 에러가 발생한 경우 null을 반환합니다.
@@ -100,12 +78,14 @@ export default function ItemAddForm({
 
         let images = await Promise.all(uploadPromises);
         // const urls = await Promise.all(uploadPromises);
+        console.log(images);
         await addDocumentToServer(
             title,
             conditions,
             description,
             images,
-            `/${Topic}/${title}_${uuid}/`
+            `/${Topic}/${title}_${uuid}/`,
+            imageRefs
         );
     };
 
@@ -265,10 +245,7 @@ export default function ItemAddForm({
                     placeholder="Descriptions..."
                 />
 
-                <button
-                    className="border hover:bg-blue-200 p-2 hover:scale-90 transition rounded-lg "
-                    onClick={() => console.log(conditions)}
-                >
+                <button className="border hover:bg-blue-200 p-2 hover:scale-90 transition rounded-lg ">
                     save
                 </button>
             </form>
