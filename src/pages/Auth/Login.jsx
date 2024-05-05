@@ -91,15 +91,19 @@ export default function LoginPage() {
                     {isPending}
                 </p>
                 <div className="flex items-center w-full lg:w-2/5 justify-center">
-                    <div className="border w-10/12 h-11 rounded-lg bg-sky-400 font-bold text-white flex items-center justify-center ">
+                    <div className="cursor-pointer border w-10/12 h-11 rounded-lg bg-sky-400 font-bold text-white flex items-center justify-center ">
                         Sign in
                     </div>
                 </div>
 
-                <div>
-                    <div className="text-gray-500 pt-7">
-                        Sing in & Join With
-                    </div>
+                <div className="pt-7 flex flex-col justify-center items-center space-y-3">
+                    <Link to={'/signup'}>
+                        <div className=" text-sky-500 cursor-pointer">
+                            Sing Up
+                        </div>
+                    </Link>
+
+                    <div className="text-gray-500 ">Sing in & Join With</div>
                 </div>
 
                 <div className="flex justify-center space-x-5 pt-3">
