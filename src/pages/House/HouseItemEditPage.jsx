@@ -1,29 +1,28 @@
-import { useNavigate, useParams } from 'react-router-dom';
-// import { useDocument } from '../../hooks/useDocument';
 import { useFirestore } from '../../hooks/useFirestore';
-import ItemModal from '../../components/Modal/ItemStatusModal';
-import MarketItemEditForm from '../../components/MarketItem/MarketItemEditForm';
-import { useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useRef, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { getDocument } from '../../api/getDocument';
 import { readItem } from '../../store/ItemSlice';
 import { getSydneyTimeISO } from '../../util/formDate';
-import { useDispatch, useSelector } from 'react-redux';
-import { getDocument } from '../../api/getDocument';
 
-export default function MarketItemEdit() {
-    const { mitemId } = useParams();
-    // const { document, error } = useDocument('MarketItem', mitemId);
-    const { updateDocument, response, loading } = useFirestore('MarketItem');
+import MarketItemEditForm from '../../components/MarketItem/MarketItemEditForm';
+import ItemModal from '../../components/Modal/ItemStatusModal';
 
+export default function HouseItemEditPage() {
+    const { hItemId } = useParams();
+
+    const { updateDocument, response, loading } = useFirestore('HouseItem');
     const modal = useRef();
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const reduxItem = useSelector((state) => state.itemInRedux.item);
 
     useEffect(() => {
-        if (mitemId) {
+        if (hItemId) {
             const fetchData = async () => {
                 try {
-                    const data = await getDocument('MarketItem', mitemId);
+                    const data = await getDocument('HouseItem', hItemId);
                     dispatch(readItem({ item: data }));
                 } catch (error) {
                     console.error(error);
@@ -47,13 +46,13 @@ export default function MarketItemEdit() {
             location: reduxItem.location,
             createdAt: createdAt,
             userId: reduxItem.userId,
-            type: 'M_Item',
+            type: 'H_Item',
             interests: reduxItem.interests,
             numOfComment: reduxItem.numOfComment,
         };
 
         console.log(updatedItem);
-        await updateDocument(mitemId, updatedItem, 'MarketItem');
+        await updateDocument(hItemId, updatedItem, 'HouseItem');
     };
 
     return (
@@ -65,7 +64,7 @@ export default function MarketItemEdit() {
                         response={response}
                         loading={loading}
                         navigate={navigate}
-                        from={'Market'}
+                        from={'House'}
                     />
                     <MarketItemEditForm
                         doAction={doEditDocument}

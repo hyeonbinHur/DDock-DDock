@@ -33,6 +33,7 @@ import AddCommunityItemPage from './pages/Community/AddCommunityItemPage';
 import CommunityItemDetailPage from './pages/Community/CommunityItemDtail';
 import ProfileRoot from './pages/User/ProfileRoot';
 import OtherUserProfile from './pages/User/OtherUserProfile';
+import HouseItemEditPage from './pages/House/HouseItemEditPage';
 
 const queryClient = new QueryClient();
 
@@ -99,6 +100,10 @@ function App() {
                         { path: '', element: <HousePage /> },
                         { path: 'add', element: <AddHouseItemPage /> },
                         { path: ':hItemId', element: <HouseItemDetailPage /> },
+                        {
+                            path: ':hItemId/edit',
+                            element: <HouseItemEditPage />,
+                        },
                     ],
                 },
                 {
