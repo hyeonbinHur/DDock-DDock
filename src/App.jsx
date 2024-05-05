@@ -35,6 +35,7 @@ import ProfileRoot from './pages/User/ProfileRoot';
 import OtherUserProfile from './pages/User/OtherUserProfile';
 import HouseItemEditPage from './pages/House/HouseItemEditPage';
 
+import CommunityItemEditPage from './pages/Community/CommunityItemEditPage';
 const queryClient = new QueryClient();
 
 // import MarketList from './components/MarketItem/MarketItemList';
@@ -115,6 +116,10 @@ function App() {
                         {
                             path: ':cItemId',
                             element: <CommunityItemDetailPage />,
+                        },
+                        {
+                            path: ':cItemId/edit',
+                            element: <CommunityItemEditPage />,
                         },
                     ],
                 },
