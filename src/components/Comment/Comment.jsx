@@ -16,7 +16,7 @@ export default function Comment({ serverItem, collection }) {
     const { updateDocument, response } = useFirestore(collection);
     const { user } = useAuthContext();
     const { updateDocument: updateUser } = useFirestore('User');
-    const { document: userInfo } = useDocument('User', user.uid);
+    const { document: userInfo } = useDocument('User', user?.uid);
     const [comment, setComment] = useState('');
     const [clientComments, setClientComments] = useState([]);
     const dispatch = useDispatch();
@@ -35,6 +35,10 @@ export default function Comment({ serverItem, collection }) {
 
     const addComment = async (event) => {
         event.preventDefault();
+
+        if (!userInfo) {
+            return;
+        }
 
         if (comment == '') {
             textarearRef.focus();

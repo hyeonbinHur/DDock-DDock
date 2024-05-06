@@ -25,7 +25,7 @@ const ItemDeleteModal = forwardRef(function ItemStatusModal(
     const [confirm, setConfirm] = useState(false);
     const modal = useRef(null);
     const { user } = useAuthContext();
-    const { document: userInfo } = useDocument('User', user.uid);
+    const { document: userInfo } = useDocument('User', user?.uid);
     const dispatch = useDispatch();
 
     useImperativeHandle(ref, () => {

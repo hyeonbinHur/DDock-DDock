@@ -40,7 +40,7 @@ import { calculateTime } from '../../util/formDate';
 export default function CommentForm({ collection, serverItem, clientComment }) {
     const { user } = useAuthContext();
     const { updateDocument, loading } = useFirestore(collection);
-    const { document: userInfo } = useDocument('User', user.uid);
+    const { document: userInfo } = useDocument('User', user?.uid);
 
     const [addCommentLoading, setAddCommentLoading] = useState(true);
     const [openReplys, setOpenReplys] = useState(false);

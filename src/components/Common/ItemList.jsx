@@ -161,18 +161,18 @@ export default function ItemList({
                                 <ListItem item={item} topic={Topic} />
                             )}
 
-                            {userData && (
-                                <div className={itemStatusCss}>
-                                    <div className="flex mr-3">
-                                        <img
-                                            src={commentPng}
-                                            className="w-4 h-4 mr-1"
-                                        />
-                                        <span>{item.numOfComment}</span>
-                                    </div>
+                            <div className={itemStatusCss}>
+                                <div className="flex mr-3">
+                                    <img
+                                        src={commentPng}
+                                        className="w-4 h-4 mr-1"
+                                    />
+                                    <span>{item.numOfComment}</span>
+                                </div>
 
-                                    <div className="flex z-10">
-                                        {userData.interests.some(
+                                <div className="flex z-10">
+                                    {userData ? (
+                                        userData.interests.some(
                                             (each) => each.id === item.id
                                         ) ? (
                                             <img
@@ -198,16 +198,28 @@ export default function ItemList({
                                                     )
                                                 }
                                             />
-                                        )}
+                                        )
+                                    ) : (
+                                        <img
+                                            src={emptyHeart}
+                                            className="w-4 h-4 mr-1 hover:scale-110"
+                                            onClick={() =>
+                                                toggleHeart(
+                                                    item,
+                                                    collection,
+                                                    userData
+                                                )
+                                            }
+                                        />
+                                    )}
 
-                                        <span>{item.interests}</span>
-                                    </div>
-
-                                    <div className={dateContainerCss}>
-                                        <span>2 days ago</span>
-                                    </div>
+                                    <span>{item.interests}</span>
                                 </div>
-                            )}
+
+                                <div className={dateContainerCss}>
+                                    <span>2 days ago</span>
+                                </div>
+                            </div>
                         </div>
                     ))}
                 </div>

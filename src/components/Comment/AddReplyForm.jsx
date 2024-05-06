@@ -1,11 +1,16 @@
 import { useState, useRef, useEffect } from 'react';
+import { useAuthContext } from '../../hooks/useAuth';
 
 export default function AddReplyForm({ addReply }) {
     const [replyContent, setReplyContent] = useState('');
     const replyRef = useRef(null);
+    const user = useAuthContext();
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        if (!user) {
+            return;
+        }
         setReplyContent('');
         addReply(replyContent);
     };
