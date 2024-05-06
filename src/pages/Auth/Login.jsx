@@ -13,6 +13,8 @@ import googleLogo from '../../assets/logo/googleLogo.png';
 import facebookLogo from '../../assets/logo/facebookLogo.png';
 import { Link } from 'react-router-dom';
 
+import { isEmail, isNotEmpty, isPassword } from '../../util/authValid';
+
 export default function LoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -20,9 +22,15 @@ export default function LoginPage() {
     const { googleLogin } = useGoogleSignin();
     const navigate = useNavigate();
 
-    function consoleInfo(event) {
+    const emailIsInvalid = !isEmail(email) && isNotEmpty(email);
+    const passwordIsInvalid = !isPassword(password) && isNotEmpty(password);
+
+    function handleSubmit(event) {
         event.preventDefault();
-        login(email, password);
+
+        if (emailIsInvalid && passwordIsInvalid) {
+            login(email, password);
+        }
     }
 
     const goBack = () => {
@@ -30,7 +38,7 @@ export default function LoginPage() {
     };
 
     return (
-        <form onSubmit={consoleInfo} className=" w-screen h-screen">
+        <form onSubmit={handleSubmit} className=" w-screen h-screen">
             <div className="pt-5 pl-5" onClick={() => goBack()}>
                 <BiArrowBack className="size-10 text-gray-400" />
             </div>
@@ -44,12 +52,24 @@ export default function LoginPage() {
 
                 <div className="flex w-full flex-col items-center rounded-lg lg:w-2/5">
                     <div className="bg-gray-50 rounded-lg border w-10/12 p-1">
-                        <div className="flex w-full h-12 bg-gray-50 flex-cols items-center rounded-lg">
-                            <AiOutlineUser className="size-6 text-gray-500" />
+                        <div
+                            className={`${
+                                emailIsInvalid
+                                    ? `border border-red-400 text-red-400`
+                                    : ``
+                            } flex w-full h-12 bg-gray-50 flex-cols items-center `}
+                        >
+                            <AiOutlineUser
+                                className={`${
+                                    emailIsInvalid
+                                        ? `text-red-400`
+                                        : `text-gray-500`
+                                } size-6 `}
+                            />
 
                             <div className="h-5/6 w-[1px] border border-gray-300 mx-2"></div>
                             <input
-                                className="outline-none w-10/12 bg-transparent"
+                                className="outline-none w-10/12 bg-transparent "
                                 required
                                 name="email"
                                 type="email"
@@ -60,13 +80,30 @@ export default function LoginPage() {
                                 placeholder="Email"
                             />
                         </div>
+                        {emailIsInvalid && (
+                            <div className="px-10 py-2 text-sm text-red-400">
+                                Email must includes '@'
+                            </div>
+                        )}
 
                         <div className="w-full flex justify-center">
                             <div className="w-11/12 h-[1px] border border-gray-100"></div>
                         </div>
 
-                        <div className="flex w-full h-12 bg-gray-50 flex-cols items-center">
-                            <RiLockPasswordLine className="size-6 text-gray-500" />
+                        <div
+                            className={`${
+                                passwordIsInvalid
+                                    ? `border border-red-400 text-red-400`
+                                    : ``
+                            } flex w-full h-12 bg-gray-50 flex-cols items-center`}
+                        >
+                            <RiLockPasswordLine
+                                className={`${
+                                    passwordIsInvalid
+                                        ? `text-red-400`
+                                        : `text-gray-500`
+                                } size-6 `}
+                            />
                             <div className="h-5/6 w-[1px] border border-gray-300 mx-2"></div>
 
                             <input
@@ -81,6 +118,11 @@ export default function LoginPage() {
                                 placeholder="Password"
                             />
                         </div>
+                        {passwordIsInvalid && (
+                            <div className="px-10 py-2 text-sm text-red-400">
+                                Password must be longer than 7 letters
+                            </div>
+                        )}
                     </div>
                 </div>
 
@@ -89,9 +131,9 @@ export default function LoginPage() {
                     {isPending}
                 </p>
                 <div className="flex items-center w-full lg:w-2/5 justify-center">
-                    <div className="cursor-pointer border w-10/12 h-11 rounded-lg bg-sky-400 font-bold text-white flex items-center justify-center ">
+                    <button className="cursor-pointer border w-10/12 h-11 rounded-lg bg-sky-400 font-bold text-white flex items-center justify-center ">
                         Sign in
-                    </div>
+                    </button>
                 </div>
 
                 <div className="pt-7 flex flex-col justify-center items-center space-y-3">

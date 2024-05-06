@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { projectAuth } from '../firebase/config';
 import { useAuthContext } from './useAuth';
 import { useFirestore } from './useFirestore';
+import { useNavigate } from 'react-router-dom';
 
 export const useSignUp = () => {
     const [isPending, setIsPending] = useState(false);
@@ -9,6 +10,7 @@ export const useSignUp = () => {
     const { dispatch } = useAuthContext();
     const [isCancelled, setIsCancelled] = useState(true);
     const { saveUser } = useFirestore('User');
+    const navigate = useNavigate();
 
     const signUp = async (email, password, nickName) => {
         setError(null);
@@ -33,6 +35,7 @@ export const useSignUp = () => {
             if (!isCancelled) {
                 setIsPending(false);
                 setError(null);
+                navigate(-1);
             }
         } catch (error) {
             setIsPending(false);
