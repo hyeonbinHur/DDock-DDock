@@ -7,7 +7,6 @@ import { useLogin } from '../../hooks/useLogin';
 // import GoogleButton from 'react-google-button';
 import { useGoogleSignin } from '../../hooks/useGoogleSignIn';
 // import apple_logo from '../../assets/apple_logo/apple_logo.png';
-import style from './Auth.module.css';
 import { useNavigate } from 'react-router-dom';
 import pocketLogo from '../../assets/logo/logo.png';
 import googleLogo from '../../assets/logo/googleLogo.png';
@@ -23,8 +22,6 @@ export default function LoginPage() {
 
     function consoleInfo(event) {
         event.preventDefault();
-        console.log('Email : ' + email);
-        console.log('Password : ' + password);
         login(email, password);
     }
 
@@ -49,6 +46,7 @@ export default function LoginPage() {
                     <div className="bg-gray-50 rounded-lg border w-10/12 p-1">
                         <div className="flex w-full h-12 bg-gray-50 flex-cols items-center rounded-lg">
                             <AiOutlineUser className="size-6 text-gray-500" />
+
                             <div className="h-5/6 w-[1px] border border-gray-300 mx-2"></div>
                             <input
                                 className="outline-none w-10/12 bg-transparent"
@@ -109,25 +107,13 @@ export default function LoginPage() {
                 <div className="flex justify-center space-x-5 pt-3">
                     <div
                         onClick={googleLogin}
-                        className="lg:w-16 lg:h-16 w-11 h-11 flex items-center border justify-center border-gray-300 rounded-full"
+                        className="lg:w-16 lg:h-16 w-11 h-11 flex items-center border justify-center border-gray-300 rounded-full hover:scale-105"
                     >
                         <img src={googleLogo} className="w-7 lg:w-9" />
                     </div>
-                    <div className="w-10 lg:w-16 lg:h-16 ">
+                    <div className="w-10 lg:w-16 lg:h-16 hover:scale-105">
                         <img src={facebookLogo} className="w-11 lg:w-14" />
                     </div>
-                </div>
-
-                <div className={style.login_div2}>
-                    {/* <GoogleButton
-                        onClick={googleLogin}
-                        className={style.google_button}
-                    /> */}
-
-                    {/* <button className={style.apple_sign}>
-                        <img src={apple_logo} className={style.apple_button} />
-                        Sign in with Apple
-                    </button> */}
                 </div>
             </div>
         </form>

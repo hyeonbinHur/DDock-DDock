@@ -24,8 +24,7 @@ export const useLogin = () => {
             if (!isCancelled) {
                 setIsPending(false);
                 setError(null);
-                const from = document.referrer || '/';
-                navigate(from, { replace: true });
+                navigate(-1);
             }
         } catch (error) {
             if (!isCancelled) {
