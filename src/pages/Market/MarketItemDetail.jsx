@@ -23,7 +23,6 @@ export default function MarketItemDetail() {
     // const { document, error } = useDocument('MarketItem', mitemId);
     const dispatch = useDispatch();
     const { user } = useAuthContext();
-    const [imageUrls, setImageUrls] = useState([]); // 아이템 테이블에서 이미지 받아오기
     const [currentIndex, setCurrentIndex] = useState(0);
 
     const modal = useRef();
@@ -61,15 +60,15 @@ export default function MarketItemDetail() {
         }
     }, [dispatch, mitemId]);
 
-    useEffect(() => {
-        if (reduxItem?.images) {
-            const emptyArray = []; // 이거 안하면 코드 재시작할때마다 여기 들어와서 imageUrls이 버그냄
-            setImageUrls(emptyArray);
-            reduxItem.images.map((url) => {
-                setImageUrls((prev) => [...prev, url]);
-            });
-        }
-    }, [reduxItem?.images]);
+    // useEffect(() => {
+    //     if (reduxItem?.images) {
+    //         const emptyArray = []; // 이거 안하면 코드 재시작할때마다 여기 들어와서 imageUrls이 버그냄
+    //         setImageUrls(emptyArray);
+    //         reduxItem.images.map((url) => {
+    //             setImageUrls((prev) => [...prev, url]);
+    //         });
+    //     }
+    // }, [reduxItem?.images]);
 
     if (error) {
         return <div className="error">{error}</div>;
@@ -114,11 +113,11 @@ export default function MarketItemDetail() {
                                 )}
 
                                 <img
-                                    src={imageUrls[currentIndex].url}
+                                    src={reduxItem.images[currentIndex].url}
                                     className="rounded-lg w-2/3 h-full lg:w-1/3"
                                 />
 
-                                {currentIndex + 1 < imageUrls.length && (
+                                {currentIndex + 1 < reduxItem.images.length && (
                                     <button
                                         onClick={() =>
                                             setCurrentIndex((prev) => prev + 1)
@@ -129,7 +128,7 @@ export default function MarketItemDetail() {
                                 )}
                             </div>
                             <div className="flex items-center justify-center font-bold">
-                                {currentIndex + 1}/{imageUrls.length}
+                                {currentIndex + 1}/{reduxItem.images.length}
                             </div>
                         </div>
                         {/* text div*/}

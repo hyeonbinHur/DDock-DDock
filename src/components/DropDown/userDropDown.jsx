@@ -21,6 +21,9 @@ export default function UserDropDown({ user1, user2, closeDropDown }) {
     const dispatch = useDispatch();
 
     const startChatting = async () => {
+        if (!user2Data) {
+            return;
+        }
         let chatPartnerExist = false;
         let chatRoomID;
         if (user1Data && user2Data) {
