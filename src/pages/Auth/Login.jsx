@@ -29,9 +29,13 @@ export default function LoginPage() {
 
     function handleSubmit(event) {
         event.preventDefault();
+        console.log('Hello login');
 
-        if (emailIsInvalid && passwordIsInvalid) {
+        if (!emailIsInvalid && !passwordIsInvalid) {
             login(email, password);
+        } else {
+            console.log(emailIsInvalid);
+            console.log(passwordIsInvalid);
         }
     }
 

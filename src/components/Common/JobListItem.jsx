@@ -52,9 +52,7 @@ export default function JobListItem({ item, topic }) {
                 )}
 
                 <div className="font-light text-xs p-1">
-                    <span>{item.location.si} 시 </span>
-                    <span>{item.location.gu} 구 </span>
-                    <span>{item.location.dong} 동 </span>
+                    <span>{item.location.dong}</span>
                 </div>
             </div>
         </Link>

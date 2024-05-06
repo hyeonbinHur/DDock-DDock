@@ -60,8 +60,9 @@ export default function ItemList({
     }, [Topic]);
 
     useEffect(() => {
+        console.log(selectPlace);
         const emptyArray = [];
-        if (selectedPlace == 'All Items') {
+        if (selectedPlace === 'All Items') {
             setFilterByPlace(Items);
         } else {
             Items.forEach((item) => {
@@ -86,12 +87,12 @@ export default function ItemList({
         });
     }, [searchedContent, Items, filterByPlace]);
 
-    useEffect(() => {
-        if (userData?.location) {
-            setSeletedPlace(userData.location.dong);
-            // setHasedPlace(userInfo.location.dong);
-        }
-    }, [userData?.location]);
+    // useEffect(() => {
+    //     if (userData?.location) {
+    //         setSeletedPlace(userData.location.dong);
+    //         // setHasedPlace(userInfo.location.dong);
+    //     }
+    // }, [userData?.location]);
 
     const toggleHeart = async (item, collection, userData) => {
         console.log('Hello heart');

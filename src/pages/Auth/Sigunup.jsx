@@ -49,10 +49,10 @@ export default function SignUpPage() {
     function consoleInfo(event) {
         event.preventDefault();
         if (
-            emailIsInValid &&
-            passwordIsInvalid &&
-            displayNameIsInvalid &&
-            confirmIsInvalid
+            !emailIsInValid &&
+            !passwordIsInvalid &&
+            !displayNameIsInvalid &&
+            !confirmIsInvalid
         ) {
             signUp(email, password, displayName);
         }

@@ -1,5 +1,4 @@
 import { AiOutlineClose } from 'react-icons/ai';
-import style from './PrivateChattingRoom.module.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { close } from '../../store/chatRoomSlice';
 import { useDocument } from '../../hooks/useDocument';
@@ -255,20 +254,20 @@ export default function PrivateChattingRoom() {
     return (
         <div className="h-full">
             {user && currentUser && (
-                <div className="h-full">
-                    <div className="border border-separate mx-2 mb-3"></div>
+                <div className="h-full relative">
+                    {/* <div className="border border-separate mx-2"></div> */}
                     {/* chat content */}
-                    <div className="">
-                        <div className="flex justify-between rounded-t-md border-t font-bold px-4 py-2 sticky top-0 right-0 z-10 w-full bg-white">
-                            {partner && <div> {partner.displayName}</div>}
+                    <div className="flex justify-between items-center rounded-t-md border-t font-bold px-4 pb-2 mb-2 sticky top-0 z-10 w-full bg-white">
+                        {partner && <div> {partner.displayName}</div>}
+                        <p
+                            className="p-1 hover:scale-110 hover:bg-gray-200 rounded-md"
+                            onClick={closeChatRoom}
+                        >
+                            <AiOutlineClose className="size-6" />
+                        </p>
+                    </div>
 
-                            <p
-                                className="p-1 hover:scale-110 hover:bg-gray-200 rounded-md"
-                                onClick={closeChatRoom}
-                            >
-                                <AiOutlineClose className="size-6" />
-                            </p>
-                        </div>
+                    <div className="lg:h-[58%] h-[75%] overflow-auto">
                         {chatRoom?.chat.length > 0 &&
                             currentChat.length > 0 &&
                             currentChat.map((chat, index) => (
@@ -296,18 +295,17 @@ export default function PrivateChattingRoom() {
                                     )}
                                 </ul>
                             ))}
-                    </div>
 
-                    <div ref={scrollDown}></div>
-                    {/* text area */}
-                    <div className={style.chat_textfield}>
+                        <div ref={scrollDown}></div>
+                    </div>
+                    <div className="w-full sticky bottom-2">
                         <input
                             type="file"
                             className="hidden"
                             ref={fileInputRef}
                             onChange={handleImageChange}
                         />
-                        <div className="mt-8 p-3 h-36">
+                        <div className="mt-8 p-3 h-32">
                             <div className="bg-white">
                                 <textarea
                                     className="w-full h-24 p-1 outline-none"
@@ -362,6 +360,8 @@ export default function PrivateChattingRoom() {
                             sendURL={receiveURL}
                         />
                     </div>
+
+                    {/* text area */}
                 </div>
             )}
         </div>

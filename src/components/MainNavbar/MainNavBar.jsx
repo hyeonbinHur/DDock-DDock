@@ -429,7 +429,7 @@ export default function Navbar() {
                 </div>
             )}
             {openChatRoom && (
-                <div className="fixed w-screen border-l border-b h-screen bottom-[0%] no-scrollbar overflow-x-hidden rounded-t-md overflow-y-scroll bg-sky-50 z-50 lg:w-1/5 lg:h-3/5 lg:bottom-[5%] lg:left-[77%]">
+                <div className="fixed w-screen border-l border-b h-screen bottom-[0%] no-scrollbar overflow-x-hidden rounded-t-md  bg-sky-50 z-50 lg:w-1/5 lg:h-3/5 lg:bottom-[5%] lg:left-[77%]">
                     <PrivateChattingRoom />
                 </div>
             )}
