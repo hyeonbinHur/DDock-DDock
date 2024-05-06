@@ -12,6 +12,7 @@ import pocketLogo from '../../assets/logo/logo.png';
 import googleLogo from '../../assets/logo/googleLogo.png';
 import facebookLogo from '../../assets/logo/facebookLogo.png';
 import { Link } from 'react-router-dom';
+import { useFaceBookSignIn } from '../../hooks/useFacebookSingIn';
 
 import { isEmail, isNotEmpty, isPassword } from '../../util/authValid';
 
@@ -21,6 +22,7 @@ export default function LoginPage() {
     const { login, isPending, error } = useLogin();
     const { googleLogin } = useGoogleSignin();
     const navigate = useNavigate();
+    const { facebookSignIn } = useFaceBookSignIn();
 
     const emailIsInvalid = !isEmail(email) && isNotEmpty(email);
     const passwordIsInvalid = !isPassword(password) && isNotEmpty(password);
@@ -153,7 +155,10 @@ export default function LoginPage() {
                     >
                         <img src={googleLogo} className="w-7 lg:w-9" />
                     </div>
-                    <div className="w-10 lg:w-16 lg:h-16 hover:scale-105">
+                    <div
+                        onClick={facebookSignIn}
+                        className="w-10 lg:w-16 lg:h-16 hover:scale-105"
+                    >
                         <img src={facebookLogo} className="w-11 lg:w-14" />
                     </div>
                 </div>

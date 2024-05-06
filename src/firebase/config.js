@@ -16,9 +16,18 @@ firebase.initializeApp(firebaseConfig);
 
 const projectFirestore = firebase.firestore();
 const provider = new firebase.auth.GoogleAuthProvider();
+const facebookProvider = new firebase.auth.FacebookAuthProvider();
 const projectAuth = firebase.auth();
 const timestamp = firebase.firestore.Timestamp;
 const projectStorage = firebase.storage();
-const FieldValue = firebase.firestore.FieldValue
+const FieldValue = firebase.firestore.FieldValue;
 
-export { projectFirestore, projectAuth, timestamp, projectStorage, provider,FieldValue };
+export {
+    projectFirestore,
+    projectAuth,
+    facebookProvider,
+    timestamp,
+    projectStorage,
+    provider,
+    FieldValue,
+};
