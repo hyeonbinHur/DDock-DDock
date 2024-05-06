@@ -95,7 +95,10 @@ export default function ItemList({
     // }, [userData?.location]);
 
     const toggleHeart = async (item, collection, userData) => {
-        console.log('Hello heart');
+        if (!user) {
+            return;
+        }
+
         const interestIndex = userData.interests.findIndex(
             (each) => each.id == item.id
         );
