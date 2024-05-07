@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getDocument } from '../../api/getDocument';
 import { readItem } from '../../store/ItemSlice';
+import spinner4 from '../../assets/logo/spinner4.svg';
 
 import { calculateTime } from '../../util/formDate';
 import { formDate2 } from '../../util/formDate';
@@ -18,6 +19,9 @@ import { readWriter } from '../../store/ItemSlice';
 
 import UserDropDown from '../../components/DropDown/userDropDown';
 import defUser from '../../assets/user.png';
+
+import { FcPrevious } from 'react-icons/fc';
+import { FcNext } from 'react-icons/fc';
 
 export default function MarketItemDetail() {
     const { mitemId } = useParams();
@@ -74,9 +78,6 @@ export default function MarketItemDetail() {
     if (error) {
         return <div className="error">{error}</div>;
     }
-    if (isLoading) {
-        return <div className="loading">Loading...</div>;
-    }
 
     // const currentIndexMinus = () => {
     //     setCurrentIndex((prev) => prev - 1);
@@ -95,38 +96,56 @@ export default function MarketItemDetail() {
         setIsUserDropDown((prev) => !prev);
     };
 
+    if (!reduxItem) {
+        return (
+            <img
+                src={spinner4}
+                className="lg:size-72 size-52 absolute top-52 right-[27%] lg:right-[42%]"
+            />
+        );
+    }
+
     return (
         <>
             {!error ? (
                 !isLoading && reduxItem && reduxItemWriter ? (
-                    <div className="pt-36 lg:flex lg:flex-col lg:items-center lg:justify-center">
+                    <div className=" lg:flex lg:flex-col lg:items-center lg:justify-center h-full">
                         {/* images */}
-                        <div className="space-y-6 w-full h-2/3 ">
-                            <div className="flex flex-cols items-center justify-center h-5/6 w-full">
-                                {currentIndex > 0 && (
-                                    <button
-                                        onClick={() =>
-                                            setCurrentIndex((prev) => prev - 1)
-                                        }
-                                    >
-                                        prev
-                                    </button>
-                                )}
-
-                                <img
-                                    src={reduxItem.images[currentIndex].url}
-                                    className="rounded-lg w-2/3 h-full lg:w-1/3"
-                                />
-
-                                {currentIndex + 1 < reduxItem.images.length && (
-                                    <button
-                                        onClick={() =>
-                                            setCurrentIndex((prev) => prev + 1)
-                                        }
-                                    >
-                                        next
-                                    </button>
-                                )}
+                        <div className="space-y-6 w-full h-100 mt-36">
+                            <div className="w-full h-5/6  flex justify-center items-center ">
+                                <div className="w-20 flex justify-end">
+                                    {currentIndex > 0 && (
+                                        <div
+                                            onClick={() =>
+                                                setCurrentIndex(
+                                                    (prev) => prev - 1
+                                                )
+                                            }
+                                        >
+                                            <FcPrevious className="size-10" />
+                                        </div>
+                                    )}
+                                </div>
+                                <div className="rounded-lg w-2/3 h-full  lg:w-1/3">
+                                    <img
+                                        src={reduxItem.images[currentIndex].url}
+                                        className="rounded-lg w-full h-full"
+                                    />
+                                </div>
+                                <div className="w-20">
+                                    {currentIndex + 1 <
+                                        reduxItem.images.length && (
+                                        <div
+                                            onClick={() =>
+                                                setCurrentIndex(
+                                                    (prev) => prev + 1
+                                                )
+                                            }
+                                        >
+                                            <FcNext className="size-10" />
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                             <div className="flex items-center justify-center font-bold">
                                 {currentIndex + 1}/{reduxItem.images.length}

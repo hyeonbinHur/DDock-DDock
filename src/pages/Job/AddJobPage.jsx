@@ -47,6 +47,7 @@ export default function AddJobPage() {
                     response={response}
                     Topic={'Job'}
                     condition={true}
+                    user={userData}
                 />
             )}
         </>
