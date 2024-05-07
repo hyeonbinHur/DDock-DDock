@@ -17,6 +17,7 @@ import { formDate2 } from '../../util/formDate';
 import { readWriter } from '../../store/ItemSlice';
 
 import UserDropDown from '../../components/DropDown/userDropDown';
+import defUser from '../../assets/user.png';
 
 export default function MarketItemDetail() {
     const { mitemId } = useParams();
@@ -138,7 +139,10 @@ export default function MarketItemDetail() {
                                 <div className="relative">
                                     <div className="flex items-center space-x-5 space-y-3">
                                         <img
-                                            src={reduxItemWriter.Avatar}
+                                            src={
+                                                reduxItemWriter.Avatar ||
+                                                defUser
+                                            }
                                             className="rounded-full h-20 w-20"
                                             onClick={() =>
                                                 setIsUserDropDown(
@@ -196,7 +200,6 @@ export default function MarketItemDetail() {
                             <div className="border"></div>
                             {/* location */}
                             <div className="font-light text-sm flex space-x-10">
-                                <div>{reduxItem.location.gu}</div>
                                 <div>{reduxItem.location.dong}</div>
                             </div>
                             <div className="border"></div>

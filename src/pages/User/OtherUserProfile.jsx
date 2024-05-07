@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import { getDocument } from '../../api/getDocument';
 import { fetchUser } from '../../store/userSlice';
 import UserItemsPopUp from './UserItemsPopUp';
+import defUser from '../../assets/user.png';
 
 export default function OtherUserProfile() {
     const { userId } = useParams();
@@ -75,7 +76,7 @@ export default function OtherUserProfile() {
                         <div className="grid grid-cols-2">
                             <div className="flex justify-center lg:justify-end lg:pr-32">
                                 <img
-                                    src={userData.Avatar}
+                                    src={userData.Avatar || defUser}
                                     className="circle shrink-0 rounded-full lg:w-64 lg:h-64 w-40 h-40"
                                 />
                             </div>
