@@ -12,6 +12,7 @@ import PlaceSettingModal from '../Modal/PlaceSettingModal';
 import ListHeader from './ListHeader';
 import ListItem from './listItem';
 import JobListItem from './JobListItem';
+import { useNavigate } from 'react-router-dom';
 
 export default function ItemList({
     Items,
@@ -34,6 +35,8 @@ export default function ItemList({
     const [listItemContainerCss, setListItemContainerCss] = useState('');
     const [itemStatusCss, setItemStatusCss] = useState('');
     const [dateContainerCss, setDateContainerCss] = useState('');
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (Topic == 'community') {
@@ -96,6 +99,7 @@ export default function ItemList({
 
     const toggleHeart = async (item, collection, userData) => {
         if (!user) {
+            navigate('/login');
             return;
         }
 

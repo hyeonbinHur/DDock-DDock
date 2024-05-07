@@ -1,14 +1,17 @@
 import { useState, useRef, useEffect } from 'react';
 import { useAuthContext } from '../../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 
 export default function AddReplyForm({ addReply }) {
     const [replyContent, setReplyContent] = useState('');
     const replyRef = useRef(null);
     const user = useAuthContext();
+    const navigate = useNavigate();
 
     const handleSubmit = (event) => {
         event.preventDefault();
         if (!user) {
+            navigate('/login');
             return;
         }
         setReplyContent('');

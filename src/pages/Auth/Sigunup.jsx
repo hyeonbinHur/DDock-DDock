@@ -13,6 +13,9 @@ import { AiOutlineUser } from 'react-icons/ai';
 import { Link } from 'react-router-dom';
 import { BiArrowBack } from 'react-icons/bi';
 import { RiLockPasswordLine } from 'react-icons/ri';
+import { useFaceBookSignIn } from '../../hooks/useFacebookSingIn';
+
+import spinner4 from '../../assets/logo/spinner4.svg';
 
 import {
     isEmail,
@@ -27,9 +30,10 @@ export default function SignUpPage() {
     const [password, setPassword] = useState('');
     const [displayName, setDisplayName] = useState('');
     const { signUp, error, isPending } = useSignUp();
-    const { googleLogin } = useGoogleSignin();
+    const { googleLogin, googleIsPending } = useGoogleSignin();
     const [confirmPassword, setConfirmPassword] = useState('');
     const modal = useRef();
+    const { facebookSignIn, facebookIsPending } = useFaceBookSignIn();
 
     // const [emailIsInValid, setEmailIsInvalid] = useState(false);
     // const [passwordIsInvalid, setPasswordIsInvalid] = useState(false);
@@ -69,6 +73,15 @@ export default function SignUpPage() {
     const goBack = () => {
         navigate(-1); // 이전 페이지로 돌아가기
     };
+
+    if (isPending || googleIsPending || facebookIsPending) {
+        return (
+            <img
+                src={spinner4}
+                className="size-72 absolute top-52 right-[42%]"
+            />
+        );
+    }
 
     return (
         <div>
@@ -260,7 +273,10 @@ export default function SignUpPage() {
                         >
                             <img src={googleLogo} className="w-7 lg:w-9" />
                         </div>
-                        <div className="w-10 lg:w-16 lg:h-16 hover:scale-105">
+                        <div
+                            onClick={() => facebookSignIn()}
+                            className="w-10 lg:w-16 lg:h-16 hover:scale-105"
+                        >
                             <img src={facebookLogo} className="w-11 lg:w-14" />
                         </div>
                     </div>

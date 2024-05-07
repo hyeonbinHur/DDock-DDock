@@ -22,6 +22,7 @@ export const useGoogleSignin = () => {
             if (!res) {
                 console.log('구글 로그인 에러 씨발');
             }
+
             await saveUser(res.user);
 
             dispatch({ type: 'LOGIN', payload: res.user });

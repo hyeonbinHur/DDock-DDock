@@ -2,9 +2,9 @@ import { AiFillCaretUp } from 'react-icons/ai';
 import { AiFillCaretDown } from 'react-icons/ai';
 import { useEffect, useState } from 'react';
 import search from '../../assets/vector/search.png';
-import { Link } from 'react-router-dom';
 import style from './ListHeader.module.css';
-
+import { useAuthContext } from '../../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 // Props를 객체 구조 분해를 사용해 정의
 export default function ListHeader({
     updateSearchContent,
@@ -16,6 +16,8 @@ export default function ListHeader({
     const [buttonStyleCss, setButtonStyleCss] = useState('');
     const [selectPlace, setSelectedPlace] = useState('All Items');
     const [showPlaceMenu, setShowPlaceMenu] = useState(false);
+    const { user } = useAuthContext();
+    const navigate = useNavigate();
     useEffect(() => {
         console.log(topic);
         if (topic === 'community') {
@@ -41,6 +43,14 @@ export default function ListHeader({
         selectPlaceFn(value);
     };
 
+    const navigateToAdd = () => {
+        if (!user) {
+            navigate(`/login`);
+        } else {
+            navigate(`/${topic}/add`);
+        }
+    };
+
     return (
         <div className="top-24 w-full z-10 bg-white">
             <div className="pl-44 w-full bg-white">
@@ -63,8 +73,11 @@ export default function ListHeader({
                         <div className={buttonStyleCss}>
                             <button onClick={modalOpenFn}>Set position</button>
                         </div>
-                        <div className={buttonStyleCss}>
-                            <Link to={`/${topic}/add`}>Add item</Link>
+                        <div
+                            className={buttonStyleCss}
+                            onClick={() => navigateToAdd()}
+                        >
+                            Add item
                         </div>
                     </div>
                 </div>

@@ -1,4 +1,4 @@
-import { Fragment, useRef, useEffect } from 'react';
+import { Fragment } from 'react';
 import './App.css';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import RootLayout from './pages/Roots';
@@ -13,8 +13,6 @@ import LoginPage from './pages/Auth/Login';
 import MarketItemEdit from './pages/Market/MarketItemEdit';
 import MarketItemAdd from './pages/Market/MarketItemAdd';
 import MarketItemDetail from './pages/Market/MarketItemDetail';
-import { useAuthContext } from './hooks/useAuth';
-import DisplayNameModal from './components/Modal/DisplayNameModal';
 import ProfilePage from './pages/User/Profile';
 import Memo from '../src/pages/Memo';
 import ErrorPage from './pages/error/ErrorPage';
@@ -41,8 +39,6 @@ const queryClient = new QueryClient();
 // import MarketList from './components/MarketItem/MarketItemList';
 
 function App() {
-    const { user } = useAuthContext();
-    const modal = useRef();
     const router = createBrowserRouter([
         {
             path: '/',
@@ -126,20 +122,12 @@ function App() {
         },
     ]);
 
-    useEffect(() => {
-        if (user && !user.displayName) {
-            console.log(user);
-            modal.current.open();
-        }
-    }, [user]);
-
     return (
         <Fragment>
             <QueryClientProvider client={queryClient}>
                 <main>
                     <RouterProvider router={router} />
                 </main>
-                <DisplayNameModal user={user} ref={modal} />
             </QueryClientProvider>
         </Fragment>
     );

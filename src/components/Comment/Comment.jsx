@@ -11,6 +11,7 @@ import { getSydneyTimeISO } from '../../util/formDate';
 import { addCommentOnJCollection } from '../../store/jobCollectionSlice';
 import { addCommentOnHCollection } from '../../store/houseCollectionSilce';
 import { addCommentOnCCollection } from '../../store/communityCollectionSlice';
+import { useNavigate } from 'react-router-dom';
 
 export default function Comment({ serverItem, collection }) {
     const { updateDocument, response } = useFirestore(collection);
@@ -21,6 +22,7 @@ export default function Comment({ serverItem, collection }) {
     const [clientComments, setClientComments] = useState([]);
     const dispatch = useDispatch();
     const textarearRef = useRef(null);
+    const navigate = useNavigate();
     useEffect(() => {
         if (textarearRef.current) {
             textarearRef.current.style.height = 'auto';
@@ -37,6 +39,7 @@ export default function Comment({ serverItem, collection }) {
         event.preventDefault();
 
         if (!userInfo) {
+            navigate('/login');
             return;
         }
 
