@@ -78,7 +78,7 @@ export default function SignUpPage() {
         return (
             <img
                 src={spinner4}
-                className="size-72 absolute top-52 right-[42%]"
+                className="lg:size-72 size-52 absolute top-52 right-[27%] lg:right-[42%]"
             />
         );
     }

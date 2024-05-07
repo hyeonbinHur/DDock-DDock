@@ -50,6 +50,7 @@ export default function AddMarketItem() {
                     response={response}
                     Topic={'Market'}
                     condition={false}
+                    user={userData}
                 />
             )}
         </>

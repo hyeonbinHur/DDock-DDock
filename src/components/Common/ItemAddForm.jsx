@@ -12,12 +12,14 @@ import { projectStorage } from '../../firebase/config';
 import ItemModal from '../Modal/ItemStatusModal';
 import { useNavigate } from 'react-router-dom';
 import ConditionForm from './ConditionForm';
+import PlaceSettingModal from '../Modal/PlaceSettingModal';
 
 export default function ItemAddForm({
     addDocumentToServer,
     response,
     Topic,
     condition,
+    user,
 }) {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
@@ -29,9 +31,10 @@ export default function ItemAddForm({
     const [isLoading, setIsLoading] = useState(false);
     const modal = useRef();
     const navigate = useNavigate();
-
+    const placeModal = useRef();
     const [imageRefs, setImageRefs] = useState([]);
-
+    const [location, setLocation] = useState(user.location.dong);
+    console.log(location);
     const addCondition = () => {
         const newConditionId = conditions.length + 1;
         setConditions([...conditions, { id: newConditionId }]);
@@ -57,6 +60,11 @@ export default function ItemAddForm({
     const handleSubmit = async (event) => {
         event.preventDefault();
         if (!imageUploads) return;
+        if (location === '') {
+            placeModal.current.open();
+            return;
+        }
+
         modal.current.open();
         setIsLoading(true);
         const uuid = uuidv4();
@@ -87,6 +95,9 @@ export default function ItemAddForm({
             `/${Topic}/${title}_${uuid}/`,
             imageRefs
         );
+    };
+    const changeLocation = (dong) => {
+        setLocation(dong);
     };
 
     const handleImageChange = (event) => {
@@ -260,6 +271,11 @@ export default function ItemAddForm({
                 loading={isLoading}
                 navigate={navigate}
                 from={Topic}
+            />
+            <PlaceSettingModal
+                ref={placeModal}
+                placeSettingFn={changeLocation}
+                user={user}
             />
         </>
     );
