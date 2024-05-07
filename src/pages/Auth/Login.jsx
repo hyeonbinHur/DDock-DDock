@@ -13,16 +13,16 @@ import googleLogo from '../../assets/logo/googleLogo.png';
 import facebookLogo from '../../assets/logo/facebookLogo.png';
 import { Link } from 'react-router-dom';
 import { useFaceBookSignIn } from '../../hooks/useFacebookSingIn';
-
+import spinner4 from '../../assets/logo/spinner4.svg';
 import { isEmail, isNotEmpty, isPassword } from '../../util/authValid';
 
 export default function LoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const { login, isPending, error } = useLogin();
-    const { googleLogin } = useGoogleSignin();
+    const { googleLogin, googleIsPending } = useGoogleSignin();
     const navigate = useNavigate();
-    const { facebookSignIn } = useFaceBookSignIn();
+    const { facebookSignIn, facebookIsPending } = useFaceBookSignIn();
 
     const emailIsInvalid = !isEmail(email) && isNotEmpty(email);
     const passwordIsInvalid = !isPassword(password) && isNotEmpty(password);
@@ -33,15 +33,21 @@ export default function LoginPage() {
 
         if (!emailIsInvalid && !passwordIsInvalid) {
             login(email, password);
-        } else {
-            console.log(emailIsInvalid);
-            console.log(passwordIsInvalid);
         }
     }
 
     const goBack = () => {
         navigate(-1); // 이전 페이지로 돌아가기
     };
+
+    if (isPending || googleIsPending || facebookIsPending) {
+        return (
+            <img
+                src={spinner4}
+                className="size-72 absolute top-52 right-[42%]"
+            />
+        );
+    }
 
     return (
         <form onSubmit={handleSubmit} className=" w-screen h-screen">
@@ -132,10 +138,12 @@ export default function LoginPage() {
                     </div>
                 </div>
 
-                <p>
-                    {error}
-                    {isPending}
-                </p>
+                {error === 'auth/internal-error' && (
+                    <div className="text-red-400">
+                        Please check your ID and Password
+                    </div>
+                )}
+
                 <div className="flex items-center w-full lg:w-2/5 justify-center">
                     <button className="cursor-pointer border w-10/12 h-11 rounded-lg bg-sky-400 font-bold text-white flex items-center justify-center ">
                         Sign in

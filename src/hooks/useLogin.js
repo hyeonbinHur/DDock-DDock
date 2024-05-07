@@ -12,13 +12,13 @@ export const useLogin = () => {
 
     const login = async (email, password) => {
         try {
+            setError(null);
+            setIsPending(true);
             const res = await projectAuth.signInWithEmailAndPassword(
                 email,
                 password
             );
 
-            setError(null);
-            setIsPending(true);
             dispatch({ type: 'LOGIN', payload: res.user });
 
             if (!isCancelled) {
@@ -29,7 +29,8 @@ export const useLogin = () => {
         } catch (error) {
             if (!isCancelled) {
                 setIsPending(false);
-                setError(error.message);
+                setError(error.code);
+                console.error(error.code);
             }
         }
     };

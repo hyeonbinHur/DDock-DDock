@@ -50,25 +50,6 @@ function App() {
             errorElement: <ErrorPage />,
             children: [
                 { path: '', element: <HomePage /> },
-                // {
-                //     path: 'market',
-                //     element: <MarketRoot />,
-                //     children: [
-                //         { path: '', element: <MarketPage /> },
-                //         {
-                //             path: ':mitemId',
-                //             children: [
-                //                 { index: true, element: <MarketItemDetail /> },
-                //                 {
-                //                     path: 'mupdate',
-                //                     element: <MarketItemEdit />,
-                //                 },
-                //             ],
-                //         },
-                //         { path: 'mupload', element: <MarketItemAdd /> },
-                //     ],
-                // },
-
                 {
                     path: 'market',
                     element: <MarketRoot />,
