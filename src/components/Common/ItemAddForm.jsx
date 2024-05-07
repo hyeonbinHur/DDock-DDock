@@ -214,6 +214,27 @@ export default function ItemAddForm({
                 <div className="text-center font-bold">
                     {currentIndex + 1}/10{' '}
                 </div>
+                <div className="w-3/5 lg:w-1/4 lg:flex justify-between">
+                    <div>
+                        <span className="text-base italic text-gray-400 pr-3">
+                            Place :
+                        </span>
+                        {location != '' ? (
+                            location
+                        ) : (
+                            <span className="text-red-400">
+                                Please set location
+                            </span>
+                        )}
+                    </div>
+
+                    <div
+                        onClick={() => placeModal.current.open()}
+                        className="border px-2 py-1 rounded-lg border-green-200 font-bold text-base hover:bg-green-500 hover:scale-90"
+                    >
+                        {location != '' ? 'Change' : 'Set Location'}
+                    </div>
+                </div>
 
                 {/* <label className="border  p-2 rounded-lg border-black "> */}
                 <label className="text-left w-3/5 lg:hidden text-base italic">
