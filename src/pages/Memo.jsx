@@ -19,8 +19,6 @@ export default function Memo() {
                 <div>01</div>
                 <div>01</div>
             </div>
-
-           
         </>
     );
 }
