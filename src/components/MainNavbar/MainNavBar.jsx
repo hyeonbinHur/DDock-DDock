@@ -253,6 +253,7 @@ export default function Navbar() {
                                         <NavLink
                                             className="p-3"
                                             to={`/profile/${user.uid}`}
+                                            onClick={() => closeMenu()}
                                         >
                                             Profile
                                         </NavLink>

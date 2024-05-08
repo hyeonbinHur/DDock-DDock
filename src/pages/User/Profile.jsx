@@ -21,6 +21,8 @@ import { projectStorage } from '../../firebase/config';
 import { v4 as uuidv4 } from 'uuid';
 // import InterestsItemModal from './interestsModal';
 import UserItemsPopUp from './UserItemsPopUp';
+import { useAuthContext } from '../../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 
 export default function ProfilePage() {
     const { userId } = useParams(); //꼭 필요
@@ -53,6 +55,14 @@ export default function ProfilePage() {
     const [isCommunityOpen, setIsCommunityOpen] = useState(false);
     const [isCommentOpen, setIsCommpentOpen] = useState(false);
     const [imageLoading, setImageloading] = useState(false);
+    const { user: online } = useAuthContext();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!online) {
+            navigate('/');
+        }
+    }, [navigate, online]);
 
     // function openConfirmModal() {
     //     if (modal.current) {
