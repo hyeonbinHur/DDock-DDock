@@ -1,11 +1,15 @@
+import { AiOutlineClose } from 'react-icons/ai';
+import { TbFaceIdError } from 'react-icons/tb';
 import { forwardRef, useImperativeHandle, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import spinner from '../../assets/spinner.svg';
+import spinner4 from '../../assets/logo/spinner4.svg';
+import { useNavigate } from 'react-router-dom';
 
 const ItemModal = forwardRef(function ItemStatusModal(
     { response, loading, from, navigate },
     ref
 ) {
+    const CloseNavigate = useNavigate();
     const modal = useRef(null);
     useImperativeHandle(ref, () => {
         return {
@@ -19,7 +23,6 @@ const ItemModal = forwardRef(function ItemStatusModal(
         if (response.success === true) {
             const timer = setTimeout(() => {
                 modal.current.close();
-
                 if (from === 'Market') {
                     navigate('/market');
                 } else if (from === 'Job') {
@@ -36,19 +39,24 @@ const ItemModal = forwardRef(function ItemStatusModal(
 
     return createPortal(
         <div>
-            <dialog ref={modal}>
-                {loading === true && response.success === false && (
-                    <img src={spinner} />
-                )}
+            <dialog ref={modal} className="rounded-lg">
+                {loading === true && <img src={spinner4} />}
                 {loading === false && response.success === true && (
                     <p>성공~!</p>
                 )}{' '}
                 {loading === false && response.success === false && (
-                    <p>실패~!</p>
+                    <div className="rounded-lg p-2 w-52 h-52 space-y-2 border-2 border-red-500">
+                        <div className="flex justify-end items-end">
+                            <AiOutlineClose onClick={() => CloseNavigate(-1)} />
+                        </div>
+                        <div className="flex flex-col items-center">
+                            <TbFaceIdError className="size-20 text-red-400" />
+                            <p>An error has occurred. </p>
+                            <p>Please try again later.</p>
+                        </div>
+                    </div>
                 )}
-                <form method="dialog">
-                    <button>close</button>
-                </form>
+                <form method="dialog"></form>
             </dialog>
         </div>,
         document.getElementById('modal')

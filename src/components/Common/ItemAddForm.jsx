@@ -2,7 +2,7 @@ import { FcAddImage } from 'react-icons/fc';
 import { TiDeleteOutline } from 'react-icons/ti';
 import { FcPrevious } from 'react-icons/fc';
 import { FcNext } from 'react-icons/fc';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import style from './ItemAddForm.module.css';
 // import defaultImg from '../../assets/defaultImg.png';
 import { v4 as uuidv4 } from 'uuid';
@@ -34,7 +34,13 @@ export default function ItemAddForm({
     const placeModal = useRef();
     const [imageRefs, setImageRefs] = useState([]);
     const [location, setLocation] = useState(user.location.dong);
-    console.log(location);
+
+    useEffect(() => {
+        if (isLoading) {
+            modal.current.open();
+        }
+    }, [isLoading]);
+
     const addCondition = () => {
         const newConditionId = conditions.length + 1;
         setConditions([...conditions, { id: newConditionId }]);
@@ -65,7 +71,6 @@ export default function ItemAddForm({
             return;
         }
 
-        modal.current.open();
         setIsLoading(true);
         const uuid = uuidv4();
 
@@ -86,7 +91,6 @@ export default function ItemAddForm({
 
         let images = await Promise.all(uploadPromises);
         // const urls = await Promise.all(uploadPromises);
-        console.log(images);
         await addDocumentToServer(
             title,
             conditions,
@@ -96,6 +100,7 @@ export default function ItemAddForm({
             imageRefs
         );
     };
+
     const changeLocation = (dong) => {
         setLocation(dong);
     };
@@ -286,6 +291,10 @@ export default function ItemAddForm({
                 <button className="border hover:bg-blue-200 p-2 hover:scale-90 transition rounded-lg ">
                     save
                 </button>
+                <div type="button" onClick={() => modal.current.open()}>
+                    {' '}
+                    open modal{' '}
+                </div>
             </form>
             <ItemModal
                 ref={modal}
