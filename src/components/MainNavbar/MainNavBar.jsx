@@ -265,7 +265,7 @@ export default function Navbar() {
                                             onClick={activeChatList}
                                             className="p-3"
                                         >
-                                            채팅
+                                            Chatting
                                         </button>
                                     </div>
                                 </>

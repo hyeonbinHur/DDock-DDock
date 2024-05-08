@@ -1,3 +1,4 @@
+import { RiEmotionSadLine } from 'react-icons/ri';
 import UserItemCard from './UserItemCard';
 
 export default function UserItemsPopUp({ items, topic }) {
@@ -10,8 +11,9 @@ export default function UserItemsPopUp({ items, topic }) {
                     </div>
                 ))
             ) : (
-                <div className="pl-7 font-bold text-sm ">
-                    You do not have any items
+                <div className="pl-7 font-bold text-sm flex text-gray-500 space-x-5">
+                    No Posted Item Yet...
+                    <RiEmotionSadLine className="size-5" />
                 </div>
             )}
         </div>

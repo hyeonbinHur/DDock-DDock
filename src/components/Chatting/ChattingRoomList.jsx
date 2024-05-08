@@ -1,4 +1,6 @@
+import { TbBrandWechat } from 'react-icons/tb';
 import { GrClose } from 'react-icons/gr';
+
 import ChattingRoomListItem from './ChattingRoomListItem';
 
 export default function ChattingRoomList({ chatRoom, userId, closeChatRoom }) {
@@ -12,8 +14,9 @@ export default function ChattingRoomList({ chatRoom, userId, closeChatRoom }) {
                     <GrClose />
                 </div>
             </div>
+
             <div className="w-full  border-stone-400 mt-1 border-separate border"></div>
-            {document &&
+            {document && chatRoom.length > 0 ? (
                 chatRoom.map(
                     (roomInfo) =>
                         roomInfo.started === true && (
@@ -24,7 +27,14 @@ export default function ChattingRoomList({ chatRoom, userId, closeChatRoom }) {
                             />
                             // <li key={roomInfo.roomId}> Hello</li>
                         )
-                )}
+                )
+            ) : (
+                <div className="flex flex-col items-center justify-center text-center text-base text-gray-400">
+                    <TbBrandWechat className="size-10 font-light" />
+                    <p>No chats yet?</p>
+                    <p>Reach out with someone now!</p>
+                </div>
+            )}
         </div>
     );
 }
