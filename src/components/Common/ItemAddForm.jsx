@@ -146,13 +146,14 @@ export default function ItemAddForm({
                         // >
                         //     prev
                         // </button> */}
-                    <div
-                        type="button"
-                        onClick={() => setCurrentIndex((prev) => prev - 1)}
-                        className="size-14"
-                    >
+                    <div type="button" className="size-14">
                         {currentIndex > 0 && (
-                            <FcPrevious className="size-full" />
+                            <FcPrevious
+                                className="size-full"
+                                onClick={() =>
+                                    setCurrentIndex((prev) => prev - 1)
+                                }
+                            />
                         )}
                     </div>
                     <div className="w-full items-center justify-center flex">
