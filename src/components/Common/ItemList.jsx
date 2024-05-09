@@ -63,7 +63,6 @@ export default function ItemList({
     }, [Topic]);
 
     useEffect(() => {
-        console.log(selectPlace);
         const emptyArray = [];
         if (selectedPlace === 'All Items') {
             setFilterByPlace(Items);

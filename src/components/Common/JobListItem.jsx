@@ -29,11 +29,13 @@ export default function JobListItem({ item, topic }) {
                     />
                 </div>
 
-                <div className=" ml-10 mt-3 w-120 h-full space-y-5">
-                    <div className="mb-2 h-7 flex items-center space-x-5 w-2/3">
+                <div className=" ml-10 mt-3 w-120 h-full space-y-3">
+                    <div className="mb-2 h-5 flex items-centerw-2/3">
                         <div className="font-bold line-clamp-1 ">
                             {item.title}
                         </div>
+                    </div>
+                    <div className="flex space-x-5 ">
                         <div className="text-gray-500 text-xs">
                             {item.location.dong}
                         </div>
@@ -42,8 +44,19 @@ export default function JobListItem({ item, topic }) {
                         </div>
                     </div>
 
+                    {item.price && (
+                        <div className="pb-2 font-bold">
+                            {item.period && (
+                                <span className="text-xs pr-3">
+                                    {item.period}
+                                </span>
+                            )}
+                            {item.price} <span className="text-xs pl-1">$</span>
+                        </div>
+                    )}
+
                     {isCondition && (
-                        <div className="text-xs h-20 space-y-2  ">
+                        <div className="text-xs h-16 space-y-1">
                             {item.conditions.map((condition) => (
                                 <p
                                     key={condition.id}

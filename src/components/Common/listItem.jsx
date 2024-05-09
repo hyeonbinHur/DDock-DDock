@@ -32,9 +32,19 @@ export default function ListItem({ item, topic }) {
                         />
                     </div>
                     <div className="text-left p-2 w-full ">
-                        <div className="mt-3 h-10 font-bold">
+                        <div className="mt-3 h-6 font-bold">
                             <div className="line-clamp-4">{item.title}</div>
                         </div>
+                        {item.price && (
+                            <div className="pb-2 font-bold">
+                                {item.period && (
+                                    <span className="text-xs pr-3">
+                                        {item.period}
+                                    </span>
+                                )}
+                                <span className="text-xs">$</span> {item.price}
+                            </div>
+                        )}
 
                         {isCondition && (
                             <div>
@@ -52,6 +62,7 @@ export default function ListItem({ item, topic }) {
 
                         <div className="font-light text-xs p-1 flex justify-between">
                             <span>{item.location.dong} </span>
+
                             <div>
                                 {timeDif} {timeString}
                             </div>
