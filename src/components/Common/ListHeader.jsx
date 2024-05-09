@@ -19,7 +19,6 @@ export default function ListHeader({
     const { user } = useAuthContext();
     const navigate = useNavigate();
     useEffect(() => {
-        console.log(topic);
         if (topic === 'community') {
             setButtonStyleCss(style.community_container);
         } else if (topic === 'house') {

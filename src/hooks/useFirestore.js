@@ -110,10 +110,10 @@ export const useFirestore = (collection) => {
         const userData = (await userDoc).data();
 
         try {
+            console.log('doc price : ' + doc.price);
             const newDocument = await ref.add({
                 ...doc,
             });
-            console.log(newDocument.id);
 
             const reduxItem = {
                 ...doc,

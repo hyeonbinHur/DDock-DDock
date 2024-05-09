@@ -18,14 +18,17 @@ export default function AddMarketItem() {
         conditions,
         description,
         images,
-        bucket
+        bucket,
+        price
     ) => {
         if (userData) {
+            console.log('price : ' + price);
             const createdAt = getSydneyTimeISO();
             const newMItem = {
                 title,
                 description,
                 conditions,
+                price,
                 comments: [],
                 images,
                 bucket,

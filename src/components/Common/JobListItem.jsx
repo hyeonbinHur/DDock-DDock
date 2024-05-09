@@ -34,7 +34,6 @@ export default function JobListItem({ item, topic }) {
                         <div className="font-bold line-clamp-1 ">
                             {item.title}
                         </div>
-
                         <div className="text-gray-500 text-xs">
                             {item.location.dong}
                         </div>
@@ -56,11 +55,12 @@ export default function JobListItem({ item, topic }) {
                         </div>
                     )}
 
-                    <div className="">
+                    <div>
                         <p className="line-clamp-3 mb-5 mt-2 h-20 w-2/3 ">
                             {item.description}
                         </p>
                     </div>
+
                     <div className="w-full border-2 border-dotted "></div>
                 </div>
             </Link>

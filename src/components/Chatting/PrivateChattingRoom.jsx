@@ -110,7 +110,6 @@ export default function PrivateChattingRoom() {
 
     const doAction = (action) => {
         if (action === 'close') {
-            console.log('프리뷰 지움');
             setImagePreview(undefined);
             setImageUpload(undefined);
         }
@@ -140,7 +139,6 @@ export default function PrivateChattingRoom() {
             await startChat(roomId, currentUser.id, partnerId);
         }
         if (year != lastYear || month != lastMonth || day != lastDay) {
-            console.log('GM message');
             const GMmessage = {
                 content: null,
                 sender: 'GM',
@@ -237,7 +235,6 @@ export default function PrivateChattingRoom() {
     const handleImageChange = (event) => {
         const file = event.target.files[0];
         setImageUpload(file);
-        console.log(file);
         if (file && file.type.match('image.*')) {
             const reader = new FileReader();
             reader.onload = (e) => {

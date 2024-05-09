@@ -14,7 +14,9 @@ export default function AddHouseItemPage() {
         conditions,
         description,
         images,
-        bucket
+        bucket,
+        price,
+        period
     ) => {
         if (userData) {
             const createdAt = getSydneyTimeISO();
@@ -22,6 +24,8 @@ export default function AddHouseItemPage() {
                 title,
                 conditions,
                 description,
+                price,
+                period,
                 images,
                 bucket,
                 location: {
@@ -46,6 +50,7 @@ export default function AddHouseItemPage() {
                     response={response}
                     Topic={'House'}
                     condition={true}
+                    user={userData}
                 />
             )}
         </>

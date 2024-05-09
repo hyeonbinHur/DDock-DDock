@@ -15,7 +15,9 @@ export default function AddJobPage() {
         conditions,
         description,
         images,
-        bucket
+        bucket,
+        price,
+        period
     ) => {
         if (userData) {
             const createdAt = getSydneyTimeISO();
@@ -23,6 +25,8 @@ export default function AddJobPage() {
                 title,
                 conditions,
                 description,
+                price,
+                period,
                 images,
                 bucket,
                 location: {

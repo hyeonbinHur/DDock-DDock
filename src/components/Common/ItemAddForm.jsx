@@ -1,3 +1,4 @@
+import { BsCurrencyDollar } from 'react-icons/bs';
 import { FcAddImage } from 'react-icons/fc';
 import { TiDeleteOutline } from 'react-icons/ti';
 import { FcPrevious } from 'react-icons/fc';
@@ -13,6 +14,12 @@ import ItemModal from '../Modal/ItemStatusModal';
 import { useNavigate } from 'react-router-dom';
 import ConditionForm from './ConditionForm';
 import PlaceSettingModal from '../Modal/PlaceSettingModal';
+import toast, { Toaster } from 'react-hot-toast';
+const PERIOD = ['Weekly', 'Monthly', 'Annually'];
+
+const notify = (content) => {
+    toast.error(content);
+};
 
 export default function ItemAddForm({
     addDocumentToServer,
@@ -32,8 +39,14 @@ export default function ItemAddForm({
     const modal = useRef();
     const navigate = useNavigate();
     const placeModal = useRef();
-    const [imageRefs, setImageRefs] = useState([]);
     const [location, setLocation] = useState(user.location.dong);
+
+    const [price, setPrice] = useState('');
+    const [period, setPeriod] = useState('Weekly');
+
+    const handlePeriodChange = (event) => {
+        setPeriod(event.target.value);
+    };
 
     useEffect(() => {
         if (isLoading) {
@@ -66,7 +79,43 @@ export default function ItemAddForm({
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        if (!imageUploads) return;
+        if (imageUploads.length == 0) {
+            notify('Item should includes at lease 1 image');
+            return;
+        }
+        if (title == '') {
+            notify('Item Title is empty!');
+            return;
+        }
+
+        if (description == '') {
+            notify('Item Description is empty!');
+            return;
+        }
+
+        if (Topic !== 'Community') {
+            if (price.length == '') {
+                notify('Price is empty!');
+                return;
+            }
+            let cnt = 0;
+            if (Topic !== 'Market') {
+                conditions.forEach((condition) => {
+                    if (cnt != 0) {
+                        return;
+                    }
+                    if (!condition.value) {
+                        cnt++;
+                        notify('Condition is empty!');
+                        return;
+                    }
+                });
+            }
+            if (cnt != 0) {
+                return;
+            }
+        }
+
         if (location === '') {
             placeModal.current.open();
             return;
@@ -86,25 +135,54 @@ export default function ItemAddForm({
                     `/${Topic}/${title}_${uuid}/${imageUpload.name}`
                 );
                 await imageRef.put(imageUpload); // 이미지 업로드를 기다립니다.
-                setImageRefs((prev) => [...prev, imageRef]);
                 const url = await imageRef.getDownloadURL();
                 return { url: url, name: imageUpload.name }; // 업로드된 이미지의 URL을 반환합니다.
             } catch (error) {
-                console.log(error);
                 return null; // 에러가 발생한 경우 null을 반환합니다.
             }
         });
 
         let images = await Promise.all(uploadPromises);
         // const urls = await Promise.all(uploadPromises);
-        await addDocumentToServer(
-            title,
-            conditions,
-            description,
-            images,
-            `/${Topic}/${title}_${uuid}/`,
-            imageRefs
-        );
+
+        if (Topic == 'Market') {
+            await addDocumentToServer(
+                title,
+                conditions,
+                description,
+                images,
+                `/${Topic}/${title}_${uuid}/`,
+                price
+            );
+        } else if (Topic == 'Job') {
+            await addDocumentToServer(
+                title,
+                conditions,
+                description,
+                images,
+                `/${Topic}/${title}_${uuid}/`,
+                price,
+                period
+            );
+        } else if (Topic == 'House') {
+            await addDocumentToServer(
+                title,
+                conditions,
+                description,
+                images,
+                `/${Topic}/${title}_${uuid}/`,
+                price,
+                period
+            );
+        } else if (Topic == 'Community') {
+            await addDocumentToServer(
+                title,
+                conditions,
+                description,
+                images,
+                `/${Topic}/${title}_${uuid}/`
+            );
+        }
     };
 
     const changeLocation = (dong) => {
@@ -150,6 +228,9 @@ export default function ItemAddForm({
                 onSubmit={handleSubmit}
                 className="pt-32 flex flex-col items-center justify-between space-y-5 mb-10"
             >
+                <div>
+                    <Toaster />
+                </div>
                 <div className="flex items-center lg:w-1/3 justify-center w-3/4">
                     {/* // <button
                         //     type="button"
@@ -214,7 +295,7 @@ export default function ItemAddForm({
                 </div>
 
                 <div className="text-center font-bold">
-                    {currentIndex + 1}/10{' '}
+                    {currentIndex + 1}/10
                 </div>
 
                 <div className="w-3/5 lg:w-1/4 lg:flex justify-between">
@@ -242,12 +323,47 @@ export default function ItemAddForm({
                 <label className="text-left w-3/5 lg:hidden text-base italic">
                     Title
                 </label>
+
                 <input
                     type="text"
                     onChange={(e) => setTitle(e.target.value)}
                     placeholder="Title"
                     className="lg:w-1/4 w-3/5 placeholder:text-transparent lg:placeholder:text-slate-400 border border-black rounded-md p-2 focus:outline-none placeholder:italic placeholder:text-slate-400 shadow-sm focus:border focus:border-sky-500 focus-ring-1"
                 />
+                {Topic != 'Community' && (
+                    <div className="flex relative items-center lg:w-1/4 w-3/5 rounded-md">
+                        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center justify-center pl-1">
+                            <BsCurrencyDollar className="" />
+                        </div>
+
+                        <input
+                            type="number"
+                            onChange={(e) => setPrice(e.target.value)}
+                            placeholder="100"
+                            value={price}
+                            className="w-full block py-1.5 pl-7 border placeholder:text-transparent outline-none lg:placeholder:text-slate-400 rounded-md p-2 focus:outline-none placeholder:italic placeholder:text-slate-400 focus:ring-1 focus:border-sky-500"
+                        />
+                        {Topic != 'Market' ? (
+                            <div className="absolute inset-y-0 right-1 flex items-center rounded-md ">
+                                <select
+                                    className="rounded-md border-0 z-20 p-1 text-base font-gray-300"
+                                    value={period}
+                                    onChange={handlePeriodChange}
+                                >
+                                    {PERIOD.map((p) => (
+                                        <option key={p} className="rounded">
+                                            {p}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                        ) : (
+                            <div className="absolute inset-y-0 right-1 w-10 z-30 p-1">
+                                <div className="bg-white w-full h-full"></div>
+                            </div>
+                        )}
+                    </div>
+                )}
 
                 {condition && (
                     <div className="lg:w-1/4 w-3/5 space-y-2">
@@ -287,9 +403,6 @@ export default function ItemAddForm({
                 <button className="border hover:bg-blue-200 p-2 hover:scale-90 transition rounded-lg ">
                     save
                 </button>
-                <div type="button" onClick={() => modal.current.open()}>
-                    open modal
-                </div>
             </form>
             <ItemModal
                 ref={modal}
@@ -302,6 +415,8 @@ export default function ItemAddForm({
                 description={description}
                 previews={imagePreviews}
                 location={location}
+                price={price}
+                period={period}
                 confirm={postItem}
             />
             <PlaceSettingModal

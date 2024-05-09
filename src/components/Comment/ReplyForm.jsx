@@ -57,14 +57,12 @@ export default function ReplyForm({
         const commentIndex = serverItem.comments.findIndex(
             (c) => c.id === comment.id
         );
-        console.log('comment index :' + commentIndex);
         if (commentIndex !== -1) {
             const commentToUpdate = { ...serverItem.comments[commentIndex] };
             if (commentToUpdate.childComment) {
                 const replyIndex = commentToUpdate.childComment.findIndex(
                     (r) => r.id === replyId
                 );
-                console.log('replyIndex index :' + replyIndex);
 
                 if (replyIndex !== -1) {
                     // 불변성을 유지하면서 배열에서 답글 제거
@@ -72,7 +70,6 @@ export default function ReplyForm({
                         ...commentToUpdate.childComment.slice(0, replyIndex),
                         ...commentToUpdate.childComment.slice(replyIndex + 1),
                     ];
-                    console.log(updatedChildComments);
                     // 업데이트할 댓글 객체에 새로운 답글 배열 할당
 
                     const updatedComment = {
@@ -86,7 +83,6 @@ export default function ReplyForm({
                         ...serverItem.comments.slice(commentIndex + 1),
                     ];
                     const newNumOfComment = serverItem.numOfComment - 1;
-                    console.log(updatedComments);
                     await updateDocument(
                         serverItem.id,
                         {

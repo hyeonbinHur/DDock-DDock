@@ -25,11 +25,12 @@ const ItemModal = forwardRef(function ItemStatusModal(
         previews,
         location,
         confirm,
+        price,
+        period,
     },
     ref
 ) {
     // const CloseNavigate = useNavigate();
-
     const modal = useRef(null);
     const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -141,10 +142,23 @@ const ItemModal = forwardRef(function ItemStatusModal(
                                     <div className="font-bold line-clamp-1">
                                         {title}
                                     </div>
+
                                     <div className="text-sm font-light text-gray-400">
                                         {location}
                                     </div>
                                     <div className="w-full border border-gray-200 "></div>
+                                    {from !== 'Community' && (
+                                        <div className="text-sm ">
+                                            $
+                                            <span className="font-bold text-lg  ml-1 mr-3">
+                                                {price}
+                                            </span>
+                                            {from !== 'Market' && (
+                                                <span> {period}</span>
+                                            )}
+                                        </div>
+                                    )}
+
                                     {conditions.length > 0 && (
                                         // condition.map((i))
                                         <div>
@@ -158,6 +172,7 @@ const ItemModal = forwardRef(function ItemStatusModal(
                                             ))}
                                         </div>
                                     )}
+
                                     <div className="line-clamp-3">
                                         {description}
                                     </div>

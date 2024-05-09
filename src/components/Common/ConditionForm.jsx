@@ -23,6 +23,7 @@ export default function ConditionForm({
                 type="text"
                 value={inputValue}
                 onChange={handleInputChange}
+                placeholder="condition..."
             />
             <div className="hover:scale-90 cursor-pointer transition">
                 <TiDeleteOutline

@@ -14,7 +14,6 @@ export default function CurrentUserChat({ chat, partner, roomId }) {
     const [messageLoading, setMessageLoading] = useState(true);
 
     useEffect(() => {
-        console.log('읽긴함');
         if (chatRoom && partnerInfo?.unread) {
             if (
                 partnerInfo.unread.some((room) => room.roomId === chatRoom.id)

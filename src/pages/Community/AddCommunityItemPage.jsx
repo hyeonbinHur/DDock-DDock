@@ -46,6 +46,7 @@ export default function AddCommunityItemPage() {
                     response={response}
                     Topic={'Community'}
                     condition={false}
+                    user={userData}
                 />
             )}
         </>
