@@ -100,45 +100,35 @@ export function calculateTime(timestamp) {
     const sydneyDate = getSydneyTimeISO(now);
     const nowSydney = new Date(sydneyDate);
     const itemCreatedAt = new Date(timestamp);
-    const diff = nowSydney - itemCreatedAt;
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const diffhours = Math.floor(diff / (1000 * 60 * 60));
-    const diffminutes = Math.floor(diff / (1000 * 60));
+    const diff = nowSydney.getTime() - itemCreatedAt.getTime();
 
-    const hours = nowSydney.getHours().toString().padStart(2, '0');
-    const minutes = nowSydney.getMinutes().toString().padStart(2, '0');
-
-    const iHours = itemCreatedAt.getHours().toString().padStart(2, '0');
-    const iMinutes = itemCreatedAt.getMinutes().toString().padStart(2, '0');
+    const diffDays = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const diffHours = Math.floor(
+        (diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+    );
+    const diffMinutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
 
     let result = 0;
     let unit = '';
 
-    if (days > 365) {
-        result = days / 365;
-        unit = 'years ago';
-    } else if (days > 30) {
-        result = days / 30;
-        unit = 'months ago';
+    if (diffDays >= 365) {
+        result = Math.floor(diffDays / 365);
+        unit = result === 1 ? 'year ago' : 'years ago';
+    } else if (diffDays >= 30) {
+        result = Math.floor(diffDays / 30);
+        unit = result === 1 ? 'month ago' : 'months ago';
+    } else if (diffDays > 0) {
+        result = diffDays;
+        unit = result === 1 ? 'day ago' : 'days ago';
+    } else if (diffHours > 0) {
+        result = diffHours;
+        unit = result === 1 ? 'hour ago' : 'hours ago';
+    } else if (diffMinutes > 0) {
+        result = diffMinutes;
+        unit = result === 1 ? 'minute ago' : 'minutes ago';
     } else {
-        if (days == 0) {
-            if (hours != iHours) {
-                result = diffhours;
-
-                unit = 'hours ago';
-            } else {
-                if (minutes == iMinutes) {
-                    result = 1;
-                    unit = 'mins ago';
-                } else {
-                    result = diffminutes;
-                    unit = 'mins ago';
-                }
-            }
-        } else {
-            result = days;
-            unit = 'days ago';
-        }
+        result = 'just now';
+        unit = '';
     }
 
     return { result, unit };
