@@ -1,8 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { calculateTime } from '../../util/formDate';
 
 export default function ListItem({ item, topic }) {
     const [isCondition, setIsCondition] = useState(false);
+
+    const { result: timeDif, unit: timeString } = calculateTime(
+        item?.createdAt
+    );
 
     useEffect(() => {
         if (topic == 'job') {
@@ -45,8 +50,11 @@ export default function ListItem({ item, topic }) {
 
                         <div className="w-full border-dotted mb-3 border-2"></div>
 
-                        <div className="font-light text-xs p-1 ">
+                        <div className="font-light text-xs p-1 flex justify-between">
                             <span>{item.location.dong} </span>
+                            <div>
+                                {timeDif} {timeString}
+                            </div>
                         </div>
                     </div>
                 </Link>

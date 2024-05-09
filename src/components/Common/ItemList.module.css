@@ -27,7 +27,7 @@
 }
 
 .job_item_status {
-    @apply flex font-extralight ml-64 p-2;
+    @apply flex font-extralight ml-64 p-3;
 }
 .item_status {
     @apply font-extralight pl-3 pt-10 flex;

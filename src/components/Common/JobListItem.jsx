@@ -1,8 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { calculateTime } from '../../util/formDate';
 
 export default function JobListItem({ item, topic }) {
     const [isCondition, setIsCondition] = useState(false);
+
+    const { result: timeDif, unit: timeString } = calculateTime(
+        item?.createdAt
+    );
 
     useEffect(() => {
         if (topic == 'job') {
@@ -23,15 +28,23 @@ export default function JobListItem({ item, topic }) {
                         src={item.images[0].url}
                     />
                 </div>
-                <div className=" ml-10 mt-3 w-120">
-                    <div className="mb-2">
-                        <p className="font-bold line-clamp-1 w-2/3 ">
+
+                <div className=" ml-10 mt-3 w-120 h-full space-y-5">
+                    <div className="mb-2 h-7 flex items-center space-x-5 w-2/3">
+                        <div className="font-bold line-clamp-1 ">
                             {item.title}
-                        </p>
+                        </div>
+
+                        <div className="text-gray-500 text-xs">
+                            {item.location.dong}
+                        </div>
+                        <div className="text-gray-500 text-xs">
+                            {timeDif} {timeString}
+                        </div>
                     </div>
 
                     {isCondition && (
-                        <div className="text-xs h-12 ">
+                        <div className="text-xs h-20 space-y-2  ">
                             {item.conditions.map((condition) => (
                                 <p
                                     key={condition.id}
@@ -43,18 +56,12 @@ export default function JobListItem({ item, topic }) {
                         </div>
                     )}
 
-                    <div>
-                        <p className="line-clamp-3 mb-2 mt-2 h-16 w-2/3 ">
+                    <div className="">
+                        <p className="line-clamp-3 mb-5 mt-2 h-20 w-2/3 ">
                             {item.description}
                         </p>
                     </div>
-                    {topic !== 'job' && (
-                        <div className="w-full border-2 border-dotted mb-3"></div>
-                    )}
-
-                    <div className="font-light text-xs p-1">
-                        <span>{item.location.dong}</span>
-                    </div>
+                    <div className="w-full border-2 border-dotted "></div>
                 </div>
             </Link>
         )

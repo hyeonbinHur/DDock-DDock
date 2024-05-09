@@ -34,7 +34,7 @@ export default function ItemList({
     const [listItemCss, setListItemCss] = useState('');
     const [listItemContainerCss, setListItemContainerCss] = useState('');
     const [itemStatusCss, setItemStatusCss] = useState('');
-    const [dateContainerCss, setDateContainerCss] = useState('');
+    // const [dateContainerCss, setDateContainerCss] = useState('');
 
     const navigate = useNavigate();
 
@@ -43,22 +43,22 @@ export default function ItemList({
             setListItemCss(style.community_listItem_container);
             setListItemContainerCss(style.community_listItem_container_real);
             setItemStatusCss(style.item_status);
-            setDateContainerCss(style.date_container);
+            // setDateContainerCss(style.date_container);
         } else if (Topic == 'house') {
             setListItemCss(style.house_listItem_container);
             setListItemContainerCss(style.house_listItem_container_real);
             setItemStatusCss(style.item_status);
-            setDateContainerCss(style.date_container);
+            // setDateContainerCss(style.date_container);
         } else if (Topic == 'job') {
             setListItemCss(style.job_listItem_container);
             setListItemContainerCss(style.job_listItem_container_real);
             setItemStatusCss(style.job_item_status);
-            setDateContainerCss(style.job_date_container);
+            // setDateContainerCss(style.job_date_container);
         } else if (Topic == 'market') {
             setListItemCss(style.market_listItem_container);
             setListItemContainerCss(style.market_listItem_container_real);
             setItemStatusCss(style.item_status);
-            setDateContainerCss(style.date_container);
+            // setDateContainerCss(style.date_container);
         }
     }, [Topic]);
 
@@ -177,7 +177,7 @@ export default function ItemList({
                                     <span>{item.numOfComment}</span>
                                 </div>
 
-                                <div className="flex z-10">
+                                <div className="flex z-10 mx-2">
                                     {userData ? (
                                         userData.interests.some(
                                             (each) => each.id === item.id
@@ -223,9 +223,9 @@ export default function ItemList({
                                     <span>{item.interests}</span>
                                 </div>
 
-                                <div className={dateContainerCss}>
+                                {/* <div className={dateContainerCss}>
                                     <span>2 days ago</span>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                     ))}
