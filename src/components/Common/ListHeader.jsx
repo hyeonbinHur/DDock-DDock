@@ -52,14 +52,17 @@ export default function ListHeader({
 
     return (
         <div className="top-24 w-full z-10 bg-white">
-            <div className="pl-44 w-full bg-white">
-                <div className="text-4xl font-bold pb-7 uppercase">{topic}</div>
-                <div className="flex justify-between">
-                    <div className="flex w-96 mt-2 max-h-10 min-h-10 justify-between">
+            <div className="lg:pl-44 px-10 w-full bg-white">
+                <div className="lg:text-4xl text-2xl font-bold pb-7 uppercase">
+                    {topic}
+                </div>
+
+                <div className="flex justify-between ">
+                    <div className="flex lg:w-96 w-60 mt-2 max-h-10 min-h-10 justify-between">
                         <div className="flex rounded-lg w-full border-2 border-black items-center pl-2 hover:border-gray-500 hover:bg-gray-100 focus:bg-gray-100">
                             <img src={search} className="w-5 h-5 mr-2" />
                             <input
-                                className="w-full bg-transparent focus:outline-none "
+                                className="w-full bg-transparent text-sm  focus:outline-none "
                                 type="search"
                                 placeholder="Search title or description"
                                 value={searchContent}
@@ -68,7 +71,8 @@ export default function ListHeader({
                             />
                         </div>
                     </div>
-                    <div className="pr-40">
+
+                    <div className="lg:pr-40">
                         <div className={buttonStyleCss}>
                             <button onClick={modalOpenFn}>Set position</button>
                         </div>
