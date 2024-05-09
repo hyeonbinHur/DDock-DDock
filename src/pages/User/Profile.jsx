@@ -24,6 +24,8 @@ import UserItemsPopUp from './UserItemsPopUp';
 import { useAuthContext } from '../../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 
+import spinner4 from '../../assets/logo/spinner4.svg';
+
 export default function ProfilePage() {
     const { userId } = useParams(); //꼭 필요
 
@@ -57,6 +59,8 @@ export default function ProfilePage() {
     const [imageLoading, setImageloading] = useState(false);
     const { user: online } = useAuthContext();
     const navigate = useNavigate();
+
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         if (!online) {
@@ -153,6 +157,8 @@ export default function ProfilePage() {
     const uploadImage = async () => {
         if (!imageUpload) return;
 
+        setIsLoading(true);
+
         const maxWidth = 1920;
         const maxHeight = 1080;
         const maxFileSize = 500 * 1024;
@@ -161,7 +167,6 @@ export default function ProfilePage() {
             const oldImageRef = projectStorage.refFromURL(user.Avatar);
             try {
                 await oldImageRef.delete();
-                console.log('Previous image deleted successfully');
             } catch (error) {
                 console.error('Error deleting old image:', error);
             }
@@ -174,7 +179,7 @@ export default function ProfilePage() {
             maxFileSize,
             (resizedFile) => {
                 const imageRef = projectStorage.ref(
-                    `${userId}/${imageUpload.name}_${uuidv4()}`
+                    `User/${userId}/${imageUpload.name}_${uuidv4()}`
                 );
                 imageRef
                     .put(resizedFile)
@@ -189,6 +194,7 @@ export default function ProfilePage() {
                             await updateDocument(userId, updatedUser, 'User');
                             setImageUrl(url);
                             setImagePreview(undefined);
+                            setIsLoading(false);
                         });
                     })
                     .catch((error) => {
@@ -273,21 +279,30 @@ export default function ProfilePage() {
                     <div className="flex items-center justify-between px-9 mt-5">
                         <div>
                             <div className="flex transform">
-                                <img
-                                    className={style.userImage}
-                                    src={
-                                        imagePreview ||
-                                        imageUrl ||
-                                        imageLoading ||
-                                        defaultUserImg
-                                    }
-                                    onLoad={() => setImageloading(false)}
-                                    alt="Default"
-                                />
+                                {isLoading ? (
+                                    <img
+                                        className={style.userImage}
+                                        src={spinner4}
+                                        onLoad={() => setImageloading(false)}
+                                        alt="Default"
+                                    />
+                                ) : (
+                                    <img
+                                        className={style.userImage}
+                                        src={
+                                            imagePreview ||
+                                            imageUrl ||
+                                            imageLoading ||
+                                            defaultUserImg
+                                        }
+                                        onLoad={() => setImageloading(false)}
+                                        alt="Default"
+                                    />
+                                )}
 
                                 <div
                                     onClick={handleImageClick}
-                                    className="hover:scale-110 absolute rounded-full p-1 top-[80%] right-[10%] bg-gray-200 borer-5"
+                                    className="hover:scale-90 absolute rounded-full p-1 top-[80%] right-[10%] bg-gray-200 borer-5"
                                 >
                                     <TbCameraPlus className="size-9" />
                                 </div>
@@ -298,7 +313,7 @@ export default function ProfilePage() {
                             onClick={uploadImage}
                             className={`${
                                 imagePreview == undefined && `hidden`
-                            } bg-blue-100 p-2  rounded-lg shadow-md absolute top-[13%] right-[11%] cursor-pointer hover:scale-110`}
+                            } bg-blue-100 p-2  rounded-lg shadow-md absolute top-[13%] right-[11%] cursor-pointer hover:scale-90`}
                         >
                             Update
                         </div>
@@ -313,7 +328,7 @@ export default function ProfilePage() {
                                         onChange={(e) =>
                                             setNewDisplayName(e.target.value)
                                         }
-                                        className="border w-full rounded-md"
+                                        className="border w-full rounded-md px-2"
                                     ></input>
                                 </div>
                             ) : (
@@ -322,7 +337,7 @@ export default function ProfilePage() {
                         </div>
                         <div className="space-x-3">
                             <button
-                                className="border p-1 cursor-pointer hover:scale-110 rounded-lg bg-blue-200 italic"
+                                className="border p-1 cursor-pointer hover:scale-90 rounded-lg bg-blue-200 italic"
                                 onClick={() => {
                                     if (startEditDisplayName) {
                                         changeDisplayName();
@@ -340,7 +355,7 @@ export default function ProfilePage() {
                                     onClick={() =>
                                         setStartEditDisplayName(false)
                                     }
-                                    className="border p-1 cursor-pointer hover:scale-110 rounded-lg bg-red-200 italic"
+                                    className="border p-1 cursor-pointer hover:scale-90 rounded-lg bg-red-200 italic"
                                 >
                                     Cancel
                                 </button>
