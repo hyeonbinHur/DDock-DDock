@@ -133,7 +133,7 @@ const uploadImg = async (img, bucket) => {
 //     }
 // };
 
-const deleteImg = async (name, bucket) => {
+export const deleteImg = async (name, bucket) => {
     const imageRef = projectStorage.ref(`${bucket}${name}`); // 추출된 경로로 참조 생성
     try {
         await imageRef.delete(); // 파일 삭제

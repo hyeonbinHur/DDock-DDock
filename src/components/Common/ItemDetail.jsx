@@ -248,6 +248,8 @@ export default function ItemDetail({ collection, paramKey }) {
                             navigate={navigate}
                             from={from}
                             collection={collection}
+                            bucket={reduxItem.bucket}
+                            images={reduxItem.images}
                         />
                     </div>
                 ) : (

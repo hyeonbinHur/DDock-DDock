@@ -8,6 +8,7 @@ import { addItem } from '../store/marketCollectionSlice';
 import { addJobItem } from '../store/jobCollectionSlice';
 import { addHouseItem } from '../store/houseCollectionSilce';
 import { addCommunityItem } from '../store/communityCollectionSlice';
+import { deleteImg } from '../util/editImage';
 // import { useDocument } from './useDocument';
 
 let initalState = {
@@ -284,13 +285,24 @@ export const useFirestore = (collection) => {
         }
     };
 
-    const deleteDocument = async (id, collection) => {
+    const deleteDocument = async (id, collection, bucket, images) => {
         setLoading(true);
         dispatch({ type: 'IS_PENDING' });
         const ref = projectFirestore.collection(collection);
 
         try {
             const deletedDocument = await ref.doc(id).delete();
+            try {
+                images.forEach((image) => {
+                    deleteImg(image.name, bucket);
+                });
+            } catch (error) {
+                dispatchIsNotCancelled({
+                    type: 'ERROR',
+                    payload: error.message,
+                });
+            }
+
             dispatchIsNotCancelled({
                 type: 'DELETED_DOCUMENT',
                 payload: deletedDocument,

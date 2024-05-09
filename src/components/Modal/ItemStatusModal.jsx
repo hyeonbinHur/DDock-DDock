@@ -78,7 +78,7 @@ const ItemModal = forwardRef(function ItemStatusModal(
 
     return createPortal(
         <div>
-            <dialog ref={modal} className="rounded-lg">
+            <dialog ref={modal} className="rounded-lg border">
                 {loading == true ? (
                     <img src={spinner4} />
                 ) : response.success == false ? (
@@ -93,7 +93,7 @@ const ItemModal = forwardRef(function ItemStatusModal(
                         </div>
                     </div>
                 ) : (
-                    <div className="w-100 p-5 flex flex-col items-center justify-center">
+                    <div className=" w-auto lg:w-100 p-5 flex flex-col items-center justify-center">
                         <div className="w-96 h-[32rem] space-y-5 border rounded-lg">
                             {previews.length > 0 && (
                                 <div className="flex items-center w-full h-2/5 rounded-lg pt-5">
