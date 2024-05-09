@@ -65,13 +65,19 @@ export default function ItemAddForm({
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+
         if (!imageUploads) return;
         if (location === '') {
             placeModal.current.open();
             return;
+        } else {
+            modal.current.open();
         }
+    };
 
+    const postItem = async () => {
         setIsLoading(true);
+
         const uuid = uuidv4();
 
         let uploadPromises = imageUploads.map(async (imageUpload) => {
@@ -162,16 +168,6 @@ export default function ItemAddForm({
                         )}
                     </div>
                     <div className="w-full items-center justify-center flex">
-                        {/* <div>
-                            
-                                <button
-                                   
-                                >
-                                    delete
-                                </button>
-                            
-                        </div> */}
-
                         <div className="lg:w-11/12 border rounded-lg border-stone-300 w-full h-96 transform flex items-center justify-center">
                             <div className="absolute size-10 hover:scale-90 top-[2%] right-[2%]">
                                 {imagePreviews[currentIndex] && (
@@ -220,6 +216,7 @@ export default function ItemAddForm({
                 <div className="text-center font-bold">
                     {currentIndex + 1}/10{' '}
                 </div>
+
                 <div className="w-3/5 lg:w-1/4 lg:flex justify-between">
                     <div>
                         <span className="text-base italic text-gray-400 pr-3">
@@ -242,7 +239,6 @@ export default function ItemAddForm({
                     </div>
                 </div>
 
-                {/* <label className="border  p-2 rounded-lg border-black "> */}
                 <label className="text-left w-3/5 lg:hidden text-base italic">
                     Title
                 </label>
@@ -292,8 +288,7 @@ export default function ItemAddForm({
                     save
                 </button>
                 <div type="button" onClick={() => modal.current.open()}>
-                    {' '}
-                    open modal{' '}
+                    open modal
                 </div>
             </form>
             <ItemModal
@@ -302,6 +297,12 @@ export default function ItemAddForm({
                 loading={isLoading}
                 navigate={navigate}
                 from={Topic}
+                title={title}
+                conditions={conditions}
+                description={description}
+                previews={imagePreviews}
+                location={location}
+                confirm={postItem}
             />
             <PlaceSettingModal
                 ref={placeModal}

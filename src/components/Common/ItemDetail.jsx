@@ -41,6 +41,7 @@ export default function ItemDetail({ collection, paramKey }) {
     const { result: timeDif, unit: timeString } = calculateTime(
         reduxItem?.createdAt
     );
+
     const [isUserDropDown, setIsUserDropDown] = useState(false);
     const [from, setFrom] = useState('');
 
