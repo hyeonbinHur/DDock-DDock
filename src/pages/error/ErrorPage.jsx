@@ -1,13 +1,29 @@
+import { CiWarning } from 'react-icons/ci';
 import { Link } from 'react-router-dom';
 import Navbar from '../../components/MainNavbar/MainNavBar';
+import logo from '../../assets/logo/logo.png';
 
-export default function ErrorPage(){
-    return <div>
-        <Navbar />
-        <h1>아이고..페이지를 찾을 수 없어요!</h1>
-
-        <p>찾으시려는 페이지의 주소가 잘못 입력되었거나, 페이지 주소가 변경되어 더이상 사용할 수 없는 페이지입니다. 페이지의 주소를 다시한번 확인해 주세요</p>
-        <Link to={`/`}><button>로고</button></Link>
-        
-    </div>;
+export default function ErrorPage() {
+    return (
+        <div>
+            <Navbar />
+            <div className="w-full h-full flex flex-col items-center justify-center pt-40 space-y-16">
+                <div className="flex">
+                    <CiWarning className="size-32 text-red-600 p" />
+                    <div className="flex items-center">
+                        <h1 className="text-xl font-bold">404 Not Found!</h1>
+                    </div>
+                </div>
+                <div>
+                    <h2 className="text-lg font-bold">Error occurred!</h2>
+                    <span className="text-md text-gray-400 inline-flex mt-3 break-words">
+                        The requested pages was not found
+                        <Link to={`/`} className="ml-5">
+                            <img src={logo} className="w-[5rem]" />
+                        </Link>
+                    </span>
+                </div>
+            </div>
+        </div>
+    );
 }
