@@ -246,7 +246,7 @@ export default function CommentForm({ collection, serverItem, clientComment }) {
     return (
         <div className="p-3  rounded-lg bg-stone-200">
             <div className="flex justify-between p-1 ">
-                <label className="text-sm">{clientComment.displayName} </label>
+                <label className="text-sm">{clientComment.displayName}</label>
                 <div className="text-sm flex">
                     {addCommentLoading ||
                         (loading && <img src={spinner2} className="size-20" />)}

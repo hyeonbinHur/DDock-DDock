@@ -13,7 +13,7 @@ import { projectFirestore } from '../../firebase/config';
 import { useQuery } from '@tanstack/react-query';
 import { getDocument } from '../../api/getDocument';
 import logo from '../../assets/logo/logo.png';
-import earth from '../../assets/vector/earth.png';
+// import earth from '../../assets/vector/earth.png';
 import menu from '../../assets/vector/menu.png';
 
 const receiveDynamycUserInfo = async (id) => {
@@ -199,9 +199,9 @@ export default function Navbar() {
                         </div>
                     </ul>
                     <div className=" space-x-5 hidden lg:flex">
-                        <div>
+                        {/* <div>
                             <img src={earth} className="w-8" />
-                        </div>
+                        </div> */}
                         <div>
                             <button onClick={() => isShowMenu((prev) => !prev)}>
                                 <img src={menu} className="w-8" />

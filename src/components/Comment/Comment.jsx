@@ -50,7 +50,7 @@ export default function Comment({ serverItem, collection }) {
         setComment('');
 
         const addedComment = {
-            displayName: user.displayName,
+            displayName: userInfo.displayName,
             userId: user.uid,
             content: comment,
             createdAt: getSydneyTimeISO(timestamp.fromDate(new Date())),
