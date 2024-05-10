@@ -156,7 +156,7 @@ export default function ItemList({
                 topic={Topic}
                 //community
             />
-            <div className="mr-40 ml-40">
+            <div className="lg:mx-40 mx-10">
                 <div className={listItemCss}>
                     {searchedItem.map((item) => (
                         // 밑에다가 flex h-52

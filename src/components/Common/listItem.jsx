@@ -23,7 +23,11 @@ export default function ListItem({ item, topic }) {
     }
     return (
         item.images.length > 0 && (
-            <div className="w-full h-96 rounded-t-2xl mb-3">
+            <div
+                className={`${
+                    isCondition ? `h-[27rem]` : `h-[23rem]`
+                } relative w-full  rounded-t-2xl`}
+            >
                 <Link to={`/${topic}/${item.id}`}>
                     <div>
                         <img
@@ -33,8 +37,9 @@ export default function ListItem({ item, topic }) {
                     </div>
                     <div className="text-left p-2 w-full ">
                         <div className="mt-3 h-6 font-bold">
-                            <div className="line-clamp-4">{item.title}</div>
+                            <div className="line-clamp-1">{item.title}</div>
                         </div>
+
                         {item.price && (
                             <div className="pb-2 font-bold">
                                 {item.period && (
@@ -47,28 +52,35 @@ export default function ListItem({ item, topic }) {
                         )}
 
                         {isCondition && (
-                            <div>
+                            <div className="h-16 space-y-1">
                                 {item.conditions.map((condition) => (
-                                    <p key={condition.id}>{condition.value}</p>
+                                    <li
+                                        key={condition.id}
+                                        className="text-xs line-clamp-1 font-semibold"
+                                    >
+                                        {condition.value}
+                                    </li>
                                 ))}
                             </div>
                         )}
 
-                        <div className="mb-3 h-20 overflow-hidden ">
-                            <p className="line-clamp-4">{item.description}</p>
-                        </div>
-
-                        <div className="w-full border-dotted mb-3 border-2"></div>
-
-                        <div className="font-light text-xs p-1 flex justify-between">
-                            <span>{item.location.dong} </span>
-
-                            <div>
-                                {timeDif} {timeString}
-                            </div>
+                        <div className="mb-1 h-12 overflow-hidden ">
+                            <p className="line-clamp-2">{item.description}</p>
                         </div>
                     </div>
                 </Link>
+
+                <div className="absolute bottom-0 w-full">
+                    <div className="w-full border-dotted mb-1 border"></div>
+
+                    <div className="font-light text-xs p-1 flex justify-between">
+                        <span>{item.location.dong} </span>
+
+                        <div>
+                            {timeDif} {timeString}
+                        </div>
+                    </div>
+                </div>
             </div>
         )
     );

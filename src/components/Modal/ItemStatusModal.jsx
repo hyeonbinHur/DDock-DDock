@@ -95,7 +95,7 @@ const ItemModal = forwardRef(function ItemStatusModal(
                     </div>
                 ) : (
                     <div className=" w-auto lg:w-100 p-5 flex flex-col items-center justify-center">
-                        <div className="w-96 h-[32rem] space-y-5 border rounded-lg">
+                        <div className="w-96 h-[38rem] space-y-5 border rounded-lg">
                             {previews.length > 0 && (
                                 <div className="flex items-center w-full h-2/5 rounded-lg pt-5">
                                     <div className="w-1/6 flex items-end justify-end">

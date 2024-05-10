@@ -21,20 +21,21 @@ export default function JobListItem({ item, topic }) {
 
     return (
         item.images.length > 0 && (
-            <Link to={`/${topic}/${item.id}`} className="flex h-72">
-                <div className="h-80 w-56">
+            <Link to={`/${topic}/${item.id}`} className="flex lg:h-72 h-40">
+                <div className="lg:h-80 lg:w-56 ">
                     <img
                         className="h-full rounded-l-xl rounded-r-none w-56"
                         src={item.images[0].url}
                     />
                 </div>
 
-                <div className=" ml-10 mt-3 w-120 h-full space-y-3">
+                <div className="ml-3 lg:ml-10 lg:mt-3 lg:w-120 w-full h-full lg:space-y-3 space-y-1">
                     <div className="mb-2 h-5 flex items-centerw-2/3">
-                        <div className="font-bold line-clamp-1 ">
+                        <div className="font-bold line-clamp-2 lg:line-clamp-1 ">
                             {item.title}
                         </div>
                     </div>
+
                     <div className="flex space-x-5 ">
                         <div className="text-gray-500 text-xs">
                             {item.location.dong}
@@ -45,7 +46,7 @@ export default function JobListItem({ item, topic }) {
                     </div>
 
                     {item.price && (
-                        <div className="pb-2 font-bold">
+                        <div className="lg:pb-2 pb-1 font-bold">
                             {item.period && (
                                 <span className="text-xs pr-3">
                                     {item.period}
@@ -56,7 +57,7 @@ export default function JobListItem({ item, topic }) {
                     )}
 
                     {isCondition && (
-                        <div className="text-xs h-16 space-y-1">
+                        <div className="text-xs h-16 space-y-1 hidden lg:block">
                             {item.conditions.map((condition) => (
                                 <p
                                     key={condition.id}
@@ -68,10 +69,8 @@ export default function JobListItem({ item, topic }) {
                         </div>
                     )}
 
-                    <div>
-                        <p className="line-clamp-3 mb-5 mt-2 h-20 w-2/3 ">
-                            {item.description}
-                        </p>
+                    <div className="lg:line-clamp-3 line-clamp-2 mb-5 lg:mt-2 lg:h-20 h-10 lg:w-2/3 w-full ">
+                        <p>{item.description}</p>
                     </div>
 
                     <div className="w-full border-2 border-dotted "></div>
