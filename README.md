@@ -128,11 +128,11 @@ This section explains how to run this project. Since the project is implemented 
 
     |     Title      |          Images           |
     | :------------: | :-----------------------: |
-    |   Home page    | ![alt text](image-1.png)  |
-    | All items page | ![alt text](image-2.png)  |
-    |  Detail page   | ![alt text](image-3.png)  |
-    |    Add page    | ![alt text](image-5.png)  |
-    |   Edit page    | ![alt text](image-11.png) |
+    |   Home page    | <img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/28c2c30c-c8f0-4094-b8ba-4cd4ad835493"> |
+    | All items page | <img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/77332be5-1287-4657-ab4f-18bc88d2a5da"> |
+    |  Detail page   | <img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/c7bfc978-5154-4810-8a15-8887fd1f31f9"> |
+    |    Add page    | <img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/2d0d7041-0c18-4e0e-9f25-2d6056f6dafe">  |
+    |   Edit page    | <img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/2f0e6d1a-ccd7-4496-ae59-d3c118ee3a66"> |
 
 -   ### Profile
 
@@ -140,9 +140,9 @@ This section explains how to run this project. Since the project is implemented 
 
     |       Title        |          Images           |
     | :----------------: | :-----------------------: |
-    |     My profile     | ![alt text](image-7.png)  |
-    | Other user profile | ![alt text](image-8.png)  |
-    |     Item card      | ![alt text](image-12.png) |
+    |     My profile     | <img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/7aef21ea-5bc1-45ac-b0d8-8fefd71ea020"> |
+    | Other user profile | <img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/d1db2251-d059-4256-b222-5e32327b2183">  |
+    |     Item card      | <img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/231f7e5b-4088-4994-b533-ebbc566b7015"> |
 
 -   ### Sign in, Sign Up
 
@@ -150,8 +150,8 @@ This section explains how to run this project. Since the project is implemented 
 
     |  Title  |          Images           |
     | :-----: | :-----------------------: |
-    | Sign in | ![alt text](image-9.png)  |
-    | Sign up | ![alt text](image-10.png) |
+    | Sign in | <img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/8fa00d59-5864-423f-bf01-91967f5e5e64">  |
+    | Sign up | <img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/10ad9ebc-ffe4-4cc6-b589-65070057b69f"> |
 
 -   ### Error page
 
@@ -159,7 +159,7 @@ This section explains how to run this project. Since the project is implemented 
 
     |   Title    |          Images          |
     | :--------: | :----------------------: |
-    | Error page | ![alt text](image-6.png) |
+    | Error page | <img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/afe06fe6-360d-475d-9585-43c5c8fb06db">|
 
     <br>
     <br>
