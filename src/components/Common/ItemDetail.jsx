@@ -218,6 +218,20 @@ export default function ItemDetail({ collection, paramKey }) {
                             <div className="font-bold text-lg ">
                                 <h1>{reduxItem.title}</h1>
                             </div>
+                            {from !== 'Community' && (
+                                <div className="text-sm font-semibold ">
+                                    $
+                                    <span className="font-bold text-lg  ml-1 mr-3">
+                                        {reduxItem.price}
+                                    </span>
+                                    {from !== 'Market' && (
+                                        <span className="font-bold">
+                                            {' '}
+                                            {reduxItem.period}
+                                        </span>
+                                    )}
+                                </div>
+                            )}
                             <ul>
                                 {reduxItem?.conditions.map((condition) => (
                                     <li key={condition.id}>

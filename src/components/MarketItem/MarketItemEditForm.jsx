@@ -179,7 +179,6 @@ export default function MarketItemForm({
                             )}
                         </div>
                     </div>
-
                     <div
                         type="button"
                         onClick={() => setCurrentIndex((prev) => prev + 1)}
