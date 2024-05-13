@@ -120,7 +120,7 @@ This section explains how to run this project. Since the project is implemented 
 
 ### 1. pages
 
-![alt text](image.png)
+<img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/1263a0b3-e2d3-42d4-8d8b-078506d7ca63">
 
 -   ### Market, Job, House, Community
 
