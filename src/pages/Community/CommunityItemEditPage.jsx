@@ -1,13 +1,12 @@
 import { useFirestore } from '../../hooks/useFirestore';
 import { useDispatch, useSelector } from 'react-redux';
-import { useRef, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { getDocument } from '../../api/getDocument';
 import { readItem } from '../../store/ItemSlice';
 import { getSydneyTimeISO } from '../../util/formDate';
 
 import MarketItemEditForm from '../../components/MarketItem/MarketItemEditForm';
-import ItemModal from '../../components/Modal/ItemStatusModal';
 
 import { updateItemInCollection } from '../../store/communityCollectionSlice';
 
@@ -15,8 +14,6 @@ export default function HouseItemEditPage() {
     const { cItemId } = useParams();
 
     const { updateDocument, response, loading } = useFirestore('CommunityItem');
-    const modal = useRef();
-    const navigate = useNavigate();
     const dispatch = useDispatch();
     const reduxItem = useSelector((state) => state.itemInRedux.item);
 
@@ -36,7 +33,6 @@ export default function HouseItemEditPage() {
     }, [dispatch]);
 
     const doEditDocument = async (title, conditions, description, images) => {
-        modal.current.open();
         const createdAt = getSydneyTimeISO();
         const updatedItem = {
             title: title,
@@ -61,17 +57,12 @@ export default function HouseItemEditPage() {
         <>
             {reduxItem && (
                 <div>
-                    <ItemModal
-                        ref={modal}
-                        response={response}
-                        loading={loading}
-                        navigate={navigate}
-                        from={'Community'}
-                    />
                     <MarketItemEditForm
                         doAction={doEditDocument}
                         item={reduxItem}
                         response={response}
+                        Topic={'Community'}
+                        loading={loading}
                     />
                 </div>
             )}

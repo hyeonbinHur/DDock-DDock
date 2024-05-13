@@ -86,7 +86,14 @@ export default function MarketItemForm({
             deletedImages
         );
 
-        await doAction(title, conditions, description, finalimages, price);
+        await doAction(
+            title,
+            conditions,
+            description,
+            finalimages,
+            price,
+            period
+        );
     };
 
     const handleImageChange = (event) => {

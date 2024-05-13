@@ -1,13 +1,12 @@
 import { useFirestore } from '../../hooks/useFirestore';
 import { useDispatch, useSelector } from 'react-redux';
-import { useRef, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { getDocument } from '../../api/getDocument';
 import { readItem } from '../../store/ItemSlice';
 import { getSydneyTimeISO } from '../../util/formDate';
 
 import MarketItemEditForm from '../../components/MarketItem/MarketItemEditForm';
-import ItemModal from '../../components/Modal/ItemStatusModal';
 
 import { updateItemInCollection } from '../../store/houseCollectionSilce';
 
@@ -15,8 +14,6 @@ export default function HouseItemEditPage() {
     const { hItemId } = useParams();
 
     const { updateDocument, response, loading } = useFirestore('HouseItem');
-    const modal = useRef();
-    const navigate = useNavigate();
     const dispatch = useDispatch();
     const reduxItem = useSelector((state) => state.itemInRedux.item);
 
@@ -35,8 +32,14 @@ export default function HouseItemEditPage() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch]);
 
-    const doEditDocument = async (title, conditions, description, images) => {
-        modal.current.open();
+    const doEditDocument = async (
+        title,
+        conditions,
+        description,
+        images,
+        price,
+        period
+    ) => {
         const createdAt = getSydneyTimeISO();
         const updatedItem = {
             title: title,
@@ -44,6 +47,8 @@ export default function HouseItemEditPage() {
             conditions: conditions,
             comments: reduxItem.comments,
             images: images,
+            price,
+            period,
             bucket: reduxItem.bucket,
             location: reduxItem.location,
             createdAt: createdAt,
@@ -61,18 +66,13 @@ export default function HouseItemEditPage() {
         <>
             {reduxItem && (
                 <div>
-                    <ItemModal
-                        ref={modal}
-                        response={response}
-                        loading={loading}
-                        navigate={navigate}
-                        from={'House'}
-                    />
                     <MarketItemEditForm
                         doAction={doEditDocument}
                         item={reduxItem}
                         response={response}
+                        loading={loading}
                         condition={true}
+                        Topic={'House'}
                     />
                 </div>
             )}

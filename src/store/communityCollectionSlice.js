@@ -85,13 +85,16 @@ const communityCollectionSlice = createSlice({
         updateItemInCollection(state, action) {
             const updatedItem = action.payload.item;
             const id = action.payload.id;
-
+            const item = {
+                ...updatedItem,
+                id,
+            };
             const index = state.communityItems.findIndex(
                 (item) => item.id === id
             );
 
             if (index !== -1) {
-                state.communityItems[index] = updatedItem;
+                state.communityItems[index] = item;
             }
         },
     },

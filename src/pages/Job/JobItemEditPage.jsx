@@ -1,13 +1,12 @@
 import { useFirestore } from '../../hooks/useFirestore';
 import { useDispatch, useSelector } from 'react-redux';
-import { useRef, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { getDocument } from '../../api/getDocument';
 import { readItem } from '../../store/ItemSlice';
 import { getSydneyTimeISO } from '../../util/formDate';
 
 import MarketItemEditForm from '../../components/MarketItem/MarketItemEditForm';
-import ItemModal from '../../components/Modal/ItemStatusModal';
 
 import { updateItemInCollection } from '../../store/jobCollectionSlice';
 
@@ -15,8 +14,6 @@ export default function JobItemEditPage() {
     const { jItemId } = useParams();
 
     const { updateDocument, response, loading } = useFirestore('JobItem');
-    const modal = useRef();
-    const navigate = useNavigate();
     const dispatch = useDispatch();
     const reduxItem = useSelector((state) => state.itemInRedux.item);
 
@@ -35,14 +32,22 @@ export default function JobItemEditPage() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch]);
 
-    const doEditDocument = async (title, conditions, description, images) => {
-        modal.current.open();
+    const doEditDocument = async (
+        title,
+        conditions,
+        description,
+        images,
+        price,
+        period
+    ) => {
         const createdAt = getSydneyTimeISO();
         const updatedItem = {
             title: title,
             description: description,
             conditions: conditions,
             comments: reduxItem.comments,
+            price: price,
+            period: period,
             images: images,
             bucket: reduxItem.bucket,
             location: reduxItem.location,
@@ -61,17 +66,12 @@ export default function JobItemEditPage() {
         <>
             {reduxItem && (
                 <div>
-                    <ItemModal
-                        ref={modal}
-                        response={response}
-                        loading={loading}
-                        navigate={navigate}
-                        from={'Job'}
-                    />
                     <MarketItemEditForm
                         doAction={doEditDocument}
                         item={reduxItem}
                         response={response}
+                        loading={loading}
+                        Topic={'Job'}
                         condition={true}
                     />
                 </div>
