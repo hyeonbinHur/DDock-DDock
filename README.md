@@ -194,13 +194,69 @@ This section explains how to run this project. Since the project is implemented 
 
 ### Items
 
+1. add Item
+
+To create an item, the user needs to be authenticated and access the add item page. When the user accesses the item page, they can add detailed information about the item, including images, title, description, price, etc. When the user creates an item, the images of the item are first stored in Firebase storage. Then, a function returns the URL for the images, and both the detailed information and image URL are stored in the Firestore database.
+<br>
+<br>
+
+![alt text](image-13.png)
+
+> Once the user fills out the form and presses **Save**, they will see a confirmation modal to confirm the item. If the user presses **Edit**, they can return to the add item page. Once the user presses **Confirm**, they will see a spinner until the item is added. When the item is successfully added, the page will move to the corresponding item section and lead the user to view the added item.
+> <br> > <br>
+
+2. read Item
+
+2.1 read collection
+
+Once users access the website, user can view all items. By using the search bar and location selector, user can find specific items that are in the selected location and include text in the search text box in title and description.
+
+2.2 read document
+
+If user press a certain item in the item list, user can check the detailed information of the item. The url link includes the item's id, and the program leads user to the deatiled information about the item.
+
+> **useParams()**, and **dynamic path** are used to read a certain data. Moreover, to render the item detail page, <Link> and **static path** are used.
+
+2.2.1 check other user's profile & start chatting
+
+Once the user accesses the item detail page, user will be able see the author's information. When another user's avatar is pressed, a popup division appears, which includes a profile and a chatting button to either move to the user's profile page or start a chat.
+
+3. edit Item
+
+Only the author is able to see the edit button in the item detail page. Once the author presses the edit button, author can move to the edit page, which includes all detailed information regarding the item. If the user edits the item, they can change the item's detailed information.
+
+> To edit an item, the item URL must be changed. Editing the item page requires multiple steps. There are several ways to edit the image URL; I chose to delete the old image and add a new one to prevent the storage from becoming too large. Firstly, check whether the images are already stored; if an image is not stored in the storage, it will be uploaded. Moreover, if the images in the storage are no longer used, they will be deleted. Once all progress regarding the storage is complete, a function returns all image URLs in storage, changes the image URL, and updates it. Titles, descriptions, and prices can also be edited.
+
+4. delete Item
+
+Only the item's author is able to see the delete button in the item detail page. Once the author presses the delete button user can delete the item.
+
+> Once user press the delete button, the item's images in the storage will be deleted first, and if all images of the item are deleted, the item will be deleted from the firestore as well.
+
 ### Chatting
 
+1. create chatting room
+2. send message
+3. send image
+4. read message
+5. unread message
+6. toast notification
+
 ### Auth
+
+1. Email authentication
+2. Google authentication
+3. Facebook authentiation
+
+### Set Location
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- CONTRIBUTING -->
+
+## Redux
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Reflecting on the Project
 
