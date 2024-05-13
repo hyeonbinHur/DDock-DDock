@@ -177,6 +177,10 @@ This section explains how to run this project. Since the project is implemented 
 ## Data Structure
 
 ### Collection
+<img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/44d6d619-3704-4228-9771-e1705c14005d">
+
+### Data structure
+<img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/3752fdbe-a9ce-4cf4-964b-4128279593f8">
 
 ### Items
 
