@@ -170,7 +170,7 @@ This section explains how to run this project. Since the project is implemented 
     <br>
     <br>
 
-    ![alt text](code.png)
+    <img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/c510fd8b-36c6-4ea7-a672-e1ff32551f84">
 
 <p align="right">(<a href="#pocket">back to top</a>)</p>
 
