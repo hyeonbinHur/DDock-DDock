@@ -20,7 +20,8 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
- <img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/5559af68-3a2e-469f-8c9d-801b1099ebd2">
+ <img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/2c861161-9f90-4ce4-9f60-97095eb6c147" width="350">
+ 
 
   <p align="center">
   </p>
