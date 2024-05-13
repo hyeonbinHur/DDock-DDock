@@ -163,13 +163,13 @@ export default function MarketItemForm({
                                 className="hidden"
                             />
 
-                            {editImagePreviews[currentIndex].url && (
+                            {editImagePreviews[currentIndex] && (
                                 <img
                                     className="w-full h-full"
                                     src={editImagePreviews[currentIndex].url}
                                 />
                             )}
-                            {!editImagePreviews[currentIndex].url && (
+                            {!editImagePreviews[currentIndex] && (
                                 <div className="flex items-center justify-center">
                                     <FcAddImage
                                         className="size-28 hover:scale-110"
