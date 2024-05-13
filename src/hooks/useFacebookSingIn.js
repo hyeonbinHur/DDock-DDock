@@ -20,10 +20,8 @@ export const useFaceBookSignIn = () => {
         try {
             const res = await projectAuth.signInWithPopup(facebookProvider);
             if (!res) {
-                console.log('구글 로그인 에러 씨발');
+                throw new Error('Could not complete signup');
             }
-            console.log('Hello');
-            console.log(res);
             await saveUser(res.user);
 
             dispatch({ type: 'LOGIN', payload: res.user });

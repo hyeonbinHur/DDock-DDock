@@ -29,6 +29,7 @@ export const useSignUp = () => {
                 displayName: nickName,
                 setDisplayName: true,
             });
+
             await saveUser(res.user);
 
             dispatch({ type: 'LOGIN', payload: res.user });

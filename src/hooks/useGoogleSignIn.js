@@ -20,7 +20,7 @@ export const useGoogleSignin = () => {
         try {
             const res = await projectAuth.signInWithPopup(provider);
             if (!res) {
-                console.log('구글 로그인 에러 씨발');
+                throw new Error('Could not complete signup');
             }
 
             await saveUser(res.user);

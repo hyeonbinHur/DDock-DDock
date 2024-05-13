@@ -78,11 +78,13 @@ const marketCollectionSlice = createSlice({
         updateItemInCollection(state, action) {
             const updatedItem = action.payload.item;
             const id = action.payload.id;
-
+            const item = {
+                ...updatedItem,
+                id: id,
+            };
             const index = state.marketItems.findIndex((item) => item.id === id);
-
             if (index !== -1) {
-                state.marketItems[index] = updatedItem;
+                state.marketItems[index] = item;
             }
         },
     },

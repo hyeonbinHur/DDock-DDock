@@ -41,7 +41,6 @@ export default function MarketPage() {
                     'createdAt',
                     'desc',
                 ]);
-                console.log(response);
                 dispatch(fetchCollection({ documents: response }));
 
                 setError(null); // 에러 상태 초기화

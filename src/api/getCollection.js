@@ -1,4 +1,4 @@
-import { projectFirestore } from "../firebase/config";
+import { projectFirestore } from '../firebase/config';
 
 export const getCollection = async (collection, orderby) => {
     let ref = projectFirestore.collection(collection);
@@ -7,7 +7,7 @@ export const getCollection = async (collection, orderby) => {
     }
     const snapshot = await ref.get();
     let results = [];
-    snapshot.docs.forEach(doc => {
+    snapshot.docs.forEach((doc) => {
         results.push({ ...doc.data(), id: doc.id });
     });
     return results;

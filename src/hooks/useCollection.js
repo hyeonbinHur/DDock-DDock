@@ -11,6 +11,7 @@ export const useCollection = (collection, _orderby) => {
     useEffect(() => {
         setLoading(true); // 이 부분을 추가하여 컴포넌트가 마운트될 때마다 로딩 상태를 재설정
         let ref = projectFirestore.collection(collection);
+
         if (orderby) {
             ref = ref.orderBy(...orderby);
         }
@@ -24,6 +25,7 @@ export const useCollection = (collection, _orderby) => {
                 setError(null);
                 setLoading(false); // 데이터 로드 완료
             },
+
             (error) => {
                 console.error(error);
                 setError('could not fetch the data');

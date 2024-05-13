@@ -288,6 +288,7 @@ export const useFirestore = (collection) => {
     const deleteDocument = async (id, collection, bucket, images) => {
         setLoading(true);
         dispatch({ type: 'IS_PENDING' });
+
         const ref = projectFirestore.collection(collection);
 
         try {
@@ -322,10 +323,12 @@ export const useFirestore = (collection) => {
 
         try {
             const updatedDocument = await ref.doc(id).update(updates);
+
             dispatchIsNotCancelled({
                 type: 'UPDATE_DOCUMENT',
                 payload: updatedDocument,
             });
+
             setLoading(false);
             return updatedDocument;
         } catch (error) {

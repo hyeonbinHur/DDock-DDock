@@ -30,6 +30,7 @@ export default function ListItem({ item, topic }) {
             >
                 <Link to={`/${topic}/${item.id}`}>
                     <div>
+                        <div>{item.id}</div>
                         <img
                             className="w-full h-52 rounded-t-2xl"
                             src={item.images[0].url}
