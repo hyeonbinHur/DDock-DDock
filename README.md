@@ -20,9 +20,8 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
-  </a>
+ ![image](https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/5559af68-3a2e-469f-8c9d-801b1099ebd2)
+
   <p align="center">
   </p>
 </div>
