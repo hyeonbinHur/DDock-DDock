@@ -20,7 +20,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
- ![image](https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/5559af68-3a2e-469f-8c9d-801b1099ebd2)
+ <img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/5559af68-3a2e-469f-8c9d-801b1099ebd2">
 
   <p align="center">
   </p>
