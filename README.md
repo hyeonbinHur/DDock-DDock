@@ -285,6 +285,7 @@ Once a user types at least one character, user can send a message to another use
 3. send image
 
 To send an image, the user needs to press the "image icon" at the bottom left of the chat room. Once the "image icon" is pressed, the user can select an image from their local device. A confirmation modal will appear, and then pressing the "send" button will send the image.
+
 <img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/96ae6620-c4db-4dda-9c17-29a93f10f5b0">
 
 4. receive message
@@ -296,6 +297,7 @@ If a user receives messages from another user, user can check the numer of recei
 5. read message
 
 If the message is unread, a "1" will appear next to it in the chatroom. Once the user reads the message, the "1" will disappear.
+
 <img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/6d2f256b-dbd9-4c93-9f92-d12fde05c76d">
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
