@@ -298,6 +298,8 @@ If a user receives messages from another user, user can check the numer of recei
 If the message is unread, a "1" will appear next to it in the chatroom. Once the user reads the message, the "1" will disappear.
 <img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/6d2f256b-dbd9-4c93-9f92-d12fde05c76d">
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ### Auth
 
 1. Email authentication
@@ -308,6 +310,8 @@ If the message is unread, a "1" will appear next to it in the chatroom. Once the
   
 3. Facebook authentiation
 <img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/d3826f3f-93c7-4f5b-b1fb-db8dd1bdbb5a">
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Set Location
 
