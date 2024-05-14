@@ -322,9 +322,9 @@ To set location, user need to press the "Set location" button in the main catego
 ##### While planning the project, I wanted to cover all municipalities and suburbs, but it was challenging for me to find the same Melbourne location JSON data and the "nominatim.openstreetmap" API address. Users can change the location, but only suburbs in Melbourne city can be filtered.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
- 
-
 
 ## Reflecting on the Project
+
+When I started the project, I aimed to deploy this web service and wanted people in Melbourne to use this application in their real lives. However, while creating the application, I became aware of my shortcomings, such as filtering locations and reducing HTTP requests. Throughout the implementation, I learned a great deal and was able to troubleshoot many problems. I faced countless errors and spent a lot of time figuring them out, which enhanced my troubleshooting skills. My goal for this application is to deploy it within a year. I need to learn more about React and database management. I plan to switch the database from Firebase to AWS to reduce costs and improve network service quality.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
