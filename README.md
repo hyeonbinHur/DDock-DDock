@@ -139,6 +139,7 @@ This section explains how to run this project. Since the project is implemented 
     |  Detail page   | <img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/c7bfc978-5154-4810-8a15-8887fd1f31f9"> | <img src="https://github.com/hyeonbinHur/hyeonbinHur/assets/160996936/33e16be5-cc78-489e-bc89-53e792acd069">|
     |    Add page    | <img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/2d0d7041-0c18-4e0e-9f25-2d6056f6dafe">  | <img src="https://github.com/hyeonbinHur/hyeonbinHur/assets/160996936/8bf56816-1c09-4c54-a235-fdb78ea920d4">|
     |   Edit page    | <img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/2f0e6d1a-ccd7-4496-ae59-d3c118ee3a66"> | <img src="https://github.com/hyeonbinHur/hyeonbinHur/assets/160996936/58819af5-6147-46c9-b954-68b43e9d620d">|
+    | Nav bar | <img src="https://github.com/hyeonbinHur/hyeonbinHur/assets/160996936/9f05df32-a398-416b-8ef6-7bfd3bf0ff4d">| <img src="https://github.com/hyeonbinHur/hyeonbinHur/assets/160996936/220e1e4a-1d86-4fe2-8272-00d790f988c7">|
 
 -   ### Profile
 
@@ -154,18 +155,18 @@ This section explains how to run this project. Since the project is implemented 
 
     This project supports three methods of sign-up and sign-in: email authentication, Google authentication, and Facebook authentication.
 
-    |  Title  |          Images           |
-    | :-----: | :-----------------------: |
-    | Sign in | <img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/8fa00d59-5864-423f-bf01-91967f5e5e64">  |
-    | Sign up | <img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/10ad9ebc-ffe4-4cc6-b589-65070057b69f"> |
+    |  Title  |          Web Images           | Mobile Images|
+    | :-----: | :-----------------------: | :---:|
+    | Sign in | <img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/8fa00d59-5864-423f-bf01-91967f5e5e64">  | <img src="https://github.com/hyeonbinHur/hyeonbinHur/assets/160996936/89908fb0-70fc-4c9c-9044-d1cad339a77c">|
+    | Sign up | <img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/10ad9ebc-ffe4-4cc6-b589-65070057b69f"> | <img src="https://github.com/hyeonbinHur/hyeonbinHur/assets/160996936/30157a9d-0a1c-4d7e-ab66-6f54bb3d74bd">|
 
 -   ### Error page
 
     If any errors are found, the program directs the user to the error page. The user can move to other pages using the navigation bar or by pressing the logo on the error page.
 
-    |   Title    |          Images          |
-    | :--------: | :----------------------: |
-    | Error page | <img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/afe06fe6-360d-475d-9585-43c5c8fb06db">|
+    |   Title    |          Images          | Mobile images|
+    | :--------: | :----------------------: | :---:|
+    | Error page | <img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/afe06fe6-360d-475d-9585-43c5c8fb06db">| <img src="https://github.com/hyeonbinHur/hyeonbinHur/assets/160996936/96ad01dc-17dc-435a-a49e-3e41e91da861">|
 
     <br>
     <br>
