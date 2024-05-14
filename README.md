@@ -132,7 +132,7 @@ This section explains how to run this project. Since the project is implemented 
 
     The pages related to the item include the all items page, detail page, add page, and edit page.
 
-    |     Title      |          Images           |
+    |     Title      |         Web Images           | 
     | :------------: | :-----------------------: |
     |   Home page    | <img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/28c2c30c-c8f0-4094-b8ba-4cd4ad835493"> |
     | All items page | <img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/77332be5-1287-4657-ab4f-18bc88d2a5da"> |
