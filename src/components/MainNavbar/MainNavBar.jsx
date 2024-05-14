@@ -32,7 +32,7 @@ export default function Navbar() {
     const [mobileMenu, setMobileMenu] = useState(false);
     const [isPageClick, setIsPageClick] = useState(false);
     const [isProfile, setIsProfile] = useState(false);
-    const [isLanguage, setIsLanguage] = useState(false);
+    // const [isLanguage, setIsLanguage] = useState(false);
 
     const openChatRoom = useSelector(
         (state) => state.openChatRoom.openChatRoom
@@ -126,18 +126,18 @@ export default function Navbar() {
     const clickPage = () => {
         setIsPageClick(!isPageClick);
         setIsProfile(false);
-        setIsLanguage(false);
+        // setIsLanguage(false);
     };
     const clickProfile = () => {
         setIsPageClick(false);
         setIsProfile(!isProfile);
-        setIsLanguage(false);
+        // setIsLanguage(false);
     };
-    const clickLanguage = () => {
-        setIsPageClick(false);
-        setIsProfile(false);
-        setIsLanguage(!isLanguage);
-    };
+    // const clickLanguage = () => {
+    //     setIsPageClick(false);
+    //     setIsProfile(false);
+    //     setIsLanguage(!isLanguage);
+    // };
 
     const closeChatRoomList = () => {
         setShowChatList(false);
@@ -407,13 +407,13 @@ export default function Navbar() {
                             </>
                         )}
 
-                        <div
+                        {/* <div
                             onClick={clickLanguage}
                             className="hover:bg-white p-3 text-xl  rounded-lg font-bold"
                         >
                             language
-                        </div>
-                        {isLanguage && (
+                        </div> */}
+                        {/* {isLanguage && (
                             <>
                                 <div className="border border-white"> </div>
                                 <div className="px-7 space-y-3 font-bold">
@@ -425,7 +425,7 @@ export default function Navbar() {
                                     </div>
                                 </div>
                             </>
-                        )}
+                        )} */}
                     </div>
                 </div>
             )}

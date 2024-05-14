@@ -145,7 +145,7 @@ export default function ItemDetail({ collection, paramKey }) {
                         {/* text div*/}
                         <div className="w-full space-y-5 px-24 lg:w-1/3 lg:px-0">
                             {/* writer */}
-                            <div className="flex h-28 justify-between">
+                            <div className="flex lg:flex-row flex-col min-h-28 justify-between">
                                 <div className="relative">
                                     <div className="flex items-center space-x-5 space-y-3">
                                         <img
@@ -177,7 +177,7 @@ export default function ItemDetail({ collection, paramKey }) {
                                     </div>
                                 </div>
 
-                                <div className="font-light text-sm  grid grid-cols-1 place-items-end ">
+                                <div className="font-light text-sm  grid grid-cols-1 place-items-end  ">
                                     {user?.uid == reduxItemWriter.uid && (
                                         <div className="space-y-2 w-5/12">
                                             <div className="w-full border rounded flex justify-center items-center border-sky-300 bg-sky-200 hover:scale-105 hover:text-sky-600">
@@ -196,7 +196,7 @@ export default function ItemDetail({ collection, paramKey }) {
                                             </div>
                                         </div>
                                     )}
-                                    <div className="flex space-x-4">
+                                    <div className="flex space-x-4 pt-5 lg:pt-0">
                                         <div>
                                             {month}, {day}, {year}
                                         </div>

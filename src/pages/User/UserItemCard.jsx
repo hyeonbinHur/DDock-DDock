@@ -26,7 +26,7 @@ export default function UserItemCard({ item, topic }) {
             ${topic == 'house' && `hover:border-green-300`}
             ${
                 topic == 'like' && `hover:border-red-400`
-            }  border rounded-lg border-gray-400 space-y-4 p-4 w-full h-full`}
+            }  border rounded-lg border-gray-400 space-y-4 p-4 w-full lg:h-full h-72`}
             >
                 <div className="w-full h-2/3 rounded-lg">
                     <img
@@ -34,14 +34,15 @@ export default function UserItemCard({ item, topic }) {
                         src={item.images[0].url}
                     />
                 </div>
-                <div className="h-1/3 space-y-3">
+
+                <div className="h-1/3  lg:space-y-3">
                     <div className="w-full line-clamp-1 font-bold break-words h-1/3">
                         {item.title}
                     </div>
                     <div className="w-full line-clamp-2 h-1/3">
                         {item.description}
                     </div>
-                    <div className="flex font-light text-sm space-x-3 break-words h-1/3">
+                    <div className="flex font-light text-sm break-words h-1/3">
                         <div>{item.location.gu}</div>
                         <div>{item.location.dong}</div>
                     </div>

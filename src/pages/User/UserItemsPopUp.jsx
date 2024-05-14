@@ -6,7 +6,7 @@ export default function UserItemsPopUp({ items, topic }) {
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-9 ">
             {items.length != 0 ? (
                 items.map((item) => (
-                    <div key={item.id} className="h-100">
+                    <div key={item.id} className="lg:h-100">
                         <UserItemCard item={item} topic={topic} />
                     </div>
                 ))

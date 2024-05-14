@@ -90,7 +90,7 @@ export default function HomePage() {
 
     return (
         <div className="h pt-36 pb-20">
-            <section className="h-screen">
+            <section className="lg:h-screen h-96">
                 <h1 className="text-center font-bold text-3xl">
                     Bring Neighborhoods Together
                 </h1>
@@ -100,7 +100,7 @@ export default function HomePage() {
                 <div className="w-full h-2/3 pt-10 pb-10 relative">
                     <img
                         src={homeImg}
-                        className="w-3/4 h-full mx-auto rounded-2xl "
+                        className="w-3/4 lg:h-full h-96  mx-auto rounded-2xl "
                     />
                 </div>
             </section>

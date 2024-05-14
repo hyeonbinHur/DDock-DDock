@@ -231,7 +231,7 @@ export default function ItemAddForm({
                 <div>
                     <Toaster />
                 </div>
-                <div className="flex items-center lg:w-1/3 justify-center w-3/4">
+                <div className="flex items-center lg:w-1/3 justify-center w-5/6 ">
                     {/* // <button
                         //     type="button"
                         //     onClick={}
