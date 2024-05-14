@@ -263,13 +263,13 @@ Once signed in, the user can press the like button on the corresponding item. If
 
 6.1 comment 
 
-Once user accessed to the item detail page, user can add some comment on to the item. To add item user must be authenticated, and type at least one character. If no characters are typed, the submit button is disabled.
+Once user accessed to the item detail page, user can add some comment on to the item. To add item user must be authenticated, and type at least one character. If no characters are typed, the submit button is disabled. User also can delete and modify the comment by pressing delete and modify button on the comment
 
 <img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/a21b184a-8e79-44f6-8a1e-75d23606e0d3">
 
 6.2 reply
 
-If there is a comment, user can add reply to the comment. The reply section can be opened and closed. Once the reply section is opened, user can check the all replys.
+If there is a comment, user can add reply to the comment. The reply section can be opened and closed. Once the reply section is opened, user can check the all replys. User also can delete and modify the replys by pressing modify or delete button on the comment.
 
 <img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/5aacad18-5d12-44f8-b178-1a8e84b35b30">
 
