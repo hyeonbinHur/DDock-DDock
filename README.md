@@ -108,6 +108,8 @@
 
 The idea for this project originated from my experience in Melbourne. Living there as a student, I was able to meet a lot of international students and foreigners. They typically live in rental houses or share houses, necessitating frequent relocations. Additionally, Australia ranks among the top five most expensive countries globally, attracting many people to work from abroad. Most of these individuals seek various experiences, so they move often. Each move requires them to buy new furniture, which poses a significant financial burden for those trying to save money. I noticed that due to high living costs and frequent moves, many people often discard a lot of items and buy new ones. As a result, many people either avoid buying new items or inquire among acquaintances for used goods. Moreover, in such environments where many young people gather, I frequently encountered the need for communities to make friends. However, Australia still lacks representative communities that provide meeting opportunities for both foreigners and locals. Based on these observations, I found the potential of used goods and forming communities.
 
+> Developed by Hur HyeonBin (Max)
+
 <p align="right">(<a href="#pocket">back to top</a>)</p>
 
 ## **Getting started**
