@@ -107,9 +107,9 @@ export default function Navbar() {
 
     const notify = (sender, content, type) => {
         if (type === 'txt') {
-            toast(sender + '님이 메세지를 보냈어요 : ' + content);
+            toast(sender + ' sent message : ' + content);
         } else if (type === 'img') {
-            toast(sender + '님이 이미지를 보냈어요');
+            toast(sender + ' sent image ');
         }
     };
 

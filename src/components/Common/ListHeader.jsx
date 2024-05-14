@@ -74,7 +74,7 @@ export default function ListHeader({
 
                     <div className="lg:pr-40">
                         <div className={buttonStyleCss}>
-                            <button onClick={modalOpenFn}>Set position</button>
+                            <button onClick={modalOpenFn}>Set location</button>
                         </div>
                         <div
                             className={buttonStyleCss}
