@@ -239,6 +239,8 @@ Only the author is able to see the edit button in the item detail page. Once the
 
 Only the item's author is able to see the delete button in the item detail page. Once the author presses the delete button user can delete the item.
 
+<img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/efe7560b-4e51-4331-8fff-d2c28ed02d6f">
+
 > Once user press the delete button, the item's images in the storage will be deleted first, and if all images of the item are deleted, the item will be deleted from the firestore as well.
 
 ### Chatting
