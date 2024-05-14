@@ -243,6 +243,12 @@ Only the item's author is able to see the delete button in the item detail page.
 
 > Once user press the delete button, the item's images in the storage will be deleted first, and if all images of the item are deleted, the item will be deleted from the firestore as well.
 
+5. like item
+
+Once signed in, the user can press the like button on the corresponding item. If the user presses the "heart" icon, the "empty heart" will change to a "red heart"; otherwise, it reverts to an "empty heart." If the user likes the item, it will be added to their list of liked items, which can be checked from the user's profile page.
+
+
+
 ### Chatting
 
 1. create chatting room
