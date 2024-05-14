@@ -267,6 +267,8 @@ Only the item's author is able to see the delete button in the item detail page.
 
 ### Set Location
 
+<img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/754c7f79-daaf-442c-a36f-e1b4891e05d8">
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- CONTRIBUTING -->
