@@ -273,9 +273,6 @@ Only the item's author is able to see the delete button in the item detail page.
 
 <!-- CONTRIBUTING -->
 
-## Redux
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Reflecting on the Project
 
