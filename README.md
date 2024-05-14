@@ -290,8 +290,6 @@ If the message is unread, a "1" will appear next to it in the chatroom. Once the
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-<!-- CONTRIBUTING -->
-
 
 ## Reflecting on the Project
 
