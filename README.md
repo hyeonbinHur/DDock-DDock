@@ -144,11 +144,11 @@ This section explains how to run this project. Since the project is implemented 
 
     From both my profile page and other user's profile pages, you can find the corresponding user's item. Additionally, clicking on an item card will direct the user to that specific item. Moreover, on my profile page, you can also find interested item.
 
-    |       Title        |          Images           |
-    | :----------------: | :-----------------------: |
-    |     My profile     | <img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/7aef21ea-5bc1-45ac-b0d8-8fefd71ea020"> |
-    | Other user profile | <img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/d1db2251-d059-4256-b222-5e32327b2183">  |
-    |     Item card      | <img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/231f7e5b-4088-4994-b533-ebbc566b7015"> |
+    |       Title        |         Web Images           |  Mobile Images
+    | :----------------: | :-----------------------: | :---:|
+    |     My profile     | <img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/7aef21ea-5bc1-45ac-b0d8-8fefd71ea020"> | <img src="https://github.com/hyeonbinHur/hyeonbinHur/assets/160996936/fb8505a3-33f9-4be5-b26c-c68634b7db15">|
+    | Other user profile | <img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/d1db2251-d059-4256-b222-5e32327b2183">  | <img src="https://github.com/hyeonbinHur/hyeonbinHur/assets/160996936/d8463059-c8d2-4518-890d-0f69584ec874">|
+    |     Item card      | <img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/231f7e5b-4088-4994-b533-ebbc566b7015"> | <img src="https://github.com/hyeonbinHur/hyeonbinHur/assets/160996936/d5336afc-a1c8-48ee-937d-52d7fc84680f">|
 
 -   ### Sign in, Sign Up
 
