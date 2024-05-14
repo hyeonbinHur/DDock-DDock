@@ -209,9 +209,13 @@ To create an item, the user needs to be authenticated and access the add item pa
 
 2.1 read collection
 
+<img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/1de4df62-8d7a-4b76-82e9-0addb6c0e3ef">
+
 Once users access the website, user can view all items. By using the search bar and location selector, user can find specific items that are in the selected location and include text in the search text box in title and description.
 
 2.2 read document
+
+<img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/e326cd43-7768-443f-a435-ec9f63bf2c5b">
 
 If user press a certain item in the item list, user can check the detailed information of the item. The url link includes the item's id, and the program leads user to the deatiled information about the item.
 
@@ -219,9 +223,13 @@ If user press a certain item in the item list, user can check the detailed infor
 
 2.2.1 check other user's profile & start chatting
 
+<img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/d0029e14-b715-4775-853d-3df97e6c7cf7">
+
 Once the user accesses the item detail page, user will be able see the author's information. When another user's avatar is pressed, a popup division appears, which includes a profile and a chatting button to either move to the user's profile page or start a chat.
 
 3. edit Item
+
+<img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/3161edb6-35aa-4a87-9024-045f27f6b722">
 
 Only the author is able to see the edit button in the item detail page. Once the author presses the edit button, author can move to the edit page, which includes all detailed information regarding the item. If the user edits the item, they can change the item's detailed information.
 
