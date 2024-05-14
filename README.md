@@ -315,9 +315,14 @@ If the message is unread, a "1" will appear next to it in the chatroom. Once the
 
 ### Set Location
 
+To set location, user need to press the "Set location" button in the main categories page, and item add page. Once user press the "GPS icon" the location will be changed based on the corresponding user location, and press "update" button will changes user's location.
+
 <img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/754c7f79-daaf-442c-a36f-e1b4891e05d8">
 
+##### While planning the project, I wanted to cover all municipalities and suburbs, but it was challenging for me to find the same Melbourne location JSON data and the "nominatim.openstreetmap" API address. Users can change the location, but only suburbs in Melbourne city can be filtered.
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+ 
 
 
 ## Reflecting on the Project
