@@ -20,12 +20,16 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
- <img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/2c861161-9f90-4ce4-9f60-97095eb6c147" width="350">
- 
-
-  <p align="center">
-  </p>
+    <img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/2c861161-9f90-4ce4-9f60-97095eb6c147" width="350">
 </div>
+<br>
+<br>
+<div align="center">
+   <img src="https://github.com/hyeonbinHur/hyeonbinHur/assets/160996936/d0e2c8e0-7162-4778-b93e-7a836c3a7677">
+ 
+</div>
+
+
 
 <details>
   <summary>Table of Contents</summary>
