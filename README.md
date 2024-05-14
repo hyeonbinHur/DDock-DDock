@@ -262,8 +262,13 @@ Only the item's author is able to see the delete button in the item detail page.
 ### Auth
 
 1. Email authentication
+<img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/3c0549cc-de24-4b5f-8f0f-12b060890059">
+
 2. Google authentication
+<img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/31f2f3a6-d297-47fa-9ab1-3b720591a4be">
+  
 3. Facebook authentiation
+<img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/d3826f3f-93c7-4f5b-b1fb-db8dd1bdbb5a">
 
 ### Set Location
 
