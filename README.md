@@ -164,7 +164,7 @@ This section explains how to run this project. Since the project is implemented 
 
     If any errors are found, the program directs the user to the error page. The user can move to other pages using the navigation bar or by pressing the logo on the error page.
 
-    |   Title    |          Images          | Mobile images|
+    |   Title    |         Web Images          | Mobile images|
     | :--------: | :----------------------: | :---:|
     | Error page | <img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/afe06fe6-360d-475d-9585-43c5c8fb06db">| <img src="https://github.com/hyeonbinHur/hyeonbinHur/assets/160996936/96ad01dc-17dc-435a-a49e-3e41e91da861">|
 
