@@ -247,10 +247,17 @@ Only the item's author is able to see the delete button in the item detail page.
 
 1. create chatting room
 2. send message
+<img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/2ee94e91-4ac3-437f-8473-8fb3570a3e4e">
+
 3. send image
+<img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/96ae6620-c4db-4dda-9c17-29a93f10f5b0">
+
 4. read message
-5. unread message
-6. toast notification
+<img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/6d2f256b-dbd9-4c93-9f92-d12fde05c76d">
+
+5. receive message
+<img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/9b5deeb5-7601-4cd6-9c6f-af34d82de525">
+
 
 ### Auth
 
