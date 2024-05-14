@@ -200,7 +200,7 @@ To create an item, the user needs to be authenticated and access the add item pa
 <br>
 <br>
 
-![alt text](image-13.png)
+<img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/d8daa895-7f66-4ea9-ab99-23dfa033d06e">
 
 > Once the user fills out the form and presses **Save**, they will see a confirmation modal to confirm the item. If the user presses **Edit**, they can return to the add item page. Once the user presses **Confirm**, they will see a spinner until the item is added. When the item is successfully added, the page will move to the corresponding item section and lead the user to view the added item.
 > <br> > <br>
