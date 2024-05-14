@@ -166,7 +166,7 @@ This section explains how to run this project. Since the project is implemented 
 
 ### 2. Router Configuration
 
--   <a href="https://uncle-hyeonb.tistory.com/12"> **My blog post about router** </a>
+-   <a href="https://uncle-hyeonb.tistory.com/12"> **links to my blog** </a>
     <br>
     <br>
 
