@@ -132,13 +132,13 @@ This section explains how to run this project. Since the project is implemented 
 
     The pages related to the item include the all items page, detail page, add page, and edit page.
 
-    |     Title      |         Web Images           | 
-    | :------------: | :-----------------------: |
-    |   Home page    | <img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/28c2c30c-c8f0-4094-b8ba-4cd4ad835493"> |
-    | All items page | <img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/77332be5-1287-4657-ab4f-18bc88d2a5da"> |
-    |  Detail page   | <img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/c7bfc978-5154-4810-8a15-8887fd1f31f9"> |
-    |    Add page    | <img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/2d0d7041-0c18-4e0e-9f25-2d6056f6dafe">  |
-    |   Edit page    | <img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/2f0e6d1a-ccd7-4496-ae59-d3c118ee3a66"> |
+    |     Title      |         Web images           | Mobile images 
+    | :------------: | :-----------------------: | :----------:
+    |   Home page    | <img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/28c2c30c-c8f0-4094-b8ba-4cd4ad835493"> | <img src="https://github.com/hyeonbinHur/hyeonbinHur/assets/160996936/90664cb7-c80c-48cb-9ed6-bd41aad18b1b">|
+    | All items page | <img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/77332be5-1287-4657-ab4f-18bc88d2a5da"> | <img src="https://github.com/hyeonbinHur/hyeonbinHur/assets/160996936/56e09e42-1861-425c-b92f-6c2ac2b98bb6">|
+    |  Detail page   | <img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/c7bfc978-5154-4810-8a15-8887fd1f31f9"> | <img src="https://github.com/hyeonbinHur/hyeonbinHur/assets/160996936/33e16be5-cc78-489e-bc89-53e792acd069">|
+    |    Add page    | <img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/2d0d7041-0c18-4e0e-9f25-2d6056f6dafe">  | <img src="https://github.com/hyeonbinHur/hyeonbinHur/assets/160996936/8bf56816-1c09-4c54-a235-fdb78ea920d4">|
+    |   Edit page    | <img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/2f0e6d1a-ccd7-4496-ae59-d3c118ee3a66"> | <img src="https://github.com/hyeonbinHur/hyeonbinHur/assets/160996936/58819af5-6147-46c9-b954-68b43e9d620d">|
 
 -   ### Profile
 
