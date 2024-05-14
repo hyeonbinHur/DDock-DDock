@@ -247,8 +247,27 @@ Only the item's author is able to see the delete button in the item detail page.
 
 Once signed in, the user can press the like button on the corresponding item. If the user presses the "heart" icon, the "empty heart" will change to a "red heart"; otherwise, it reverts to an "empty heart." If the user likes the item, it will be added to their list of liked items, which can be checked from the user's profile page.
 
+5. like item
 
+Once signed in, the user can press the like button on the corresponding item. If the user presses the "heart" icon, the "empty heart" will change to a "red heart"; otherwise, it reverts to an "empty heart." If the user likes the item, it will be added to their list of liked items, which can be checked from the user's profile page.
 
+<img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/cfe95082-9627-4723-847a-9f991ac9d6ea">
+
+6. comment
+
+6.1 comment 
+
+Once user accessed to the item detail page, user can add some comment on to the item. To add item user must be authenticated, and type at least one character. If no characters are typed, the submit button is disabled.
+
+<img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/a21b184a-8e79-44f6-8a1e-75d23606e0d3">
+
+6.2 reply
+
+If there is a comment, user can add reply to the comment. The reply section can be opened and closed. Once the reply section is opened, user can check the all replys.
+
+<img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/5aacad18-5d12-44f8-b178-1a8e84b35b30">
+
+<img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/a51d639c-f159-43fc-9649-875ab416df85">
 ### Chatting
 
 1. create chatting room
