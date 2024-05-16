@@ -46,11 +46,15 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
 
     // eslint-disable-next-line no-unused-vars
     const [map, setMap] = useState(null);
-    const [currentLat, setCurrentLat] = useState(0);
-    const [currentLng, setCurrentLng] = useState(0);
+    const [currentLat, setCurrentLat] = useState(
+        user ? +user.location.lat : -37.81343
+    );
+    const [currentLng, setCurrentLng] = useState(
+        user ? +user.location.lng : 144.959031
+    );
     const [center, setCenter] = useState({
-        lat: user?.location.lat,
-        lng: user?.location.lng,
+        lat: currentLat,
+        lng: currentLng,
     });
     // const [selectedBound, setSelectedBound] = useState('dong');
     const [currentDong, setCurrentDong] = useState('');
@@ -73,8 +77,10 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
     };
 
     useEffect(() => {
-        setCenter({ lat: currentLat, lng: currentLng });
-        setZoomLevel(15);
+        if (user) {
+            setCenter({ lat: currentLat, lng: currentLng });
+            setZoomLevel(15);
+        }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentLat, currentLng]);
@@ -148,6 +154,7 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
 
     const handleClose = async () => {
         const originalUser = user;
+
         const updatedUser = {
             ...originalUser,
             location: {
@@ -157,7 +164,8 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
             },
         };
 
-        await updateDocument(user.id, updatedUser, 'User');
+        await updateDocument(user.uid, updatedUser, 'User');
+
         placeSettingFn(currentDong);
 
         modal.current.close();
@@ -167,6 +175,9 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
         <div>
             {isLoaded ? (
                 <dialog ref={modal} className="rounded-lg">
+                    <div onClick={() => console.log(typeof user.location.lat)}>
+                        Hello world
+                    </div>
                     <div className="px-5 pb-5 bg-sky-50">
                         <div className="py-2 flex justify-end">
                             <div

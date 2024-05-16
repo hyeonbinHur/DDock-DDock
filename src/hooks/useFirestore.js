@@ -359,6 +359,8 @@ export const useFirestore = (collection) => {
                     email: user.email,
                     interests: [],
                     location: {
+                        lat: -37.81343,
+                        lng: 144.959031,
                         si: '',
                         gu: '',
                         dong: '',
