@@ -41,14 +41,14 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
     //-37.823733, 144.964144 // South Bank
     // -37.809176, 144.927688 //West Melbourne
     // eslint-disable-next-line no-unused-vars
-    const testLat = -37.81922; // chagne all testLat, testLng to currentLat,currentLng
-    const testLng = 144.949051;
+    // const testLat = -37.81922; // chagne all testLat, testLng to currentLat,currentLng
+    // const testLng = 144.949051;
 
     // eslint-disable-next-line no-unused-vars
     const [map, setMap] = useState(null);
     const [currentLat, setCurrentLat] = useState(0);
     const [currentLng, setCurrentLng] = useState(0);
-    const [center, setCenter] = useState({ lat: testLat, lng: testLng });
+    const [center, setCenter] = useState({ lat: null, lng: null });
     // const [selectedBound, setSelectedBound] = useState('dong');
     const [currentDong, setCurrentDong] = useState('');
     const { updateDocument } = useFirestore('User');
@@ -70,8 +70,7 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
     };
 
     useEffect(() => {
-        console.log(center);
-        setCenter({ lat: testLat, lng: testLng });
+        setCenter({ lat: currentLat, lng: currentLng });
         setZoomLevel(15);
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -79,7 +78,7 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
 
     const moveToCenter = () => {
         // currentLat, currentLng
-        setCenter({ lat: testLat, lng: testLng });
+        setCenter({ lat: currentLat, lng: currentLng });
         setZoomLevel(15);
     };
 
@@ -117,19 +116,19 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
         const latitude = position.coords.latitude;
         const longitude = position.coords.longitude;
 
-        const lat = testLat; // 시드니의 위도
-        const lon = testLng; // 시드니의 경도
+        // const lat = testLat; // 시드니의 위도
+        // const lon = testLng; // 시드니의 경도
 
         fetch(
-            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&accept-language=en`
+            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&accept-language=en`
         )
             .then((response) => response.json())
             .then((data) => {
                 const address = data.address;
                 const dong = address.suburb;
                 moveToCenter();
-                setCurrentLat(lat);
-                setCurrentLng(lon);
+                setCurrentLat(latitude);
+                setCurrentLng(longitude);
                 setCurrentDong(dong);
 
                 if (dong === 'Melbourne') {
@@ -184,8 +183,8 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
                         >
                             <Circle
                                 center={{
-                                    lat: testLat,
-                                    lng: testLng,
+                                    lat: center.lat,
+                                    lng: center.lng,
                                 }}
                                 radius={1000}
                                 options={{
@@ -198,8 +197,8 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
                             />
                             <MarkerF
                                 position={{
-                                    lat: testLat,
-                                    lng: testLng,
+                                    lat: center.lat,
+                                    lng: center.lng,
                                 }}
                             />
                         </GoogleMap>
