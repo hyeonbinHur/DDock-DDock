@@ -49,8 +49,8 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
     const [currentLat, setCurrentLat] = useState(0);
     const [currentLng, setCurrentLng] = useState(0);
     const [center, setCenter] = useState({
-        lat: user.location.lat,
-        lng: user.location.lng,
+        lat: user?.location.lat,
+        lng: user?.location.lng,
     });
     // const [selectedBound, setSelectedBound] = useState('dong');
     const [currentDong, setCurrentDong] = useState('');
