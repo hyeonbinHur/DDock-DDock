@@ -189,11 +189,6 @@ This section explains how to run this project. Since the project is implemented 
 ### Data structure
 <img src="https://github.com/hyeonbinHur/DDock-DDock/assets/160996936/3752fdbe-a9ce-4cf4-964b-4128279593f8">
 
-### Items
-
-### User
-
-### Chatting Room
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
