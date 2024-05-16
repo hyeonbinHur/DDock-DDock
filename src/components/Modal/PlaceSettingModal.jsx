@@ -48,7 +48,10 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
     const [map, setMap] = useState(null);
     const [currentLat, setCurrentLat] = useState(0);
     const [currentLng, setCurrentLng] = useState(0);
-    const [center, setCenter] = useState({ lat: null, lng: null });
+    const [center, setCenter] = useState({
+        lat: user.location.lat,
+        lng: user.location.lng,
+    });
     // const [selectedBound, setSelectedBound] = useState('dong');
     const [currentDong, setCurrentDong] = useState('');
     const { updateDocument } = useFirestore('User');
@@ -148,8 +151,8 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
         const updatedUser = {
             ...originalUser,
             location: {
-                lat: '',
-                lng: '',
+                lat: currentLat,
+                lng: currentLng,
                 dong: currentDong,
             },
         };
