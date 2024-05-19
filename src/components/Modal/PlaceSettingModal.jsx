@@ -175,9 +175,6 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
         <div>
             {isLoaded ? (
                 <dialog ref={modal} className="rounded-lg">
-                    <div onClick={() => console.log(typeof user.location.lat)}>
-                        Hello world
-                    </div>
                     <div className="px-5 pb-5 bg-sky-50">
                         <div className="py-2 flex justify-end">
                             <div
