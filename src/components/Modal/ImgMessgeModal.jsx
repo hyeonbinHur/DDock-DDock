@@ -147,7 +147,10 @@ const ImgMessageModal = forwardRef(function ImgMessageModal(
 
     return createPortal(
         <div className="">
-            <dialog ref={modal} className="border rounded-lg">
+            <dialog
+                ref={modal}
+                className="border-2 min-w-[30%] h-[57%] rounded-lg"
+            >
                 <div className="flex items-center justify-end pr-3">
                     <span
                         className="p-1 my-1 hover:bg-gray-200 rounded-md flex items-center"
@@ -158,11 +161,11 @@ const ImgMessageModal = forwardRef(function ImgMessageModal(
                         </button>
                     </span>
                 </div>
-                <div>
+                <div className="flex justify-center">
                     {loading ? (
-                        <img src={spinner3} className="h-52" />
+                        <img src={spinner3} className="h-96" />
                     ) : (
-                        <img src={preview} className="h-72" />
+                        <img src={preview} className="h-96 rounded-md" />
                     )}
                 </div>
                 <div className="flex items-center justify-start py-1 px-2">

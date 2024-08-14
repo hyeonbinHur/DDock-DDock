@@ -9,7 +9,6 @@ import { useNavigate } from 'react-router-dom';
 export const useFaceBookSignIn = () => {
     const [facebookError, setError] = useState(null);
     const [facebookIsPending, setIsPending] = useState(false);
-    const [isCancelled, setIsCancelled] = useState(true);
     const { dispatch } = useAuthContext();
     const { saveUser } = useFirestore('User');
     const navigate = useNavigate();
@@ -23,25 +22,27 @@ export const useFaceBookSignIn = () => {
                 throw new Error('Could not complete signup');
             }
             await saveUser(res.user);
-
             dispatch({ type: 'LOGIN', payload: res.user });
-
-            if (!isCancelled) {
-                setError(null);
-                setIsPending(false);
-                navigate(-1);
-            }
+            setError(null);
+            setIsPending(false);
+            navigate(-1);
         } catch (error) {
-            console.error(error);
-            if (!isCancelled) {
-                setError(null);
-                setIsPending(error.message);
+            console.error(error.code);
+            if (error.code === 'auth/popup-closed-by-user') {
+                setError('Facebook login was cancelled by the user');
+                console.log('Facebook login popup was closed by the user.'); // 이 로그를 추가
+            } else {
+                setError(error.message);
             }
+            setIsPending(false);
         }
     };
 
     useEffect(() => {
-        return () => setIsCancelled(!isCancelled);
-    }, [isCancelled]);
+        return () => {
+            console.log('Component is unmounting...'); // 언마운트 시 출력될 메시지
+        };
+    }, []);
+
     return { facebookSignIn, facebookError, facebookIsPending };
 };

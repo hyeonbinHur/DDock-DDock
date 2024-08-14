@@ -44,34 +44,39 @@ export default function PartnerUserChat({
 
     return (
         <div
-            className={`flex space-x-2 ml-2 ${
+            className={`flex space-x-2 ml-2  ${
                 chat.showBasicInfo ? `mt-5` : `mt-1`
             }`}
         >
             {chat.showBasicInfo && (
-                <div className="">
-                    <img className="w-10" src={avatar || defaultUserImg} />
+                <div>
+                    <img src={avatar || defaultUserImg} className="w-10" />
                 </div>
             )}
 
-            <div className="max-w-96 lg:max-w-80">
+            <div className="w-[80%]">
                 {chat.showBasicInfo && (
                     <div>
                         <span>{displayName}</span>
                     </div>
                 )}
-                <div className="flex">
+                <div className={` flex `}>
                     {chat.type === 'txt' && (
                         <div
                             className={`${
                                 chat.showBasicInfo ? `` : `ml-12`
-                            } border-2 bg-white p-1 rounded-md max-w-60 break-words`}
+                            } bg-white p-1 border-2 rounded-md max-w-[80%] min-w-[6%]`}
                         >
-                            {chat.content}
+                            <div className="break-words">{chat.content}</div>
                         </div>
                     )}
                     {chat.type === 'img' && (
-                        <img src={chat.content} className="w-40 rounded-md" />
+                        <img
+                            src={chat.content}
+                            className={`${
+                                chat.showBasicInfo ? `` : `lg:ml-12 ml-12`
+                            } w-40 rounded-md`}
+                        />
                     )}
                     <div className="flex items-end space-x-3">
                         {chat.showBasicInfo && (

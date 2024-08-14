@@ -20,9 +20,9 @@ export default function LoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const { login, isPending, error } = useLogin();
-    const { googleLogin, googleIsPending } = useGoogleSignin();
+    const { googleLogin } = useGoogleSignin();
     const navigate = useNavigate();
-    const { facebookSignIn, facebookIsPending } = useFaceBookSignIn();
+    const { facebookSignIn } = useFaceBookSignIn();
 
     const emailIsInvalid = !isEmail(email) && isNotEmpty(email);
     const passwordIsInvalid = !isPassword(password) && isNotEmpty(password);
@@ -30,7 +30,6 @@ export default function LoginPage() {
     function handleSubmit(event) {
         event.preventDefault();
         console.log('Hello login');
-
         if (!emailIsInvalid && !passwordIsInvalid) {
             login(email, password);
         }
@@ -40,7 +39,7 @@ export default function LoginPage() {
         navigate(-1); // 이전 페이지로 돌아가기
     };
 
-    if (isPending || googleIsPending || facebookIsPending) {
+    if (isPending) {
         return (
             <img
                 src={spinner4}
@@ -167,6 +166,7 @@ export default function LoginPage() {
                     >
                         <img src={googleLogo} className="w-7 lg:w-9" />
                     </div>
+
                     <div
                         onClick={facebookSignIn}
                         className="w-10 lg:w-16 lg:h-16 hover:scale-105"

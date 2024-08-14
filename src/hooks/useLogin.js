@@ -18,9 +18,7 @@ export const useLogin = () => {
                 email,
                 password
             );
-
             dispatch({ type: 'LOGIN', payload: res.user });
-
             if (!isCancelled) {
                 setIsPending(false);
                 setError(null);

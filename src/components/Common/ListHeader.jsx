@@ -18,6 +18,7 @@ export default function ListHeader({
     const [showPlaceMenu, setShowPlaceMenu] = useState(false);
     const { user } = useAuthContext();
     const navigate = useNavigate();
+
     useEffect(() => {
         if (topic === 'community') {
             setButtonStyleCss(style.community_container);

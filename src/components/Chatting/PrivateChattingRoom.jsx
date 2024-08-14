@@ -249,9 +249,9 @@ export default function PrivateChattingRoom() {
     }
 
     return (
-        <div className="h-full">
+        <div className="h-full overflow-hidden">
             {user && currentUser && (
-                <div className="h-full relative">
+                <div className="h-[90%] relative ">
                     {/* <div className="border border-separate mx-2"></div> */}
                     {/* chat content */}
                     <div className="flex justify-between items-center rounded-t-md border-t font-bold px-4 pb-2 mb-2 sticky top-0 z-10 w-full bg-white">

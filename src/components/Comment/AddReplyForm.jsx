@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { useAuthContext } from '../../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 
@@ -17,11 +17,6 @@ export default function AddReplyForm({ addReply }) {
         setReplyContent('');
         addReply(replyContent);
     };
-
-    useEffect(() => {
-        replyRef.current.style.height = 'auto';
-        replyRef.current.style.height = replyRef.current.scrollHeight + 'px';
-    }, [replyContent]);
 
     return (
         <form onSubmit={(event) => handleSubmit(event)}>

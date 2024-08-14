@@ -12,13 +12,11 @@ export const useLogout = () => {
         setError(null);
         setIsPending(true);
         //sign user out
-
         try {
             await projectAuth.signOut();
             //dispatch log out action
             dispatch({ type: 'LOGOUT' });
             //update state
-
             if (!isCancelled) {
                 setIsPending(false); // 에러를 이르키는건 이친구들이었음
                 setError(null); // 에러를 일으키는건 이친구들!!

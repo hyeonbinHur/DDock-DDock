@@ -84,7 +84,6 @@ export default function MarketList({ documents }) {
                 }
             });
         }
-
         setResults(emptyArray);
     }, [hasedPlace, searchedItem, selectedPlace, userDong, userGu, userSi]);
 
@@ -100,7 +99,6 @@ export default function MarketList({ documents }) {
     const toggleHeart = async (item) => {
         const originalUser = userInfo;
         const updatedInterests = originalUser.interests;
-
         const index = updatedInterests.indexOf(item.id);
 
         if (index > -1) {
@@ -113,7 +111,6 @@ export default function MarketList({ documents }) {
                 interests: updatedInterets,
             };
             await updateDocument(item.id, updatedItem, 'MarketItem');
-
         } else {
             updatedInterests.push(item.id);
             dispatch(plusInterest({ id: item.id }));
@@ -191,7 +188,6 @@ export default function MarketList({ documents }) {
         setUserSi(si);
         setUserGu(gu);
         setUserDong(dong);
-        setHasedPlace(dong);
     };
 
     const changeSelectedPlace = (event) => {
@@ -286,10 +282,7 @@ export default function MarketList({ documents }) {
                         )}
                         <div className={style.pngContainer}>
                             <img src={commentPng} className={style.basicPng} />
-                            <p>
-                                {doc.numOfComment}
-                                개
-                            </p>
+                            <p>{doc.numOfComment}개</p>
 
                             {userInfo.interests.includes(doc.id) ? (
                                 <img

@@ -75,7 +75,6 @@ export default function MarketItemForm({
     const handleSubmit = async (event) => {
         event.preventDefault();
         modal.current.open();
-
         // setResponse()
     };
 

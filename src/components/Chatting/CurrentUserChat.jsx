@@ -60,8 +60,8 @@ export default function CurrentUserChat({ chat, partner, roomId }) {
                     )}
                 </div>
                 {chat.type === 'txt' && (
-                    <div className="bg-sky-200 border-2 rounded-md border-sky-300 text-lg min-w-9 flex justify-end px-2 max-w-80 ">
-                        <div className="max-w-64 break-words ">
+                    <div className="bg-sky-200 border-2 rounded-md border-sky-300 text-lg min-w-9 flex justify-end px-2 max-w-[70%] break-words">
+                        <div className="break-words max-w-[100%]">
                             {chat.content}
                         </div>
                     </div>

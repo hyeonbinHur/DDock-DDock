@@ -43,5 +43,5 @@ export const useGoogleSignin = () => {
     useEffect(() => {
         return () => setIsCancelled(!isCancelled);
     }, [isCancelled]);
-    return { googleLogin, googleError, googleIsPending };
+    return { googleLogin, isCancelled, googleError, googleIsPending };
 };

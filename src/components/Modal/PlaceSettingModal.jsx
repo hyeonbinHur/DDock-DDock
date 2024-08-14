@@ -17,10 +17,7 @@ import { GoogleMap, useJsApiLoader, Circle } from '@react-google-maps/api';
 import { useFirestore } from '../../hooks/useFirestore';
 import { mapOptions } from '../../util/formDate';
 
-const PlaceSettingModal = forwardRef(function PlaceSettingModal(
-    { placeSettingFn, user },
-    ref
-) {
+const PlaceSettingModal = forwardRef(function PlaceSettingModal({ user }, ref) {
     //paceSettingFn은 원하는 위치 태그를 마켓에다가 포함시켜야하기때문임 해시태그를 마켓페이지에 보여줘야함, 범위를 보여주려고
     const modal = useRef(null);
     const { isLoaded } = useJsApiLoader({
@@ -122,12 +119,13 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
     }
 
     function success(position) {
+        // -37.840319, 144.997647 //South Yarra
+        //-37.823733, 144.964144 // South Bank
+        // -37.837814, 144.929717 // port melbourne
+        // const latitude = -37.840319;
+        // const longitude = 144.997647;
         const latitude = position.coords.latitude;
         const longitude = position.coords.longitude;
-
-        // const lat = testLat; // 시드니의 위도
-        // const lon = testLng; // 시드니의 경도
-
         fetch(
             `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&accept-language=en`
         )
@@ -143,7 +141,6 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
                 if (dong === 'Melbourne') {
                     setCurrentDong('Melbourne CBD');
                 }
-                console.log(`동 : ${dong}`);
             })
             .catch((error) => console.error('Error:', error));
     }
@@ -154,7 +151,6 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
 
     const handleClose = async () => {
         const originalUser = user;
-
         const updatedUser = {
             ...originalUser,
             location: {
@@ -163,11 +159,8 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
                 dong: currentDong,
             },
         };
-
         await updateDocument(user.uid, updatedUser, 'User');
-
-        placeSettingFn(currentDong);
-
+        // placeSettingFn(currentDong);
         modal.current.close();
     };
 
@@ -226,7 +219,7 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal(
                         <div className="flex mt-3 mx-3">
                             <div
                                 onClick={() => handleClose()}
-                                className="flex border-2 rounded-md p-2 hover:bg-green-100"
+                                className="flex border-2 rounded-md p-2 cursor-pointer hover:bg-green-100"
                             >
                                 Update My Place
                             </div>

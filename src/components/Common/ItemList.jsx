@@ -107,7 +107,6 @@ export default function ItemList({
         );
         if (interestIndex == -1) {
             dispatch(addInterest({ item: item }));
-
             const updatedUser = {
                 ...userData,
                 interests: [...userData.interests, item],
@@ -134,9 +133,9 @@ export default function ItemList({
             await updateDocument(item.id, updatedItem, collection);
         }
     };
-    const placeSetting = (dong) => {
-        setSeletedPlace(dong);
-    };
+    // const placeSetting = (dong) => {
+    //     setSeletedPlace(dong);
+    // };
     const selectPlace = (value) => {
         setSeletedPlace(value);
     };
@@ -154,6 +153,7 @@ export default function ItemList({
                 modalOpenFn={openModal}
                 selectPlaceFn={selectPlace}
                 topic={Topic}
+                setSeletedPlace={setSeletedPlace}
                 //community
             />
             <div className="lg:mx-40 mx-10">
@@ -231,7 +231,7 @@ export default function ItemList({
                 </div>
                 <PlaceSettingModal
                     ref={placeModal}
-                    placeSettingFn={placeSetting}
+                    // placeSettingFn={placeSetting}
                     user={userData}
                 />
             </div>
