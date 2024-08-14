@@ -2,7 +2,7 @@
 
 ## Pocket
 
-<p>
+<div align="center">
 <img src="https://img.shields.io/badge/Javascript-F7DF1E?style=for-the-badge&logo=Javascript&logoColor=white">
 <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white">
 <img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=white">
@@ -15,7 +15,8 @@
 <img src="https://img.shields.io/badge/uuid-9.0.1-FF7800?style=for-the-badge&logo=uuid&logoColor=white">
 <img src="https://img.shields.io/badge/framer--motion-11.1.9-%230055FF.svg?style=for-the-badge&logo=framer&logoColor=0055FF">
 
-</p>
+</div>
+
 
 <!-- PROJECT LOGO -->
 <br />
