@@ -122,8 +122,8 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal({ user }, ref) {
         // -37.840319, 144.997647 //South Yarra
         //-37.823733, 144.964144 // South Bank
         // -37.837814, 144.929717 // port melbourne
-        // const latitude = -37.840319;
-        // const longitude = 144.997647;
+        // const latitude = -37.837814;
+        // const longitude = 144.929717;
         const latitude = position.coords.latitude;
         const longitude = position.coords.longitude;
         fetch(
@@ -137,7 +137,6 @@ const PlaceSettingModal = forwardRef(function PlaceSettingModal({ user }, ref) {
                 setCurrentLat(latitude);
                 setCurrentLng(longitude);
                 setCurrentDong(dong);
-
                 if (dong === 'Melbourne') {
                     setCurrentDong('Melbourne CBD');
                 }

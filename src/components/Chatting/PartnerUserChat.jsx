@@ -1,7 +1,6 @@
 import defaultUserImg from '../../assets/user.png';
 import { useEffect, useState } from 'react';
 import { useDocument } from '../../hooks/useDocument';
-
 export default function PartnerUserChat({
     avatar,
     displayName,
@@ -14,9 +13,7 @@ export default function PartnerUserChat({
     const [day, month, year] = datePart.split('/').map(Number);
     // eslint-disable-next-line no-unused-vars
     const [hour, minute, second] = timePart.split(':').map(Number);
-
     const [read, setRead] = useState(false);
-
     const { document: chatRoom } = useDocument('ChattingRoom', roomId);
     const { document: currentUser } = useDocument('User', user.id);
     useEffect(() => {
@@ -41,7 +38,6 @@ export default function PartnerUserChat({
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentUser?.unread]);
-
     return (
         <div
             className={`flex space-x-2 ml-2  ${
@@ -60,7 +56,7 @@ export default function PartnerUserChat({
                         <span>{displayName}</span>
                     </div>
                 )}
-                <div className={` flex `}>
+                <div className={`flex`}>
                     {chat.type === 'txt' && (
                         <div
                             className={`${
@@ -81,7 +77,7 @@ export default function PartnerUserChat({
                     <div className="flex items-end space-x-3">
                         {chat.showBasicInfo && (
                             <span className="text-sm ml-2">
-                                {String(hour).padStart(2, '0')} :{' '}
+                                {String(hour).padStart(2, '0')}:
                                 {String(minute).padStart(2, '0')}
                             </span>
                         )}

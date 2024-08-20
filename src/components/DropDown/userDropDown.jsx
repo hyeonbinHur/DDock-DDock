@@ -72,7 +72,7 @@ export default function UserDropDown({ user1, user2, closeDropDown }) {
             {/* <div >Chatting</div> */}
             <div
                 onClick={startChatting}
-                className="border flex space-x-4 p-2 font-bold rounded-md hover:bg-gray-300"
+                className="cursor-pointer border flex space-x-4 p-2 font-bold rounded-md hover:bg-gray-300"
             >
                 <div className="flex items-center">
                     <BsChatHeart className="size-7" />

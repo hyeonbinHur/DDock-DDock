@@ -181,13 +181,13 @@ const ItemModal = forwardRef(function ItemStatusModal(
                         </div>
                         <div className="flex space-x-5 mt-3">
                             <div
-                                className="border p-1 rounded border-red-200 text-red-200 hover:scale-90 hover:bg-red-300 hover:text-white"
+                                className="cursor-pointer border p-1 rounded border-red-200 text-red-200 hover:scale-90 hover:bg-red-300 hover:text-white"
                                 onClick={() => modal.current.close()}
                             >
                                 edit
                             </div>
                             <div
-                                className="border p-1 rounded border-sky-400 text-sky-400 hover:scale-90 hover:bg-sky-400 hover:text-white"
+                                className="cursor-pointer border p-1 rounded border-sky-400 text-sky-400 hover:scale-90 hover:bg-sky-400 hover:text-white"
                                 onClick={confrimItem}
                             >
                                 confrim

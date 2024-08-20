@@ -241,7 +241,7 @@ export default function ItemAddForm({
                     <div type="button" className="size-14">
                         {currentIndex > 0 && (
                             <FcPrevious
-                                className="size-full"
+                                className="size-full cursor-pointer"
                                 onClick={() =>
                                     setCurrentIndex((prev) => prev - 1)
                                 }
@@ -253,7 +253,7 @@ export default function ItemAddForm({
                             <div className="absolute size-10 hover:scale-90 top-[2%] right-[2%]">
                                 {imagePreviews[currentIndex] && (
                                     <TiDeleteOutline
-                                        className="size-full"
+                                        className="size-full cursor-pointer"
                                         type="button"
                                         onClick={() => deleteImage()}
                                     />
@@ -273,7 +273,7 @@ export default function ItemAddForm({
                                 />
                             )}
                             {!imagePreviews[currentIndex] && (
-                                <div className="flex items-center justify-center">
+                                <div className="cursor-pointer flex items-center justify-center">
                                     <FcAddImage
                                         className="size-28 hover:scale-110"
                                         onClick={handleImageClick}
@@ -289,7 +289,7 @@ export default function ItemAddForm({
                         className="size-14"
                     >
                         {currentIndex < 10 && imagePreviews[currentIndex] && (
-                            <FcNext className="size-full" />
+                            <FcNext className="size-full cursor-pointer" />
                         )}
                     </div>
                 </div>
@@ -314,7 +314,7 @@ export default function ItemAddForm({
 
                     <div
                         onClick={() => placeModal.current.open()}
-                        className="border px-2 py-1 rounded-lg border-green-200 font-bold text-base hover:bg-green-500 hover:scale-90"
+                        className="cursor-pointer border px-2 py-1 rounded-lg border-green-200 font-bold text-base hover:bg-green-500 hover:scale-90"
                     >
                         {location != '' ? 'Change' : 'Set Location'}
                     </div>

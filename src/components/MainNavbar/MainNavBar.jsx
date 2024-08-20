@@ -10,8 +10,8 @@ import { useSelector } from 'react-redux';
 import PrivateChattingRoom from '../Chatting/PrivateChattingRoom';
 import toast, { Toaster } from 'react-hot-toast';
 import { projectFirestore } from '../../firebase/config';
-import { useQuery } from '@tanstack/react-query';
-import { getDocument } from '../../api/getDocument';
+// import { useQuery } from '@tanstack/react-query';
+// import { getDocument } from '../../api/getDocument';
 import logo from '../../assets/logo/logo.png';
 // import earth from '../../assets/vector/earth.png';
 import menu from '../../assets/vector/menu.png';
@@ -40,13 +40,13 @@ export default function Navbar() {
 
     const [oldUser, setOldUser] = useState(currentUser?.unread);
 
-    const { data } = useQuery({
-        queryKey: ['User', user?.uid],
-        queryFn: () => getDocument('User', user?.uid),
-        enabled: !!user?.uid, // user?.uid가 존재할 때만 쿼리 실행
-        cacheTime: 1000 * 60 * 5, // 5분 동안 캐시 유지
-        staleTime: 1000 * 60,
-    });
+    // const { data } = useQuery({
+    //     queryKey: ['User', user?.uid],
+    //     queryFn: () => getDocument('User', user?.uid),
+    //     enabled: !!user?.uid, // user?.uid가 존재할 때만 쿼리 실행
+    //     cacheTime: 1000 * 60 * 5, // 5분 동안 캐시 유지
+    //     staleTime: 1000 * 60,
+    // });
 
     const activeChatList = () => {
         setShowChatList(!showChatList);
@@ -276,8 +276,8 @@ export default function Navbar() {
                 {showChatList && (
                     <div className="w-full  z-40 absolute top-[90%] left-[47%] lg:left-[82%]">
                         <ChattingRoomList
-                            chatRoom={data.chatRoom}
-                            userId={data.id}
+                            chatRoom={currentUser.chatRoom}
+                            userId={currentUser.id}
                             closeChatRoom={closeChatRoomList}
                         />
                     </div>
